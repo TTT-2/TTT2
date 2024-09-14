@@ -14,31 +14,7 @@ local validButtons = {
     "func_rot_button",
 }
 
-local function UpdateStates(foundButtons)
-    for class, list in pairs(foundButtons) do
-        for i = 1, #list do
-            local ent = list[i]
-
-            if not IsValid(ent) then
-                continue
-            end
-
-            if class == "func_button" then
-                ent:SetDefaultButton(true)
-            end
-
-            if class == "func_rot_button" then
-                ent:SetRotatingButton(true)
-            end
-
-            ent:SetNotSolid(false)
-        end
-    end
-end
-
 if SERVER then
-    local foundButtons = {}
-
     ---
     -- Setting up all buttons found on a map, this is done on every map reset (on prepare round).
     -- @internal
@@ -46,27 +22,35 @@ if SERVER then
     function button.SetUp()
         for i = 1, #validButtons do
             local classButton = validButtons[i]
+            local buttonsTable = ents.FindByClass(classButton)
 
-            foundButtons[classButton] = ents.FindByClass(classButton)
+            for j = 1, #buttonsTable do
+                local foundButton = buttonsTable[j]
+
+                foundButton:SetNotSolid(false)
+                foundButton:SetSolid(SOLID_BSP)
+
+                foundButton:SetNWInt("button_class", i)
+            end
         end
-
-        -- sync to client and set state
-        UpdateStates(foundButtons)
-        net.SendStream("TTT2SyncButtonEntities", foundButtons)
-    end
-
-    ---
-    -- Resyncs button states to the client if they late connect or hotreload.
-    -- @param Player ply The player to sync to
-    -- @internal
-    -- @realm server
-    function button.SyncToClient(ply)
-        net.SendStream("TTT2SyncButtonEntities", foundButtons, ply)
     end
 end
 
-if CLIENT then
-    net.ReceiveStream("TTT2SyncButtonEntities", function(foundButtons)
-        UpdateStates(foundButtons)
-    end)
+---
+-- Checks if a given button entity has the provided class.
+-- @note This is checked like this, because buttons and levers
+-- lose their specific class name on the client and therefore use custom
+-- syncing here.
+-- @param Entity ent The button entity that should be checked
+-- @param string class The class name
+-- @return boolean Returns true if the entity matches the provided class name
+-- @realm shared
+function button.IsClass(ent, class)
+    local classID = ent:GetNWInt("button_class")
+
+    if not classID or classID > #validButtons then
+        return
+    end
+
+    return validButtons[classID] == class
 end
