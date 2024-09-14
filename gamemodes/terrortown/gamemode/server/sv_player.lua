@@ -548,6 +548,15 @@ net.Receive("TTT2PlayerUseEntity", function(len, ply)
         return
     end
 
+    if
+        ---
+        -- @realm server
+        -- stylua: ignore
+        hook.Run("TTT2OnButtonUse", ply, ent, ent:GetInternalVariable("m_toggle_state")) == false
+    then
+        return
+    end
+
     ---
     -- Enable addons to allow handling PlayerUse
     -- Otherwise default to old IsTerror Check
@@ -559,6 +568,7 @@ net.Receive("TTT2PlayerUseEntity", function(len, ply)
 
     if ply:IsSpec() then
         SpecUseKey(ply, ent)
+
         return
     end
 
@@ -580,6 +590,16 @@ net.Receive("TTT2PlayerUseEntity", function(len, ply)
         ply:SafePickupWeapon(ent, false, true, true, nil)
     end
 end)
+
+---
+-- A hook that is called before a button is pressed. Can be used to cancel the event by returning false.
+-- @param Player ply The player that pressed the button
+-- @param Entity ent The button entitiy
+-- @param boolean oldState The old toggle state of the button before it was pressed
+-- @return boolean return false to prevent the player from using that button
+-- @hook
+-- @realm server
+function GM:TTT2OnButtonUse(ply, ent, oldState) end
 
 ---
 -- Called when a @{Player} leaves the server. See the <a href="https://wiki.facepunch.com/gmod/gameevent/player_disconnect">player_disconnect gameevent</a> for a shared version of this hook.
