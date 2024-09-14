@@ -100,7 +100,7 @@ function targetid.FindEntityAlongView(pos, dir, filter)
     local trace = util.TraceLine({
         start = pos,
         endpos = endpos,
-        mask = MASK_SHOT,
+        mask = MASK_ALL,
         filter = filter,
     })
 
