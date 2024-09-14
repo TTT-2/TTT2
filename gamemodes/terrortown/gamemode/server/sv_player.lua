@@ -553,7 +553,8 @@ net.Receive("TTT2PlayerUseEntity", function(len, ply)
         ---
         -- @realm server
         -- stylua: ignore
-        and hook.Run("TTT2OnButtonUse", ply, ent, ent:GetInternalVariable("m_toggle_state")) == false
+        and hook.Run("TTT2OnButtonUse", ply, ent, ent:GetInternalVariable("m_toggle_state"))
+            == false
     then
         return
     end
