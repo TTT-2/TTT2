@@ -84,7 +84,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
                 start = ply:GetShootPos(),
                 endpos = ply:GetShootPos() + ply:GetAimVector() * 100,
                 filter = ply,
-                mask = MASK_SHOT,
+                mask = MASK_ALL,
             })
 
             useEnt = tr.Entity
