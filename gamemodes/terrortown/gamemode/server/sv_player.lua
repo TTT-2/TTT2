@@ -595,7 +595,7 @@ end)
 ---
 -- A hook that is called before a button is pressed. Can be used to cancel the event by returning false.
 -- @param Player ply The player that pressed the button
--- @param Entity ent The button entitiy
+-- @param Entity ent The button entity
 -- @param boolean oldState The old toggle state of the button before it was pressed
 -- @return boolean return false to prevent the player from using that button
 -- @hook
