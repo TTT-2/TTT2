@@ -89,10 +89,10 @@ function GM:PlayerBindPress(ply, bindName, pressed)
 
             useEnt = tr.Entity
             if not tr.Hit or not IsValid(useEnt) then
-                return
+                useEnt = nil
             end
 
-            if isfunction(useEnt.ClientUse) then
+            if useEnt and isfunction(useEnt.ClientUse) then
                 isClientOnly = useEnt:ClientUse()
             end
         elseif isfunction(useEnt.RemoteUse) then
@@ -107,6 +107,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
         end
 
         net.Start("TTT2PlayerUseEntity")
+        net.WriteBool(useEnt ~= nil)
         net.WriteEntity(useEnt)
         net.WriteBool(isRemote)
         net.SendToServer()

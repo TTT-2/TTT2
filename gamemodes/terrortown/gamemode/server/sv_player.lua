@@ -526,8 +526,13 @@ end
 -- @realm server
 -- @internal
 net.Receive("TTT2PlayerUseEntity", function(len, ply)
+    local hasEnt = net.ReadBool()
     local ent = net.ReadEntity()
     local isRemote = net.ReadBool()
+
+    if not hasEnt then
+        ent = ply:GetUseEntity()
+    end
 
     if not IsValid(ent) then
         return
