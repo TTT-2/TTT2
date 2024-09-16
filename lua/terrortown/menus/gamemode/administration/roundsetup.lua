@@ -170,4 +170,28 @@ function CLGAMEMODESUBMENU:Populate(parent)
         decimal = 0,
         master = enbSessionLimitsEnabled,
     })
+
+    local form6 = vgui.CreateTTT2Form(parent, "header_loadingscreen")
+
+    form6:MakeHelp({
+        label = "help_enable_loadingscreen",
+    })
+
+    form6:MakeHelp({
+        label = "help_enable_loadingscreen_server",
+    })
+
+    local enbLoadingscreen = form6:MakeCheckBox({
+        label = "label_enable_loadingscreen_server",
+        serverConvar = "ttt2_enable_loadingscreen_server",
+    })
+
+    form6:MakeSlider({
+        label = "label_loadingscreen_min_duration",
+        serverConvar = "ttt2_loadingscreen_min_duration",
+        min = 0,
+        max = 10,
+        decimal = 1,
+        master = enbLoadingscreen,
+    })
 end

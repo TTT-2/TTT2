@@ -8,6 +8,17 @@ if SERVER then
     util.AddNetworkString("TTT2LoadingScreenActive")
 end
 
+local cvLoadingScreenEnabled = CreateConVar(
+    "ttt2_enable_loadingscreen_server",
+    "1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED }
+)
+local cvLoadingScreenMinDuration = CreateConVar(
+    "ttt2_loadingscreen_min_duration",
+    "4",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED }
+)
+
 loadingscreen = loadingscreen or {}
 
 loadingscreen.isShown = false
@@ -21,6 +32,10 @@ loadingscreen.disableSounds = false
 -- @internal
 -- @realm shared
 function loadingscreen.Begin()
+    if not cvLoadingScreenEnabled:GetBool() then
+        return
+    end
+
     -- add manual syncing so that the loading screen starts as soon as the
     -- cleanup map is started
     if SERVER then
@@ -89,15 +104,7 @@ if SERVER then
     -- @return number The minimum time
     -- @realm server
     function loadingscreen.GetDuration()
-        return loadingscreen.duration or 4
-    end
-
-    ---
-    -- Sets the minimum time that a loadingscreen should have.
-    -- @param number duration The minimum time in seconds
-    -- @realm server
-    function loadingscreen.SetDuration(duration)
-        loadingscreen.duration = duration
+        return cvLoadingScreenMinDuration:GetFloat()
     end
 end
 
