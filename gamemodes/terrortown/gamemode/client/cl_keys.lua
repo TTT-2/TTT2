@@ -88,6 +88,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
             })
 
             useEnt = tr.Entity
+
             if not tr.Hit or not IsValid(useEnt) then
                 useEnt = nil
             end
