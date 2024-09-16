@@ -53,6 +53,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added force role admin command (by @mexikoedi)
 - Added `draw.RefreshAvatars(id64)` to refresh avatar icons (by @mexikoedi)
 - Added `GM:TTT2OnButtonUse(ply, ent, oldState)`: a hook that is triggered when a button is pressed and that is able to prevent that button press (by @TimGoll)
+- Added `GM:TTT2PostButtonInitialization(buttonList)`: a hook that is called after all buttons on the map have been initialized (by @TimGoll)
 
 ### Changed
 
