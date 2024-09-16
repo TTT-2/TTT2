@@ -8,16 +8,15 @@ if SERVER then
     util.AddNetworkString("TTT2LoadingScreenActive")
 end
 
-local cvLoadingScreenEnabled = CreateConVar(
-    "ttt2_enable_loadingscreen_server",
-    "1",
-    { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED }
-)
-local cvLoadingScreenMinDuration = CreateConVar(
-    "ttt2_loadingscreen_min_duration",
-    "4",
-    { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED }
-)
+---
+-- @realm server
+-- stylua: ignore
+local cvLoadingScreenEnabled = CreateConVar("ttt2_enable_loadingscreen_server", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED })
+
+---
+-- @realm server
+-- stylua: ignore
+local cvLoadingScreenMinDuration = CreateConVar("ttt2_loadingscreen_min_duration", "4", { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED })
 
 loadingscreen = loadingscreen or {}
 
