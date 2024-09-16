@@ -77,7 +77,7 @@ function entmeta:Spawn()
 end
 
 ---
--- Checks if the entity has any use functionality activated.
+-- Checks if the entity has any use functionality attached.
 -- @param[default=0] number requiredCaps Use caps that are required for this entity
 -- @return boolean Returns true if the entity is usable by the player
 -- @ref https://github.com/ValveSoftware/source-sdk-2013/blob/0d8dceea4310fde5706b3ce1c70609d72a38efdf/sp/src/game/server/player.cpp#L2766C71-L2781
