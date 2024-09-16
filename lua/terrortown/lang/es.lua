@@ -1733,7 +1733,7 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.label_max_extra_slots = "Max extra slots"
 --L.label_weapon_autopickup = "Enable automatic weapon pickup"
 --L.label_sprint_enabled = "Enable sprinting"
---L.label_sprint_max = "Max sprinting stamina"
+--L.label_sprint_max = "Speed boost factor"
 --L.label_sprint_stamina_consumption = "Stamina consumption factor"
 --L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
 --L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
@@ -2352,3 +2352,12 @@ L.decoy_help_primary = "Colocar el señuelo"
 --L.label_button_player_force_role = "force role"
 
 --L.label_player_role = "Select role"
+
+-- 2024-09-16
+--L.help_enable_loadingscreen_server = [[
+--The loadingscreen settings also exist on the client. They are hidden if disabled on the server.
+--
+--The minimum display time is there to give the player time to read the tips. If the reload of the map takes longer than the minimum time, the loadingscreen is shown as long as it needs to be. In general a reload time of 0.5 to 1 second is to be expected.]]
+
+--L.label_enable_loadingscreen_server = "Enable the loadingscreen serverwide"
+--L.label_loadingscreen_min_duration = "Minimum loadingscreen display time"

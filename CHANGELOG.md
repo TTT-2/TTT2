@@ -114,6 +114,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed inverted settings being inverted twice in the equipment editor (by @TimGoll)
 - Fixed OldTTT HUD sidebar elements missing translation (by @TimGoll)
 - Fixed avatar icons not refreshing if they were changed on Steam (by @mexikoedi)
+- Fixed a wrong label for the sprint speed multiplier in the F1 menu (by @TimGoll)
 
 ### Removed
 

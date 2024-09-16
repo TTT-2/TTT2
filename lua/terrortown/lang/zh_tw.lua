@@ -1733,7 +1733,7 @@ L.label_max_special_slots = "特殊槽位最多可攜帶"
 L.label_max_extra_slots = "額外槽位最多可攜帶"
 L.label_weapon_autopickup = "啟用自動武器拾取"
 L.label_sprint_enabled = "啟用沖刺功能"
-L.label_sprint_max = "沖刺體力最大值"
+--L.label_sprint_max = "Speed boost factor"
 L.label_sprint_stamina_consumption = "體力消耗系數"
 L.label_sprint_stamina_regeneration = "體力恢復系數"
 L.label_crowbar_unlocks = "主要攻擊鍵可以作為互動（即解鎖）使用"
@@ -2352,3 +2352,12 @@ L.decoy_help_primary = "安放誘餌"
 --L.label_button_player_force_role = "force role"
 
 --L.label_player_role = "Select role"
+
+-- 2024-09-16
+--L.help_enable_loadingscreen_server = [[
+--The loadingscreen settings also exist on the client. They are hidden if disabled on the server.
+--
+--The minimum display time is there to give the player time to read the tips. If the reload of the map takes longer than the minimum time, the loadingscreen is shown as long as it needs to be. In general a reload time of 0.5 to 1 second is to be expected.]]
+
+--L.label_enable_loadingscreen_server = "Enable the loadingscreen serverwide"
+--L.label_loadingscreen_min_duration = "Minimum loadingscreen display time"
