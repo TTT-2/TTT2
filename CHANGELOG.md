@@ -53,6 +53,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added force role admin command (by @mexikoedi)
 - Added `draw.RefreshAvatars(id64)` to refresh avatar icons (by @mexikoedi)
 - Added `GM:TTT2OnButtonUse(ply, ent, oldState)`: a hook that is triggered when a button is pressed and that is able to prevent that button press (by @TimGoll)
+- Added TargetID and keyInfo to vehicles (by @TimGoll)
 
 ### Changed
 
@@ -114,6 +115,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed OldTTT HUD sidebar elements missing translation (by @TimGoll)
 - Fixed avatar icons not refreshing if they were changed on Steam (by @mexikoedi)
 - Fixed a wrong label for the sprint speed multiplier in the F1 menu (by @TimGoll)
+- Fixed own player name being shown in targetID when in vehicle (by @TimGoll)
 
 ### Removed
 
