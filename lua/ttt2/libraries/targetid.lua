@@ -612,7 +612,7 @@ function targetid.HUDDrawTargetIDButtons(tData)
         or not client:IsTerror()
         or not IsValid(ent)
         or not ent:IsButton()
-        or tData:GetEntityDistance() > 90
+        or tData:GetEntityDistance() > 100
     then
         return
     end
