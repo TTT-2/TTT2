@@ -89,6 +89,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Avatar icons are not fetched anymore but instead created with `AvatarImage` (fixes missing icons for chinese players) (by @mexikoedi)
 - `GM:TTT2PlayerReady` is now called for every player even on clients (by @TimGoll)
 - Updated Japanese translation (by @westooooo)
+- `plyspawn.GetSpawnPointsAroundSpawn` now tries to find spawns that are on the ground if possible (by @TimGoll)
 
 ### Fixed
 

@@ -134,7 +134,17 @@ function plyspawn.GetSpawnPointsAroundSpawn(ply, pos, radiusMultiplier)
     local positions = {}
 
     for i = 1, #spawnPointVariations do
-        positions[i] = pos + spawnPointVariations[i] * boundsPlayer
+        local newPosition = pos + spawnPointVariations[i] * boundsPlayer
+
+        -- make sure the spawn is as close to the bottom as possible to prevent the player
+        -- being to close to the ceiling
+        local groundHeight = navmesh.GetGroundHeight(newPosition)
+
+        if groundHeight then
+            positions[i] = Vector(newPosition.x, newPosition.y, groundHeight)
+        else
+            positions[i] = newPosition
+        end
     end
 
     return positions
