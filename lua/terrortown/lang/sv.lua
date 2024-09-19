@@ -2361,3 +2361,8 @@ L.body_confirm_one = "{finder} bekräftade att {victim} har dött."
 
 --L.label_enable_loadingscreen_server = "Enable the loadingscreen serverwide"
 --L.label_loadingscreen_min_duration = "Minimum loadingscreen display time"
+
+-- 2024-09-18
+--L.label_keyhelper_leave_vehicle = "leave vehicle"
+--L.name_vehicle = "Vehicle"
+--L.vehicle_enter = "Press [{usekey}] to enter vehicle"
