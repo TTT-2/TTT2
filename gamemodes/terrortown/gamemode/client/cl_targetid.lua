@@ -324,6 +324,7 @@ function GM:HUDDrawTargetID()
     targetid.HUDDrawTargetIDButtons(tData)
     targetid.HUDDrawTargetIDDoors(tData)
     targetid.HUDDrawTargetIDDNAScanner(tData)
+    targetid.HUDDrawTargetIDVehicle(tData)
 
     -- add hints to the focused entity (deprecated method of adding stuff to targetID)
     local hint = ent.TargetIDHint
