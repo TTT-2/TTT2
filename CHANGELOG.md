@@ -17,7 +17,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added the option to assign random unique models at round start (by @Exonen2)
 - Added a new voice chat UI (by @TimGoll)
 - Added new credit related hooks (by @Spanospy)
-  - Added `TTT2CanTakeCredits` hook for overriding whether a player is allowed to take credits from a given corpse
+  - Added `GM:TTT2CanTakeCredits()` hook for overriding whether a player is allowed to take credits from a given corpse
   - Added `GM:TTT2OnGiveFoundCredits()` hook which is called when a player has been given credits for searching a corpse
   - Added `GM:TTT2OnReceiveKillCredits()` hook which is called when a player recieves credits for a kill
   - Added `GM:TTT2OnReceiveTeamAwardCredits()` hook which is called when a player recieves credits as a team award
@@ -65,9 +65,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - TargetID is now hidden when a marker vision element is focused (by @TimGoll)
 - Tracers are now drawn for every shot/pellet instead of only 25% of shots/pellets (by @EntranceJew)
 - The ConVar "ttt_debug_preventwin" will now also prevent the time limit from ending the round (by @NickCloudAT)
-- `TTT2GiveFoundCredits` hook is no longer called when checking whether a player is allowed to take credits from a given corpse (by @Spanospy)
+- `GM:TTT2GiveFoundCredits` hook is no longer called when checking whether a player is allowed to take credits from a given corpse (by @Spanospy)
 - Micro optimizations (by @EntranceJew)
-  - switched from `player.GetAll()` to `select(2, player.Iterator())`
   - use `net.ReadPlayer` / `net.WritePlayer` if applicable instead of `net.Read|WriteEntity`
   - Reduced radar bit size for net message
   - The holdtype for pistol weapons now matches the viewmodel
@@ -129,7 +128,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Breaking Changes
 
-- Renamed `TTT2ModifyVoiceChatColor(ply, clr)` to `TTT2ModifyVoiceChatMode(ply, mode)`
+- Renamed `GM:TTT2ModifyVoiceChatColor(ply, clr)` to `GM:TTT2ModifyVoiceChatMode(ply, mode)`
 - Renamed `ply:GetHeightVector()` to `ply:GetHeadPosition()`
 - Removed the `TIPS` module and replaced it with a new `tips` module
 - Removed `draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)` and `draw.SeamlessWebImage(url, parentwidth, parentheight, xrep, yrep, color)` from the `draw` module
