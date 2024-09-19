@@ -6,33 +6,34 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
-- Added hook ENTITY:ClientUse(), which is triggered clientside if an entity is used
+- Added hook ENTITY:ClientUse(), which is triggered clientside if an entity is used (by @ZenBre4ker)
   - Return true to prevent also using this on the server for clientside only usecases
-- Added hook ENTITY:RemoteUse(ply), which is shared
+- Added hook ENTITY:RemoteUse(ply), which is shared (by @ZenBre4ker)
   - Return true if only clientside should be used
-- Added RemoteUse to radio, you can now directly access it via use button on marker focus
-- Added sounds to multiple UI interactions (can be disabled in settings: Gameplay > Client-Sounds)
-- Added a globally audible sound when searching a body
-- Added the option to add a subtitle to a marker vision element
+- Added RemoteUse to radio, you can now directly access it via use button on marker focus (by @ZenBre4ker)
+- Added sounds to multiple UI interactions (can be disabled in settings: Gameplay > Client-Sounds) (by @TimGoll)
+- Added a globally audible sound when searching a body (by @TimGoll and @mexikoedi)
+- Added the option to add a subtitle to a marker vision element (by @TimGoll)
 - Added the option to assign random unique models at round start (by @Exonen2)
 - Added a new voice chat UI (by @TimGoll)
-- Added `TTT2CanTakeCredits` hook for overriding whether a player is allowed to take credits from a given corpse. (by @Spanospy)
-- Added `GM:TTT2OnGiveFoundCredits()` hook which is called when a player has been given credits for searching a corpse.
-- Added `GM:TTT2OnReceiveKillCredits()` hook which is called when a player recieves credits for a kill.
-- Added `GM:TTT2OnReceiveTeamAwardCredits()` hook which is called when a player recieves credits as a team award.
-- Added `GM:TTT2OnTransferCredits()` hook which is called when a player has successfully transfered a credit to another player.
-- Disabled locational voice during the preparing phase by default
+- Added new credit related hooks (by @Spanospy)
+  - Added `TTT2CanTakeCredits` hook for overriding whether a player is allowed to take credits from a given corpse
+  - Added `GM:TTT2OnGiveFoundCredits()` hook which is called when a player has been given credits for searching a corpse
+  - Added `GM:TTT2OnReceiveKillCredits()` hook which is called when a player recieves credits for a kill
+  - Added `GM:TTT2OnReceiveTeamAwardCredits()` hook which is called when a player recieves credits as a team award
+  - Added `GM:TTT2OnTransferCredits()` hook which is called when a player has successfully transfered a credit to another player
+- Disabled locational voice during the preparing phase by default (by @ruby0b)
   - Added a ConVar `ttt_locational_voice_prep` to reenable it
 - Added `SWEP.EnableConfigurableClip` and `SWEP.ConfigurableClip` to set the weapon's clip on buy via the equipment editor (by @TimGoll)
 - Added Text / Nickname length limiting (by @TimGoll)
-- Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range
-- Added a convar `ttt2_inspect_credits_always_visible` to control whether credits are visible to players that do not have a shop
-- Added multiple global voice chat activation modes for clients to choose from (Gameplay > Voice & Volume):
+- Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range (by @ruby0b)
+- Added a convar `ttt2_inspect_credits_always_visible` to control whether credits are visible to players that do not have a shop (by @nike4613)
+- Added multiple global voice chat activation modes for clients to choose from (Gameplay > Voice & Volume): (by @ruby0b)
   - Push-to-Talk (default)
   - Push-to-Mute
   - Toggle
   - Toggle (Activate on Join)
-- Team Voice Chat is always push-to-talk and temporarily disables global voice chat while being used
+- Team Voice Chat is always push-to-talk and temporarily disables global voice chat while being used (by @ruby0b)
 - Added a new generic button to F1 menu elements to be used in custom menus (by @TimGoll)
 - Added toggle and run buttons to many F1 menu elements (by @TimGoll)
 - Added combo cards to the UI, clickable cards that act like combo boxes (by @TimGoll)
@@ -64,7 +65,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - TargetID is now hidden when a marker vision element is focused (by @TimGoll)
 - Tracers are now drawn for every shot/pellet instead of only 25% of shots/pellets (by @EntranceJew)
 - The ConVar "ttt_debug_preventwin" will now also prevent the time limit from ending the round (by @NickCloudAT)
-- `TTT2GiveFoundCredits` hook is no longer called when checking whether a player is allowed to take credits from a given corpse. (by @Spanospy)
+- `TTT2GiveFoundCredits` hook is no longer called when checking whether a player is allowed to take credits from a given corpse (by @Spanospy)
 - Micro optimizations (by @EntranceJew)
   - switched from `player.GetAll()` to `select(2, player.Iterator())`
   - use `net.ReadPlayer` / `net.WritePlayer` if applicable instead of `net.Read|WriteEntity`
@@ -94,7 +95,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed `DynamicCamera` error when a weapon's `CalcView` doesn't return complete values (by @TW1STaL1CKY)
-- Fixed Roundendscreen showing karma changes even if karma is disabled
+- Fixed Roundendscreen showing karma changes even if karma is disabled (by @Histalek)
 - Fixed the player's FOV staying zoomed in if their weapon is removed while scoped in (by @TW1STaL1CKY)
 - Fixed the player's FOV staying zoomed in with the binoculars if they're removed from you (by @TW1STaL1CKY)
 - Fixed weapon unscoping (or generally any time FOV is set back to default) being delayed due to the player's lag (by @TW1STaL1CKY)
