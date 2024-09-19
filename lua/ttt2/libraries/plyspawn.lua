@@ -12,8 +12,6 @@ local table = table
 local mathSin = math.sin
 local mathCos = math.cos
 
-local searchVector = Vector(0, 0, 100)
-
 local spawnPointVariations = { Vector(0, 0, 0) }
 
 for i = 0, 360, 22.5 do
@@ -140,15 +138,10 @@ function plyspawn.GetSpawnPointsAroundSpawn(ply, pos, radiusMultiplier)
 
         -- make sure the spawn is as close to the bottom as possible to prevent the player
         -- being to close to the ceiling
-        local traceGround = util.TraceLine({
-            start = newPosition,
-            endpos = newPosition - searchVector,
-            filter = player.GetAll(),
-            mask = MASK_SOLID,
-        })
+        local groundHeight = navmesh.GetGroundHeight(newPosition)
 
-        if traceGround.Hit then
-            positions[i] = traceGround.HitPos
+        if groundHeight then
+            positions[i] = Vector(newPosition.x, newPosition.y, groundHeight)
         else
             positions[i] = newPosition
         end
