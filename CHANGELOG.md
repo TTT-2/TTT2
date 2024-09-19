@@ -4,6 +4,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
+
 ### Added
 
 - Added hook ENTITY:ClientUse(), which is triggered clientside if an entity is used (by @ZenBre4ker)
