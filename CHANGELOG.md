@@ -118,6 +118,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed avatar icons not refreshing if they were changed on Steam (by @mexikoedi)
 - Fixed a wrong label for the sprint speed multiplier in the F1 menu (by @TimGoll)
 - Fixed own player name being shown in targetID when in vehicle (by @TimGoll)
+- Fixed the haste mode setting being linked to the wrong convar (by @TimGoll)
 
 ### Removed
 
