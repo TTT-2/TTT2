@@ -32,7 +32,7 @@ local cvDetectiveMode = CreateConVar("ttt_sherlock_mode", "1", SERVER and {FCVAR
 ---
 -- @realm server
 -- stylua: ignore
-local cvHasteMode = CreateConVar("ttt_haste_mode", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+local cvHasteMode = CreateConVar("ttt_haste", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
 ---
 -- @realm server
