@@ -87,7 +87,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
     })
 
     local enbHaste = form3:MakeCheckBox({
-        serverConvar = "ttt_haste_mode",
+        serverConvar = "ttt_haste",
         label = "label_haste",
     })
 
