@@ -85,6 +85,10 @@ local sizeIconOverHeadIcon = 0.7 * sizeOverHeadIcon
 -- @param Color colorRole The role color for the background
 -- @realm client
 function DrawOverheadRoleIcon(client, ply, iconRole, colorRole)
+    if not IsValid(client) or not IsValid(ply) then
+        return
+    end
+
     local ang = client:EyeAngles()
     local pos = ply:GetPos() + ply:GetHeadPosition()
     pos.z = pos.z + offsetOverHeadIcon
