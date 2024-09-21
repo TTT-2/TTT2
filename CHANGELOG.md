@@ -120,6 +120,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed avatar icons not refreshing if they were changed on Steam (by @mexikoedi)
 - Fixed a wrong label for the sprint speed multiplier in the F1 menu (by @TimGoll)
 - Fixed own player name being shown in targetID when in vehicle (by @TimGoll)
+- Fixed `ShopEditor.BuildValidEquipmentCache()` being called too early on the client, resulting in a wrong cache state (by @NickCloudAT and @12problems)
 
 ### Removed
 

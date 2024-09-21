@@ -206,8 +206,6 @@ function GM:Initialize()
 
     keyhelp.InitializeBasicKeys()
 
-    ShopEditor.BuildValidEquipmentCache()
-
     tips.Initialize()
 
     ---
@@ -291,6 +289,8 @@ function GM:InitPostEntity()
 
     -- initialize fallback shops
     InitFallbackShops()
+
+    ShopEditor.BuildValidEquipmentCache()
 
     ---
     -- @realm client
