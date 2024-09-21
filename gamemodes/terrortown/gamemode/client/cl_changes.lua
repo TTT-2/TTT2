@@ -2190,6 +2190,7 @@ function CreateChanges()
             <li>Avatar icons not refreshing if they were changed on Steam</li>
             <li>A wrong label for the sprint speed multiplier in the F1 menu</li>
             <li>Own player name being shown in targetID when in vehicle</li>
+            <li>Fixed <code>ShopEditor.BuildValidEquipmentCache()</code> being called to early on the client, resulting in a wrong cache state</li>
         </ul>
         <h2>Removed</h2>
         <ul>
