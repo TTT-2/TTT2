@@ -2,12 +2,6 @@ local math = math
 
 ---
 -- @ignore
-function ITEM:Equip(ply)
-    RunConsoleCommand("ttt_radar_scan")
-end
-
----
--- @ignore
 function ITEM:DrawInfo()
     return math.ceil(math.max(0, (LocalPlayer().radarTime or 30) - (CurTime() - radar.startTime)))
 end

@@ -284,6 +284,17 @@ if CLIENT then
     end
     net.Receive("TTT2RadarUpdateTime", ReceiveRadarTime)
 
+    function radar:SwitchRepeatingMode()
+        local newValue = not self.repeating
+
+        self.repeating = newValue
+        net.Start("TTT2RadarUpdateAutoScan")
+        net.WriteBool(newValue)
+        net.SendToServer()
+
+        radar.repeating = newValue
+    end
+
     ---
     -- Creates the settings menu
     -- @param Panel parent
@@ -301,7 +312,7 @@ if CLIENT then
         dform:StretchToParent(0, 0, 0, 0)
         dform:SetAutoSize(false)
 
-        local owned = LocalPlayer():HasEquipmentItem("item_ttt_radar")
+        local owned = LocalPlayer():HasRadarEquipped()
         if not owned then
             dform:Help(GetTranslation("radar_not_owned"))
 
@@ -335,11 +346,7 @@ if CLIENT then
         dcheck:SetValue(radar.repeating)
 
         dcheck.OnChange = function(s, val)
-            net.Start("TTT2RadarUpdateAutoScan")
-            net.WriteBool(val)
-            net.SendToServer()
-
-            radar.repeating = val
+            radar:SwitchRepeatingMode()
         end
 
         dform:AddItem(dcheck)
@@ -364,13 +371,13 @@ function radar.TriggerRadarScan(ply)
         return
     end
 
-    if not ply:HasEquipmentItem("item_ttt_radar") then
+    if not ply:HasRadarEquipped() then
         LANG.Msg(ply, "radar_not_owned", nil, MSG_CHAT_WARN)
 
         return
     end
 
-    if ply.radar_charge > CurTime() then
+    if ply.radarCharge > CurTime() then
         LANG.Msg(ply, "radar_charging", nil, MSG_CHAT_WARN)
 
         return
@@ -386,7 +393,7 @@ function radar.TriggerRadarScan(ply)
     end
 
     -- remove 0.1 seconds to account for rounding errors
-    ply.radar_charge = CurTime() + ply.radarTime - 0.1
+    ply.radarCharge = CurTime() + ply.radarTime - 0.1
 
     local targets, customradar
 
@@ -531,11 +538,7 @@ end
 -- @realm server
 function radar.SetupRadarScan(ply)
     timer.Create("radarTimeout_" .. ply:SteamID64(), ply.radarTime, 1, function()
-        if
-            not IsValid(ply)
-            or not ply:HasEquipmentItem("item_ttt_radar")
-            or ply.radarDoesNotRepeat
-        then
+        if not IsValid(ply) or not ply.radarRepeating or not ply:HasRadarEquipped() then
             return
         end
 
@@ -554,7 +557,7 @@ function radar.Init(ply)
         return
     end
 
-    ply:ResetRadarTime()
+    ply:ResetRadar()
 
     radar.TriggerRadarScan(ply)
     radar.SetupRadarScan(ply)
@@ -578,7 +581,7 @@ net.Receive("TTT2RadarUpdateAutoScan", function(_, ply)
         return
     end
 
-    ply.radarDoesNotRepeat = not net.ReadBool()
+    ply.radarRepeating = net.ReadBool()
 end)
 
 ---
@@ -597,8 +600,10 @@ end
 ---
 -- Sets the radar time interval to the role or convar default, lets the current scan run out before it is changed.
 -- @realm server
-function plymeta:ResetRadarTime()
+function plymeta:ResetRadar()
     self.radarTime = self:GetSubRoleData().radarTime or GetConVar("ttt2_radar_charge_time"):GetInt()
+    self.radarRepeating = self.radarRepeating or true
+    self.radarCharge = 0
 end
 
 ---
@@ -606,15 +611,19 @@ end
 -- call this function after @{plymeta:SetRadarTime} to enforce an immediate change.
 -- @realm server
 function plymeta:ForceRadarScan()
-    if not self:HasEquipmentItem("item_ttt_radar") then
+    if not self:HasRadarEquipped() then
         return
     end
 
     radar.Deinit(self)
 
     -- reset the radar charge end time to now to allow a new scan
-    self.radar_charge = CurTime()
+    self.radarCharge = CurTime()
 
     radar.TriggerRadarScan(self)
     radar.SetupRadarScan(self)
+end
+
+function plymeta:HasRadarEquipped()
+    return self:HasEquipmentItem("item_ttt_radar") or self:HasEquipmentWeapon("weapon_ttt_radar")
 end

@@ -389,7 +389,6 @@ function plymeta:ResetRoundFlags()
 
     -- equipment stuff
     self.bomb_wire = nil
-    self.radar_charge = 0
     self.decoy = nil
 
     timer.Remove("give_equipment" .. self:UniqueID())

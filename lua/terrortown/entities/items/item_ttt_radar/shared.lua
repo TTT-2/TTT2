@@ -28,7 +28,7 @@ function ITEM:Reset(buyer)
         radar.Deinit(buyer)
     end
 
-    buyer.radar_charge = 0
+    buyer.radarCharge = 0
     if CLIENT then
         radar:Clear()
     end
