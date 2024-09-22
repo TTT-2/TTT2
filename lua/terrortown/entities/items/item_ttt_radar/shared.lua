@@ -17,7 +17,7 @@ ITEM.builtin = true
 -- @ignore
 function ITEM:Equip(buyer)
     if SERVER then
-        RADAR.Init(buyer)
+        radar.Init(buyer)
     end
 end
 
@@ -25,11 +25,11 @@ end
 -- @ignore
 function ITEM:Reset(buyer)
     if SERVER then
-        RADAR.Deinit(buyer)
+        radar.Deinit(buyer)
     end
 
     buyer.radar_charge = 0
     if CLIENT then
-        RADAR:Clear()
+        radar:Clear()
     end
 end

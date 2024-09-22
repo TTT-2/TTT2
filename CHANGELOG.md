@@ -1081,7 +1081,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Moved the disguiser icon to the status system to be only displayed when the player is actually disguised
 - Reworked the addonchecker and added a command to execute the checker at a later point
-- Renamed `RADAR.SetRadarTime(ply, time)` to `ply:SetRadarTime(time)`
+- Renamed `radar.SetRadarTime(ply, time)` to `ply:SetRadarTime(time)`
 - Updated Italian translation (Thanks @ThePlatinumGhost)
 - Removed Is[ROLE] functions of all roles except default TTT ones
 - Moved legacy item initialization to the `items` module (`items.MigrateLegacyItems()`)
@@ -1127,8 +1127,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a few door related hooks and convenience functions
 - Added entityOutputs library to register map entity outputs easier
 - Added speed handling system based on the `TTTPlayerSpeedModifier` hook
-- Added a convenience function for the creation of radar points: `RADAR.CreateTargetTable(ply, pos, ent, color)`
-- Added the possibility to change the radar time by either setting `ROLE.radarTime` or calling `RADAR.SetRadarTime(ply, time)`
+- Added a convenience function for the creation of radar points: `radar.CreateTargetTable(ply, pos, ent, color)`
+- Added the possibility to change the radar time by either setting `ROLE.radarTime` or calling `radar.SetRadarTime(ply, time)`
 - Added two new convars to change the confirmation behaviour
   - `ttt2_confirm_detective_only (default: 0)` - Everybody can search the corpse, but only detectives can confirm them
   - `ttt2_inspect_detective_only (default: 0)` - Only detectives can search and confirm corpses

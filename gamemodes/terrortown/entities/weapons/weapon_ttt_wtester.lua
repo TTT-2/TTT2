@@ -654,8 +654,8 @@ if CLIENT then
         local target = self.ItemSamples[self.ActiveSample]
 
         if not IsValid(target) or not GetGlobalBool("ttt2_dna_radar") then
-            RADAR.samples = {}
-            RADAR.samples_count = 0
+            radar.samples = {}
+            radar.samples_count = 0
 
             self.RadarPos = nil
 
@@ -664,8 +664,8 @@ if CLIENT then
 
         self.RadarPos = target:LocalToWorld(target:OBBCenter())
 
-        RADAR.samples = { { pos = self.RadarPos } }
-        RADAR.samples_count = 1
+        radar.samples = { { pos = self.RadarPos } }
+        radar.samples_count = 1
     end
 
     ---

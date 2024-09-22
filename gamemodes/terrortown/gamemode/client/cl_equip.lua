@@ -839,7 +839,7 @@ function TraitorMenuPopup()
 
     -- Item control
     if client:HasEquipmentItem("item_ttt_radar") then
-        local dradar = RADAR.CreateMenu(dsheet, dframe)
+        local dradar = radar.CreateMenu(dsheet, dframe)
 
         dsheet:AddSheet(
             GetTranslation("radar_name"),

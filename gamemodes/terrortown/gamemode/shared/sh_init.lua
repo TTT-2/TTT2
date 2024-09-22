@@ -601,6 +601,7 @@ include("ttt2/libraries/marker_vision.lua")
 include("ttt2/libraries/weaponrenderer.lua")
 include("ttt2/libraries/game_effects.lua")
 include("ttt2/libraries/voicebattery.lua")
+include("ttt2/libraries/radar.lua")
 
 -- include ttt required files
 ttt_include("sh_decal")
