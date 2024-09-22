@@ -217,8 +217,8 @@ function outline.RenderedEntity()
 end
 
 local function RenderModels(render_ents)
-    for j = 1, #render_ents do
-        local ent = render_ents[j]
+    for i = 1, #render_ents do
+        local ent = render_ents[i]
 
         if IsValid(ent) then
             RenderEnt = ent
