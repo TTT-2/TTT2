@@ -9,7 +9,7 @@ if SERVER then
     util.AddNetworkString("TTT2RadarUpdateTime")
 end
 
-radar = radar or {}
+RADAR = RADAR or {}
 
 local math = math
 
@@ -33,21 +33,21 @@ if CLIENT then
 
     local colorFallback = Color(150, 150, 150)
 
-    radar.targets = {}
-    radar.enable = false
-    radar.startTime = 0
-    radar.bombs = {}
-    radar.bombs_count = 0
-    radar.repeating = true
-    radar.samples = {}
-    radar.samples_count = 0
-    radar.called_corpses = {}
+    RADAR.targets = {}
+    RADAR.enable = false
+    RADAR.startTime = 0
+    RADAR.bombs = {}
+    RADAR.bombs_count = 0
+    RADAR.repeating = true
+    RADAR.samples = {}
+    RADAR.samples_count = 0
+    RADAR.called_corpses = {}
 
     ---
     -- Disables the scan
     -- @internal
     -- @realm client
-    function radar:EndScan()
+    function RADAR:EndScan()
         self.enable = false
         self.startTime = 0
     end
@@ -56,7 +56,7 @@ if CLIENT then
     -- Clears the radar
     -- @internal
     -- @realm client
-    function radar:Clear()
+    function RADAR:Clear()
         self:EndScan()
 
         self.bombs = {}
@@ -69,20 +69,20 @@ if CLIENT then
     -- Cache stuff we'll be drawing
     -- @internal
     -- @realm client
-    function radar.CacheEnts()
+    function RADAR.CacheEnts()
         -- also do some corpse cleanup here
-        for k, corpse in pairs(radar.called_corpses) do
+        for k, corpse in pairs(RADAR.called_corpses) do
             if corpse.called + 45 < CurTime() then
-                radar.called_corpses[k] = nil -- will make # inaccurate, no big deal
+                RADAR.called_corpses[k] = nil -- will make # inaccurate, no big deal
             end
         end
 
-        if radar.bombs_count == 0 then
+        if RADAR.bombs_count == 0 then
             return
         end
 
         -- Update bomb positions for those we know about
-        for idx, b in pairs(radar.bombs) do
+        for idx, b in pairs(RADAR.bombs) do
             local ent = Entity(idx)
 
             if IsValid(ent) then
@@ -139,7 +139,7 @@ if CLIENT then
     -- @hook
     -- @internal
     -- @realm client
-    function radar:Draw(client)
+    function RADAR:Draw(client)
         if not IsValid(client) then
             return
         end
@@ -196,14 +196,14 @@ if CLIENT then
         surface.SetTexture(indicator)
 
         local radarTime = client.radarTime or 30
-        local remaining = math.max(0, radarTime - (CurTime() - radar.startTime))
+        local remaining = math.max(0, radarTime - (CurTime() - RADAR.startTime))
         local alpha_base = 55 + 200 * (remaining / radarTime)
         local mpos = Vector(ScrW() * 0.5, ScrH() * 0.5, 0)
 
         local subrole, alpha, scrpos, md
 
-        for i = 1, #radar.targets do
-            local tgt = radar.targets[i]
+        for i = 1, #RADAR.targets do
+            local tgt = RADAR.targets[i]
 
             alpha = alpha_base
             scrpos = tgt.pos:ToScreen()
@@ -238,14 +238,14 @@ if CLIENT then
         local pos = net.ReadVector()
         local _tmp = { pos = pos, called = CurTime() }
 
-        table.insert(radar.called_corpses, _tmp)
+        table.insert(RADAR.called_corpses, _tmp)
     end
     net.Receive("TTT_CorpseCall", TTT_CorpseCall)
 
     local function ReceiveRadarScan()
         local num_targets = net.ReadUInt(16)
 
-        radar.targets = {}
+        RADAR.targets = {}
 
         for i = 1, num_targets do
             local pos = Vector(net.ReadInt(15), net.ReadInt(15), net.ReadInt(15))
@@ -265,7 +265,7 @@ if CLIENT then
                 color = net.ReadColor()
             end
 
-            radar.targets[i] = {
+            RADAR.targets[i] = {
                 pos = pos,
                 subrole = subrole,
                 team = team,
@@ -274,8 +274,8 @@ if CLIENT then
             }
         end
 
-        radar.enable = true
-        radar.startTime = CurTime()
+        RADAR.enable = true
+        RADAR.startTime = CurTime()
     end
     net.Receive("TTT_Radar", ReceiveRadarScan)
 
@@ -284,7 +284,7 @@ if CLIENT then
     end
     net.Receive("TTT2RadarUpdateTime", ReceiveRadarTime)
 
-    function radar:SwitchRepeatingMode()
+    function RADAR:SwitchRepeatingMode()
         local newValue = not self.repeating
 
         self.repeating = newValue
@@ -292,7 +292,7 @@ if CLIENT then
         net.WriteBool(newValue)
         net.SendToServer()
 
-        radar.repeating = newValue
+        RADAR.repeating = newValue
     end
 end -- CLIENT
 
@@ -301,7 +301,7 @@ end -- CLIENT
 -- @param Player ply The player whose radar is affected
 -- @internal
 -- @realm server
-function radar.TriggerRadarScan(ply)
+function RADAR.TriggerRadarScan(ply)
     if not IsValid(ply) or not ply:IsTerror() then
         return
     end
@@ -363,7 +363,7 @@ function radar.TriggerRadarScan(ply)
             pos.y = math.Round(pos.y)
             pos.z = math.Round(pos.z)
 
-            targets[#targets + 1] = radar.CreateTargetTable(ply, pos, ent)
+            targets[#targets + 1] = RADAR.CreateTargetTable(ply, pos, ent)
         end
     end
 
@@ -454,7 +454,7 @@ end
 -- @param[opt] Color color A color for this radar point, this overwrites the normal color
 -- @return table
 -- @realm server
-function radar.CreateTargetTable(ply, pos, ent, color)
+function RADAR.CreateTargetTable(ply, pos, ent, color)
     local subrole, team = GetDataForRadar(ply, ent)
 
     return {
@@ -470,7 +470,7 @@ end
 -- @param Player ply The player whose radar is affected
 -- @internal
 -- @realm server
-function radar.SetupRadarScan(ply)
+function RADAR.SetupRadarScan(ply)
     timer.Create("radarTimeout_" .. ply:SteamID64(), ply.radarTime, 1, function()
         if
             not IsValid(ply)
@@ -480,33 +480,33 @@ function radar.SetupRadarScan(ply)
             return
         end
 
-        radar.TriggerRadarScan(ply)
-        radar.SetupRadarScan(ply)
+        RADAR.TriggerRadarScan(ply)
+        RADAR.SetupRadarScan(ply)
     end)
 end
 
 ---
--- Inits the radar.
+-- Inits the RADAR.
 -- Called when the radar is added to the player.
 -- @param Player ply The player who owens the radar
 -- @realm server
-function radar.Init(ply)
+function RADAR.Init(ply)
     if not IsValid(ply) then
         return
     end
 
     ply:ResetRadar()
 
-    radar.TriggerRadarScan(ply)
-    radar.SetupRadarScan(ply)
+    RADAR.TriggerRadarScan(ply)
+    RADAR.SetupRadarScan(ply)
 end
 
 ---
--- Deinits the radar.
+-- Deinits the RADAR.
 -- Called when the radar is removed from the player.
 -- @param Player ply The player who owned the radar
 -- @realm server
-function radar.Deinit(ply)
+function RADAR.Deinit(ply)
     if not IsValid(ply) then
         return
     end

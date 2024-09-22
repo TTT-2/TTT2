@@ -76,7 +76,7 @@ function GM:HUDPaint()
     -- @realm client
     -- stylua: ignore
     if hook.Run("HUDShouldDraw", "TTTRadar") then
-        radar:Draw(client)
+        RADAR:Draw(client)
     end
 end
 

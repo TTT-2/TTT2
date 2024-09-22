@@ -400,22 +400,22 @@ function GM:OnReloaded()
 end
 
 ---
--- Caches the @{radar} and @{TBHUD} @{Entity}
+-- Caches the @{RADAR} and @{TBHUD} @{Entity}
 -- @note Called every second by the "cache_ents" timer
 -- @hook
 -- @realm client
 function GM:DoCacheEnts()
-    radar:CacheEnts()
+    RADAR:CacheEnts()
     TBHUD:CacheEnts()
 end
 
 ---
--- Clears the @{radar} and @{TBHUD} @{Entity}
+-- Clears the @{RADAR} and @{TBHUD} @{Entity}
 -- @note Called by the @{GM:ClearClientState} hook
 -- @hook
 -- @realm client
 function GM:HUDClear()
-    radar:Clear()
+    RADAR:Clear()
     TBHUD:Clear()
 end
 
