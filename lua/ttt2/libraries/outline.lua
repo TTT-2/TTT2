@@ -227,8 +227,8 @@ local function RenderModels(render_ents)
     end
 end
 
-local MATERIAL_WHITE = Material("models/debug/debugwhite")
-local mat_antialias = GetConVar("mat_antialias")
+local materialDebugWhite = Material("models/debug/debugwhite")
+local cvMaterialAntialias = GetConVar("mat_antialias")
 local function Render()
     local scene = render.GetRenderTarget()
 
@@ -265,7 +265,7 @@ local function Render()
         -- Start stencil modification
         render.SetStencilEnable(true)
             -- Render using a cheap material
-            render.MaterialOverride(MATERIAL_WHITE)
+            render.MaterialOverride(materialDebugWhite)
             -- We dont need lighting
             render.SuppressEngineLighting(true)
             -- We dont need color
@@ -397,7 +397,7 @@ local function Render()
         -- when its only 1px thick, so if AA is on we add 1px to compensate.
         -- This is done in all cases to still differentiate between 1px and 2px outlines
         local outline_thickness = OutlineThickness
-        if enable_thin_line_workaround and mat_antialias:GetInt() ~= 0 then outline_thickness = outline_thickness + 1 end
+        if enable_thin_line_workaround and cvMaterialAntialias:GetInt() ~= 0 then outline_thickness = outline_thickness + 1 end
 
         -- Draw each corner/side of the outline.
         -- We use the Ex version because the non Ex has some alignment issues.
