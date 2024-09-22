@@ -63,6 +63,48 @@ SWEP.NoSights = true
 -- Radar specific
 SWEP.IsAutomaticScanRunning = false
 local targets = {}
+local statusIcon = Material("vgui/ttt/perks/hud_radar.png")
+local radarAvailable = "radar_scan_available"
+local radarBlocked = "radar_scan_blocked"
+
+if CLIENT then
+    STATUS:RegisterStatus(radarAvailable, {
+        -- sets the icon that will be rendered
+        hud = statusIcon,
+        -- the type that defines the color, it can be 'good', 'bad' or 'default'
+        type = "good",
+    })
+    STATUS:RegisterStatus(radarBlocked, {
+        -- sets the icon that will be rendered
+        hud = statusIcon,
+        -- the type that defines the color, it can be 'good', 'bad' or 'default'
+        type = "bad",
+    })
+end
+
+---
+-- @realm server
+local function UpdateStatus(radarEnt, applyToNewOwner)
+    if CLIENT or not IsValid(radarEnt) then
+        return
+    end
+
+    local lastPly = radarEnt:GetLastOwner()
+    if IsValid(lastPly) then
+        STATUS:RemoveStatus(lastPly, radarAvailable)
+        STATUS:RemoveStatus(lastPly, radarBlocked)
+    end
+
+    local curPly = radarEnt:GetOwner()
+    if applyToNewOwner and IsValid(curPly) then
+        local remainingTime = radarEnt:GetRemainingTime()
+        if remainingTime > 0 then
+            STATUS:AddTimedStatus(curPly, radarBlocked, remainingTime, true)
+        else
+            STATUS:AddStatus(curPly, radarAvailable)
+        end
+    end
+end
 
 -- @realm shared
 -- stylua: ignore
@@ -71,6 +113,7 @@ cvRadarChargeTime = CreateConVar("ttt2_radar_charge_time", "30", {FCVAR_NOTIFY, 
 function SWEP:SetupDataTables()
     self:NetworkVar("Bool", 0, "IsRepeatMode")
     self:NetworkVar("Float", 0, "LastRadarTime")
+    self:NetworkVar("Entity", 0, "LastOwner")
 end
 
 function SWEP:Reset()
@@ -101,16 +144,20 @@ function SWEP:Initialize()
 end
 
 function SWEP:Equip(newOwner)
-    if not IsValid(newOwner) then
-        return
-    end
+    self:SetLastOwner(newOwner)
+    UpdateStatus(self, true)
 
     if self:GetIsRepeatMode() then
-        self:StartAutomaticScan()
+        self:TryTriggerScan()
     end
 end
 
+function SWEP:OnDrop()
+    UpdateStatus(self, false)
+end
+
 function SWEP:OnRemove()
+    UpdateStatus(self, false)
     hook.Remove("HUDPaint", "Radar_Weapon_Targets")
 end
 
@@ -119,7 +166,7 @@ end
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-    if self:TryTriggerScan(false) then
+    if self:TryTriggerScan() then
         -- TODO: Play Sound
     else
         -- LANG.Msg(self:GetOwner(), "radar_charging", nil, MSG_CHAT_WARN)
@@ -134,7 +181,7 @@ function SWEP:SecondaryAttack()
     self:SetIsRepeatMode(not self:GetIsRepeatMode())
 
     if self:GetIsRepeatMode() then
-        self:StartAutomaticScan()
+        self:TryTriggerScan()
     end
     -- TODO: Play Sound
 end
@@ -145,14 +192,8 @@ function SWEP:Reload()
     return false
 end
 
-function SWEP:CanTriggerNextScan(isAutomatic)
-    return IsValid(self:GetOwner())
-        and isAutomatic == self:GetIsRepeatMode()
-        and not self.IsAutomaticScanRunning
-        and (
-            self:GetIsRepeatMode()
-            or CurTime() - self:GetLastRadarTime() > cvRadarChargeTime:GetInt()
-        )
+function SWEP:CanTriggerNextScan()
+    return IsValid(self:GetOwner()) and self:GetRemainingTime() <= 0
 end
 
 ---
@@ -212,12 +253,23 @@ end
 -- @param bool isAutomatic
 -- @internal
 -- @realm shared
-function SWEP:TryTriggerScan(isAutomatic)
-    if not self:CanTriggerNextScan(isAutomatic) then
+function SWEP:TryTriggerScan()
+    if not self:CanTriggerNextScan() then
         return false
     end
 
     self:SetLastRadarTime(CurTime())
+    UpdateStatus(self, true)
+
+    timer.Simple(cvRadarChargeTime:GetInt(), function()
+        UpdateStatus(self, true)
+
+        if not IsValid(self) or not self:GetIsRepeatMode() then
+            return
+        end
+
+        self:TryTriggerScan()
+    end)
 
     if CLIENT then
         return true
@@ -283,28 +335,8 @@ function SWEP:TryTriggerScan(isAutomatic)
     return true
 end
 
-function SWEP:StartAutomaticScan()
-    local wasSuccess = self:TryTriggerScan(true)
-
-    if not wasSuccess then
-        return
-    end
-
-    self.IsAutomaticScanRunning = true
-
-    timer.Simple(cvRadarChargeTime:GetInt(), function()
-        if not IsValid(self) then
-            return
-        end
-
-        self.IsAutomaticScanRunning = false
-
-        if not IsValid(self:GetOwner()) or not self:GetIsRepeatMode() then
-            return
-        end
-
-        self:StartAutomaticScan()
-    end)
+function SWEP:GetRemainingTime()
+    return math.max(0, self:GetLastRadarTime() + cvRadarChargeTime:GetInt() - CurTime() - 0.1)
 end
 
 if CLIENT then
@@ -401,7 +433,8 @@ if CLIENT then
 
     function SWEP:ShouldDraw()
         return IsValid(self:GetOwner())
-            and CurTime() - self:GetLastRadarTime() <= cvRadarChargeTime:GetInt()
+            and self:GetOwner() == LocalPlayer()
+            and self:GetRemainingTime() > 0
     end
 
     local function ReceiveRadarScan()
