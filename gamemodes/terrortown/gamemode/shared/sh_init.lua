@@ -49,7 +49,6 @@ SPECIAL_EQUIPMENT = {
     "weapon_ttt_teleport",
     "weapon_ttt_radar",
     "item_ttt_armor",
-    "item_ttt_radar",
     "item_ttt_nodrowningdmg",
     "item_ttt_noenergydmg",
     "item_ttt_noexplosiondmg",
@@ -75,7 +74,6 @@ TRAITOR_EQUIPMENT = {
     "weapon_ttt_decoy",
     "weapon_ttt_radar",
     "item_ttt_armor",
-    "item_ttt_radar",
     "item_ttt_disguiser",
 }
 

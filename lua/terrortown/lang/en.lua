@@ -113,7 +113,6 @@ Allows you to scan for life signs.
 
 Starts automatic scans as soon as you buy it. Equip to configure it.]]
 L.radar_menutitle = "Radar control"
-L.radar_not_owned = "You are not carrying a Radar!"
 L.radar_scan = "Perform scan"
 L.radar_auto = "Switch Auto-repeat scan mode"
 L.radar_help = "Scan results show for {num} seconds, after which the Radar will have recharged and can be used again."

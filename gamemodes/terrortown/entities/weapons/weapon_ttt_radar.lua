@@ -3,6 +3,8 @@
 -- @desc radar
 -- @section weapon_ttt_radar
 
+local playerGetAll = player.GetAll
+
 if SERVER then
     AddCSLuaFile()
 end
@@ -44,7 +46,7 @@ SWEP.Primary.Delay = 1.0
 
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
-SWEP.Secondary.Automatic = true
+SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 SWEP.Secondary.Delay = 1.0
 
@@ -58,21 +60,58 @@ SWEP.builtin = true
 SWEP.AllowDrop = true
 SWEP.NoSights = true
 
-function SWEP:Equip(newOwner)
-    if SERVER then
-        radar.Init(newOwner)
+-- Radar specific
+SWEP.IsAutomaticScanRunning = false
+local targets = {}
+
+-- @realm shared
+-- stylua: ignore
+cvRadarChargeTime = CreateConVar("ttt2_radar_charge_time", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
+function SWEP:SetupDataTables()
+    self:NetworkVar("Bool", 0, "IsRepeatMode")
+    self:NetworkVar("Float", 0, "LastRadarTime")
+end
+
+function SWEP:Reset()
+    self:SetIsRepeatMode(true)
+    self:SetLastRadarTime(CurTime() - cvRadarChargeTime:GetInt())
+end
+
+---
+-- @ignore
+function SWEP:Initialize()
+    self.BaseClass.Initialize(self)
+
+    self:Reset()
+
+    if CLIENT then
+        hook.Add("HUDPaint", "Radar_Weapon_Targets", function()
+            if not IsValid(self) then
+                hook.Remove("HUDPaint", "Radar_Weapon_Targets")
+                return
+            end
+            if self:ShouldDraw() then
+                self:Draw()
+            end
+        end)
+
+        self:AddTTT2HUDHelp("radar_scan", "radar_auto")
     end
 end
 
-function SWEP:OnDrop()
-    if SERVER then
-        radar.Deinit(self:GetOwner())
+function SWEP:Equip(newOwner)
+    if not IsValid(newOwner) then
+        return
     end
 
-    self:GetOwner().radarCharge = 0
-    if CLIENT then
-        radar:Clear()
+    if self:GetIsRepeatMode() then
+        self:StartAutomaticScan()
     end
+end
+
+function SWEP:OnRemove()
+    hook.Remove("HUDPaint", "Radar_Weapon_Targets")
 end
 
 ---
@@ -80,8 +119,10 @@ end
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-    if SERVER then
-        radar.TriggerRadarScan(self:GetOwner())
+    if self:TryTriggerScan(false) then
+        -- TODO: Play Sound
+    else
+        -- LANG.Msg(self:GetOwner(), "radar_charging", nil, MSG_CHAT_WARN)
     end
 end
 
@@ -90,9 +131,12 @@ end
 function SWEP:SecondaryAttack()
     self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
-    if CLIENT then
-        radar:SwitchRepeatingMode()
+    self:SetIsRepeatMode(not self:GetIsRepeatMode())
+
+    if self:GetIsRepeatMode() then
+        self:StartAutomaticScan()
     end
+    -- TODO: Play Sound
 end
 
 ---
@@ -101,15 +145,169 @@ function SWEP:Reload()
     return false
 end
 
-if CLIENT then
-    ---
-    -- @ignore
-    function SWEP:Initialize()
-        self:AddTTT2HUDHelp("radar_scan", "radar_auto")
+function SWEP:CanTriggerNextScan(isAutomatic)
+    return IsValid(self:GetOwner())
+        and isAutomatic == self:GetIsRepeatMode()
+        and not self.IsAutomaticScanRunning
+        and (
+            self:GetIsRepeatMode()
+            or CurTime() - self:GetLastRadarTime() > cvRadarChargeTime:GetInt()
+        )
+end
 
-        self.BaseClass.Initialize(self)
+---
+-- Creates a new radar point
+-- @param Player ply The player that will see this radar point
+-- @param Vector pos The position of the radar point
+-- @param[opt] Entity ent The entity that is used for this radar point
+-- @param[opt] Color color A color for this radar point, this overwrites the normal color
+-- @return table
+-- @realm server
+local function CreateTargetTable(ply, pos, ent, color)
+    local subrole, team = -1, "none"
+
+    if not IsValid(ent) then
+        subrole = -1
+    elseif not ent:IsPlayer() then
+        -- Decoys appear as innocents for players from other teams
+        if ent:GetNWString("decoy_owner_team", "none") ~= ply:GetTeam() then
+            subrole = ROLE_INNOCENT
+            team = TEAM_INNOCENT
+        end
+    else
+        ---
+        -- @realm server
+        -- stylua: ignore
+        subrole, team = hook.Run("TTT2ModifyRadarRole", ply, ent)
+
+        if not subrole then
+            subrole = (
+                ent:IsInTeam(ply)
+                or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())
+            )
+                    and ent:GetSubRole()
+                or ROLE_INNOCENT
+        end
+
+        if not team then
+            team = (
+                ent:IsInTeam(ply)
+                or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())
+            )
+                    and ent:GetTeam()
+                or TEAM_INNOCENT
+        end
     end
 
+    return {
+        pos = pos,
+        subrole = subrole,
+        team = team,
+        color = color,
+    }
+end
+
+---
+-- Triggers a new radar scan. Fails if the radar is still charging.
+-- @param bool isAutomatic
+-- @internal
+-- @realm shared
+function SWEP:TryTriggerScan(isAutomatic)
+    if not self:CanTriggerNextScan(isAutomatic) then
+        return false
+    end
+
+    self:SetLastRadarTime(CurTime())
+
+    if CLIENT then
+        return true
+    end
+
+    local ply = self:GetOwner()
+
+    local scan_ents = playerGetAll()
+
+    table.Add(scan_ents, ents.FindByClass("ttt_decoy"))
+
+    local targets = {}
+    for i = 1, #scan_ents do
+        local ent = scan_ents[i]
+
+        if
+            not IsValid(ent)
+            or ply == ent
+            or ent:IsPlayer() and (not ent:IsTerror() or ent:GetNWBool("disguised", false))
+        then
+            continue
+        end
+
+        local pos = ent:LocalToWorld(ent:OBBCenter())
+
+        -- Round off, easier to send and inaccuracy does not matter
+        pos.x = math.Round(pos.x)
+        pos.y = math.Round(pos.y)
+        pos.z = math.Round(pos.z)
+
+        targets[#targets + 1] = CreateTargetTable(ply, pos, ent)
+    end
+
+    net.Start("TTT_Radar")
+    net.WriteUInt(#targets, 16)
+
+    for i = 1, #targets do
+        local tgt = targets[i]
+
+        net.WriteInt(tgt.pos.x, 15)
+        net.WriteInt(tgt.pos.y, 15)
+        net.WriteInt(tgt.pos.z, 15)
+
+        if tgt.subrole == -1 then
+            net.WriteBool(false)
+        else
+            net.WriteBool(true)
+            net.WriteUInt(tgt.subrole, ROLE_BITS)
+        end
+
+        net.WriteString(tgt.team or "none")
+
+        if tgt.color then
+            net.WriteBool(true)
+            net.WriteColor(tgt.color)
+        else
+            net.WriteBool(false)
+        end
+    end
+
+    net.Send(ply)
+
+    return true
+end
+
+function SWEP:StartAutomaticScan()
+    local wasSuccess = self:TryTriggerScan(true)
+
+    if not wasSuccess then
+        return
+    end
+
+    self.IsAutomaticScanRunning = true
+
+    timer.Simple(cvRadarChargeTime:GetInt(), function()
+        if not IsValid(self) then
+            return
+        end
+
+        self.IsAutomaticScanRunning = false
+
+        if not IsValid(self:GetOwner()) or not self:GetIsRepeatMode() then
+            return
+        end
+
+        self:StartAutomaticScan()
+    end)
+end
+
+if CLIENT then
     ---
     -- @ignore
     function SWEP:AddToSettingsMenu(parent)
@@ -157,4 +355,86 @@ if CLIENT then
             bodygroup = {},
         })
     end
+
+    local indicator = surface.GetTextureID("effects/select_ring")
+    local colorFallback = Color(150, 150, 150)
+    local near_cursor_dist = 180
+
+    function SWEP:Draw()
+        surface.SetFont("HudSelectionText")
+        surface.SetTexture(indicator)
+        local mpos = Vector(ScrW() * 0.5, ScrH() * 0.5, 0)
+
+        local subrole, alpha, scrpos, md
+
+        for i = 1, #targets do
+            local tgt = targets[i]
+
+            alpha = 255
+            scrpos = tgt.pos:ToScreen()
+
+            if scrpos.visible then
+                md = mpos:Distance(Vector(scrpos.x, scrpos.y, 0))
+
+                if md < near_cursor_dist then
+                    alpha = math.Clamp(alpha * (md / near_cursor_dist), 40, 230)
+                end
+
+                subrole = tgt.subrole or ROLE_INNOCENT
+
+                local roleData = roles.GetByIndex(subrole)
+                local c = roleData.radarColor
+                    or (TEAMS[tgt.team] and TEAMS[tgt.team].color or colorFallback)
+
+                if tgt.color then
+                    surface.SetDrawColor(tgt.color.r, tgt.color.g, tgt.color.b, alpha)
+                    surface.SetTextColor(tgt.color.r, tgt.color.g, tgt.color.b, alpha)
+                else
+                    surface.SetDrawColor(c.r, c.g, c.b, alpha)
+                    surface.SetTextColor(c.r, c.g, c.b, alpha)
+                end
+
+                RADAR.DrawTarget(tgt, 24, 0)
+            end
+        end
+    end
+
+    function SWEP:ShouldDraw()
+        return IsValid(self:GetOwner())
+            and CurTime() - self:GetLastRadarTime() <= cvRadarChargeTime:GetInt()
+    end
+
+    local function ReceiveRadarScan()
+        local num_targets = net.ReadUInt(16)
+
+        targets = {}
+
+        for i = 1, num_targets do
+            local pos = Vector(net.ReadInt(15), net.ReadInt(15), net.ReadInt(15))
+
+            local hasSubrole = net.ReadBool()
+            local subrole
+
+            if hasSubrole then
+                subrole = net.ReadUInt(ROLE_BITS)
+            end
+
+            local team = net.ReadString()
+
+            local color
+
+            if net.ReadBool() then
+                color = net.ReadColor()
+            end
+
+            targets[i] = {
+                pos = pos,
+                subrole = subrole,
+                team = team,
+                hasSubrole = hasSubrole,
+                color = color,
+            }
+        end
+    end
+    net.Receive("TTT_Radar", ReceiveRadarScan)
 end
