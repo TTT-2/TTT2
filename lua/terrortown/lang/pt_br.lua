@@ -814,7 +814,6 @@ L.sb_sortby = "Classificar por:"
 
 -- 2018-07-24
 L.equip_tooltip_main = "Menu de Equipamentos"
-L.equip_tooltip_radar = "Controle do Radar"
 L.equip_tooltip_disguise = "Controle do Disfarce"
 L.equip_tooltip_radio = "Controle do Rádio"
 L.equip_tooltip_xfer = "Transferir créditos"

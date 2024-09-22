@@ -814,7 +814,6 @@ L.sb_sortby = "Sıralama Ölçütü"
 
 -- 2018-07-24
 L.equip_tooltip_main = "Ekipman menüsü"
-L.equip_tooltip_radar = "Radar kontrolü"
 L.equip_tooltip_disguise = "Kılık değiştirme kontrolü"
 L.equip_tooltip_radio = "Radyo kontrolü"
 L.equip_tooltip_xfer = "Kredileri aktar"

@@ -814,7 +814,6 @@ L.sb_sortby = "排序方法："
 
 -- 2018-07-24
 L.equip_tooltip_main = "装备菜单"
-L.equip_tooltip_radar = "雷达控制"
 L.equip_tooltip_disguise = "伪装器控制"
 L.equip_tooltip_radio = "收音机控制"
 L.equip_tooltip_xfer = "转移积分"

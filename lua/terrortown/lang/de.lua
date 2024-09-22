@@ -814,7 +814,6 @@ L.sb_sortby = "Sortiere nach:"
 
 -- 2018-07-24
 L.equip_tooltip_main = "Ausrüstungsmenü"
-L.equip_tooltip_radar = "Radar-Einstellungen"
 L.equip_tooltip_disguise = "Tarnungs-Einstellungen"
 L.equip_tooltip_radio = "Radio-Einstellungen"
 L.equip_tooltip_xfer = "Ausrüstungspunkte transferieren"

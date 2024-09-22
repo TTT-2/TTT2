@@ -814,7 +814,6 @@ L.sb_sortby = "排序方法："
 
 -- 2018-07-24
 L.equip_tooltip_main = "裝備菜單"
-L.equip_tooltip_radar = "雷達控製"
 L.equip_tooltip_disguise = "偽裝器控製"
 L.equip_tooltip_radio = "收音機控製"
 L.equip_tooltip_xfer = "轉移信用點數"

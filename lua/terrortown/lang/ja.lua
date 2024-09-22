@@ -814,7 +814,6 @@ L.sb_sortby = "並び変え順:"
 
 -- 2018-07-24
 L.equip_tooltip_main = "装備品一覧"
-L.equip_tooltip_radar = "レーダーメニュー"
 L.equip_tooltip_disguise = "変装メニュー"
 L.equip_tooltip_radio = "ラジオメニュー"
 L.equip_tooltip_xfer = "クレジット譲渡"

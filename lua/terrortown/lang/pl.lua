@@ -814,7 +814,6 @@ L.sb_sortby = "Sortuj:"
 
 -- 2018-07-24
 L.equip_tooltip_main = "Menu Ekwipunktu"
-L.equip_tooltip_radar = "Kontrola radaru"
 L.equip_tooltip_disguise = "Kontrola przebrania"
 L.equip_tooltip_radio = "Kontrola radia"
 L.equip_tooltip_xfer = "Transfer kredytów"

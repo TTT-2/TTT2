@@ -837,20 +837,6 @@ function TraitorMenuPopup()
         GetTranslation("equip_tooltip_main")
     )
 
-    -- Item control
-    if client:HasRadarEquipped() then
-        local dradar = radar.CreateMenu(dsheet, dframe)
-
-        dsheet:AddSheet(
-            GetTranslation("radar_name"),
-            dradar,
-            "icon16/magnifier.png",
-            false,
-            false,
-            GetTranslation("equip_tooltip_radar")
-        )
-    end
-
     -- Credit transferring
     if credits > 0 then
         local dtransfer = CreateTransferMenu(dsheet)

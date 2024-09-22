@@ -814,7 +814,6 @@ L.sb_sortby = "Сортувати за:"
 
 -- 2018-07-24
 L.equip_tooltip_main = "Меню обладнання"
-L.equip_tooltip_radar = "Керування радаром"
 L.equip_tooltip_disguise = "Керування маскуванням"
 L.equip_tooltip_radio = "Керування радіо"
 L.equip_tooltip_xfer = "Переказ кредитів"

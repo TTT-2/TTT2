@@ -294,71 +294,6 @@ if CLIENT then
 
         radar.repeating = newValue
     end
-
-    ---
-    -- Creates the settings menu
-    -- @param Panel parent
-    -- @param Panel frame
-    -- @return Panel the dform
-    -- @internal
-    -- @realm client
-    function radar.CreateMenu(parent, frame)
-        GetTranslation = GetTranslation or LANG.GetTranslation
-        GetPTranslation = GetPTranslation or LANG.GetParamTranslation
-        --local w, h = parent:GetSize()
-
-        local dform = vgui.Create("DForm", parent)
-        dform:SetLabel(GetTranslation("radar_menutitle"))
-        dform:StretchToParent(0, 0, 0, 0)
-        dform:SetAutoSize(false)
-
-        local owned = LocalPlayer():HasRadarEquipped()
-        if not owned then
-            dform:Help(GetTranslation("radar_not_owned"))
-
-            return dform
-        end
-
-        local bw, bh = 100, 25
-
-        local dscan = vgui.Create("DButton", dform)
-        dscan:SetSize(bw, bh)
-        dscan:SetText(GetTranslation("radar_scan"))
-
-        dscan.DoClick = function(s)
-            RunConsoleCommand("ttt_radar_scan")
-
-            frame:Close()
-        end
-
-        dform:AddItem(dscan)
-
-        local dlabel = vgui.Create("DLabel", dform)
-        dlabel:SetText(GetPTranslation("radar_help", { num = LocalPlayer().radarTime or 30 }))
-        dlabel:SetWrap(true)
-        dlabel:SetTall(50)
-
-        dform:AddItem(dlabel)
-
-        local dcheck = vgui.Create("DCheckBoxLabel", dform)
-        dcheck:SetText(GetTranslation("radar_auto"))
-        dcheck:SetIndent(5)
-        dcheck:SetValue(radar.repeating)
-
-        dcheck.OnChange = function(s, val)
-            radar:SwitchRepeatingMode()
-        end
-
-        dform:AddItem(dcheck)
-
-        dform.Think = function(s)
-            dscan:SetEnabled(not radar.repeating and owned)
-        end
-
-        dform:SetVisible(true)
-
-        return dform
-    end
 end -- CLIENT
 
 ---
@@ -371,7 +306,7 @@ function radar.TriggerRadarScan(ply)
         return
     end
 
-    if not ply:HasRadarEquipped() then
+    if not ply:HasEquipmentWeapon("weapon_ttt_radar") then
         LANG.Msg(ply, "radar_not_owned", nil, MSG_CHAT_WARN)
 
         return
@@ -461,7 +396,6 @@ function radar.TriggerRadarScan(ply)
 
     net.Send(ply)
 end
-concommand.Add("ttt_radar_scan", radar.TriggerRadarScan)
 
 ---
 -- This hook can be used to modify the radar dots of players.
@@ -538,7 +472,11 @@ end
 -- @realm server
 function radar.SetupRadarScan(ply)
     timer.Create("radarTimeout_" .. ply:SteamID64(), ply.radarTime, 1, function()
-        if not IsValid(ply) or not ply.radarRepeating or not ply:HasRadarEquipped() then
+        if
+            not IsValid(ply)
+            or not ply.radarRepeating
+            or not ply:HasEquipmentWeapon("weapon_ttt_radar")
+        then
             return
         end
 
@@ -604,26 +542,4 @@ function plymeta:ResetRadar()
     self.radarTime = self:GetSubRoleData().radarTime or GetConVar("ttt2_radar_charge_time"):GetInt()
     self.radarRepeating = self.radarRepeating or true
     self.radarCharge = 0
-end
-
----
--- Forces a new radar scan, even when the radar is still charging. It is recommended to
--- call this function after @{plymeta:SetRadarTime} to enforce an immediate change.
--- @realm server
-function plymeta:ForceRadarScan()
-    if not self:HasRadarEquipped() then
-        return
-    end
-
-    radar.Deinit(self)
-
-    -- reset the radar charge end time to now to allow a new scan
-    self.radarCharge = CurTime()
-
-    radar.TriggerRadarScan(self)
-    radar.SetupRadarScan(self)
-end
-
-function plymeta:HasRadarEquipped()
-    return self:HasEquipmentItem("item_ttt_radar") or self:HasEquipmentWeapon("weapon_ttt_radar")
 end

@@ -814,7 +814,6 @@ L.sb_sortby = "Ordina per:"
 
 -- 2018-07-24
 L.equip_tooltip_main = "Menù equipaggiamento"
-L.equip_tooltip_radar = "Controllo Radar"
 L.equip_tooltip_disguise = "Controllo Travestimento"
 L.equip_tooltip_radio = "Controllo Radio"
 L.equip_tooltip_xfer = "Trasferisci crediti"

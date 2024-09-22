@@ -816,7 +816,6 @@ L.sb_sortby = "Сортировка:"
 
 -- 2018-07-24
 L.equip_tooltip_main = "Меню снаряжения"
-L.equip_tooltip_radar = "Управление радаром"
 L.equip_tooltip_disguise = "Управление Маскировкой"
 L.equip_tooltip_radio = "Управление Радио"
 L.equip_tooltip_xfer = "Передача кредитов"

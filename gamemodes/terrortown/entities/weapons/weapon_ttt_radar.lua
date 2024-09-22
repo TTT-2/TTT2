@@ -80,7 +80,9 @@ end
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-    radar.TriggerRadarScan(self:GetOwner())
+    if SERVER then
+        radar.TriggerRadarScan(self:GetOwner())
+    end
 end
 
 ---
