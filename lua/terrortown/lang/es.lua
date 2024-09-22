@@ -106,8 +106,12 @@ L.disg_enable = "Activar disfraz"
 L.disg_help1 = "Cuando tu disfraz esté activo, tu nombre, vida y karma no se mostrarán cuando alguien te mire. Además, estarás oculto del radar del detective."
 L.disg_help2 = "Pulsa la telca Enter del Numpad para activar el disfraz sin tener que usar de menú. También puedes configurar una tecla bajo el comando 'ttt_toggle_disguise' usando la consola."
 
--- Radar tab in equipment menu
+-- Radar
 L.radar_name = "Radar"
+--L.radar_desc = [[
+--Permite detectar señales de vida.
+--
+--Empieza por si solo luego de ser comprado. Configúrelo en la pestaña del radar.]]
 L.radar_menutitle = "Control del Radar"
 L.radar_not_owned = "¡No estás llevando un Radar!"
 L.radar_scan = "Realizar escaneo"
@@ -206,12 +210,6 @@ L.item_armor_desc = [[
 Reduce el daño de bala, fuego y explosivo. Se desgasta con el uso.
 
 Puede ser comprado múltiples veces. Tras alcanzar cierto valor de armadura, el chaleco se vuelve más resistente.]]
-
-L.item_radar = "Radar"
-L.item_radar_desc = [[
-Permite detectar señales de vida.
-
-Empieza por si solo luego de ser comprado. Configúrelo en la pestaña del radar.]]
 
 L.item_disg = "Disfraz"
 L.item_disg_desc = [[

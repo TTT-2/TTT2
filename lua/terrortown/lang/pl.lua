@@ -106,8 +106,12 @@ L.disg_enable = "Włącz przebranie"
 L.disg_help1 = "Kiedy twoje przebranie jest aktywne, twoje imie, zdrowie i karma nie będzie widoczna, gdy ktoś na ciebie spojrzy. Ponadto, będziesz niewidzoczny dla radaru Detektywa."
 L.disg_help2 = "Kliknij Enter na Numpadzie, by przełączać przebranie bez używania menu. Możesz też ustawić inny przycisk do 'ttt_toggle_disguise' używając konsoli."
 
--- Radar tab in equipment menu
+-- Radar
 L.radar_name = "Radar"
+--L.radar_desc = [[
+--Wyszukuje oznak życia, skanując.
+--
+--Zaczyna automatycznie skanować tylko jak go kupisz. Skonfiguruj to w zakładce radaru w tym menu.]]
 L.radar_menutitle = "Obsługa radaru"
 L.radar_not_owned = "Nie masz radaru!"
 L.radar_scan = "Wykonaj skanowanie"
@@ -206,12 +210,6 @@ L.item_armor_desc = [[
 Zmniejsza obrażenia, zużywa się z czasem
 
 Można ją zakupić kilka razy. Po osiągnięciu odpowiedniej liczby punktów, kamizelka się wzmacnia!]]
-
-L.item_radar = "Radar"
-L.item_radar_desc = [[
-Wyszukuje oznak życia, skanując.
-
-Zaczyna automatycznie skanować tylko jak go kupisz. Skonfiguruj to w zakładce radaru w tym menu.]]
 
 L.item_disg = "Przebranie"
 L.item_disg_desc = [[

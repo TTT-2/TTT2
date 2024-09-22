@@ -106,8 +106,12 @@ L.disg_enable = "Kılık değiştirmeyi etkinleştir"
 L.disg_help1 = "Kılık değiştiğinde, biri sana baktığında adın, sağlığın ve Karman gösterilmez. Ayrıca, bir Dedektifin radarından gizleneceksiniz."
 L.disg_help2 = "Menüyü kullanmadan kılık değiştirmek için Numpad Enter tuşuna basın. Konsolu kullanarak farklı bir tuşa 'ttt_toggle_digguise' olarak da atayabilirsiniz."
 
--- Radar tab in equipment menu
+-- Radar
 L.radar_name = "Radar"
+--L.radar_desc = [[
+--Yaşam belirtilerini taramanızı sağlar.
+--
+--Satın alır almaz otomatik taramaları başlatır. Bu menünün Radar sekmesinde yapılandırın.]]
 L.radar_menutitle = "Radar kontrolü"
 L.radar_not_owned = "Radar taşımıyorsun!"
 L.radar_scan = "Tarama yap"
@@ -206,12 +210,6 @@ L.item_armor_desc = [[
 Mermi, ateş ve patlama hasarını azaltır. Zamanla tükenir.
 
 Birden çok kez satın alınabilir. Belirli bir zırh değerine ulaştıktan sonra, zırh güçlenir.]]
-
-L.item_radar = "Radar"
-L.item_radar_desc = [[
-Yaşam belirtilerini taramanızı sağlar.
-
-Satın alır almaz otomatik taramaları başlatır. Bu menünün Radar sekmesinde yapılandırın.]]
 
 L.item_disg = "Kılık Değiştirici"
 L.item_disg_desc = [[

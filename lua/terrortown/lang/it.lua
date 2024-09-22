@@ -106,8 +106,12 @@ L.disg_enable = "Attiva travestimento"
 L.disg_help1 = "Quando il tuo travestimento è attivo, il tuo nome, la tua vita e il tuo karma non si vedono quando qualcuno ti guarda. In più, sarai nascosto al radar del Detective."
 L.disg_help2 = "Premi Numpad Enter per togliere il travestimento senza aprire il menù. Puoi anche metter un tasto diverso in 'ttt_toggle_disguise' usando la console."
 
--- Radar tab in equipment menu
+-- Radar
 L.radar_name = "Radar"
+--L.radar_desc = [[
+--Ti permette di fare una scansione dei segni vitali.
+--
+--Comincia una ricerca automatica appena lo compri. Configuralo nella finestra Radar di questo menù.]]
 L.radar_menutitle = "Controllo del Radar"
 L.radar_not_owned = "Non hai un Radar!"
 L.radar_scan = "Fai una scansione"
@@ -206,12 +210,6 @@ L.item_armor_desc = [[
 Riduce il danno dei proiettili, fuoco e il danno esplosivo. Si consuma nel tempo.
 
 Può essere comprata multiple volte. Dopo aver superato uno specifico valore, l'armatura diventa più forte.]]
-
-L.item_radar = "Radar"
-L.item_radar_desc = [[
-Ti permette di fare una scansione dei segni vitali.
-
-Comincia una ricerca automatica appena lo compri. Configuralo nella finestra Radar di questo menù.]]
 
 L.item_disg = "Travestimento"
 L.item_disg_desc = [[

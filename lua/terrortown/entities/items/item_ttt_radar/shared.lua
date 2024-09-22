@@ -5,8 +5,8 @@ end
 ITEM.hud = Material("vgui/ttt/perks/hud_radar.png")
 ITEM.EquipMenuData = {
     type = "item_active",
-    name = "item_radar",
-    desc = "item_radar_desc",
+    name = "radar_name",
+    desc = "radar_desc",
 }
 ITEM.material = "vgui/ttt/icon_radar"
 ITEM.CanBuy = { ROLE_TRAITOR, ROLE_DETECTIVE }

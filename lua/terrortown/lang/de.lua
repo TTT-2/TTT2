@@ -106,8 +106,12 @@ L.disg_enable = "Tarnung aktivieren"
 L.disg_help1 = "Wenn deine Tarnung aktiv ist, werden dein Name, Leben und Karma nicht angezeigt, wenn dich jemand anschaut. Zusätzlich tauchst du nicht auf dem Radar des Detektivs auf."
 L.disg_help2 = "Drücke Enter auf dem Numpad, um die Tarnung an- oder auszuschalten, ohne das Menü zu nutzen. Du kannst alternativ 'ttt_toggle_diguise' durch die Konsole auf eine andere Taste legen."
 
--- Radar tab in equipment menu
+-- Radar
 L.radar_name = "Radar"
+L.radar_desc = [[
+Dies erlaubt dir nach Lebenszeichen zu scannen.
+
+Es startet automatisch beim Kauf. Rüste es aus um es einzustellen.]]
 L.radar_menutitle = "Radar-Einstellungen"
 L.radar_not_owned = "Du trägst kein Radar!"
 L.radar_scan = "Scan durchführen"
@@ -206,12 +210,6 @@ L.item_armor_desc = [[
 Verringere den Schaden durch Kugeln, Feuer und Explosionen. Geht mit der Zeit kaputt.
 
 Du kannst es mehrfach kaufen. Beim Erreichen eines gewissen Rüstungswert wird die Rüstung stärker.]]
-
-L.item_radar = "Radar"
-L.item_radar_desc = [[
-Dies erlaubt dir nach Lebenszeichen zu scannen.
-
-Es startet automatisch beim Kauf. Stelle es im Reiter "Radar" dieses Menüs ein.]]
 
 L.item_disg = "Tarnung"
 L.item_disg_desc = [[

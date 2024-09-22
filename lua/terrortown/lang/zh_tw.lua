@@ -106,8 +106,12 @@ L.disg_enable = "執行偽裝"
 L.disg_help1 = "偽裝開啟後，別人瞄準你時，將不會看見你的名字，生命以及業值。除此之外，你也能躲避探長的雷達。"
 L.disg_help2 = "可直接在主選單外，使用數字鍵來切換偽裝。你也可以用控制台指令綁定一個按鍵（ttt_toggle_disguise）。"
 
--- Radar tab in equipment menu
+-- Radar
 L.radar_name = "雷達"
+--L.radar_desc = [[
+--允許你掃描生命訊號。
+--
+--一旦持有，它將自動掃描。需要啟用時，可在選單設定它]]
 L.radar_menutitle = "雷達控制器"
 L.radar_not_owned = "你未持有雷達！"
 L.radar_scan = "執行掃描"
@@ -206,12 +210,6 @@ L.item_armor_desc = [[
 阻擋子彈，火焰和爆炸傷害。耐久會隨著使用而降低。
 
 這個裝備可以購買多次。護甲達到一定閾值後防禦力會上升。]]
-
-L.item_radar = "雷達"
-L.item_radar_desc = [[
-允許你掃描生命訊號。
-
-一旦持有，它將自動掃描。需要啟用時，可在選單設定它]]
 
 L.item_disg = "偽裝"
 L.item_disg_desc = [[

@@ -106,8 +106,12 @@ L.disg_enable = "変装を有効にする"
 L.disg_help1 = "変装している時、誰かがあなたを見てもあなたの名前、体力とカルマは表示されない。また、Detectiveのレーダーにも反応されないだろう。"
 L.disg_help2 = "テンキーのEnterを押すとCキーからのメニューを使用せずに変装を切り替えできる。 開発者コンソールで「ttt_toggle_disguise」を異なるキーに割り当てることが可能。"
 
--- Radar tab in equipment menu
+-- Radar
 L.radar_name = "レーダー"
+-- L.radar_desc = [[
+-- 生命反応を捉えることができる。
+--
+-- 購入するとすぐに自動で探知してくれる。 設定はCキーのレーダーメニューから。]]
 L.radar_menutitle = "レーダーメニュー"
 L.radar_not_owned = "レーダーはまだ持っていないぞ！"
 L.radar_scan = "スキャンを実行。"
@@ -206,12 +210,6 @@ L.item_armor_desc = [[
 弾丸、炎、爆発によるダメージを軽減。延長時間になったら使い物にならない。
 
 複数の購入が可能。ある特定の装甲値に達した後、アーマーは強化される。]]
-
-L.item_radar = "レーダー"
-L.item_radar_desc = [[
-生命反応を捉えることができる。
-
-購入するとすぐに自動で探知してくれる。 設定はCキーのレーダーメニューから。]]
 
 L.item_disg = "変装装置"
 L.item_disg_desc = [[

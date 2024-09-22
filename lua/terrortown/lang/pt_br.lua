@@ -106,8 +106,12 @@ L.disg_enable = "Habilitar Disfarce"
 L.disg_help1 = "Quando você está disfarçado, seu nome, saúde e karma não são exibidos quando alguém olha para você. Em adição, você é ocultado dos radares dos Detetives"
 L.disg_help2 = "Pressione a tecla Enter do teclado numérico para disfarçar-se sem usar o menu. Você também pode fazer uma bind com o comando 'ttt_toggle_disguise' usando o console."
 
--- Radar tab in equipment menu
+-- Radar
 L.radar_name = "Radar"
+--L.radar_desc = [[
+--Permite varrer sinais vitais.
+--
+--Varre automaticamente assim que você o compra. Configure-o na aba Radar deste menu.]]
 L.radar_menutitle = "Controle do Radar"
 L.radar_not_owned = "Você não possui um Radar!"
 L.radar_scan = "Realizar varredura"
@@ -206,12 +210,6 @@ L.item_armor_desc = [[
 Reduz o dano das balas em 30% quando você é atingido.
 
 Equipamento padrão de Detetives.]]
-
-L.item_radar = "Radar"
-L.item_radar_desc = [[
-Permite varrer sinais vitais.
-
-Varre automaticamente assim que você o compra. Configure-o na aba Radar deste menu.]]
 
 L.item_disg = "Disfarce"
 L.item_disg_desc = [[

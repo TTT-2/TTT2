@@ -106,8 +106,12 @@ L.disg_enable = "执行伪装"
 L.disg_help1 = "伪装开启后，别人瞄准你时将不会看见你的名字，生命值以及人品。除此之外，你也能躲避探长的雷达。"
 L.disg_help2 = "按下小键盘回车键可不通过菜单直接切换伪装。你也可以使用控制台把另一个键位绑定'ttt_toggle_disguise'。"
 
--- Radar tab in equipment menu
+-- Radar
 L.radar_name = "雷达"
+--L.radar_desc = [[
+--允许你扫描存活着的玩家。
+--
+--一旦持有，雷达会开始自动扫描。使用该页面的雷达菜单来设置。]]
 L.radar_menutitle = "雷达控制"
 L.radar_not_owned = "你没有雷达！"
 L.radar_scan = "执行扫描"
@@ -206,12 +210,6 @@ L.item_armor_desc = [[
 阻挡子弹，火焰和爆炸伤害。耐久会随着使用而降低。
 
 这个装备可以购买多次。护甲达到一定阈值后防御力会上升。]]
-
-L.item_radar = "雷达"
-L.item_radar_desc = [[
-允许你扫描存活着的玩家。
-
-一旦持有，雷达会开始自动扫描。使用该页面的雷达菜单来设置。]]
 
 L.item_disg = "伪装"
 L.item_disg_desc = [[

@@ -106,12 +106,16 @@ L.disg_enable = "Enable disguise"
 L.disg_help1 = "When your disguise is active, your name, health and Karma do not show when someone looks at you. In addition, you will be hidden from a Detective's radar."
 L.disg_help2 = "Press Numpad Enter to toggle the disguise without using the menu. You can also bind a different key to 'ttt_toggle_disguise' using the console."
 
--- Radar tab in equipment menu
+-- Radar
 L.radar_name = "Radar"
+L.radar_desc = [[
+Allows you to scan for life signs.
+
+Starts automatic scans as soon as you buy it. Equip to configure it.]]
 L.radar_menutitle = "Radar control"
 L.radar_not_owned = "You are not carrying a Radar!"
 L.radar_scan = "Perform scan"
-L.radar_auto = "Auto-repeat scan"
+L.radar_auto = "Switch Auto-repeat scan mode"
 L.radar_help = "Scan results show for {num} seconds, after which the Radar will have recharged and can be used again."
 L.radar_charging = "Your Radar is still charging!"
 
@@ -206,12 +210,6 @@ L.item_armor_desc = [[
 Reduces bullet, fire and explosion damage. Depletes over time.
 
 It can be purchased multiple times. After reaching a specific armor value, the armor becomes stronger.]]
-
-L.item_radar = "Radar"
-L.item_radar_desc = [[
-Allows you to scan for life signs.
-
-Starts automatic scans as soon as you buy it. Configure it in Radar tab of this menu.]]
 
 L.item_disg = "Disguiser"
 L.item_disg_desc = [[

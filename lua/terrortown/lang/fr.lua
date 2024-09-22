@@ -106,8 +106,13 @@ L.disg_enable = "Activer le déguisement"
 L.disg_help1 = "Lorsque votre déguisement est actif, votre nom, santé et karma ne sont pas visibles quand quelqu'un vous regarde. De plus, vous n'apparaîtrez pas sur le radar du Détective."
 L.disg_help2 = "Appuyez sur Entrée du Pavé-Numérique pour activer/désactiver le déguisement sans le menu. Vous pouvez aussi choisir une autre touche en appuyant sur F1 -> Configuration."
 
--- Radar tab in equipment menu
+-- Radar
 L.radar_name = "Radar"
+-- L.radar_desc = [[
+--Vous laisse scanner des formes de vie.
+--
+--Commence des scans automatiques dès que vous l'achetez. Configurez-le dans l'onglet Radar de ce menu.]]
+
 L.radar_menutitle = "Contrôle du radar"
 L.radar_not_owned = "Vous n'avez pas de Radar!"
 L.radar_scan = "Scanner"
@@ -206,12 +211,6 @@ L.item_armor_desc = [[
 Réduit les dommages causés par les balles, les flammes et les explosions. Diminue avec le temps.
 
 Il peut être acheté plusieurs fois. Après avoir atteint une valeur d'armure spécifique, l'armure devient plus résistante.]]
-
-L.item_radar = "Radar"
-L.item_radar_desc = [[
-Vous laisse scanner des formes de vie.
-
-Commence des scans automatiques dès que vous l'achetez. Configurez-le dans l'onglet Radar de ce menu.]]
 
 L.item_disg = "Déguisement"
 L.item_disg_desc = [[

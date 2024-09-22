@@ -106,8 +106,12 @@ L.disg_enable = "Aktivera förklädare"
 L.disg_help1 = "När din förklädare är påslagen visas inte ditt namn, din hälsa eller din karma när någon tittar på dig. Du syns heller inte på en Detektivs radar."
 L.disg_help2 = "Tryck på Numpad Enter för att sätta på/stänga av förklädnaden utan att använda menyn. Du kan även binda en annan tangent till 'ttt_toggle_disguise' genom att använda konsollen."
 
--- Radar tab in equipment menu
+-- Radar
 L.radar_name = "Radar"
+--L.radar_desc = [[
+--Tillåter dig att skanna efter livstecken.
+--
+--Startar automatiskt så fort du köper den. Konfigurera den i Radar-fliken i den här menyn.]]
 L.radar_menutitle = "Radar-kontroll"
 L.radar_not_owned = "Du har ingen Radar!"
 L.radar_scan = "Utför skanning"
@@ -206,12 +210,6 @@ L.item_armor_desc = [[
 Reducerar skottskador med 30% när du blir träffad.
 
 Standard-verktyg för Detektiver.]]
-
-L.item_radar = "Radar"
-L.item_radar_desc = [[
-Tillåter dig att skanna efter livstecken.
-
-Startar automatiskt så fort du köper den. Konfigurera den i Radar-fliken i den här menyn.]]
 
 L.item_disg = "Förklädare"
 L.item_disg_desc = [[
