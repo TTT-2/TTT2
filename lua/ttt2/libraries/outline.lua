@@ -25,20 +25,20 @@ OUTLINE_MODE_BOTH = 0
 OUTLINE_MODE_NOTVISIBLE = 1
 OUTLINE_MODE_VISIBLE = 2
 
-OUTLINE_RENDERTYPE_BEFORE_VM = 0	-- Render before drawing the view model
-OUTLINE_RENDERTYPE_BEFORE_EF = 1	-- Render before drawing all effects (after drawing the viewmodel)
-OUTLINE_RENDERTYPE_AFTER_EF = 2		-- Render after drawing all effects
+OUTLINE_RENDERTYPE_BEFORE_VM = 0 -- Render before drawing the view model
+OUTLINE_RENDERTYPE_BEFORE_EF = 1 -- Render before drawing all effects (after drawing the viewmodel)
+OUTLINE_RENDERTYPE_AFTER_EF = 2 -- Render after drawing all effects
 
 local Lists = {
     [OUTLINE_RENDERTYPE_BEFORE_VM] = {},
     [OUTLINE_RENDERTYPE_BEFORE_EF] = {},
-    [OUTLINE_RENDERTYPE_AFTER_EF] = {}
+    [OUTLINE_RENDERTYPE_AFTER_EF] = {},
 }
 
 local ListsSize = {
     [OUTLINE_RENDERTYPE_BEFORE_VM] = {},
     [OUTLINE_RENDERTYPE_BEFORE_EF] = {},
-    [OUTLINE_RENDERTYPE_AFTER_EF] = {}
+    [OUTLINE_RENDERTYPE_AFTER_EF] = {},
 }
 local RenderEnt = NULL
 local RenderType = OUTLINE_RENDERTYPE_AFTER_EF
@@ -50,7 +50,7 @@ local outline_mat_settings = {
     ["$basetexture"] = texture_draw:GetName(),
     ["$ignorez"] = 1,
     ["$alphatest"] = 1,
-    ["$smooth"] = 0
+    ["$smooth"] = 0,
 }
 local outline_mat = CreateMaterial("ttt2_outline", "UnlitGeneric", outline_mat_settings)
 
@@ -64,11 +64,11 @@ local MODE = 3
 local enable_thin_line_workaround = false
 
 local function SetRenderType(render_type)
-    if (
-        render_type ~= OUTLINE_RENDERTYPE_BEFORE_VM and
-        render_type ~= OUTLINE_RENDERTYPE_BEFORE_EF and
-        render_type ~= OUTLINE_RENDERTYPE_AFTER_EF
-    ) then
+    if
+        render_type ~= OUTLINE_RENDERTYPE_BEFORE_VM
+        and render_type ~= OUTLINE_RENDERTYPE_BEFORE_EF
+        and render_type ~= OUTLINE_RENDERTYPE_AFTER_EF
+    then
         return
     end
 
@@ -80,7 +80,6 @@ end
 local function GetRenderType()
     return RenderType
 end
-
 
 local function GetOutlineThickness()
     return OutlineThickness
@@ -96,7 +95,6 @@ local function SetOutlineThickness(thickness)
     return true
 end
 
-
 local function GetCurrentLists()
     return Lists[GetRenderType()]
 end
@@ -104,7 +102,6 @@ end
 local function GetCurrentListsSize()
     return ListsSize[GetRenderType()]
 end
-
 
 local function GetCurrentList()
     return Lists[GetRenderType()][GetOutlineThickness()]
@@ -114,7 +111,6 @@ local function GetCurrentListSize()
     return ListsSize[GetRenderType()][GetOutlineThickness()]
 end
 
-
 local function ResetCurrentLists()
     Lists[GetRenderType()] = {}
 end
@@ -123,7 +119,6 @@ local function ResetCurrentListsSize()
     ListsSize[GetRenderType()] = {}
 end
 
-
 local function SetCurrentList(value)
     Lists[GetRenderType()] = value
 end
@@ -131,7 +126,6 @@ end
 local function SetCurrentListSize(size)
     ListsSize[GetRenderType()][GetOutlineThickness()] = size
 end
-
 
 local function InitializeCurrentListIfNeeded()
     local render_type, outline_thickness = GetRenderType(), GetOutlineThickness()
@@ -190,7 +184,7 @@ function outline.Add(ents, color, mode, render_type, outline_thickness)
 
     -- Support for passing Entity as first argument
     if not istable(ents) then
-        ents = {ents}
+        ents = { ents }
     end
 
     -- Do not pass empty tables
@@ -233,7 +227,9 @@ local function Render()
     local scene = render.GetRenderTarget()
 
     -- Only draw inside of the actual main screen RT, prevents breaking addons and other rendering
-    if scene ~= nil then return end
+    if scene ~= nil then
+        return
+    end
 
     -- Copy the current RT to another RT so we can restore this later on
     -- the way the drawing of this library works is as follows:
@@ -252,119 +248,120 @@ local function Render()
     --    because of this approach where a solid version of the entity is just offset by a certain amount of pixels it becomes less pretty and accurate the thicker you go.
     render.CopyRenderTargetToTexture(texture_store)
 
-
     local w, h = ScrW(), ScrH()
     local List, ListSize = GetCurrentList(), GetCurrentListSize()
     local reference = 0
 
     -- Make sure we got a 3D context for our model rendering
     cam.Start3D()
-        -- Clear out the stencil
-        render.ClearStencil()
+    -- Clear out the stencil
+    render.ClearStencil()
 
-        -- Start stencil modification
-        render.SetStencilEnable(true)
-            -- Render using a cheap material
-            render.MaterialOverride(materialDebugWhite)
-            -- We dont need lighting
-            render.SuppressEngineLighting(true)
-            -- We dont need color
-            render.OverrideColorWriteEnable(true, false)
-            -- We dont need depth
-            render.OverrideDepthEnable(true, false)
+    -- Start stencil modification
+    render.SetStencilEnable(true)
+    -- Render using a cheap material
+    render.MaterialOverride(materialDebugWhite)
+    -- We dont need lighting
+    render.SuppressEngineLighting(true)
+    -- We dont need color
+    render.OverrideColorWriteEnable(true, false)
+    -- We dont need depth
+    render.OverrideDepthEnable(true, false)
 
-            -- reset everything to known good values
-            render.SetStencilWriteMask(0xFF)
-            render.SetStencilTestMask(0xFF)
-            render.SetStencilReferenceValue(0)
+    -- reset everything to known good values
+    render.SetStencilWriteMask(0xFF)
+    render.SetStencilTestMask(0xFF)
+    render.SetStencilReferenceValue(0)
+    render.SetStencilCompareFunction(STENCIL_GREATER)
+    render.SetStencilPassOperation(STENCIL_KEEP)
+    render.SetStencilFailOperation(STENCIL_KEEP)
+    render.SetStencilZFailOperation(STENCIL_KEEP)
+
+    -- Render the models onto the stencil
+    render.SetBlend(1)
+    for i = 1, ListSize do
+        -- Determine our reference value based on the list index
+        reference = 0xFF - (i - 1)
+
+        -- Get the data we need for this list index
+        local data = List[i]
+        local mode = data[MODE]
+        local render_ents = data[ENTS]
+
+        -- Set our reference value
+        render.SetStencilReferenceValue(reference)
+
+        if mode == OUTLINE_MODE_BOTH or mode == OUTLINE_MODE_VISIBLE then
+            -- Setup the stencil for hidden or parts or the entire thing
             render.SetStencilCompareFunction(STENCIL_GREATER)
-            render.SetStencilPassOperation(STENCIL_KEEP)
+            render.SetStencilZFailOperation(
+                mode == OUTLINE_MODE_BOTH and STENCIL_REPLACE or STENCIL_KEEP
+            )
             render.SetStencilFailOperation(STENCIL_KEEP)
-            render.SetStencilZFailOperation(STENCIL_KEEP)
+            render.SetStencilPassOperation(STENCIL_KEEP)
 
-            -- Render the models onto the stencil
-            render.SetBlend(1)
-            for i = 1, ListSize do
-                -- Determine our reference value based on the list index
-                reference = 0xFF - (i - 1)
+            RenderModels(render_ents)
+        elseif mode == OUTLINE_MODE_NOTVISIBLE then
+            -- Setup the stencil for 2-pass rendering where we first determine what is hidden and then what is shown to prevent self z-fail
+            render.SetStencilCompareFunction(STENCIL_GREATER)
+            render.SetStencilZFailOperation(STENCIL_REPLACE)
+            render.SetStencilFailOperation(STENCIL_KEEP)
+            render.SetStencilPassOperation(STENCIL_KEEP)
 
-                -- Get the data we need for this list index
-                local data = List[i]
-                local mode = data[MODE]
-                local render_ents = data[ENTS]
+            RenderModels(render_ents)
 
-                -- Set our reference value
-                render.SetStencilReferenceValue(reference)
-
-                if mode == OUTLINE_MODE_BOTH or mode == OUTLINE_MODE_VISIBLE then
-                    -- Setup the stencil for hidden or parts or the entire thing
-                    render.SetStencilCompareFunction(STENCIL_GREATER)
-                    render.SetStencilZFailOperation(mode == OUTLINE_MODE_BOTH and STENCIL_REPLACE or STENCIL_KEEP)
-                    render.SetStencilFailOperation(STENCIL_KEEP)
-                    render.SetStencilPassOperation(STENCIL_KEEP)
-
-                    RenderModels(render_ents)
-                elseif mode == OUTLINE_MODE_NOTVISIBLE then
-                    -- Setup the stencil for 2-pass rendering where we first determine what is hidden and then what is shown to prevent self z-fail
-                    render.SetStencilCompareFunction(STENCIL_GREATER)
-                    render.SetStencilZFailOperation(STENCIL_REPLACE)
-                    render.SetStencilFailOperation(STENCIL_KEEP)
-                    render.SetStencilPassOperation(STENCIL_KEEP)
-
-                    RenderModels(render_ents)
-
-                    -- Setup the stencil for the second pass
-                    render.SetStencilCompareFunction(STENCIL_EQUAL)
-                    render.SetStencilZFailOperation(STENCIL_KEEP)
-                    render.SetStencilFailOperation(STENCIL_KEEP)
-                    render.SetStencilPassOperation(STENCIL_ZERO)
-
-                    RenderModels(render_ents)
-                end
-            end
-
-            -- Undo color override
-            render.OverrideColorWriteEnable(false)
-
-            -- We are not rendering anything specific anymore
-            RenderEnt = NULL
-
-            -- Setup the stencil to override the color of values equal to reference
-            -- this makes sure we can only touch pixels that the previous rendering operations have touched
+            -- Setup the stencil for the second pass
             render.SetStencilCompareFunction(STENCIL_EQUAL)
             render.SetStencilZFailOperation(STENCIL_KEEP)
             render.SetStencilFailOperation(STENCIL_KEEP)
-            render.SetStencilPassOperation(STENCIL_KEEP)
+            render.SetStencilPassOperation(STENCIL_ZERO)
 
-            -- Make the screen transparent, on opaque RT's this will make it black instead, all the main game RT's in source are RGB888 wich is opaque,
-            -- but the actual RT inside of D3D has alpha support, its merely the ones that source uses which are RGB888, those are not the actual RT,
-            -- because its just something the result is copied over to during the rendering process.
-            -- The halo library does not suffer from this given it uses additive/subtractive rendering where you can use a black/white background as a psuedo transparent layer,
-            -- but such an approach is only desirable for a brightening glow.
-            render.Clear(0, 0, 0, 0, false, false)
+            RenderModels(render_ents)
+        end
+    end
 
-            -- Render the color onto the RT using our stencil values
-            for i = 1, ListSize do
-                reference = 0xFF - (i - 1)
+    -- Undo color override
+    render.OverrideColorWriteEnable(false)
 
-                render.SetStencilReferenceValue(reference)
-                local col = List[i][COLOR]
+    -- We are not rendering anything specific anymore
+    RenderEnt = NULL
 
-                -- While clearing the buffer would be proper here for some reason the base color of the RT bleeds through which makes me believe this
-                -- somehow talks to the gmod RT and not what we got in D3D, its really hard to say but using surface works fine
-                -- otherwise we could have done: render.ClearBuffersObeyStencil(col.r, col.g, col.b, col.a, false)
-                cam.Start2D()
-                    surface.SetDrawColor(col)
-                    surface.DrawRect(0, 0, w, h)
-                cam.End2D()
-            end
+    -- Setup the stencil to override the color of values equal to reference
+    -- this makes sure we can only touch pixels that the previous rendering operations have touched
+    render.SetStencilCompareFunction(STENCIL_EQUAL)
+    render.SetStencilZFailOperation(STENCIL_KEEP)
+    render.SetStencilFailOperation(STENCIL_KEEP)
+    render.SetStencilPassOperation(STENCIL_KEEP)
 
-            --Undo the rest of the overrides
-            render.SuppressEngineLighting(false)
-            render.MaterialOverride(nil)
-            render.OverrideDepthEnable(false)
-        -- End stencil modification
-        render.SetStencilEnable(false)
+    -- Make the screen transparent, on opaque RT's this will make it black instead, all the main game RT's in source are RGB888 wich is opaque,
+    -- but the actual RT inside of D3D has alpha support, its merely the ones that source uses which are RGB888, those are not the actual RT,
+    -- because its just something the result is copied over to during the rendering process.
+    -- The halo library does not suffer from this given it uses additive/subtractive rendering where you can use a black/white background as a psuedo transparent layer,
+    -- but such an approach is only desirable for a brightening glow.
+    render.Clear(0, 0, 0, 0, false, false)
+
+    -- Render the color onto the RT using our stencil values
+    for i = 1, ListSize do
+        reference = 0xFF - (i - 1)
+
+        render.SetStencilReferenceValue(reference)
+        local col = List[i][COLOR]
+
+        -- While clearing the buffer would be proper here for some reason the base color of the RT bleeds through which makes me believe this
+        -- somehow talks to the gmod RT and not what we got in D3D, its really hard to say but using surface works fine
+        -- otherwise we could have done: render.ClearBuffersObeyStencil(col.r, col.g, col.b, col.a, false)
+        cam.Start2D()
+        surface.SetDrawColor(col)
+        surface.DrawRect(0, 0, w, h)
+        cam.End2D()
+    end
+
+    --Undo the rest of the overrides
+    render.SuppressEngineLighting(false)
+    render.MaterialOverride(nil)
+    render.OverrideDepthEnable(false)
+    -- End stencil modification
+    render.SetStencilEnable(false)
     cam.End3D()
 
     -- Copy solidly colored result to draw texture
@@ -383,32 +380,34 @@ local function Render()
 
     -- Draw the outlines
     render.SetStencilEnable(true)
-        -- Setup the stencil to only draw pixels when the reference is 0,
-        -- this basically means that we can only draw outside of outlined objects
-        render.SetStencilReferenceValue(0)
-        render.SetStencilCompareFunction(STENCIL_EQUAL)
+    -- Setup the stencil to only draw pixels when the reference is 0,
+    -- this basically means that we can only draw outside of outlined objects
+    render.SetStencilReferenceValue(0)
+    render.SetStencilCompareFunction(STENCIL_EQUAL)
 
-        outline_mat:SetTexture("$basetexture", texture_draw)
+    outline_mat:SetTexture("$basetexture", texture_draw)
 
-        -- Set our outline material
-        render.SetMaterial(outline_mat)
+    -- Set our outline material
+    render.SetMaterial(outline_mat)
 
-        -- When antiliasing is on we run into the problem of the transparency looking very off
-        -- when its only 1px thick, so if AA is on we add 1px to compensate.
-        -- This is done in all cases to still differentiate between 1px and 2px outlines
-        local outline_thickness = OutlineThickness
-        if enable_thin_line_workaround and cvMaterialAntialias:GetInt() ~= 0 then outline_thickness = outline_thickness + 1 end
+    -- When antiliasing is on we run into the problem of the transparency looking very off
+    -- when its only 1px thick, so if AA is on we add 1px to compensate.
+    -- This is done in all cases to still differentiate between 1px and 2px outlines
+    local outline_thickness = OutlineThickness
+    if enable_thin_line_workaround and cvMaterialAntialias:GetInt() ~= 0 then
+        outline_thickness = outline_thickness + 1
+    end
 
-        -- Draw each corner/side of the outline.
-        -- We use the Ex version because the non Ex has some alignment issues.
-        render.DrawScreenQuadEx(-outline_thickness, -outline_thickness, w ,h)
-        render.DrawScreenQuadEx(-outline_thickness, 0, w, h)
-        render.DrawScreenQuadEx(-outline_thickness, outline_thickness, w, h)
-        render.DrawScreenQuadEx(0, -outline_thickness, w, h)
-        render.DrawScreenQuadEx(0, outline_thickness, w, h)
-        render.DrawScreenQuadEx(outline_thickness, -outline_thickness, w, h)
-        render.DrawScreenQuadEx(outline_thickness, 0, w, h)
-        render.DrawScreenQuadEx(outline_thickness, outline_thickness, w, h)
+    -- Draw each corner/side of the outline.
+    -- We use the Ex version because the non Ex has some alignment issues.
+    render.DrawScreenQuadEx(-outline_thickness, -outline_thickness, w, h)
+    render.DrawScreenQuadEx(-outline_thickness, 0, w, h)
+    render.DrawScreenQuadEx(-outline_thickness, outline_thickness, w, h)
+    render.DrawScreenQuadEx(0, -outline_thickness, w, h)
+    render.DrawScreenQuadEx(0, outline_thickness, w, h)
+    render.DrawScreenQuadEx(outline_thickness, -outline_thickness, w, h)
+    render.DrawScreenQuadEx(outline_thickness, 0, w, h)
+    render.DrawScreenQuadEx(outline_thickness, outline_thickness, w, h)
     render.SetStencilEnable(false)
 end
 
@@ -442,7 +441,6 @@ hook.Add("PostDrawEffects", "RenderOutlines", function()
     SetRenderType(OUTLINE_RENDERTYPE_AFTER_EF)
     RenderOutlines()
 end)
-
 
 ---
 -- A rendering hook that is run in @{GM:PostDrawEffects}, @{GM:PreDrawEffects} and @{GM:PreDrawViewModels} before the outlines are rendered.
