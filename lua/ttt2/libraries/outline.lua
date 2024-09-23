@@ -184,7 +184,7 @@ function outline.Add(ents, color, mode, render_type, outline_thickness)
 
     -- Support for passing Entity as first argument
     if not istable(ents) then
-        ents = {ents}
+        ents = { ents }
     end
 
     -- Do not pass empty tables
