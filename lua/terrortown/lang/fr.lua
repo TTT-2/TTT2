@@ -1039,7 +1039,7 @@ L.label_performance_ohicon_enable = "Activer les icônes des rôles"
 L.label_interface_popup = "Durée de la pop-up de début de partie"
 L.label_interface_fastsw_menu = "Activer le menu avec un changement d'arme rapide"
 L.label_inferface_wswitch_hide_enable = "Activer la fermeture automatique du menu quand l'arme change"
-L.label_inferface_scues_enable = "Jouer un son au début ou à la fin d'une partie"
+L.label_inferface_scues_enable = "Jouer un son au début et à la fin d'une partie"
 L.label_gameplay_specmode = "Mode Spectateur (toujours resté en spectateur)"
 L.label_gameplay_fastsw = "Changement d'arme rapide"
 L.label_gameplay_hold_aim = "Maintenir pour viser"
@@ -1641,7 +1641,7 @@ L.label_namechange_bantime = "Durée du bannissement en minutes après une expul
 L.label_log_damage_for_console = "Activer le rapport des dégâts dans la console"
 L.label_damagelog_save = "Sauvegarder le rapport des dégâts sur un disque"
 L.label_debug_preventwin = "Empêcher toute condition de victoire [debug]"
-L.label_bots_are_spectators = "Bots are always spectators"
+L.label_bots_are_spectators = "Les bots sont toujours en mode spectateurs"
 L.label_tbutton_admin_show = "Montrer les boutons de traître aux administrateurs"
 L.label_ragdoll_carrying = "Activer le fait de pouvoir transporter n'importe quel corps"
 L.label_prop_throwing = "Activer le lancer de props"
@@ -1761,7 +1761,7 @@ L.hudeditor_chat_hint3 = "[TTT2][INFO] Appuyez sur la touche MAJ et maintenez-la
 L.hudeditor_chat_hint4 = "[TTT2][INFO] Appuyez su [Clic droit] -> 'Fermer' pour quitter l'Éditeur d'HUD !"
 
 L.guide_nothing_title = "Il n'y a rien ici pour l'instant !"
-L.guide_nothing_desc = "Ce projet est en cours de réalisation, aidez-nous en contribuant au projet sur GitHub."
+L.guide_nothing_desc = "Ce projet est en cours, aidez-nous en contribuant au projet sur GitHub."
 
 L.sb_rank_tooltip_developer = "Développeur TTT2"
 L.sb_rank_tooltip_vip = "Supporter TTT2"
@@ -1896,7 +1896,7 @@ L.search_hitgroup_leftleg = "Le projectile a été retrouvé dans sa jambe gauch
 L.search_hitgroup_gear = "Le projectile a été retrouvé dans sa hanche."
 
 L.search_policingrole_report_confirm = [[
-Un rôle de détective public ne peut être appelé auprès d'un corps mort qu'après que la mort du corps a été confirmée.]]
+Un rôle de détective public ne peut être appelé auprès d'un corps qu'après que la mort du corps a été confirmée.]]
 L.search_policingrole_confirm_disabled_1 = [[
 Le corps ne peut être confirmé que par un rôle de détective public. Signalez le corps pour les informer !]]
 L.search_policingrole_confirm_disabled_2 = [[
@@ -1993,8 +1993,8 @@ L.label_keyhelper_flashlight = "activer/désactiver la lampe torche"
 L.label_keyhelper_quickchat = "ouvrir le chat rapide"
 L.label_keyhelper_voice_global = "chat vocal global"
 L.label_keyhelper_voice_team = "chat vocal d'équipe"
-L.label_keyhelper_chat_global = "chat global"
-L.label_keyhelper_chat_team = "chat d'équipe"
+L.label_keyhelper_chat_global = "chat textuel global"
+L.label_keyhelper_chat_team = "chat textuel d'équipe"
 L.label_keyhelper_show_all = "tout afficher"
 L.label_keyhelper_disguiser = "activer/désactiver le déguisement"
 L.label_keyhelper_save_exit = "sauvegarder et quitter"
@@ -2153,7 +2153,7 @@ Si la longueur de la ligne reste statique, seul l'écart varie en fonction des c
 L.header_weapon_settings = "Paramètres des Armes"
 
 -- 2024-01-24
-L.grenade_fuse = "DÉGOUPILLAGE"
+L.grenade_fuse = "EXPLOSION"
 
 -- 2024-01-25
 L.header_roles_magnetostick = "Magnéto-stick"
@@ -2188,17 +2188,17 @@ L.help_enable_sound_interact = "Les sons d'interaction sont les sons joués à l
 L.help_enable_sound_buttons = "Les sons de bouton sont des sons cliquetants qui sont joués lorsque l'on clique sur un bouton."
 L.help_enable_sound_message = "Les sons de message ou de notification sont joués pour les messages de chat et les notifications. Ils peuvent être assez désagréables."
 
-L.label_enable_sound_interact = "Activer les sons d'interaction"
+L.label_enable_sound_interact = "Activer les sons des interactions"
 L.label_enable_sound_buttons = "Activer les sons des boutons"
 L.label_enable_sound_message = "Activer les sons des messages"
 
-L.label_level_sound_interact = "Multiplicateur du niveau sonore des interactions"
-L.label_level_sound_buttons = "Multiplicateur du niveau sonore des boutons"
-L.label_level_sound_message = "Multiplicateur du niveau sonore des messages"
+L.label_level_sound_interact = "Volume des interactions"
+L.label_level_sound_buttons = "Volume des boutons"
+L.label_level_sound_message = "Volume des messages"
 
 -- 2024-03-07
 L.label_crosshair_static_gap_length = "Activer la taille d'espacement statique du réticule"
-L.label_crosshair_size_gap = "Multiplicateur de la taille d'espacement statique du réticule"
+L.label_crosshair_size_gap = "Taille d'espacement des lignes statiques du réticule"
 
 -- 2024-03-31
 L.help_locational_voice = "Le chat de proximité est une implémentation de TTT2 de la voix localisée en 3D. Les joueurs ne sont audibles que dans un rayon déterminé autour d'eux et deviennent de plus en plus silencieux à mesure qu'ils s'éloignent."
@@ -2231,7 +2231,7 @@ L.label_voice_activation_mode_toggle_disabled = "Activer/Désactiver"
 L.label_voice_activation_mode_toggle_enabled = "Activer/Désactiver (Activer lors de votre connexion)"
 
 -- 2024-04-08
-L.label_inspect_credits_always = "Permettre à tous les joueurs de voir les crédits sur les corps morts"
+L.label_inspect_credits_always = "Permettre à tous les joueurs de voir les crédits sur les corps"
 L.help_inspect_credits_always = [[
 Lorsqu'un rôle ayant une boutique meure, ses crédits peuvent être récupérés par d'autres joueurs possédant un rôle ayant une boutique.
 
@@ -2253,9 +2253,9 @@ L.button_change_map = "Changer de carte"
 L.submenu_commands_commands_title = "Commandes"
 
 L.header_commands_round_restart = "Redémarrer la partie"
-L.header_commands_player_slay = "Tuer le Joueur"
-L.header_commands_player_teleport = "Téléporter le joueur a l'emplacement visé"
-L.header_commands_player_respawn = "Réanimer le joueur a l'emplacement visét"
+L.header_commands_player_slay = "Tuer un Joueur"
+L.header_commands_player_teleport = "Téléporter un joueur a l'emplacement visé"
+L.header_commands_player_respawn = "Réanimer un joueur a l'emplacement visét"
 L.header_commands_player_add_credits = "Ajouter des crédits d'équipement"
 L.header_commands_player_set_health = "Définir la santé"
 L.header_commands_player_set_armor = "Définir l'armure"
@@ -2272,7 +2272,7 @@ L.label_slider_add_credits = "Définir le montant de crédit"
 L.label_slider_set_health = "Définir la santé"
 L.label_slider_set_armor = "Définir l'armure"
 
-L.label_player_select = "Sélectionner le joueur"
+L.label_player_select = "Sélectionner un joueur"
 L.label_execute_command = "Exécuter la commande"
 
 -- 2024-05-22
@@ -2351,7 +2351,7 @@ L.header_commands_player_force_role = "Forcer le Rôle du Joueur"
 
 L.label_button_player_force_role = "forcer le rôle"
 
-L.label_player_role = "Sélectionner le rôle"
+L.label_player_role = "Sélectionner un rôle"
 
 -- 2024-09-16
 L.help_enable_loadingscreen_server = [[
