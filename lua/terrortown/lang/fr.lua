@@ -996,7 +996,7 @@ L.help_hud_special_settings = "Voici les paramètres spécifiques de ce HUD."
 L.help_vskin_info = "VSkin (vgui skin) est le skin appliqué à tous les éléments du menu comme celui en cours. Les skins peuvent être facilement créés avec un simple script lua et peuvent changer les couleurs et la taille de certains paramètres."
 L.help_targetid_info = "TargetID est l'information rendue lors de la focalisation d'une entité. Une couleur fixe peut être définie dans le panneau des paramètres généraux."
 L.help_hud_default_desc = "Définissez le HUD par défaut pour tous les joueurs. Les joueurs qui n'ont pas encore sélectionné de HUD recevront ce HUD par défaut. Cela ne changera pas le HUD des joueurs qui ont déjà sélectionné leur HUD."
-L.help_hud_forced_desc = "Forcer un HUD pour tous les joueurs. Cela désactive la fonction de sélection du HUD pour tous."
+L.help_hud_forced_desc = "Forcer un HUD pour tous les joueurs. Cela désactive la fonction de sélection du HUD pour tout les joueurs."
 L.help_hud_enabled_desc = "Activez/Désactivez les HUD pour restreindre la sélection de ces HUD."
 L.help_damage_indicator_desc = "L'indicateur de dégâts est la couche affichée lorsque le joueur prend des dégâts. Pour ajouter un nouveau thème, placez un png dans 'materials/vgui/ttt/damageindicator/themes/'."
 L.help_shop_key_desc = "Ouvrer la boutique en appuyant sur votre touche de boutique (c par défaut) au lieu du menu 'score' pendant la préparation / à la fin de la partie?"
@@ -1070,8 +1070,8 @@ L.header_damage_indicator = "Paramètres de l'indicateur de dégâts"
 L.header_performance_settings = "Paramètres de performance"
 L.header_interface_settings = "Paramètres de l'interface"
 L.header_gameplay_settings = "Paramètres de jeu"
-L.header_hud_administration = "Sélectionnez l'HUDs par défaut et obligatoire"
-L.header_hud_enabled = "Activer/Désactiver l'HUDs"
+L.header_hud_administration = "Sélectionnez le HUD par défaut et obligatoire"
+L.header_hud_enabled = "Activer/Désactiver les HUD"
 
 L.button_menu_back = "Retour"
 L.button_none = "Aucun"
@@ -1583,7 +1583,7 @@ L.help_killer_dna_basetime = "Temps de base en secondes jusqu'à ce qu'un échan
 L.help_dna_radar = "Le scanner d'ADN du TTT2 indique la distance et la direction exactes de l'échantillon d'ADN sélectionné s'il en est équipé. Cependant, il existe également un mode scanner d'ADN classique qui met à jour l'échantillon sélectionné avec un affichage dans le monde à chaque fois que le temps de rechargement est écoulé."
 L.help_idle = "Le mode inactif est utilisé pour forcer les joueurs inactifs à passer en mode spectateur automatiquement. Pour quitter ce mode, ils devront le désactiver dans leur menu 'Jouabilité'."
 L.help_namechange_kick = [[
-Changer votre nom au cours d'une partie active peut être une source d'abus. C'est pourquoi cette pratique est interdite par défaut et entraînera une expulsion du joueur du serveur.
+Changer votre nom au cours d'une partie active peut être une source d'abus. C'est pourquoi cette pratique est interdite par défaut et entraînera une expulsion du joueur.
 
 Si le temps d'expulsion est supérieur à 0, le joueur ne pourra pas se reconnecter au serveur tant que ce temps ne sera pas écoulé.]]
 L.help_damage_log = "Chaque fois qu'un joueur subit des dégâts, une entrée dans le rapport de dégâts est ajoutée à la console si cette option est activée. Ce rapport peut également être stocké sur le disque après la fin d'une partie. Le fichier est situé dans 'data/terrortown/logs/'"
@@ -1600,7 +1600,7 @@ L.help_haste_mode = [[
 Le mode Hâtif équilibre le jeu en augmentant la durée de la partie pour chaque joueur mort. Seuls les rôles qui voient des joueurs disparus peuvent voir la durée réelle de la partie. Tous les autres rôles ne peuvent voir que le temps de départ du mode Hâtif.
 
 Si le mode Hâtif est activé, le temps de la partie fixé est ignoré.]]
-L.help_round_limit = "Lorsque l'une des conditions limites est remplie, un changement de carte est enclenché."
+L.help_round_limit = "Lorsque l'une des conditions est remplie, un changement de carte est enclenché."
 L.help_armor_balancing = "Les valeurs suivantes peuvent être utilisées pour équilibrer l'armure."
 L.help_item_armor_classic = "Si le mode d'armure classique est activé, seuls les paramètres précédents sont pris en compte. Le mode d'armure classique signifie qu'un joueur ne peut acheter une armure qu'une seule fois par partie, et que cette armure bloque 30 % des dégâts infligés par les balles et les pieds de biche jusqu'à ce qu'il meure."
 L.help_item_armor_dynamic = [[
@@ -1642,7 +1642,7 @@ L.label_log_damage_for_console = "Activer le rapport des dégâts dans la consol
 L.label_damagelog_save = "Sauvegarder le rapport des dégâts sur un disque"
 L.label_debug_preventwin = "Empêcher toute condition de victoire [debug]"
 L.label_bots_are_spectators = "Les bots sont toujours en mode spectateurs"
-L.label_tbutton_admin_show = "Montrer les boutons de traître aux administrateurs"
+L.label_tbutton_admin_show = "Affiche les boutons des traîtres aux administrateurs"
 L.label_ragdoll_carrying = "Activer le fait de pouvoir transporter n'importe quel corps"
 L.label_prop_throwing = "Activer le lancer de props"
 L.label_weapon_carrying = "Activer le port d'armes"
@@ -1661,22 +1661,22 @@ L.label_locational_voice_prep = "Activer le chat vocal de proximité pendant la 
 L.label_locational_voice_range = "Portée du chat vocal de proximité"
 L.label_armor_on_spawn = "Armure du joueur lors d'une (ré)apparition"
 L.label_prep_respawn = "Activer la réapparition instantanée pendant la phase de préparation"
-L.label_preptime_seconds = "Durée de la préparation en secondes"
+L.label_preptime_seconds = "Durée de la préparation d'une partie en secondes"
 L.label_firstpreptime_seconds = "Premier temps de préparation en secondes"
-L.label_roundtime_minutes = "Temps de partie fixe en minutes"
+L.label_roundtime_minutes = "Durée d'une partie en minutes"
 L.label_haste = "Activer le mode hâtif"
 L.label_haste_starting_minutes = "Temps de démarrage du mode hâtif en minutes"
 L.label_haste_minutes_per_death = "Temps additionnel en minutes par mort"
-L.label_posttime_seconds = "Temps de fin de partie en secondes"
-L.label_round_limit = "Limite maximale de parties"
-L.label_time_limit_minutes = "Limite maximum du temps de jeu en minutes"
-L.label_nade_throw_during_prep = "Activer le lancer de grenade pendant le temps de préparation"
+L.label_posttime_seconds = "Durée de la phase de fin de partie en secondes"
+L.label_round_limit = "Nombre de parties maximum sur cette carte"
+L.label_time_limit_minutes = "Temps de jeu maximum en minutes sur cette carte"
+L.label_nade_throw_during_prep = "Activer le lancer de grenade pendant la phase de préparation"
 L.label_postround_dm = "Activer le match à mort a la fin de la partie"
 L.label_session_limits_enabled = "Activer la limite de partie"
 L.label_spectator_chat = "Activer le chat entre les spectateurs et les vivants"
 L.label_lastwords_chatprint = "Affiche les derniers mots dans le chat si la personne est tuée pendant qu'elle écrit."
 L.label_identify_body_woconfirm = "Identifier les corps sans appuyer sur le bouton 'confirmer'"
-L.label_announce_body_found = "Annoncer qu'un corps a été trouvé alors que le corps a été confirmé"
+L.label_announce_body_found = "Annoncer qu'un corps a été trouvé quand que le corps est confirmé"
 L.label_confirm_killlist = "Annoncer la liste des meurtres du corps confirmé"
 L.label_dyingshot = "Tirer quand vous mourrez si quelqu'un est dans votre ligne de mire [expérimental]"
 L.label_armor_block_headshots = "Activer le blocage des tirs à la tête grâce à l'armure"
@@ -1688,12 +1688,12 @@ L.label_armor_damage_health_pct = "Pourcentage de dégâts encaissés par le jou
 L.label_armor_enable_reinforced = "Activer l'armure renforcée"
 L.label_armor_threshold_for_reinforced = "Seuil de l'armure renforcé"
 L.label_sherlock_mode = "Activer le mode sherlock"
-L.label_highlight_admins = "Mettre en surbrillance les administrateurs du serveur"
-L.label_highlight_dev = "Mettre en surbrillance les développeurs du TTT2"
-L.label_highlight_vip = "Mettre en surbrillance les supporter du TTT2"
-L.label_highlight_addondev = "Mettre en surbrillance les développeurs d'addons du TTT2"
-L.label_highlight_supporter = "Mettre en surbrillance les autres"
-L.label_enable_hud_element = "Activer {elem} les éléments du HUD"
+L.label_highlight_admins = "Mettre en surbrillance les noms des administrateurs du serveur"
+L.label_highlight_dev = "Mettre en surbrillance les noms des développeurs du TTT2"
+L.label_highlight_vip = "Mettre en surbrillance les noms des supporter du TTT2"
+L.label_highlight_addondev = "Mettre en surbrillance les noms des développeurs d'addons du TTT2"
+L.label_highlight_supporter = "Mettre en surbrillance les noms des autres"
+L.label_enable_hud_element = "Activer l'éléments {elem} du HUD"
 L.label_spec_prop_control = "Activer la possession de props"
 L.label_spec_prop_base = "Valeur de base de la possession"
 L.label_spec_prop_maxpenalty = "Limite minimale de la possession de props"
@@ -1815,7 +1815,7 @@ L.search_info = "Information"
 L.search_confirm = "Confirmer la mort"
 L.search_confirm_credits = "Confirmer (+{credits} Crédit(s))"
 L.search_take_credits = "Prendre {credits} Crédit(s)"
-L.search_confirm_forbidden = "Interdire la confirmation"
+L.search_confirm_forbidden = "Confirmation interdite"
 L.search_confirmed = "Mort confirmée"
 L.search_call = "Rapport de mort"
 L.search_called = "Mort signalée"
@@ -1947,7 +1947,7 @@ mode 0: C'est le fonctionnement standard du TTT. Tout le monde peut fouiller et 
 
 mode 1: Ce mode renforce l'importance des rôles de détective public en limitant l'option de confirmation à ces derniers. Cela signifie également qu'il est désormais possible de prendre des crédits et de signaler des corps avant de confirmer un corps. Tout le monde peut toujours fouiller les corps et trouver des informations, mais il n'est pas possible d'annoncer les informations trouvées.
 
-mode 2: Ce mode est un peu plus strict que le mode 1. Dans ce mode, la capacité de fouille est également retirée aux joueurs normaux. Cela signifie que le signalement d'un corps à un joueur ayant un rôles de détective public est désormais le seul moyen d'obtenir des informations sur les corps.]]
+mode 2: Ce mode est un peu plus strict que le mode 1. Dans ce mode, la capacité de fouille est également retirée aux joueurs normaux. Cela signifie que le signalement d'un corps à un joueur ayant un rôles de détective public est désormais le seul moyen d'obtenir des informations (comme le rôle du joueur par exemple) sur les corps.]]
 
 -- 2023-10-19
 L.label_grenade_trajectory_ui = "Indicateur de trajectoire des grenades"
