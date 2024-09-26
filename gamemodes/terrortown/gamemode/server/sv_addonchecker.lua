@@ -685,6 +685,7 @@ function addonChecker.Check()
     print("TTT2 ADDON CHECKER")
     print("=============================================================")
     print("")
+    print("Scanning for known incompatible addons:")
 
     for i = 1, #addonTable do
         local addon = addonTable[i]
@@ -727,6 +728,42 @@ function addonChecker.Check()
         print("")
     end
 
+    print("=============================================================")
+    print("")
+    print("Scanning for weapons with incorrect weapon base:")
+
+    local equipmentWeapons = weapons.GetList()
+
+    for i = 1, #equipmentWeapons do
+        local equipment = equipmentWeapons[i]
+        local name = WEPS.GetClass(equipment)
+
+        if
+            name and not equipment.Duplicated and weapons.IsBasedOn(name, "weapon_tttbase")
+            -- ignore bases as they are not added to the shop anyways
+            or string.match(name, "base")
+            or string.match(name, "event")
+            -- ignore weapons that are not in the terrortown folder
+            or not string.match(equipment.Folder, "terrortown/")
+        then
+            continue
+        end
+
+        print(
+            "Warning: "
+                .. name
+                .. " is not based on 'weapon_tttbase', this may lead to issues when playing the game"
+        )
+        print("Location: " .. equipment.Folder)
+
+        if equipment.Author and equipment.Author ~= "" then
+            print("Author: " .. equipment.Author)
+        end
+
+        print("")
+    end
+
+    print("")
     print("=============================================================")
     print("This is the end of the addon checker output.")
     print("")
