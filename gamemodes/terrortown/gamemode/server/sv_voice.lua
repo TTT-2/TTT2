@@ -259,9 +259,9 @@ local function MuteTeam(ply, state)
         LANG.Msg(ply, "mute_off", nil, MSG_CHAT_PLAIN)
     else
         LANG.Msg(
-            ply, 
-            "mute_team", 
-            { team = LANG.NameParam(string.lower(team.GetName(state))) }, 
+            ply,
+            "mute_team",
+            { team = LANG.NameParam(string.lower(team.GetName(state))) },
             MSG_CHAT_PLAIN
         )
     end
