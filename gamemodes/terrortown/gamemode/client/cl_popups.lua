@@ -87,7 +87,7 @@ local function RoundStartPopup()
     end
 
     local client = LocalPlayer()
-    if not client then
+    if not client or client:GetRole() == ROLE_NONE then
         return
     end
 
