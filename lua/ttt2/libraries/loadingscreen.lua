@@ -206,9 +206,9 @@ if CLIENT then
         local colorTip = table.Copy(util.GetDefaultColor(colorLoadingScreen))
         colorTip.a = 255 * progress
 
-        draw.BlurredBox(0, 0, ScrW(), ScrH(), progress * 10)
-        draw.BlurredBox(0, 0, ScrW(), ScrH(), progress * 3)
-        draw.Box(0, 0, ScrW(), ScrH(), colorLoadingScreen)
+        draw.BlurredBox(-1, -1, ScrW() * 1.5, ScrH() * 1.5, progress * 10)
+        draw.BlurredBox(-1, -1, ScrW() * 1.5, ScrH() * 1.5, progress * 3)
+        draw.Box(-1, -1, ScrW() * 1.5, ScrH() * 1.5, colorLoadingScreen)
 
         draw.AdvancedText(
             LANG.TryTranslation("loadingscreen_round_restart_title"),
@@ -251,6 +251,14 @@ if CLIENT then
             return
         end
 
+        -- Scale values that are multiples of 0.2 cause artifacts above the tips, while non-multiples do not
+        local tipsScale = appearance.GetGlobalScale()
+        -- Check if tipsScale is close to a multiple of 0.2
+        local isMultipleOfTwo = math.abs(tipsScale % 0.2) < 0.01 -- Tolerance for floating-point numbers
+        if isMultipleOfTwo then
+            tipsScale = tipsScale + 0.1
+        end
+
         local textWrapped, _, heightText = draw.GetWrappedText(
             LANG.TryTranslation("tips_panel_tip")
                 .. " "
@@ -260,7 +268,7 @@ if CLIENT then
                 ),
             0.6 * ScrW(),
             "PureSkinRole",
-            appearance.GetGlobalScale()
+            tipsScale
         )
 
         local heightLine = heightText / #textWrapped
@@ -275,7 +283,7 @@ if CLIENT then
                 TEXT_ALIGN_CENTER,
                 TEXT_ALIGN_CENTER,
                 true,
-                appearance.GetGlobalScale()
+                tipsScale
             )
         end
     end
