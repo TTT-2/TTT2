@@ -258,7 +258,7 @@ local function MuteTeam(ply, state)
     elseif state == MUTE_NONE or state == TEAM_UNASSIGNED or not team.Valid(state) then
         LANG.Msg(ply, "mute_off", nil, MSG_CHAT_PLAIN)
     else
-        LANG.Msg(ply, "mute_team", { team = team.GetName(state) }, MSG_CHAT_PLAIN)
+        LANG.Msg(ply, "mute_team", { team = LANG.NameParam(string.lower(team.GetName(state))) }, MSG_CHAT_PLAIN)
     end
 end
 
