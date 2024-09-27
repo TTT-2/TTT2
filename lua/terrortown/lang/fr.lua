@@ -1309,10 +1309,10 @@ L.layering_not_layered = "Sans couche"
 L.layering_layer = "Couche {layer}"
 L.header_rolelayering_role = "{role} a la couche"
 L.header_rolelayering_baserole = "Couche des rôles de base"
-L.submenu_administration_rolelayering_title = "Couche des rôles"
+L.submenu_administration_rolelayering_title = "Couche des Rôles"
 L.header_rolelayering_info = "Informations sur la priorité de distribution des rôles"
-L.help_rolelayering_roleselection = "La distribution des rôles se fait en deux étapes. La première étape consiste à distribuer les rôles de base, à savoir les rôles d'innocent, de traître et les rôles énumérés dans la case 'couche de rôles de base' ci-dessous. La deuxième étape permet de transformer ces rôles de base en sous-rôles."
-L.help_rolelayering_layers = "Un seul rôle est sélectionné dans chaque couche. En premier les rôles des couches personnalisées sont distribués en commençant par la première couche jusqu'à la dernière ou jusqu'à ce qu'il n'y ait plus de rôles pouvant être assignés. Selon ce qui se passe en premier, s'il reste des places disponibles pour des rôles, les rôles des couches non personnalisées seront également distribués."
+L.help_rolelayering_roleselection = "La distribution des rôles se fait en deux étapes. La première étape consiste à distribuer les rôles de base, à savoir les rôles d'innocent, de traître et les rôles énumérés dans la case 'couche des rôles de base' ci-dessous. La deuxième étape permet de transformer ces rôles de base en sous-rôles."
+L.help_rolelayering_layers = "Un seul rôle est sélectionné dans chaque couche. En premier les rôles des couches personnalisées sont distribués en commençant par la première couche jusqu'à la dernière ou jusqu'à ce qu'il n'y ait plus de rôles pouvant être assignés. Selon ce qui se passe en premier, s'il reste des places disponibles pour des rôles, les rôles sans couche non personnalisées seront également distribués."
 L.scoreboard_voice_tooltip = "Défiler avec la molette de la souris pour modifier le volume"
 
 -- 2021-06-15
@@ -1337,21 +1337,21 @@ L.spawneditor_remove = "Retirer un point d'apparition"
 L.spawneditor_change = "Changer le type de point d'apparition (Maintenez la touche [SHIFT] enfoncée pour inverser)"
 L.spawneditor_ammo_edit = "Rester appuyé sur le point d'apparition d'une arme pour modifier les munitions qui apparaissent automatiquement"
 
-L.spawn_weapon_random = "Point d'Apparition d'Armes Aléatoire"
-L.spawn_weapon_melee = "Point d'Apparition d'Armes de Mêlée"
-L.spawn_weapon_nade = "Point d'Apparition de Grenade"
-L.spawn_weapon_shotgun = "Point d'Apparition de Fusil à pompe"
-L.spawn_weapon_heavy = "Point d'Apparition de d'Armes Lourde"
-L.spawn_weapon_sniper = "Point d'Apparition de Fusil de sniper"
-L.spawn_weapon_pistol = "Point d'Apparition de Pistolet"
-L.spawn_weapon_special = "Point d'Apparition d'Arme Spéciale"
-L.spawn_ammo_random = "Point d'Apparition de Munitions Aléatoire"
-L.spawn_ammo_deagle = "Point d'Apparition de Munitions de Deagle"
-L.spawn_ammo_pistol = "Point d'Apparition de Munitions de Pistolet"
-L.spawn_ammo_mac10 = "Point d'Apparition de Munitions de MAC10"
-L.spawn_ammo_rifle = "Point d'Apparition de Munitions de Fusil de sniper"
-L.spawn_ammo_shotgun = "Point d'Apparition de Munitions de Fusil à pompe"
-L.spawn_player_random = "Point d'Apparition de Joueurs Aléatoire"
+L.spawn_weapon_random = "Armes Aléatoire"
+L.spawn_weapon_melee = "Armes de Mêlée"
+L.spawn_weapon_nade = "Grenade"
+L.spawn_weapon_shotgun = "Fusil à pompe"
+L.spawn_weapon_heavy = "Fusil/Armes Lourde/SMG"
+L.spawn_weapon_sniper = "Fusil de sniper"
+L.spawn_weapon_pistol = "Pistolet"
+L.spawn_weapon_special = "Arme Spéciale"
+L.spawn_ammo_random = "Munitions Aléatoire"
+L.spawn_ammo_deagle = "Munitions de Deagle"
+L.spawn_ammo_pistol = "Munitions de 9mm"
+L.spawn_ammo_mac10 = "Munitions de SMG"
+L.spawn_ammo_rifle = "Munitions de Fusil de sniper"
+L.spawn_ammo_shotgun = "Munitions de Fusil à pompe"
+L.spawn_player_random = "Point d'Apparition de Joueurs"
 
 L.spawn_weapon_ammo = "(Munitions: {ammo})"
 
@@ -1363,10 +1363,10 @@ L.spawn_type_player = "C'est un point d'apparition de joueur"
 
 L.spawn_remove = "Appuyez sur [{secondaryfire}] pour retirer ce point d'apparition"
 
-L.submenu_administration_entspawn_title = "Editeur de point d'Apparition"
+L.submenu_administration_entspawn_title = "Éditeur de Point d'Apparition"
 L.header_entspawn_settings = "Paramètres de l'Éditeur de point d'Apparition"
-L.button_start_entspawn_edit = "Commencer l'Édition des points d'Apparitions"
-L.button_delete_all_spawns = "Supprimer tous les points d'apparitions"
+L.button_start_entspawn_edit = "Édition des apparitions"
+L.button_delete_all_spawns = "Supprimer tout"
 
 L.label_dynamic_spawns_enable = "Activez les apparitions dynamiques sur cette carte"
 L.label_dynamic_spawns_global_enable = "Activez les apparitions dynamiques sur toutes les cartes"
@@ -1385,25 +1385,25 @@ L.help_spawn_editor_enable = "Sur certaines cartes, il peut être conseillé d'u
 L.help_spawn_editor_hint = "Conseil : Pour quitter l'éditeur de point d'apparitions, ouvrez à nouveau le menu du jeu."
 L.help_spawn_editor_spawn_amount = [[
 Il y a actuellement {weapon} points d'apparitions d'armes, {ammo}  points d'apparitions de munitions et {player} points d'apparitions de joueurs sur cette carte.
-Cliquez sur 'Commencer l'Édition des points d'Apparitions' pour modifier ce montant.
+Cliquez sur 'Édition des apparitions' pour modifier ce montant.
 
 {weaponrandom}x Point d'Apparition d'Armes Aléatoire
 {weaponmelee}x Point d'Apparition d'Armes de Mêlée Aléatoire
 {weaponnade}x Point d'Apparition de Grenade Aléatoire
 {weaponshotgun}x Point d'Apparition de Fusil à pompe
-{weaponheavy}x Point d'Apparition de d'Armes Lourde
+{weaponheavy}x Point d'Apparition de Fusil/Armes Lourde/SMG
 {weaponsniper}x Point d'Apparition de Fusil de sniper
 {weaponpistol}x Point d'Apparition de Pistolet
 {weaponspecial}x Point d'Apparition d'Arme Spéciale
 
 {ammorandom}x Point d'Apparition de Munitions Aléatoire
 {ammodeagle}x Point d'Apparition de Munitions de Deagle
-{ammopistol}x Point d'Apparition de Munitions de Pistolet
-{ammomac10}x Point d'Apparition de Munitions de MAC10
+{ammopistol}x Point d'Apparition de Munitions de 9mm
+{ammomac10}x Point d'Apparition de Munitions de SMG
 {ammorifle}x Point d'Apparition de Munitions de Fusil de sniper
 {ammoshotgun}x Point d'Apparition de Munitions de Fusil à pompe
 
-{playerrandom}x Point d'Apparition de Joueurs Aléatoire]]
+{playerrandom}x Point d'Apparition de Joueurs]]
 
 L.equipmenteditor_name_auto_spawnable = "Les équipements apparaissent de manière aléatoire sur la carte"
 L.equipmenteditor_name_spawn_type = "Sélectionner le type de point d'apparition"
@@ -1419,10 +1419,10 @@ L.submenu_administration_playermodels_title = "Modèles de Joueurs"
 L.header_playermodels_general = "Paramètres Généraux des Modèles de Joueurs"
 L.header_playermodels_selection = "Sélection de Modèles de Joueurs"
 
-L.label_enforce_playermodel = "Appliquer un modèle de joueurs spécifiques à un rôle"
+L.label_enforce_playermodel = "Appliquer le modèle de joueurs spécifiques à un rôle"
 L.label_use_custom_models = "Utiliser un modèle de joueur choisi au hasard parmi ceux qui ont été sélectionnés"
 L.label_prefer_map_models = "Privilégier les modèles de joueurs spécifiques aux cartes plutôt que les modèles de joueurs par défaut"
-L.label_select_model_per_round = "Sélectionner un nouveau modèle de joueurs aléatoire à chaque partie (uniquement en cas de changement de carte si désactivé)"
+L.label_select_model_per_round = "Sélectionner un nouveau modèle de joueurs aléatoire à chaque partie (uniquement quand la carte change si désactivé)"
 L.label_select_unique_model_per_round = "Sélectionner au hasard un modèle de joueur unique pour chaque joueur"
 
 L.help_prefer_map_models = [[
@@ -1430,7 +1430,7 @@ Certaines cartes définissent leurs propres modèles de joueurs. Par défaut, ce
 
 Les modèles de joueurs spécifiques à un rôle ont toujours une priorité plus élevée et ne sont pas affectés par ce paramètre.]]
 L.help_enforce_playermodel = [[
-Certains rôles ont des modèles de joueurs personnalisés. Ils peuvent être désactivés, ce qui peut être important pour la compatibilité avec certains de modèles de joueurs.
+Certains rôles ont des modèles de joueurs personnalisés. Ils peuvent être désactivés, ce qui peut être important pour la compatibilité avec certains modèles de joueurs.
 Les modèles de joueurs aléatoires par défaut peuvent toujours être sélectionnés si cette option est désactivée.]]
 L.help_use_custom_models = [[
 Par défaut, seul le modèle de joueur CS:S Phoenix est attribué à tous les joueurs. En activant cette option, il est possible de sélectionner une selection de modèles de joueurs. Avec cette option activée, chaque joueur se verra attribuer le même modèle de joueur, mais il s'agira d'un modèle aléatoire provenant de la selection de modèles joueurs défini.
@@ -1450,7 +1450,7 @@ L.kill_score_team = "Meurtre allié:"
 
 -- 2021-10-09
 L.help_models_select = [[
-Clic gauche sur les modèles de joueurs pour les ajouter à la sélection de modèles de joueur. Cliquez à nouveau dessus pour les retirer de la sélection. Clic droit permet d'activer ou de désactiver les chapeaux du détective pour le modèle de joueur ciblé.
+Clic gauche sur les modèles de joueurs pour les ajouter à la sélection de modèles de joueur. Cliquez à nouveau dessus pour les retirer de la sélection. Clic droit permet d'activer ou de désactiver le chapeaux du détective pour le modèle de joueur sélectionné.
 
 L'indicateur en haut à gauche indique si le modèle de joueur a une hitbox pour la tête. L'icône ci-dessous indique si ce modèle est applicable pour le chapeau du détective.]]
 
@@ -1507,10 +1507,10 @@ L.label_roles_credits_award_pct = "Pourcentage de crédit de récompense"
 L.label_roles_credits_award_size = "Nombre de crédit de récompense"
 L.label_roles_credits_award_repeat = "Répétition de la récompense de crédit"
 L.label_roles_newroles_enabled = "Activez les rôles personnalisés"
-L.label_roles_max_roles = "Nombre maximum de ce rôle"
-L.label_roles_max_roles_pct = "Nombre maximum de ce rôle par pourcentage"
-L.label_roles_max_baseroles = "Nombre maximum de ce rôle de base"
-L.label_roles_max_baseroles_pct = "Nombre maximum de ce rôle de base par pourcentage"
+L.label_roles_max_roles = "Nombre maximum de rôle"
+L.label_roles_max_roles_pct = "Nombre maximum de rôle en pourcentage"
+L.label_roles_max_baseroles = "Nombre maximum de rôle de base"
+L.label_roles_max_baseroles_pct = "Nombre maximum de rôle de base en pourcentage"
 L.label_detective_hats = "Activer les chapeaux pour les rôles de détective (si le modèle du joueur permet d'en avoir)"
 
 L.ttt2_desc_innocent = "L'Innocent n'a pas de capacités. Il doit trouver les Traîtres parmi les terroristes et les tuer. Mais il doit faire attention à ne pas tuer ses alliés."
@@ -1518,7 +1518,7 @@ L.ttt2_desc_traitor = "Le Traître est l'ennemi des Innocents. Il dispose d'un m
 L.ttt2_desc_detective = "Le Détective est la seule personne en qui les Innocents peuvent avoir confiance. Mais qui est Innocent ? Le grand Détective doit trouver tous les Traîtres. Les équipements qui se trouvent dans leur boutique peuvent l'aider dans cette tâche."
 
 -- 2021-10-10
-L.button_reset_models = "Réinitialiser les modèles de joueurs"
+L.button_reset_models = "Réinitialiser les modèles"
 
 -- 2021-10-13
 L.help_roles_credits_award_kill = "Une autre façon de gagner des crédits est de tuer des joueurs ayant un 'rôle public' comme par exemple un Détective. Si le rôle du meurtrier a cette option activée, il gagne le nombre de crédits défini ci-dessous."
@@ -2308,7 +2308,7 @@ L.header_roles_derandomize = "Dérandomisation des rôles"
 L.help_roles_derandomize = [[
 La Dérandomisation des rôles peut être utilisé pour rendre la distribution des rôles plus équitable au cours d'une session.
 
-Lorsqu'elle est activée, les chances d'un joueur de recevoir un rôle augmentent s'il ne s'est pas vu attribuer ce rôle. Bien que cela puisse sembler plus juste, cela permet également le métagaming, où un joueur peut deviner qu'un autre joueur sera un traître en se basant sur le fait qu'il n'a pas été traître depuis plusieurs parties. N'activez pas cette option si vous voulez éviter ce genre de situation.
+Lorsqu'elle est activée, les chances d'un joueur de recevoir un rôle augmentent s'il ne s'est pas vu attribuer ce rôle. Bien que cela puisse sembler plus juste, cela crée du métagaming, où un joueur peut deviner qu'un autre joueur sera un traître en se basant sur le fait qu'il n'a pas été traître depuis plusieurs parties. N'activez pas cette option si vous voulez éviter ce genre de situation.
 
 Il y a 4 modes :
 
