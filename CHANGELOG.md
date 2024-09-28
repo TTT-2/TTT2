@@ -9,6 +9,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed missing translation for None role error by removing it (by @mexikoedi)
 - Fixed translation of muting Terrorists and Spectators (by @mexikoedi)
 
+### Changed
+
+- Updated French translation (by @MisterClems)
+
 ## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
 
 ### Added
