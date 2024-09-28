@@ -27,6 +27,8 @@ ENT.NextHeal = 0
 ENT.HealRate = 1
 ENT.HealFreq = 0.2
 
+ENT.CanUseKey = true
+
 ---
 -- @realm shared
 function ENT:SetupDataTables()

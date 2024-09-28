@@ -14,6 +14,8 @@ ENT.isDestructible = true
 
 ENT.pickupWeaponClass = nil
 
+ENT.CanUseKey = true
+
 local soundDeny = Sound("HL2Player.UseDeny")
 
 ---
