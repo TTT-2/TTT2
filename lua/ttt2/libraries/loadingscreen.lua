@@ -70,7 +70,9 @@ function loadingscreen.End()
     end
 
     if SERVER then
-        local duration = loadingscreen.timeBegin - SysTime() + loadingscreen.GetDuration()
+        local duration = (loadingscreen.timeBegin or SysTime())
+            - SysTime()
+            + loadingscreen.GetDuration()
 
         -- this timer makes sure the loading screen is displayed for at least the
         -- time that is set as the minimum time
@@ -103,7 +105,11 @@ if SERVER then
     -- @return number The minimum time
     -- @realm server
     function loadingscreen.GetDuration()
-        return cvLoadingScreenMinDuration:GetFloat()
+        if cvLoadingScreenEnabled:GetBool() then
+            return cvLoadingScreenMinDuration:GetFloat()
+        else
+            return 0
+        end
     end
 end
 
@@ -229,7 +235,7 @@ if CLIENT then
 
             text = LANG.GetParamTranslation(
                 "loadingscreen_round_restart_subtitle_limits",
-                { map = game.GetMap(), rounds = roundsLeft, time = timeLeft }
+                { map = game.GetMap(), rounds = roundsLeft + 1, time = timeLeft }
             )
         else
             text = LANG.TryTranslation("loadingscreen_round_restart_subtitle")
