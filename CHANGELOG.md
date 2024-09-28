@@ -9,6 +9,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed missing translation for None role error by removing it (by @mexikoedi)
 - Fixed sometimes entity use triggering the wrong or no entity (by @TimGoll)
 - Fixed translation of muting Terrorists and Spectators (by @mexikoedi)
+- Fixed the loadingscreen disable causing an error (by @TimGoll)
+- Fixed the rounds left always displaying one less than actually left (by @TimGoll)
 
 ### Changed
 
