@@ -94,7 +94,7 @@ function entmeta:IsUsableEntity(requiredCaps)
     local caps = self:ObjectCaps()
 
     -- special case: TTT specific lua based use interactions
-    -- when were looking for specfically the lua use, return false it not set
+    -- when were looking for specifically the lua use, return false it not set
     if
         bit.band(FCAP_USE_LUA, requiredCaps) > 0
         and not (self.CanUseKey or self.player_ragdoll or self:IsWeapon())
