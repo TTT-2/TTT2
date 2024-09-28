@@ -2354,15 +2354,15 @@ L.label_button_player_force_role = "rolü zorla"
 L.label_player_role = "Rol seç"
 
 -- 2024-09-16
---L.help_enable_loadingscreen_server = [[
---The loadingscreen settings also exist on the client. They are hidden if disabled on the server.
---
---The minimum display time is there to give the player time to read the tips. If the reload of the map takes longer than the minimum time, the loadingscreen is shown as long as it needs to be. In general a reload time of 0.5 to 1 second is to be expected.]]
+L.help_enable_loadingscreen_server = [[
+Yükleme ekranı ayarları istemcide de mevcuttur. Sunucuda devre dışı bırakılırsa yükleme ekranı ayarları gizlenir.
 
---L.label_enable_loadingscreen_server = "Enable the loadingscreen serverwide"
---L.label_loadingscreen_min_duration = "Minimum loadingscreen display time"
+Minimum görüntüleme süresi, oyuncuya ipuçlarını okuması için zaman vermek için oradadır. Haritanın yeniden yüklenmesi minimum süreden daha uzun sürerse, yükleme ekranı olması gerektiği kadar uzun süre gösterilir. Genel olarak 0,5 ila 1 saniyelik bir yeniden yükleme süresi beklenmektedir.]]
+
+L.label_enable_loadingscreen_server = "Sunucu genelinde yükleme ekranını etkinleştir"
+L.label_loadingscreen_min_duration = "Minimum yükleme ekranı görüntüleme süresi"
 
 -- 2024-09-18
---L.label_keyhelper_leave_vehicle = "leave vehicle"
---L.name_vehicle = "Vehicle"
---L.vehicle_enter = "Press [{usekey}] to enter vehicle"
+L.label_keyhelper_leave_vehicle = "araçtan çık"
+L.name_vehicle = "Araç"
+L.vehicle_enter = "Araca girmek için [{usekey}] tuşuna bas"
