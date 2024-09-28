@@ -518,6 +518,72 @@ local function SpecUseKey(ply, ent)
     end
 end
 
+local function EntityContinuousUse(ent, ply)
+    ---
+    -- Enable addons to allow handling PlayerUse
+    -- Otherwise default to old IsTerror Check
+    -- @realm server
+    -- stylua: ignore
+    if hook.Run("PlayerUse", ply, ent, ply:IsTerror()) then
+        ent:Use(ply, ply)
+    end
+
+    if ply:IsSpec() then
+        SpecUseKey(ply, ent)
+
+        return
+    end
+
+    if not ply:IsTerror() then
+        return
+    end
+
+    if ent.CanUseKey and ent.UseOverride then
+        local phys = ent:GetPhysicsObject()
+
+        if not IsValid(phys) or phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then
+            return
+        end
+
+        ent:UseOverride(ply)
+    elseif ent.player_ragdoll then
+        CORPSE.ShowSearch(ply, ent, ply:KeyDown(IN_WALK) or ply:KeyDownLast(IN_WALK))
+
+        return
+    elseif ent:IsWeapon() then
+        ply:SafePickupWeapon(ent, false, true, true, nil)
+
+        return
+    end
+
+    -- if it is a SENT, this will always return true
+    -- if it is a map entity, the flag will be checked
+    if not ent:IsUsableEntity(FCAP_CONTINUOUS_USE) then
+        return
+    end
+
+    -- make sure it is called 10 times per second
+    timer.Simple(0.1, function()
+        if not IsValid(ent) or not IsValid(ply) then
+            return
+        end
+
+        -- make sure the use key is still pressed
+        if not ply:KeyDown(IN_USE) then
+            return
+        end
+
+        -- make sure the entity is still in a good position
+        local distance = ply:GetShootPos():Distance(ent:GetPos())
+
+        if distance > 100 + ent:BoundingRadius() then
+            return
+        end
+
+        EntityContinuousUse(ent, ply)
+    end)
+end
+
 ---
 -- This is called by a client when using the "+use"-key
 -- and contains the entity which was detected
@@ -564,38 +630,7 @@ net.Receive("TTT2PlayerUseEntity", function(len, ply)
         return
     end
 
-    ---
-    -- Enable addons to allow handling PlayerUse
-    -- Otherwise default to old IsTerror Check
-    -- @realm server
-    -- stylua: ignore
-    if hook.Run("PlayerUse", ply, ent, ply:IsTerror()) then
-        ent:Use(ply, ply)
-    end
-
-    if ply:IsSpec() then
-        SpecUseKey(ply, ent)
-
-        return
-    end
-
-    if not ply:IsTerror() then
-        return
-    end
-
-    if ent.CanUseKey and ent.UseOverride then
-        local phys = ent:GetPhysicsObject()
-
-        if not IsValid(phys) or phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then
-            return
-        end
-
-        ent:UseOverride(ply)
-    elseif ent.player_ragdoll then
-        CORPSE.ShowSearch(ply, ent, ply:KeyDown(IN_WALK) or ply:KeyDownLast(IN_WALK))
-    elseif ent:IsWeapon() then
-        ply:SafePickupWeapon(ent, false, true, true, nil)
-    end
+    EntityContinuousUse(ent, ply)
 end)
 
 ---
