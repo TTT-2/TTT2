@@ -89,7 +89,15 @@ end
 -- @local
 function GM:PostDrawHUD()
     vguihandler.DrawBackground()
+end
 
+---
+-- Called after all other 2D draw hooks are called. Draws over all VGUI Panels and HUDs.
+-- @2D
+-- @hook
+-- @realm client
+-- @ref https://wiki.facepunch.com/gmod/GM:DrawOverlay
+function GM:DrawOverlay()
     loadingscreen.Handler()
 end
 
