@@ -18,7 +18,7 @@ L.last_words = "Derniers mots"
 L.terrorists = "Terroristes"
 L.spectators = "Spectateurs"
 
-L.nones = "Pas d'Équipe"
+L.nones = "Sans Équipe"
 L.innocents = "Équipe des Innocents"
 L.traitors = "Équipe des Traîtres"
 
@@ -993,8 +993,8 @@ L.help_color_desc = "Si cette option est activée, il est possible de choisir un
 L.help_scale_factor = "L'échelle influence tous les éléments de l'UI (HUD, vgui et targetID). Il est automatiquement mis à jour si la résolution de l'écran est modifiée. La modification de cette valeur entraîne la réinitialisation du HUD !"
 L.help_hud_game_reload = "Le HUD n'est pas disponible pour le moment. Le jeu doit être rechargé."
 L.help_hud_special_settings = "Voici les paramètres spécifiques de ce HUD."
-L.help_vskin_info = "VSkin (vgui skin) est le skin appliqué à tous les éléments du menu comme celui en cours. Les skins peuvent être facilement créés avec un simple script lua et peuvent changer les couleurs et la taille de certains paramètres."
-L.help_targetid_info = "TargetID est l'information rendue lors de la focalisation d'une entité. Une couleur fixe peut être définie dans le panneau des paramètres généraux."
+L.help_vskin_info = "Le VSkin (vgui skin) est le skin appliqué à tous les éléments du menu comme celui en cours. Les skins peuvent être facilement créés avec un simple script lua et peuvent changer les couleurs et la taille de certains paramètres."
+L.help_targetid_info = "Le TargetID est l'information rendue lors de la focalisation d'une entité. Une couleur fixe peut être définie dans le panneau des paramètres généraux."
 L.help_hud_default_desc = "Définissez le HUD par défaut pour tous les joueurs. Les joueurs qui n'ont pas encore sélectionné de HUD recevront ce HUD par défaut. Cela ne changera pas le HUD des joueurs qui ont déjà sélectionné leur HUD."
 L.help_hud_forced_desc = "Forcer un HUD pour tous les joueurs. Cela désactive la fonction de sélection du HUD pour tout les joueurs."
 L.help_hud_enabled_desc = "Activez/Désactivez les HUD pour restreindre la sélection de ces HUD."
@@ -1011,7 +1011,7 @@ L.label_hud_select = "Sélectionnez un HUD"
 L.label_vskin_select = "Sélectionnez un VSkin"
 L.label_blur_enable = "Activer le flou à l'arrière-plan du VSkin"
 L.label_color_enable = "Activer la couleur de fond du VSkin"
-L.label_minimal_targetid = "Minimaliste Target ID sous le réticule (pas d'affichage du karma, indice, etc.)"
+L.label_minimal_targetid = "Target ID minimaliste sous le réticule (pas d'affichage du karma, indice, etc.)"
 L.label_shop_always_show = "Toujours montrer la boutique"
 L.label_shop_double_click_buy = "Acheter un article dans la boutique en double-cliquant dessus"
 L.label_shop_num_col = "Nombre de colonnes"
@@ -1043,7 +1043,7 @@ L.label_inferface_scues_enable = "Jouer un son au début et à la fin d'une part
 L.label_gameplay_specmode = "Mode Spectateur (toujours resté en spectateur)"
 L.label_gameplay_fastsw = "Changement d'arme rapide"
 L.label_gameplay_hold_aim = "Maintenir pour viser"
-L.label_gameplay_mute = "Mettez en sourdine les joueurs vivants lorsqu'ils sont morts"
+L.label_gameplay_mute = "Rendre muets les joueurs vivants quand vous mourrez"
 L.label_hud_default = "HUD par défaut"
 L.label_hud_force = "HUD obligatoire"
 
@@ -1094,8 +1094,8 @@ L.item_no_hazard_damage = "Pas de dégâts dus aux radiations"
 L.item_no_hazard_damage_desc = [[Vous immunise contre les dégâts causés par le poison, les radiations et les acides.]]
 L.item_no_energy_damage = "Pas de dégâts énergétiques"
 L.item_no_energy_damage_desc = [[Vous immunise contre les dégâts énergétiques tels que les lasers, le plasma et l'électricité.]]
-L.item_no_prop_damage = "Pas de dégâts dus aux props"
-L.item_no_prop_damage_desc = [[Vous immunise contre les dégâts causés par les props.]]
+L.item_no_prop_damage = "Pas de dégâts dus aux entité"
+L.item_no_prop_damage_desc = [[Vous immunise contre les dégâts causés par les entités.]]
 L.item_no_drown_damage = "Pas de dégâts de noyade"
 L.item_no_drown_damage_desc = [[Vous immunise contre les dégâts dus à la noyade.]]
 
@@ -1275,7 +1275,7 @@ L.shopeditor_desc_random_shops = [[Les boutiques aléatoires attribuent à chaqu
 Les boutiques d'équipe donnent de manière systématique les mêmes ensembles d'équipements à tous les joueurs de l'équipe.
 La relance vous permet d'obtenir un nouvel ensemble d'équipements aléatoires en échange de crédits.]]
 L.shopeditor_name_random_shop_items = "Nombre d'équipements aléatoires"
-L.shopeditor_desc_random_shop_items = "Cela inclut les équipements qui sont marqués par la mention \"Toujours disponible dans la boutique\". Cela inclut les équipements qui sont marqués par la mention « Toujours disponible dans la boutique ». Choisissez donc un nombre suffisamment élevé d'équipements ou vous n'obtiendrez que ceux-là."
+L.shopeditor_desc_random_shop_items = "Cela inclut les équipements qui sont marqués par la mention « Toujours disponible dans la boutique ». Choisissez donc un nombre suffisamment élevé d'équipements ou vous n'obtiendrez que ceux-là."
 L.shopeditor_name_random_team_shops = "Activez les boutiques d'équipe"
 L.shopeditor_name_random_shop_reroll = "Activer la relance d'équipement de la boutique"
 L.shopeditor_name_random_shop_reroll_cost = "Coût par relance"
@@ -1307,12 +1307,12 @@ L.equip_inherit_removed = "retiré (hériter)"
 -- 2021-06-09
 L.layering_not_layered = "Sans couche"
 L.layering_layer = "Couche {layer}"
-L.header_rolelayering_role = "{role} a la couche"
+L.header_rolelayering_role = "Couche des rôles des {role}"
 L.header_rolelayering_baserole = "Couche des rôles de base"
 L.submenu_administration_rolelayering_title = "Couche des Rôles"
 L.header_rolelayering_info = "Informations sur la priorité de distribution des rôles"
 L.help_rolelayering_roleselection = "La distribution des rôles se fait en deux étapes. La première étape consiste à distribuer les rôles de base, à savoir les rôles d'innocent, de traître et les rôles énumérés dans la case 'couche des rôles de base' ci-dessous. La deuxième étape permet de transformer ces rôles de base en sous-rôles."
-L.help_rolelayering_layers = "Un seul rôle est sélectionné dans chaque couche. En premier les rôles des couches personnalisées sont distribués en commençant par la première couche jusqu'à la dernière ou jusqu'à ce qu'il n'y ait plus de rôles pouvant être assignés. Selon ce qui se passe en premier, s'il reste des places disponibles pour des rôles, les rôles sans couche non personnalisées seront également distribués."
+L.help_rolelayering_layers = "Un seul rôle est sélectionné dans chaque couche. En premier les rôles des couches personnalisées sont distribués en commençant par la première couche jusqu'à la dernière ou jusqu'à ce qu'il n'y ait plus de rôles pouvant être assignés. Selon ce qui se passe en premier, s'il reste des places disponibles pour des rôles, les rôles sans couche personnalisées seront également distribués."
 L.scoreboard_voice_tooltip = "Défiler avec la molette de la souris pour modifier le volume"
 
 -- 2021-06-15
@@ -1405,8 +1405,8 @@ Cliquez sur 'Édition des apparitions' pour modifier ce montant.
 
 {playerrandom}x Point d'Apparition de Joueurs]]
 
-L.equipmenteditor_name_auto_spawnable = "Les équipements apparaissent de manière aléatoire sur la carte"
-L.equipmenteditor_name_spawn_type = "Sélectionner le type de point d'apparition"
+L.equipmenteditor_name_auto_spawnable = "L'équipement apparaît de manière aléatoire sur la carte"
+L.equipmenteditor_name_spawn_type = "Sélection du type de point d'apparition"
 L.equipmenteditor_desc_auto_spawnable = [[
 Le système de point d'apparitions de TTT2 permet à toutes les armes d'apparaître sur la carte. Par défaut, seules les armes marquées d'un 'AutoSpawnable' par le créateur de la carte apparaîtra sur la carte, mais cela peut être modifié à partir de ce menu.
 
@@ -1422,7 +1422,7 @@ L.header_playermodels_selection = "Sélection de Modèles de Joueurs"
 L.label_enforce_playermodel = "Appliquer le modèle de joueurs spécifiques à un rôle"
 L.label_use_custom_models = "Utiliser un modèle de joueur choisi au hasard parmi ceux qui ont été sélectionnés"
 L.label_prefer_map_models = "Privilégier les modèles de joueurs spécifiques aux cartes plutôt que les modèles de joueurs par défaut"
-L.label_select_model_per_round = "Sélectionner un nouveau modèle de joueurs aléatoire à chaque partie (uniquement quand la carte change si désactivé)"
+L.label_select_model_per_round = "Sélectionner un nouveau modèle de joueurs aléatoire à chaque partie (quand la carte change si désactivé)"
 L.label_select_unique_model_per_round = "Sélectionner au hasard un modèle de joueur unique pour chaque joueur"
 
 L.help_prefer_map_models = [[
@@ -1450,7 +1450,7 @@ L.kill_score_team = "Meurtre allié:"
 
 -- 2021-10-09
 L.help_models_select = [[
-Clic gauche sur les modèles de joueurs pour les ajouter à la sélection de modèles de joueur. Cliquez à nouveau dessus pour les retirer de la sélection. Clic droit permet d'activer ou de désactiver le chapeaux du détective pour le modèle de joueur sélectionné.
+Clic gauche sur les modèles de joueurs pour les ajouter à la sélection de modèles de joueur. Cliquez à nouveau dessus pour les retirer de la sélection. Clic droit permet d'activer ou de désactiver le chapeau du détective pour le modèle de joueur sélectionné.
 
 L'indicateur en haut à gauche indique si le modèle de joueur a une hitbox pour la tête. L'icône ci-dessous indique si ce modèle est applicable pour le chapeau du détective.]]
 
@@ -1462,7 +1462,7 @@ L.submenu_administration_roles_general_title = "Paramètres Généraux des Rôle
 L.header_roles_info = "Informations sur le Rôle"
 L.header_roles_selection = "Paramètres de Sélection des Rôles"
 L.header_roles_tbuttons = "Accès aux boutons des Traîtres"
-L.header_roles_credits = "Crédits d'Équipements des Rôles"
+L.header_roles_credits = "Crédits d'Équipements du Rôle"
 L.header_roles_additional = "Paramètres Additionnels des Rôles"
 L.header_roles_reward_credits = "Crédits d'Équipement de Récompense"
 
@@ -1497,10 +1497,10 @@ Ce dernier n'est utilisé que si le montant fixe est '0' et fixe une limite sup�
 
 L.label_roles_enabled = "Activer le rôle"
 L.label_roles_min_inno_pct = "Distribution des innocents selon le nombre de joueurs"
-L.label_roles_pct = "Distribution des rôles selon le nombre de joueurs"
-L.label_roles_max = "Nombre de joueurs maximum attribués à ce rôle"
-L.label_roles_random = "Nombre de chances pour que ce rôle soit distribué"
-L.label_roles_min_players = "Nombre de joueurs minimum attribués à ce rôle"
+L.label_roles_pct = "Distribution du rôle selon le nombre de joueurs"
+L.label_roles_max = "Nombre de joueurs maximum pour attribués ce rôle"
+L.label_roles_random = "Taux de chances que ce rôle soit distribué"
+L.label_roles_min_players = "Nombre de joueurs minimum pour attribués ce rôle"
 L.label_roles_tbutton = "Le rôle peut utiliser les boutons de Traître"
 L.label_roles_credits_starting = "Crédits de départ"
 L.label_roles_credits_award_pct = "Pourcentage de crédit de récompense"
@@ -1551,7 +1551,7 @@ L.submenu_administration_sprint_title = "Sprint"
 L.submenu_administration_playersettings_title = "Paramètres des Joueurs"
 
 L.header_roles_special_settings = "Paramètres des Rôles Spéciaux"
-L.header_equipment_additional = "Paramètres Additionnels des Équipements"
+L.header_equipment_additional = "Paramètres Additionnels de l'Équipement"
 L.header_administration_general = "Paramètres Admin Généraux"
 L.header_administration_logging = "Rapport des parties"
 L.header_administration_misc = "Divers"
@@ -1568,7 +1568,7 @@ L.header_textchat = "Chat Textuel"
 L.header_round_dead_players = "Paramètres des Joueurs Morts"
 L.header_administration_scoreboard = "Paramètres du Tableau des Scores"
 L.header_hud_toggleable = "Éléments du HUD Activables"
-L.header_mapentities_prop_possession = "Possession des Props"
+L.header_mapentities_prop_possession = "Possession des Entités"
 L.header_mapentities_doors = "Portes"
 L.header_karma_tweaking = "Modification du Karma"
 L.header_karma_kick = "Karma Kick et Ban"
@@ -1611,7 +1611,7 @@ Lorsque le joueur subit des dégâts, un certain pourcentage de ces dégâts son
 Si l'armure renforcée est activée, les dégâts appliqués au joueur sont diminués de 15 % tant que la valeur de l'armure est supérieure au seuil de renforcement.]]
 L.help_sherlock_mode = "Le mode sherlock est un mode TTT classique. Si le mode sherlock est désactivé, les corps ne peuvent pas être confirmés, le tableau des scores indique que tout le monde est en vie et les spectateurs peuvent parler aux joueurs vivants."
 L.help_prop_possession = [[
-La possession de props peut être utilisée par les spectateurs pour posséder des props qui se trouvent dans le monde et utiliser le 'FRAPPE-O-METRE' qui se recharge lentement pour déplacer le props.
+La possession d'entité peut être utilisée par les spectateurs pour posséder des entités qui se trouvent dans le monde et utiliser le 'FRAPPE-O-METRE' qui se recharge lentement pour déplacer l'entité.
 
 La valeur maximale du 'FRAPPE-O-METRE' se compose d'une valeur de base de possession, à laquelle s'ajoute la différence meurtres/morts, comprise entre deux limites définies. Le compteur se recharge lentement au fil du temps. Le temps de recharge défini est le temps nécessaire pour recharger un seul point du 'FRAPPE-O-METRE'.]]
 L.help_karma = "Les joueurs commencent avec un certain montant de Karma et le perdent lorsqu'ils blessent/tuent des alliés. Le montant qu'ils perdent dépend du Karma de la personne qu'ils ont blessée/tuée. Un Karma faible réduit les dégâts infligés."
@@ -1633,7 +1633,7 @@ L.label_dna_scanner_slots = "Emplacements pour les échantillons d'ADN"
 L.label_dna_radar = "Activer le mode classique du scanner d'ADN"
 L.label_dna_radar_cooldown = "Temps de recharge du scanner ADN"
 L.label_radar_charge_time = "Temps de recharge après utilisation"
-L.label_crowbar_shove_delay = "Temps de recharge après avoir poussé avec le pied de biche"
+L.label_crowbar_shove_delay = "Temps de recharge après avoir poussé"
 L.label_idle = "Activer le mode inactif"
 L.label_idle_limit = "Temps maximum d'inactivité en secondes"
 L.label_namechange_kick = "Activer l'expulsion en cas de changement de nom"
@@ -1644,25 +1644,25 @@ L.label_debug_preventwin = "Empêcher toute condition de victoire [debug]"
 L.label_bots_are_spectators = "Les bots sont toujours en mode spectateurs"
 L.label_tbutton_admin_show = "Affiche les boutons des traîtres aux administrateurs"
 L.label_ragdoll_carrying = "Activer le fait de pouvoir transporter n'importe quel corps"
-L.label_prop_throwing = "Activer le lancer de props"
+L.label_prop_throwing = "Activer le lancer d'entité"
 L.label_weapon_carrying = "Activer le port d'armes"
 L.label_weapon_carrying_range = "Portée de l'arme"
-L.label_prop_carrying_force = "Force de ramassage de props"
-L.label_teleport_telefrags = "Tuer le(s) joueur(s) bloquant(s) lors d'une téléportation (téléfrag)"
+L.label_prop_carrying_force = "Force de ramassage d'entité"
+L.label_teleport_telefrags = "Tuer le(s) joueur(s) bloquant(s) le point de téléportation lors d'une téléportation (téléfrag)"
 L.label_allow_discomb_jump = "Autoriser le saut a la discombobulateur pour le lanceur de grenade"
 L.label_spawn_wave_interval = "Intervalle entre les vagues d'apparition en secondes"
 L.label_voice_enable = "Activer le chat vocal"
 L.label_voice_drain = "Activer la fonction de batterie du chat vocal"
-L.label_voice_drain_normal = "Consommation de la batterie par tick pour les joueurs normaux"
-L.label_voice_drain_admin = "Consommation par tick pour les administrateurs et les rôles de détective publics"
-L.label_voice_drain_recharge = "Taux de recharge par tick de non utilisation du chat vocal"
+L.label_voice_drain_normal = "Consommation par tick pour les joueurs"
+L.label_voice_drain_admin = "Consommation par tick pour les admin et rôles de détective"
+L.label_voice_drain_recharge = "Temps de recharge par tick"
 L.label_locational_voice = "Activer le chat vocal de proximité pour les joueurs vivants"
 L.label_locational_voice_prep = "Activer le chat vocal de proximité pendant la phase de préparation"
 L.label_locational_voice_range = "Portée du chat vocal de proximité"
 L.label_armor_on_spawn = "Armure du joueur lors d'une (ré)apparition"
 L.label_prep_respawn = "Activer la réapparition instantanée pendant la phase de préparation"
-L.label_preptime_seconds = "Durée de la préparation d'une partie en secondes"
-L.label_firstpreptime_seconds = "Premier temps de préparation en secondes"
+L.label_preptime_seconds = "Durée de la phase de préparation en secondes"
+L.label_firstpreptime_seconds = "Durée de la PREMIÈRE phase de préparation en secondes"
 L.label_roundtime_minutes = "Durée d'une partie en minutes"
 L.label_haste = "Activer le mode hâtif"
 L.label_haste_starting_minutes = "Temps de démarrage du mode hâtif en minutes"
@@ -1682,11 +1682,11 @@ L.label_dyingshot = "Tirer quand vous mourrez si quelqu'un est dans votre ligne 
 L.label_armor_block_headshots = "Activer le blocage des tirs à la tête grâce à l'armure"
 L.label_armor_block_blastdmg = "Activer le blocage des dégâts d'explosion grâce à l'armure"
 L.label_armor_dynamic = "Activer l'armure dynamique"
-L.label_armor_value = "Montant d'armure donné par l'armure"
+L.label_armor_value = "Montant d'armure"
 L.label_armor_damage_block_pct = "Pourcentage de dégâts encaissés par l'armure"
 L.label_armor_damage_health_pct = "Pourcentage de dégâts encaissés par le joueur"
 L.label_armor_enable_reinforced = "Activer l'armure renforcée"
-L.label_armor_threshold_for_reinforced = "Seuil de l'armure renforcé"
+L.label_armor_threshold_for_reinforced = "Seuil de renforcement"
 L.label_sherlock_mode = "Activer le mode sherlock"
 L.label_highlight_admins = "Mettre en surbrillance les noms des administrateurs du serveur"
 L.label_highlight_dev = "Mettre en surbrillance les noms des développeurs du TTT2"
@@ -1694,11 +1694,11 @@ L.label_highlight_vip = "Mettre en surbrillance les noms des supporter du TTT2"
 L.label_highlight_addondev = "Mettre en surbrillance les noms des développeurs d'addons du TTT2"
 L.label_highlight_supporter = "Mettre en surbrillance les noms des autres"
 L.label_enable_hud_element = "Activer l'éléments {elem} du HUD"
-L.label_spec_prop_control = "Activer la possession de props"
+L.label_spec_prop_control = "Activer la possession d'entité"
 L.label_spec_prop_base = "Valeur de base de la possession"
-L.label_spec_prop_maxpenalty = "Limite minimale de la possession de props"
-L.label_spec_prop_maxbonus = "Limite maximale de la possession de props"
-L.label_spec_prop_force = "Force de poussée lors de la possession de props"
+L.label_spec_prop_maxpenalty = "Limite minimale de la possession d'entité"
+L.label_spec_prop_maxbonus = "Limite maximale de la possession d'entité"
+L.label_spec_prop_force = "Force de poussée lors de la possession d'entité"
 L.label_spec_prop_rechargetime = "Temps de recharge en secondes"
 L.label_doors_force_pairs = "Forcer les portes proches à devenir des portes doubles"
 L.label_doors_destructible = "Activer la destruction des portes"
@@ -1710,32 +1710,32 @@ L.label_karma = "Activer le Karma"
 L.label_karma_strict = "Activer le Karma strict"
 L.label_karma_starting = "Karma de départ"
 L.label_karma_max = "Karma maximum"
-L.label_karma_ratio = "Taux de pénalité pour les dégâts causés à un allié"
+L.label_karma_ratio = "Ratio de pénalité par dégâts causés à un allié"
 L.label_karma_kill_penalty = "Pénalité pour le meurtre d'un allié"
 L.label_karma_round_increment = "Restauration du Karma"
 L.label_karma_clean_bonus = "Bonus de partie parfaite"
-L.label_karma_traitordmg_ratio = "Ratio bonus pour les dégâts infligés aux ennemis"
+L.label_karma_traitordmg_ratio = "Ratio bonus par dégâts infligés aux ennemis"
 L.label_karma_traitorkill_bonus = "Bonus pour le meutre d'un ennemi"
 L.label_karma_clean_half = "Réduction du bonus de partie parfaite "
 L.label_karma_persist = "Le Karma ne se remet pas à zéro lors d'un changement de carte"
 L.label_karma_low_autokick = "Expulsion automatique des joueurs ayant un Karma faible"
 L.label_karma_low_amount = "Seuil du Karma faible"
-L.label_karma_low_ban = "Bannissement des joueurs sélectionnés ayant un Karma faible "
-L.label_karma_low_ban_minutes = "Temps du bannissement en minutes"
+L.label_karma_low_ban = "Bannissement des joueurs ayant un Karma faible"
+L.label_karma_low_ban_minutes = "Durée du bannissement en minutes"
 L.label_karma_debugspam = "Activer les messages de débug dans la console concernant les modifications apportées au Karma"
 L.label_max_melee_slots = "Nombre maximal d'emplacements d'armes de mêlée"
 L.label_max_secondary_slots = "Nombre maximal d'emplacements d'armes secondaires"
 L.label_max_primary_slots = "Nombre maximal d'emplacements d'arme principale"
 L.label_max_nade_slots = "Nombre maximal d'emplacements de grenade"
-L.label_max_carry_slots = "Nombre maximal d'emplacements d'objets pouvant être portés"
+L.label_max_carry_slots = "Nombre maximal d'emplacements d'objets portable"
 L.label_max_unarmed_slots = "Nombre maximal d'emplacements non armés"
 L.label_max_special_slots = "Nombre maximal d'emplacements d'armes spéciales"
 L.label_max_extra_slots = "Nombre maximal d'emplacements supplémentaire"
 L.label_weapon_autopickup = "Activer le ramassage automatique des armes"
 L.label_sprint_enabled = "Activer le sprint"
-L.label_sprint_max = "Facteur d'augmentation de la vitesse"
-L.label_sprint_stamina_consumption = "Coefficient de la consommation d'endurance"
-L.label_sprint_stamina_regeneration = "Coefficient de la régénération de l'endurance"
+L.label_sprint_max = "Vitesse du sprint"
+L.label_sprint_stamina_consumption = "Consommation d'endurance"
+L.label_sprint_stamina_regeneration = "Régénération d'endurance"
 L.label_crowbar_unlocks = "L'attaque principale peut être utilisée pour interagir (Ouvrir des portes)"
 L.label_crowbar_pushforce = "Force de la poussée du pied de biche"
 
@@ -1743,8 +1743,8 @@ L.label_crowbar_pushforce = "Force de la poussée du pied de biche"
 L.header_playersettings_falldmg = "Paramètres des dégâts de chute"
 
 L.label_falldmg_enable = "Activer les dégâts de chute"
-L.label_falldmg_min_velocity = "Seuil de vitesse minimum pour que des dégâts de chute se produisent"
-L.label_falldmg_exponent = "Exposant permettant d'augmenter les dégâts de chute en fonction de la vitesse"
+L.label_falldmg_min_velocity = "Vitesse minimum pour pouvoir surbir des dégâts de chute"
+L.label_falldmg_exponent = "Exposant des dégâts de chute en fonction de la vitesse"
 
 L.help_falldmg_exponent = [[
 Cette valeur modifie l'augmentation exponentielle des dégâts de chute en fonction de la vitesse à laquelle le joueur touche le sol.
@@ -1777,7 +1777,7 @@ L.tbut_adminarea = "ESPACE ADMIN :"
 L.equipmenteditor_name_damage_scaling = "Évolution des dégâts"
 
 -- 2023-08-11
-L.equipmenteditor_name_allow_drop = "Autoriser de jeter"
+L.equipmenteditor_name_allow_drop = "Autorisation de jeter"
 L.equipmenteditor_desc_allow_drop = "Si cette option est activée, l'équipement peut être jeté librement par le joueur."
 
 L.equipmenteditor_name_drop_on_death_type = "Lâcher à la mort"
@@ -1789,7 +1789,7 @@ L.drop_on_death_type_deny = "Interdire le lâcher d'équipement à la mort"
 
 -- 2023-08-26
 L.equipmenteditor_name_kind = "Emplacement d'équipement"
-L.equipmenteditor_desc_kind = "L'emplacement d'inventaire que l'équipement occupera."
+L.equipmenteditor_desc_kind = "L'emplacement que l'équipement occupera."
 
 L.slot_weapon_melee = "Emplacement d'armes de mêlée"
 L.slot_weapon_pistol = "Emplacement d'armes secondaires"
@@ -1978,17 +1978,17 @@ L.label_keyhelper_help = "ouvrir le menu du mode de jeu"
 L.label_keyhelper_mutespec = "cycle du mode muet des spectateurs"
 L.label_keyhelper_shop = "ouvrir la boutique d'équipement"
 L.label_keyhelper_show_pointer = "afficher le curseur de la souris"
-L.label_keyhelper_possess_focus_entity = "posséder le props ciblée"
+L.label_keyhelper_possess_focus_entity = "posséder l'entité ciblée"
 L.label_keyhelper_spec_focus_player = "observer le joueur ciblé"
 L.label_keyhelper_spec_previous_player = "joueur précédent"
 L.label_keyhelper_spec_next_player = "joueur suivant"
 L.label_keyhelper_spec_player = "observer un joueur au hasard"
-L.label_keyhelper_possession_jump = "prop: sauter"
-L.label_keyhelper_possession_left = "prop: gauche"
-L.label_keyhelper_possession_right = "prop: droite"
-L.label_keyhelper_possession_forward = "prop: avancer"
-L.label_keyhelper_possession_backward = "prop: reculer"
-L.label_keyhelper_free_roam = "quitter le props et se déplacer librement"
+L.label_keyhelper_possession_jump = "entité: sauter"
+L.label_keyhelper_possession_left = "entité: gauche"
+L.label_keyhelper_possession_right = "entité: droite"
+L.label_keyhelper_possession_forward = "entité: avancer"
+L.label_keyhelper_possession_backward = "entité: reculer"
+L.label_keyhelper_free_roam = "quitter l'entité et se déplacer librement"
 L.label_keyhelper_flashlight = "activer/désactiver la lampe torche"
 L.label_keyhelper_quickchat = "ouvrir le chat rapide"
 L.label_keyhelper_voice_global = "chat vocal global"
@@ -2035,11 +2035,11 @@ L.hat_deerstalker_name = "Chapeau du Détective"
 
 -- 2023-11-16
 L.help_prop_spec_dash = [[
-Les props possédées par les spectateurs se déplacent dans la direction qu'ils visent. Les déplacements peuvent être plus puissants que les mouvements normaux. Une force plus élevée signifie également une consommation de la force de base plus importante.
+Les entités possédées par les spectateurs se déplacent dans la direction qu'ils visent. Les déplacements peuvent être plus puissants que les mouvements normaux. Une force plus élevée signifie également une consommation de la force de base plus importante.
 
 Cette variable est un multiplicateur de la force de poussée.]]
-L.label_spec_prop_dash = "Multiplicateur de force de la force de déplacement"
-L.label_keyhelper_possession_dash = "prop: déplacement dans la direction visée"
+L.label_spec_prop_dash = "Force de déplacement"
+L.label_keyhelper_possession_dash = "entité: déplacement dans la direction visée"
 L.label_keyhelper_weapon_drop = "jeter l'arme sélectionnée si possible"
 L.label_keyhelper_ammo_drop = "jeter les munitions en réserve de l'arme sélectionnée"
 
@@ -2157,11 +2157,11 @@ L.grenade_fuse = "EXPLOSION"
 
 -- 2024-01-25
 L.header_roles_magnetostick = "Magnéto-stick"
-L.label_roles_ragdoll_pinning = "Activer l'accrochage des corps"
+L.label_roles_ragdoll_pinning = "Le rôle peut accrocher les corps"
 L.magneto_stick_help_carry_rag_pin = "Accrocher le corps"
 L.magneto_stick_help_carry_rag_drop = "Décrocher le corps"
-L.magneto_stick_help_carry_prop_release = "Porter le props"
-L.magneto_stick_help_carry_prop_drop = "Poser le props"
+L.magneto_stick_help_carry_prop_release = "Porter l'entité"
+L.magneto_stick_help_carry_prop_drop = "Poser l'entité"
 
 -- 2024-01-27
 L.decoy_help_primary = "Placer le leurre"
@@ -2204,7 +2204,7 @@ L.label_crosshair_size_gap = "Taille d'espacement des lignes statiques du rétic
 L.help_locational_voice = "Le chat de proximité est une implémentation de TTT2 de la voix localisée en 3D. Les joueurs ne sont audibles que dans un rayon déterminé autour d'eux et deviennent de plus en plus silencieux à mesure qu'ils s'éloignent."
 L.help_locational_voice_prep = [[Par défaut, le chat de proximité est désactivé pendant la phase de préparation. Si cette option est activée, le chat de proximité est également activé pendant la phase de préparation.
 
-Note: Le chat de proximité est toujours désactivé pendant la fin de partie.]]
+Note: Le chat de proximité est toujours désactivé pendant la phase de fin de partie.]]
 L.help_voice_duck_spectator = "La réduction des voix des spectateurs rend les autres spectateurs plus silencieux par rapport aux joueurs vivants. Cela peut être utile si vous souhaitez écouter attentivement les discussions des joueurs vivants."
 
 L.help_equipmenteditor_configurable_clip = [[La valeur configurable définit le nombre d'utilisations de l'arme lorsqu'elle est achetée dans la boutique ou qu'elle apparaît dans le monde.
@@ -2347,7 +2347,7 @@ L.button_rotating = "Appuyez sur [{usekey}] pour basculer"
 L.undefined_key = "???"
 
 -- 2024-08-18
-L.header_commands_player_force_role = "Forcer le Rôle du Joueur"
+L.header_commands_player_force_role = "Forcer le Rôle d'un Joueur"
 
 L.label_button_player_force_role = "forcer le rôle"
 
