@@ -176,7 +176,15 @@ if SERVER then
             end
         elseif self.data.visibleFor == VISIBLE_FOR_TEAM then
             if IsPlayer(self.data.owner) then
-                self.receiverList = GetTeamFilter(self.data.owner:GetTeam(), false, true)
+                local team = self.data.owner:GetTeam()
+                local subRoleData = self.data.owner:GetSubRoleData()
+
+                -- visible for team is restricted when the team is unknown
+                if subRoleData.unknownTeam or team == TEAM_NONE or TEAMS[team].alone then
+                    self.receiverList = { self.data.owner }
+                else
+                    self.receiverList = GetTeamFilter(team, false, true)
+                end
             else
                 -- handle static team
                 self.receiverList = GetTeamFilter(self.data.owner, false, true)

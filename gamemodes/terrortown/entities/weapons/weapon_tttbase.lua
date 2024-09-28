@@ -555,6 +555,9 @@ if CLIENT then
             local isIcon = false
 
             if isstring(binding) then
+                -- attempt to translate binding in case it can be translated
+                bindig = TryT(binding)
+
                 local wKey, hKey = draw.GetTextSize(binding, "weapon_hud_help_key", scale)
 
                 wBinding = wKey + 2 * padXKey * scale
@@ -710,11 +713,11 @@ if CLIENT then
         self:ClearHUDHelp()
 
         if primary then
-            self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
+            self:AddHUDHelpLine(primary, Key("+attack", "undefined_key"))
         end
 
         if secondary then
-            self:AddHUDHelpLine(secondary, Key("+attack2", "MOUSE2"))
+            self:AddHUDHelpLine(secondary, Key("+attack2", "undefined_key"))
         end
     end
 
@@ -727,11 +730,11 @@ if CLIENT then
         self:ClearHUDHelp()
 
         if primary then
-            self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
+            self:AddHUDHelpLine(primary, Key("+attack", "undefined_key"))
         end
 
         if secondary then
-            self:AddHUDHelpLine(secondary, Key("+attack2", "MOUSE2"))
+            self:AddHUDHelpLine(secondary, Key("+attack2", "undefined_key"))
         end
     end
 

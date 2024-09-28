@@ -21,7 +21,7 @@ L.terrorists = "Террористы"
 L.spectators = "Наблюдатели"
 
 L.nones = "Нет команды"
-L.innocents = "Команда невиновых"
+L.innocents = "Команда невиновных"
 L.traitors = "Команда предателей"
 
 -- Round status messages
@@ -1133,7 +1133,6 @@ L.binoc_help_sec = "Изменить уровень приближения."
 
 L.vis_help_pri = "Бросить активированное устройство."
 
-
 -- 2020-08-07
 L.pickup_error_spec = "Вы не можете подобрать это за наблюдателя."
 L.pickup_error_owns = "Вы не можете подобрать это, так как у вас уже есть это оружие."
@@ -1426,7 +1425,7 @@ L.label_enforce_playermodel = "Использовать модель от рол
 L.label_use_custom_models = "Использовать случайно выбранную модель игрока."
 L.label_prefer_map_models = "Предпочитать специфичные для карты модели игрока стандартным моделям."
 L.label_select_model_per_round = "Выбирать новую случайную модель каждый раунд(только при смене карты, если выключено)."
---L.label_select_unique_model_per_round = "Select a random unique model for each player"
+L.label_select_unique_model_per_round = "Выбирать случайную уникальную модель для каждого игрока"
 
 L.help_prefer_map_models = [[
 Некоторые карты устанавливают свои собственные модели игроков. По умолчанию, эти модели имеют больший приоритет чем те, что назначаются автоматически. Выключив эту настройку, заданные картой модели выключаются.
@@ -1736,7 +1735,7 @@ L.label_max_special_slots = "Максимум слотов особых пред
 L.label_max_extra_slots = "Максимум дополнительных слотов"
 L.label_weapon_autopickup = "Включить автоматический подбор оружия."
 L.label_sprint_enabled = "Включить ускорение."
-L.label_sprint_max = "Максимальная выносливость ускорения"
+--L.label_sprint_max = "Speed boost factor"
 L.label_sprint_stamina_consumption = "Коэффициент потребления выносливости"
 L.label_sprint_stamina_regeneration = "Коэффициент восстановления выносливости"
 L.label_crowbar_unlocks = "Основная атака может использоваться для взаимодействия (например, открытия)."
@@ -2100,10 +2099,8 @@ L.msg_beacon_death = "Игрок умер в непосредственной б
 
 L.beacon_short_desc = "Маячки используются полицейскими ролями для локального просмотра сквозь стены возле них."
 
--- 2023-12-18
 L.entity_pickup_owner_only = "Может подобрать только владелец."
 
--- 2023-12-18
 L.body_confirm_one = "{finder} подтверждает смерть {victim}."
 L.body_confirm_more = "{finder} подтверждает несколько смертей ({count}): {victims}."
 
@@ -2112,19 +2109,6 @@ L.builtin_marker = "Встроенное."
 L.equipmenteditor_desc_builtin = "Это встроенное в режим снаряжение, идущее совместно с TTT2!"
 L.help_roles_builtin = "Это встроенная в режим роль, идущая совместно с TTT2!"
 L.header_equipment_info = "Информация о снаряжении"
-
-
--- 2023-12-24
-L.submenu_gameplay_accessibility_title = "Специальные возможности"
-
-L.header_accessibility_settings = "Настройки специальных возможностей"
-
-L.label_enable_dynamic_fov = "Включить динамичное поле зрения."
-L.label_enable_bobbing = "Включить покачивание камеры."
-L.label_enable_bobbing_strafe = "Включить покачивание камеры при движении в бок."
-
-L.help_enable_dynamic_fov = "Динамичное поле зрения применяется в зависимости от скорости игрока. Например, когда игрок ускоряется, поле зрения увеличивается для визуализации скорости."
-L.help_enable_bobbing_strafe = "Покачивание — лёгкая тряска камеры при ходьбе, плавании или падении."
 
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[Множит значение базового урона оружия на этот коэффициент.
@@ -2138,6 +2122,17 @@ L.equipmenteditor_desc_damage_scaling = [[Множит значение базо
 Примечание: некоторое оружие может не использовать это значение, что приведёт к неэффективности этого множителя.]]
 
 -- 2023-12-24
+L.submenu_gameplay_accessibility_title = "Специальные возможности"
+
+L.header_accessibility_settings = "Настройки специальных возможностей"
+
+L.label_enable_dynamic_fov = "Включить динамичное поле зрения."
+L.label_enable_bobbing = "Включить покачивание камеры."
+L.label_enable_bobbing_strafe = "Включить покачивание камеры при движении в бок."
+
+L.help_enable_dynamic_fov = "Динамичное поле зрения применяется в зависимости от скорости игрока. Например, когда игрок ускоряется, поле зрения увеличивается для визуализации скорости."
+L.help_enable_bobbing_strafe = "Покачивание — лёгкая тряска камеры при ходьбе, плавании или падении."
+
 L.binoc_help_reload = "Сбросить цель."
 L.cl_sb_row_sresult_direct_conf = "Подтверждение напрямую"
 L.cl_sb_row_sresult_pub_police = "Подтверждение публичной полицейской роли"
@@ -2159,16 +2154,6 @@ L.help_crosshair_scale_enable = [[
 
 L.header_weapon_settings = "Настройки оружия"
 
-
-L.marker_vision_visible_for_0 = "Видимо для вас."
-L.marker_vision_visible_for_1 = "Видимо для вашей роли."
-L.marker_vision_visible_for_2 = "Видимо для вашей команды."
-L.marker_vision_visible_for_3 = "Видимо для всех."
-
--- 2024-01-27
-L.decoy_help_primary = "Разместить Приманку"
-L.decoy_help_secondary = "Прикрепить Приманку к поверхности"
-
 -- 2024-01-24
 L.grenade_fuse = "ФИТИЛЬ"
 
@@ -2179,6 +2164,16 @@ L.magneto_stick_help_carry_rag_pin = "Прикрепить рэгдолл"
 L.magneto_stick_help_carry_rag_drop = "Положить рэгдолл"
 L.magneto_stick_help_carry_prop_release = "Бросить объект"
 L.magneto_stick_help_carry_prop_drop = "Положить объект"
+
+-- 2024-01-27
+L.decoy_help_primary = "Разместить Приманку"
+L.decoy_help_secondary = "Прикрепить Приманку к поверхности"
+
+
+L.marker_vision_visible_for_0 = "Видимо для вас."
+L.marker_vision_visible_for_1 = "Видимо для вашей роли."
+L.marker_vision_visible_for_2 = "Видимо для вашей команды."
+L.marker_vision_visible_for_3 = "Видимо для всех."
 
 -- 2024-02-14
 L.throw_no_room = "Здесь нет места, чтобы выбросить устройство!"
@@ -2310,36 +2305,66 @@ L.loadingscreen_round_restart_subtitle = "вы играете на карте {m
 L.loadingscreen_round_restart_subtitle_limits = "вы играете на карте {map}, которая продлится ещё {rounds} раунд (а/ов) или {time}"
 
 -- 2024-06-23
---L.header_roles_derandomize = "Role Derandomization"
+L.header_roles_derandomize = "Дерандомизация ролей"
 
---L.help_roles_derandomize = [[
---Role derandomization can be used to make role distribution feel more fair over the course of a session.
---
---In essence, when it is enabled, a player's chance of receiving a role increases while they have not been assigned that role. While this can feel more fair, this also enables metagaming, where a player can guess that another will be traitor-aligned based on the fact that they have not been traitor aligned in several rounds. Do not enable this option if this is undesirable.
---
---There are 4 modes:
---
---mode 0: Disabled - No derandomization is done. This is the default.
---
---mode 1: Base roles only - Derandomization is performed for base roles only. Sub-roles will be selected randomly. These are roles like Innocent and Traitor.
---
---mode 2: Sub-roles only - Derandomization is performed for sub-roles only. Base roles will be selected randomly. Note that sub-roles are only assigned to players which have already been selected for their base role.
---
---mode 3: Base roles AND sub-roles - Derandomization is performed for both base roles and sub-roles.]]
---L.label_roles_derandomize_mode = "Derandomization mode"
---L.label_roles_derandomize_mode_none = "mode 0: Disabled"
---L.label_roles_derandomize_mode_base_only = "mode 1: Base roles only"
---L.label_roles_derandomize_mode_sub_only = "mode 2: Sub-roles only"
---L.label_roles_derandomize_mode_base_and_sub = "mode 3: Base roles AND sub-roles"
+L.help_roles_derandomize = [[
+Дерандомизацию ролей можно использовать, чтобы сделать распределение ролей более справедливой за время игровой сессии.
 
---L.help_roles_derandomize_min_weight = [[
---Derandomization is performed by making the random player selections during role distribution use a weight associated with each role for each player, and that weight increases by 1 each time the player does not get assigned that role. These weights are not persisted between connections, or across maps.
+В сущности, если она включена, шансы игрока на получение роли повышаются до тех пор, пока эта роль не была ему назначена. Хотя это может казаться более справедливым, этот также позволяет игрокам предугадать, что другой игрок будет назначен в качестве предателя, основываясь на том, что ранее он не назначался в течение нескольких раундов. Не включайте эту настройку, если подобное нежелательно.
+
+Существует 4 режима:
+
+режим 0: выключена — дерандомизации не происходит.
+
+режим 1: только базовые роли — дерандомизация происходит только для базовых ролей, таких как невиновный и предатель. Подроли выбираются случайным образом.
+
+режим 2: только подроли — дерандомизация происходит только для подролей. Базовые роли выбираются случайным образом. Учтите, что подроли назначаются только игрокам, которым уже были назначены базовые роли.
+
+режим 3: базовые роли И подроли — дерандомизация происходит как для базовых ролей, так и для подролей.]]
+L.label_roles_derandomize_mode = "Режим дерандомизации"
+L.label_roles_derandomize_mode_none = "режим 0: выключена"
+L.label_roles_derandomize_mode_base_only = "режим 1: только базовые роли"
+L.label_roles_derandomize_mode_sub_only = "режим 2: только подроли"
+L.label_roles_derandomize_mode_base_and_sub = "режим 3: базовые роли И подроли"
+
+L.help_roles_derandomize_min_weight = [[
+Дерандомизация происходит путём использования при выборе случайного игрока во время распределения ролей «веса», связанного с каждой ролью для каждого игрока, и этот вес увеличивается на 1 каждый раз, когда игроку не назначается эта роль. Этот вес не сохраняется между подключениями или картами.
+
+Каждый раз, когда игроку назначается роль, соответствующий вес сбрасывается до минимального значения. Этот вес не имеет никакого абсолютного значения и может толковаться только по отношению к другим весам.
+
+Например, есть игрок А с весом 1 и игрок Б с весом 5. Вероятность того, что будет выбран игрок Б в 5 раз выше, чем игрок А. Однако, если бы у игрока А был вес 4, то у игрока Б был бы шанс всего лишь в 5/4 раза выше.
+
+Следовательно, минимальный вес эффективно определяет, насколько сильно каждый раунд влияет на шансы игрока быть выбранным, где большие значения уменьшают это влияние. Стандартное значение 1 означает, что каждый раунд приводит к довольно значительному увеличению шансов игроку и наоборот, что он крайне маловероятно получит одну и ту же роль дважды подряд.
+
+Изменения этого значения не будут применены до тех пор, пока игроки не переподключатся или не сменится карта.]]
+L.label_roles_derandomize_min_weight = "Минимальный вес дерандомизации"
+
+-- 2024-08-17
+L.name_button_default = "Кнопка"
+L.name_button_rotating = "Рычаг"
+
+L.button_default = "[{usekey}] Нажать."
+L.button_rotating = "[{usekey}] Повернуть."
+
+L.undefined_key = "???"
+
+-- 2024-08-18
+L.header_commands_player_force_role = "Назначение роли игроку"
+
+L.label_button_player_force_role = "назначить роль"
+
+L.label_player_role = "Выберите роль"
+
+-- 2024-09-16
+--L.help_enable_loadingscreen_server = [[
+--The loadingscreen settings also exist on the client. They are hidden if disabled on the server.
 --
---Each time a player is assigned a role, the corresponding weight is reset to this minimum weight. This weight does not have any absolute meaning; it can only be interpreted with respect to other weights.
---
---For example, given player A with a weight of 1, and player B with a weight of 5, player B is 5 times more likely than player A to be selected. However, if player A had a weight of 4, player B is only 5/4 times more likely to be selected.
---
---The minimum weight, therefore, effectively controls how much each round affects a player's chance at being selected, with higher values causing it to be affected less. The default value of 1 means that each round causes a fairly significant increase in chance, and conversely, that it is extremely unlikely that a player will get the same role twice in a row.
---
---Changes to this value will not take effect until players reconnect or the map changes.]]
---L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
+--The minimum display time is there to give the player time to read the tips. If the reload of the map takes longer than the minimum time, the loadingscreen is shown as long as it needs to be. In general a reload time of 0.5 to 1 second is to be expected.]]
+
+--L.label_enable_loadingscreen_server = "Enable the loadingscreen serverwide"
+--L.label_loadingscreen_min_duration = "Minimum loadingscreen display time"
+
+-- 2024-09-18
+--L.label_keyhelper_leave_vehicle = "leave vehicle"
+--L.name_vehicle = "Vehicle"
+--L.vehicle_enter = "Press [{usekey}] to enter vehicle"

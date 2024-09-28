@@ -32,7 +32,7 @@ local cvDetectiveMode = CreateConVar("ttt_sherlock_mode", "1", SERVER and {FCVAR
 ---
 -- @realm server
 -- stylua: ignore
-local cvHasteMode = CreateConVar("ttt_haste_mode", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+local cvHasteMode = CreateConVar("ttt_haste", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
 ---
 -- @realm server
@@ -161,6 +161,10 @@ if SERVER then
             -- that way idling on a map doesn't decrease the map time
             gameloop.SetLevelStartTime(CurTime())
         end
+
+        -- make sure that the duration of the loading screen is added to the
+        -- duration of the prep time
+        timePrepPhase = timePrepPhase + loadingscreen.GetDuration()
 
         gameloop.mapWinType = WIN_NONE
 
@@ -672,6 +676,20 @@ if SERVER then
 
         events.Trigger(EVENT_GAME, state)
     end
+
+    hook.Add("TTT2LoadNextMap", "MapVoteCompat", function(nextMap, roundsLeft, timeLeft)
+        if not isfunction(CheckForMapSwitch) then
+            return
+        end
+
+        ErrorNoHalt(
+            "[TTT2] Using deprecated map vote overwrite. Replace your map vote addon and contact the addon developer."
+        )
+
+        CheckForMapSwitch()
+
+        return true
+    end)
 end
 
 if CLIENT then

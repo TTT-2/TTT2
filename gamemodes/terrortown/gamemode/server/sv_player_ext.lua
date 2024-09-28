@@ -22,6 +22,7 @@ local soundWeaponPickup = Sound("items/ammo_pickup.wav")
 util.AddNetworkString("StartDrowning")
 util.AddNetworkString("TTT2TargetPlayer")
 util.AddNetworkString("TTT2SetPlayerReady")
+util.AddNetworkString("TTT2NotifyPlayerReadyOnClients")
 util.AddNetworkString("TTT2SetRevivalReason")
 util.AddNetworkString("TTT2RevivalStopped")
 util.AddNetworkString("TTT2RevivalUpdate_IsReviving")
@@ -1709,6 +1710,15 @@ local function SetPlayerReady(_, ply)
     -- @realm server
     -- stylua: ignore
     hook.Run("TTT2PlayerReady", ply)
+
+    -- notify all other players as well that this player is ready
+    local recipients = GetPlayerFilter(function(p)
+        return p ~= ply and p:IsReady()
+    end)
+
+    net.Start("TTT2NotifyPlayerReadyOnClients")
+    net.WritePlayer(ply)
+    net.Send(recipients)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)
 
@@ -1918,3 +1928,20 @@ function GM:TTT2SetDefaultCredits(ply) end
 -- @hook
 -- @realm server
 function GM:TTT2ModifyDefaultTraitorCredits(ply, credits) end
+
+---
+-- Hook that is called when a player recieves credits for a kill.
+-- @param Player ply The player who killed another player
+-- @param Player victim The player who was killed
+-- @param number credits The amount of credits the player received
+-- @hook
+-- @realm server
+function GM:TTT2OnReceiveKillCredits(ply, victim, credits) end
+
+---
+-- Hook that is called when a player recieves credits as a team award.
+-- @param Player ply The player who was awarded the credits
+-- @param number credits The amount of credits the player received
+-- @hook
+-- @realm server
+function GM:TTT2OnReceiveTeamAwardCredits(ply, credits) end

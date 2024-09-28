@@ -1131,7 +1131,6 @@ L.binoc_help_sec = "Zmień Przybliżenie."
 
 L.vis_help_pri = "Wyrzuć aktywne urządzenie."
 
-
 -- 2020-08-07
 L.pickup_error_spec = "Nie możesz tego zrobić jako widz."
 L.pickup_error_owns = "Nie możesz tego podnieść, bo już masz tą broń."
@@ -1734,7 +1733,7 @@ L.none = "Brak Roli"
 --L.label_max_extra_slots = "Max extra slots"
 --L.label_weapon_autopickup = "Enable automatic weapon pickup"
 --L.label_sprint_enabled = "Enable sprinting"
---L.label_sprint_max = "Max sprinting stamina"
+--L.label_sprint_max = "Speed boost factor"
 --L.label_sprint_stamina_consumption = "Stamina consumption factor"
 --L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
 --L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
@@ -2098,10 +2097,8 @@ L.search_eyes = "Używając umiejętności detektywa, zidentyfikowałeś ostatni
 
 --L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
 
--- 2023-12-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
--- 2023-12-18
 L.body_confirm_one = "{finder} potwierdził śmierć {victim}."
 --L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
 
@@ -2110,19 +2107,6 @@ L.body_confirm_one = "{finder} potwierdził śmierć {victim}."
 --L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
-
-
--- 2023-12-24
---L.submenu_gameplay_accessibility_title = "Accessibility"
-
---L.header_accessibility_settings = "Accessibility Settings"
-
---L.label_enable_dynamic_fov = "Enable dynamic FOV change"
---L.label_enable_bobbing = "Enable view bobbing"
---L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
-
---L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
---L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
@@ -2136,6 +2120,17 @@ L.body_confirm_one = "{finder} potwierdził śmierć {victim}."
 --Note: Some weapons might not use this value which causes this multiplier to be ineffective.]]
 
 -- 2023-12-24
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+
 --L.binoc_help_reload = "Clear target."
 --L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
 --L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
@@ -2157,16 +2152,6 @@ L.body_confirm_one = "{finder} potwierdził śmierć {victim}."
 
 --L.header_weapon_settings = "Weapon Settings"
 
-
---L.marker_vision_visible_for_0 = "Visible for you"
---L.marker_vision_visible_for_1 = "Visible for your role"
---L.marker_vision_visible_for_2 = "Visible for your team"
---L.marker_vision_visible_for_3 = "Visible for everyone"
-
--- 2024-01-27
-L.decoy_help_primary = "Rozstaw Wabik"
---L.decoy_help_secondary = "Stick Decoy to surface"
-
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
 
@@ -2177,6 +2162,16 @@ L.decoy_help_primary = "Rozstaw Wabik"
 --L.magneto_stick_help_carry_rag_drop = "Put down ragdoll"
 --L.magneto_stick_help_carry_prop_release = "Release prop"
 --L.magneto_stick_help_carry_prop_drop = "Put down prop"
+
+-- 2024-01-27
+L.decoy_help_primary = "Rozstaw Wabik"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
+
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
 
 -- 2024-02-14
 --L.throw_no_room = "You have no space here to drop this device"
@@ -2317,7 +2312,7 @@ L.decoy_help_primary = "Rozstaw Wabik"
 --
 --There are 4 modes:
 --
---mode 0: Disabled - No derandomization is done. This is the default.
+--mode 0: Disabled - No derandomization is done.
 --
 --mode 1: Base roles only - Derandomization is performed for base roles only. Sub-roles will be selected randomly. These are roles like Innocent and Traitor.
 --
@@ -2341,3 +2336,33 @@ L.decoy_help_primary = "Rozstaw Wabik"
 --
 --Changes to this value will not take effect until players reconnect or the map changes.]]
 --L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
+
+-- 2024-08-17
+--L.name_button_default = "Button"
+--L.name_button_rotating = "Lever"
+
+--L.button_default = "Press [{usekey}] to trigger"
+--L.button_rotating = "Press [{usekey}] to flip"
+
+--L.undefined_key = "???"
+
+-- 2024-08-18
+--L.header_commands_player_force_role = "Force Player Role"
+
+--L.label_button_player_force_role = "force role"
+
+--L.label_player_role = "Select role"
+
+-- 2024-09-16
+--L.help_enable_loadingscreen_server = [[
+--The loadingscreen settings also exist on the client. They are hidden if disabled on the server.
+--
+--The minimum display time is there to give the player time to read the tips. If the reload of the map takes longer than the minimum time, the loadingscreen is shown as long as it needs to be. In general a reload time of 0.5 to 1 second is to be expected.]]
+
+--L.label_enable_loadingscreen_server = "Enable the loadingscreen serverwide"
+--L.label_loadingscreen_min_duration = "Minimum loadingscreen display time"
+
+-- 2024-09-18
+--L.label_keyhelper_leave_vehicle = "leave vehicle"
+--L.name_vehicle = "Vehicle"
+--L.vehicle_enter = "Press [{usekey}] to enter vehicle"

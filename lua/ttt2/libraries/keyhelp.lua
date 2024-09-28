@@ -55,6 +55,7 @@ local materialShowmore = Material("vgui/ttt/hudhelp/showmore")
 local materialPointer = Material("vgui/ttt/hudhelp/pointer")
 local materialThirdPerson = Material("vgui/ttt/hudhelp/third_person")
 local materialSave = Material("vgui/ttt/hudhelp/save")
+local materialLeaveVehicle = Material("vgui/ttt/hudhelp/leave_vehicle")
 
 ---
 -- @realm client
@@ -588,6 +589,19 @@ function keyhelp.InitializeBasicKeys()
         "label_keyhelper_free_roam",
         function(client)
             if not client:IsSpec() or not IsValid(client:GetObserverTarget()) then
+                return
+            end
+
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+use",
+        materialLeaveVehicle,
+        KEYHELP_CORE,
+        "label_keyhelper_leave_vehicle",
+        function(client)
+            if client:IsSpec() or not client:InVehicle() then
                 return
             end
 

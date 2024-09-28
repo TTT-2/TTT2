@@ -72,11 +72,13 @@ end
 -- @return number The Distance between the Origin and the Entity
 -- @realm client
 function targetid.FindEntityAlongView(pos, dir, filter)
+    local client = LocalPlayer()
     local endpos = dir
+
     endpos:Mul(MAX_TRACE_LENGTH)
     endpos:Add(pos)
 
-    if entspawnscript.IsEditing(LocalPlayer()) then
+    if entspawnscript.IsEditing(client) then
         local focusedSpawn = entspawnscript.GetFocusedSpawn()
         local wepEditEnt = entspawnscript.GetSpawnInfoEntity()
 
@@ -100,7 +102,7 @@ function targetid.FindEntityAlongView(pos, dir, filter)
     local trace = util.TraceLine({
         start = pos,
         endpos = endpos,
-        mask = MASK_SHOT,
+        mask = MASK_ALL,
         filter = filter,
     })
 
@@ -108,8 +110,12 @@ function targetid.FindEntityAlongView(pos, dir, filter)
     local ent = trace.Entity
 
     -- if a vehicle, we identify the driver instead
-    if IsValid(ent) and IsValid(ent:GetNWEntity("ttt_driver", nil)) then
-        ent = ent:GetNWEntity("ttt_driver", nil)
+    if IsValid(ent) then
+        local driver = ent:GetNWEntity("ttt_driver", nil)
+
+        if IsValid(driver) and driver ~= client then
+            ent = driver
+        end
     end
 
     return ent, trace.StartPos:Distance(trace.HitPos)
@@ -198,7 +204,6 @@ function targetid.HUDDrawTargetIDTButtons(tData)
     if
         not IsValid(client)
         or not client:IsTerror()
-        or not client:Alive()
         or not IsValid(ent)
         or ent:GetClass() ~= "ttt_traitor_button"
         or tData:GetEntityDistance() > ent:GetUsableRange()
@@ -320,7 +325,6 @@ function targetid.HUDDrawTargetIDWeapons(tData)
     if
         not IsValid(client)
         or not client:IsTerror()
-        or not client:Alive()
         or not IsValid(ent)
         or tData:GetEntityDistance() > 100
         or not ent:IsWeapon()
@@ -596,6 +600,42 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 end
 
 ---
+-- This function handles looking at buttons and adds specific descriptions
+-- @param TARGET_DATA tData The object to be used in the hook
+-- @realm client
+function targetid.HUDDrawTargetIDButtons(tData)
+    local client = LocalPlayer()
+    local ent = tData:GetEntity()
+
+    if
+        not IsValid(client)
+        or not client:IsTerror()
+        or not IsValid(ent)
+        or not ent:IsButton()
+        or tData:GetEntityDistance() > 100
+    then
+        return
+    end
+
+    -- enable targetID rendering
+    tData:EnableText()
+    tData:EnableOutline()
+    tData:SetOutlineColor(client:GetRoleColor())
+
+    tData:SetKey(input.GetKeyCode(key_params.usekey))
+
+    if ent:IsDefaultButton() then
+        tData:SetTitle(TryT("name_button_default"))
+        tData:SetSubtitle(ParT("button_default", key_params))
+    end
+
+    if ent:IsRotatingButton() then
+        tData:SetTitle(TryT("name_button_rotating"))
+        tData:SetSubtitle(ParT("button_rotating", key_params))
+    end
+end
+
+---
 -- This function handles looking at doors and adds specific descriptions
 -- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
@@ -606,7 +646,6 @@ function targetid.HUDDrawTargetIDDoors(tData)
     if
         not IsValid(client)
         or not client:IsTerror()
-        or not client:Alive()
         or not IsValid(ent)
         or not ent:IsDoor()
         or not ent:PlayerCanOpenDoor()
@@ -685,4 +724,34 @@ function targetid.HUDDrawTargetIDDNAScanner(tData)
     else
         tData:AddDescriptionLine(TryT("dna_tid_impossible"), COLOR_RED, { materialDNATargetID })
     end
+end
+
+---
+-- This function handles looking at usable vehicles
+-- @param TARGET_DATA tData The object to be used in the hook
+-- @realm client
+function targetid.HUDDrawTargetIDVehicle(tData)
+    local client = LocalPlayer()
+    local ent = tData:GetEntity()
+
+    if
+        not IsValid(client)
+        or not client:IsTerror()
+        or client:InVehicle()
+        or not IsValid(ent)
+        or not ent:IsVehicle()
+        or tData:GetEntityDistance() > 100
+    then
+        return
+    end
+
+    -- enable targetID rendering
+    tData:EnableText()
+    tData:EnableOutline()
+    tData:SetOutlineColor(client:GetRoleColor())
+
+    tData:SetKey(input.GetKeyCode(key_params.usekey))
+
+    tData:SetTitle(TryT(ent.PrintName or "name_vehicle"))
+    tData:SetSubtitle(ParT("vehicle_enter", key_params))
 end

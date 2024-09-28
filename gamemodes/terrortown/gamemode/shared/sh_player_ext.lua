@@ -228,11 +228,7 @@ end
 -- @return Color
 -- @realm shared
 function plymeta:GetRoleColor()
-    if not self.roleColor then
-        self.roleColor = roles.NONE.color
-    end
-
-    return self.roleColor
+    return self.roleColor or roles.NONE.color
 end
 
 ---
@@ -251,7 +247,7 @@ end
 -- @return Color
 -- @realm shared
 function plymeta:GetRoleDkColor()
-    return self.roleDkColor
+    return self.roleDkColor or roles.NONE.dkcolor
 end
 
 ---
@@ -270,7 +266,7 @@ end
 -- @return Color
 -- @realm shared
 function plymeta:GetRoleLtColor()
-    return self.roleLtColor
+    return self.roleLtColor or roles.NONE.ltcolor
 end
 
 ---
@@ -289,7 +285,7 @@ end
 -- @return Color
 -- @realm shared
 function plymeta:GetRoleBgColor()
-    return self.roleBgColor
+    return self.roleBgColor or roles.NONE.bgcolor
 end
 
 ---
@@ -1071,6 +1067,9 @@ end
 -- Returns whether the player is ready. A player is ready when he is able to look
 -- around and move (first call of @{GM:SetupMove}). A bot player is always considered
 -- as ready.
+-- @warning If called on the client, it is only 100% reliable for the local player. While the
+-- restult for other players is most likely still true, it can have some issues in certain
+-- scenarios.
 -- @return boolean
 -- @realm shared
 function plymeta:IsReady()

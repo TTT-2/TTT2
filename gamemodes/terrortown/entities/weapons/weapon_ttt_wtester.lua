@@ -510,7 +510,7 @@ if CLIENT then
         self:SetSubMaterial(0, "!scanner_screen_mat")
 
         self:AddTTT2HUDHelp("dna_help_primary", "dna_help_secondary")
-        self:AddHUDHelpLine("dna_help_reload", Key("+reload", "R"))
+        self:AddHUDHelpLine("dna_help_reload", Key("+reload", "undefined_key"))
 
         return BaseClass.Initialize(self)
     end

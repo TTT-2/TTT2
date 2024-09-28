@@ -4,31 +4,48 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Fixed
+
+- Fixed missing translation for None role error by removing it (by @mexikoedi)
+- Fixed sometimes entity use triggering the wrong or no entity (by @TimGoll)
+- Fixed translation of muting Terrorists and Spectators (by @mexikoedi)
+
+### Changed
+
+- Updated French translation (by @MisterClems)
+
+## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
+
 ### Added
 
-- Added hook ENTITY:ClientUse(), which is triggered clientside if an entity is used
+- Added hook ENTITY:ClientUse(), which is triggered clientside if an entity is used (by @ZenBre4ker)
   - Return true to prevent also using this on the server for clientside only usecases
-- Added hook ENTITY:RemoteUse(ply), which is shared
+- Added hook ENTITY:RemoteUse(ply), which is shared (by @ZenBre4ker)
   - Return true if only clientside should be used
-- Added RemoteUse to radio, you can now directly access it via use button on marker focus
-- Added sounds to multiple UI interactions (can be disabled in settings: Gameplay > Client-Sounds)
-- Added a globally audible sound when searching a body
-- Added the option to add a subtitle to a marker vision element
+- Added RemoteUse to radio, you can now directly access it via use button on marker focus (by @ZenBre4ker)
+- Added sounds to multiple UI interactions (can be disabled in settings: Gameplay > Client-Sounds) (by @TimGoll)
+- Added a globally audible sound when searching a body (by @TimGoll and @mexikoedi)
+- Added the option to add a subtitle to a marker vision element (by @TimGoll)
 - Added the option to assign random unique models at round start (by @Exonen2)
 - Added a new voice chat UI (by @TimGoll)
-- Added `TTT2CanTakeCredits` hook for overriding whether a player is allowed to take credits from a given corpse. (by @Spanospy)
-- Disabled locational voice during the preparing phase by default
+- Added new credit related hooks (by @Spanospy)
+  - Added `GM:TTT2CanTakeCredits()` hook for overriding whether a player is allowed to take credits from a given corpse
+  - Added `GM:TTT2OnGiveFoundCredits()` hook which is called when a player has been given credits for searching a corpse
+  - Added `GM:TTT2OnReceiveKillCredits()` hook which is called when a player recieves credits for a kill
+  - Added `GM:TTT2OnReceiveTeamAwardCredits()` hook which is called when a player recieves credits as a team award
+  - Added `GM:TTT2OnTransferCredits()` hook which is called when a player has successfully transfered a credit to another player
+- Disabled locational voice during the preparing phase by default (by @ruby0b)
   - Added a ConVar `ttt_locational_voice_prep` to reenable it
 - Added `SWEP.EnableConfigurableClip` and `SWEP.ConfigurableClip` to set the weapon's clip on buy via the equipment editor (by @TimGoll)
 - Added Text / Nickname length limiting (by @TimGoll)
-- Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range
-- Added a convar `ttt2_inspect_credits_always_visible` to control whether credits are visible to players that do not have a shop
-- Added multiple global voice chat activation modes for clients to choose from (Gameplay > Voice & Volume):
+- Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range (by @ruby0b)
+- Added a convar `ttt2_inspect_credits_always_visible` to control whether credits are visible to players that do not have a shop (by @nike4613)
+- Added multiple global voice chat activation modes for clients to choose from (Gameplay > Voice & Volume): (by @ruby0b)
   - Push-to-Talk (default)
   - Push-to-Mute
   - Toggle
   - Toggle (Activate on Join)
-- Team Voice Chat is always push-to-talk and temporarily disables global voice chat while being used
+- Team Voice Chat is always push-to-talk and temporarily disables global voice chat while being used (by @ruby0b)
 - Added a new generic button to F1 menu elements to be used in custom menus (by @TimGoll)
 - Added toggle and run buttons to many F1 menu elements (by @TimGoll)
 - Added combo cards to the UI, clickable cards that act like combo boxes (by @TimGoll)
@@ -42,8 +59,15 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `admin.IsAdmin(ply)` as a wrapper that automatically calls `GM:TTT2AdminCheck` (by @TimGoll)
   - Made sure this new function is used in our whole codebase for all admin checks
 - Added `ENTITY:IsPlayerRagdoll` to check if a corpse is a real player ragdoll (by @TimGoll)
+- Added improved vFire integration for everything in TTT2 that spawns fire (by @TimGoll and @EntranceJew)
 - Added the `SWEP.DryFireSound` field to the weapon base to allow the dryfire sound to be easily changed (by @TW1STaL1CKY)
-- Added role derandomization options for perceptually fairer role distribution
+- Added role derandomization options for perceptually fairer role distribution, enabled by default (by @nike4613)
+- Added targetID to buttons (by @TimGoll)
+- Added force role admin command (by @mexikoedi)
+- Added `draw.RefreshAvatars(id64)` to refresh avatar icons (by @mexikoedi)
+- Added `GM:TTT2OnButtonUse(ply, ent, oldState)`: a hook that is triggered when a button is pressed and that is able to prevent that button press (by @TimGoll)
+- Added TargetID and keyInfo to vehicles (by @TimGoll)
+- Added `GM:TTT2PostButtonInitialization(buttonList)`: a hook that is called after all buttons on the map have been initialized (by @TimGoll)
 
 ### Changed
 
@@ -53,9 +77,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - TargetID is now hidden when a marker vision element is focused (by @TimGoll)
 - Tracers are now drawn for every shot/pellet instead of only 25% of shots/pellets (by @EntranceJew)
 - The ConVar "ttt_debug_preventwin" will now also prevent the time limit from ending the round (by @NickCloudAT)
-- `TTT2GiveFoundCredits` hook is no longer called when checking whether a player is allowed to take credits from a given corpse. (by @Spanospy)
+- `GM:TTT2GiveFoundCredits` hook is no longer called when checking whether a player is allowed to take credits from a given corpse (by @Spanospy)
 - Micro optimizations (by @EntranceJew)
-  - switched from `player.GetAll()` to `select(2, player.Iterator())`
   - use `net.ReadPlayer` / `net.WritePlayer` if applicable instead of `net.Read|WriteEntity`
   - Reduced radar bit size for net message
   - The holdtype for pistol weapons now matches the viewmodel
@@ -74,11 +97,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Corpses on fire display that information in targetID and MStack (by @TimGoll)
 - Updated Russian and English localization files (by @Satton2)
 - Made `ply:IsReviving` a shared player variable (by @TimGoll)
+- Updated and improved the Simplified Chinese localization file (by @sbzlzh and @TheOnly8Z)
+- Avatar icons are not fetched anymore but instead created with `AvatarImage` (fixes missing icons for chinese players) (by @mexikoedi)
+- `GM:TTT2PlayerReady` is now called for every player even on clients (by @TimGoll)
+- Updated Japanese translation (by @westooooo)
+- `plyspawn.GetSpawnPointsAroundSpawn` now tries to find spawns that are on the ground if possible (by @TimGoll)
 
 ### Fixed
 
 - Fixed `DynamicCamera` error when a weapon's `CalcView` doesn't return complete values (by @TW1STaL1CKY)
-- Fixed Roundendscreen showing karma changes even if karma is disabled
+- Fixed Roundendscreen showing karma changes even if karma is disabled (by @Histalek)
 - Fixed the player's FOV staying zoomed in if their weapon is removed while scoped in (by @TW1STaL1CKY)
 - Fixed the player's FOV staying zoomed in with the binoculars if they're removed from you (by @TW1STaL1CKY)
 - Fixed weapon unscoping (or generally any time FOV is set back to default) being delayed due to the player's lag (by @TW1STaL1CKY)
@@ -90,10 +118,19 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed weapon dryfire sound interrupting the weapon's gunshot sound (by @TW1STaL1CKY)
 - Fixed incendiaries sometimes exploding without fire (by @TimGoll)
 - Fixed scoreboard not showing any body search info on players that changed to forced spec during a round (by @TimGoll)
+- Fixed vFire explosions killing a player even if they have `NoExplosionDamage` equipped (by @TimGoll)
 - Fixed a nil error in the PreDrop function in weapon_ttt_cse (by @mexikoedi)
 - Fixed `table.FullCopy(tbl)` behaviour when `tbl` contained a Vector or Angle (by @Histalek)
 - Fixed the bodysearch showing a wrong player icon when searching a fake body (by @TimGoll)
 - Fixed players respawned with `ply:Revive` sometimes spawning on a fake corpse (by @TimGoll)
+- Fixed undefined Keys breaking the gamemode (by @TimGoll)
+- Fixed markerVision elements being visible to team mates of unknown teams (such as team Innocent) (by @TimGoll)
+- Fixed inverted settings being inverted twice in the equipment editor (by @TimGoll)
+- Fixed OldTTT HUD sidebar elements missing translation (by @TimGoll)
+- Fixed avatar icons not refreshing if they were changed on Steam (by @mexikoedi)
+- Fixed a wrong label for the sprint speed multiplier in the F1 menu (by @TimGoll)
+- Fixed own player name being shown in targetID when in vehicle (by @TimGoll)
+- Fixed `ShopEditor.BuildValidEquipmentCache()` being called too early on the client, resulting in a wrong cache state (by @NickCloudAT and @12problems)
 
 ### Removed
 
@@ -104,9 +141,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Breaking Changes
 
-- Renamed `TTT2ModifyVoiceChatColor(ply, clr)` to `TTT2ModifyVoiceChatMode(ply, mode)`
+- Renamed `GM:TTT2ModifyVoiceChatColor(ply, clr)` to `GM:TTT2ModifyVoiceChatMode(ply, mode)`
 - Renamed `ply:GetHeightVector()` to `ply:GetHeadPosition()`
 - Removed the `TIPS` module and replaced it with a new `tips` module
+- Removed `draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)` and `draw.SeamlessWebImage(url, parentwidth, parentheight, xrep, yrep, color)` from the `draw` module
+- Due to `GM:TTT2PlayerReady` now being called for every player, addon devs have to make sure to check the player on the client
 
 ## [v0.13.2b](https://github.com/TTT-2/TTT2/tree/0.13.2b) (2024-03-10)
 
