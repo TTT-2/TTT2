@@ -7,6 +7,11 @@ FCAP_IMPULSE_USE = 16
 FCAP_CONTINUOUS_USE = 32
 FCAP_ONOFF_USE = 64
 FCAP_DIRECTIONAL_USE = 128
+FCAP_USE_ONGROUND = 256
+FCAP_USE_IN_RADIUS = 512
+
+-- custom FCAPS possible from 2048 to 268435456
+FCAP_USE_LUA = 2048
 
 local safeCollisionGroups = {
     [COLLISION_GROUP_WEAPON] = true,
@@ -77,7 +82,8 @@ function entmeta:Spawn()
 end
 
 ---
--- Checks if the entity has any use functionality attached.
+-- Checks if the entity has any use functionality attached. This can be attached in the engine/via hammer or by
+-- setting `.CanUseKey` to true. Player ragdolls and weapons always have use functionality attached.
 -- @param[default=0] number requiredCaps Use caps that are required for this entity
 -- @return boolean Returns true if the entity is usable by the player
 -- @ref https://github.com/ValveSoftware/source-sdk-2013/blob/0d8dceea4310fde5706b3ce1c70609d72a38efdf/sp/src/game/server/player.cpp#L2766C71-L2781
@@ -86,6 +92,17 @@ function entmeta:IsUsableEntity(requiredCaps)
     requiredCaps = requiredCaps or 0
 
     local caps = self:ObjectCaps()
+
+    -- special case: TTT specific lua based use interactions
+    -- when were looking for specifically the lua use, return false it not set
+    if
+        bit.band(FCAP_USE_LUA, requiredCaps) > 0
+        and not (self.CanUseKey or self.player_ragdoll or self:IsWeapon())
+    then
+        return false
+    elseif requiredCaps == 0 and (self.CanUseKey or self.player_ragdoll or self:IsWeapon()) then
+        return true
+    end
 
     if
         bit.band(

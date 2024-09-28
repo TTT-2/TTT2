@@ -7,6 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed missing translation for None role error by removing it (by @mexikoedi)
+- Fixed sometimes entity use triggering the wrong or no entity (by @TimGoll)
 - Fixed translation of muting Terrorists and Spectators (by @mexikoedi)
 
 ### Changed
