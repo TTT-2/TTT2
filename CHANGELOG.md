@@ -9,11 +9,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed missing translation for None role error by removing it (by @mexikoedi)
 - Fixed sometimes entity use triggering the wrong or no entity (by @TimGoll)
 - Fixed translation of muting Terrorists and Spectators (by @mexikoedi)
+- Fixed continuous use being broken, meaing that holding E on a health station did nothing (by @TimGoll)
 
 ### Changed
 
 - Updated French translation (by @MisterClems)
 - Updated Turkish localization (by @NovaDiablox)
+- Changed it so that continous use doesn't require direct focus; healing at a health station also works when looking around as long as you stay close by (by @TimGoll)
 
 ## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
 
