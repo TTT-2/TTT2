@@ -110,8 +110,8 @@ function targetid.FindEntityAlongView(pos, dir, filter)
     local ent = trace.Entity
 
     -- if a vehicle, we identify the driver instead
-    if IsValid(ent) then
-        local driver = ent:GetNWEntity("ttt_driver", nil)
+    if IsValid(ent) and ent:IsVehicle() then
+        local driver = ent:GetDriver()
 
         if IsValid(driver) and driver ~= client then
             ent = driver
