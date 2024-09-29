@@ -684,15 +684,21 @@ end
 
 ---
 -- Returns whether a @{Player} carries a @{Weapon}
+-- @param[opt] string className
 -- @return boolean
 -- @realm shared
-function plymeta:HasEquipmentWeapon()
+function plymeta:HasEquipmentWeapon(className)
     local weps = self:GetWeapons()
 
     for i = 1, #weps do
         local wep = weps[i]
 
         if not IsValid(wep) or not WEPS.IsEquipment(wep) then
+            continue
+        end
+
+        -- Check for specifc class
+        if className and not WEPS.GetClass(wep) == className then
             continue
         end
 

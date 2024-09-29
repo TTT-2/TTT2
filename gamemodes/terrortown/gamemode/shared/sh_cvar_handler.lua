@@ -1,10 +1,6 @@
 ---
 -- All replicated convars are handled in this file
 
--- @realm shared
--- stylua: ignore
-CreateConVar("ttt2_radar_charge_time", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
-
 ---
 -- @realm shared
 -- stylua: ignore
