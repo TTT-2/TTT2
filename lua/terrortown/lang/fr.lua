@@ -1498,7 +1498,7 @@ Ce dernier n'est utilisé que si le montant fixe est '0' et fixe une limite sup�
 L.label_roles_enabled = "Activer le rôle"
 L.label_roles_min_inno_pct = "Distribution des innocents selon le nombre de joueurs"
 L.label_roles_pct = "Distribution du rôle selon le nombre de joueurs"
-L.label_roles_max = "Nombre de joueurs maximum pour attribués ce rôle"
+L.label_roles_max = "Nombre de joueurs maximum pouvant avoir ce rôle"
 L.label_roles_random = "Taux de chances que ce rôle soit distribué"
 L.label_roles_min_players = "Nombre de joueurs minimum pour attribués ce rôle"
 L.label_roles_tbutton = "Le rôle peut utiliser les boutons de Traître"
