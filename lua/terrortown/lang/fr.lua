@@ -904,7 +904,7 @@ L.hstation_short_desc = "La station de soins se recharge lentement au fil du tem
 
 -- 2019-11-03
 L.vis_short_desc = "Visualise une scène de crime si la victime est morte d'une blessure par balle"
-L.corpse_binoculars = "Appuyez sur [{key}] pour rechercher un corps à l'aide des jumelles."
+L.corpse_binoculars = "Appuyez sur [{key}] pour fouiller un corps à l'aide des jumelles."
 L.binoc_progress = "Progression des recherches: {progress}%"
 
 L.pickup_no_room = "Vous n'avez pas de place dans votre inventaire pour ce type d'arme"
@@ -2131,7 +2131,7 @@ L.label_enable_bobbing_strafe = "Activer le view bobbing quand vous mitraillez"
 L.help_enable_dynamic_fov = "Le FOV dynamique est appliqué en fonction de la vitesse du joueur. Lorsqu'un joueur sprint par exemple, le FOV est augmenté pour visualiser la vitesse."
 L.help_enable_bobbing_strafe = "Le view bobbing est un léger tremblement de la caméra lorsque l'on marche, que l'on nage ou que l'on tombe."
 
-L.binoc_help_reload = "Enlever la cible"
+L.binoc_help_reload = "Effacer la cible"
 L.cl_sb_row_sresult_direct_conf = "Confirmation directe"
 L.cl_sb_row_sresult_pub_police = "Confirmation par un rôle de Détective public"
 
