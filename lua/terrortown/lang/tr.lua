@@ -152,18 +152,18 @@ L.quick_yes = "Evet."
 L.quick_no = "Hayır."
 L.quick_help = "Yardım edin!"
 L.quick_imwith = "{player} ile birlikteyim."
-L.quick_see = "{player} adlı oyuncuyu görüyorum."
+L.quick_see = "{player} oyuncusunu görüyorum."
 L.quick_suspect = "{player} şüpheli davranıyor."
-L.quick_traitor = "{player} bir Hain!"
+L.quick_traitor = "{player} Hain!"
 L.quick_inno = "{player} masum."
 L.quick_check = "Kimse hayatta mı?"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below.  Keep these lowercase.
 L.quick_nobody = "hiç kimse"
-L.quick_disg = "kılık değiştirmiş biri var"
-L.quick_corpse = "kimliği belirsiz bir ceset var"
-L.quick_corpse_id = "{player} oyuncusunun cesedi"
+L.quick_disg = "kılık değiştirmiş"
+L.quick_corpse = "kimliği belirsiz bir ceset"
+L.quick_corpse_id = "{player} adlı ceset"
 
 -- Scoreboard
 L.sb_playing = "Şu anda bu sunucuda oynuyorsunuz..."
