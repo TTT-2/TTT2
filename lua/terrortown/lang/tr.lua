@@ -163,7 +163,7 @@ L.quick_check = "Kimse hayatta mı?"
 L.quick_nobody = "hiç kimse"
 L.quick_disg = "kılık değiştirmiş"
 L.quick_corpse = "kimliği belirsiz bir ceset"
-L.quick_corpse_id = "{player} adlı cesedin"
+L.quick_corpse_id = "{player} adlı ceset"
 
 -- Scoreboard
 L.sb_playing = "Şu anda bu sunucuda oynuyorsunuz..."
