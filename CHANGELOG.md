@@ -18,6 +18,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated French translation (by @MisterClems)
 - Updated Turkish localization (by @NovaDiablox)
 - Updated targetID to use `Vehicle:GetDriver` instead of the `ttt_driver` NWEntity (by @Histalek)
+- Updated Russian and English localization files (by @Satton2)
 
 ## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
 
