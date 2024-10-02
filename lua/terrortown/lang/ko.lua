@@ -1,5 +1,3 @@
-
-
 local L = LANG.CreateLanguage("ko")
 
 L.__alias = "Korean"
