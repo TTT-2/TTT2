@@ -10,23 +10,35 @@ end
 
 ---
 -- @realm server
--- stylua: ignore
-local cvVoiceDrain = CreateConVar("ttt_voice_drain", "0", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+local cvVoiceDrain = CreateConVar(
+    "ttt_voice_drain",
+    "0",
+    SERVER and { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED } or FCVAR_REPLICATED
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local cvVoiceDrainNormal = CreateConVar("ttt_voice_drain_normal", "0.2", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+local cvVoiceDrainNormal = CreateConVar(
+    "ttt_voice_drain_normal",
+    "0.2",
+    SERVER and { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED } or FCVAR_REPLICATED
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local cvVoiceDrainAdmin = CreateConVar("ttt_voice_drain_admin", "0.05", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+local cvVoiceDrainAdmin = CreateConVar(
+    "ttt_voice_drain_admin",
+    "0.05",
+    SERVER and { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED } or FCVAR_REPLICATED
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local cvVoiceDrainRecharge = CreateConVar("ttt_voice_drain_recharge", "0.05", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+local cvVoiceDrainRecharge = CreateConVar(
+    "ttt_voice_drain_recharge",
+    "0.05",
+    SERVER and { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED } or FCVAR_REPLICATED
+)
 
 voicebattery = {}
 

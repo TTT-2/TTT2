@@ -337,33 +337,57 @@ end
 if SERVER then
     ---
     -- @realm server
-    -- stylua: ignore
-    local random_shops = CreateConVar("ttt2_random_shops", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
+    local random_shops = CreateConVar(
+        "ttt2_random_shops",
+        "0",
+        { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE },
+        "Set to 0 to disable"
+    )
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local random_shop_items = CreateConVar("ttt2_random_shop_items", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set the number of shown items in a random shop.")
+    local random_shop_items = CreateConVar(
+        "ttt2_random_shop_items",
+        "10",
+        { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE },
+        "Set the number of shown items in a random shop."
+    )
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local random_team_shops = CreateConVar("ttt2_random_team_shops", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
+    local random_team_shops = CreateConVar(
+        "ttt2_random_team_shops",
+        "1",
+        { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE },
+        "Set to 0 to disable"
+    )
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local random_shop_reroll = CreateConVar("ttt2_random_shop_reroll", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
+    local random_shop_reroll = CreateConVar(
+        "ttt2_random_shop_reroll",
+        "1",
+        { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE },
+        "Set to 0 to disable"
+    )
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local random_shop_reroll_cost = CreateConVar("ttt2_random_shop_reroll_cost", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Credit cost per reroll")
+    local random_shop_reroll_cost = CreateConVar(
+        "ttt2_random_shop_reroll_cost",
+        "1",
+        { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE },
+        "Credit cost per reroll"
+    )
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local random_shop_reroll_per_buy = CreateConVar("ttt2_random_shop_reroll_per_buy", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Should the random shop reroll after every purchase")
+    local random_shop_reroll_per_buy = CreateConVar(
+        "ttt2_random_shop_reroll_per_buy",
+        "0",
+        { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE },
+        "Should the random shop reroll after every purchase"
+    )
 
     util.AddNetworkString("TTT2SyncRandomShops")
 
@@ -1166,7 +1190,6 @@ if SERVER then
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTT2LoadSingleShopEquipment", roleData)
 
         SYNC_EQUIP = SYNC_EQUIP or {}

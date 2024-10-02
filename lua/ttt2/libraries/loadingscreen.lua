@@ -10,13 +10,19 @@ end
 
 ---
 -- @realm server
--- stylua: ignore
-local cvLoadingScreenEnabled = CreateConVar("ttt2_enable_loadingscreen_server", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED })
+local cvLoadingScreenEnabled = CreateConVar(
+    "ttt2_enable_loadingscreen_server",
+    "1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED }
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local cvLoadingScreenMinDuration = CreateConVar("ttt2_loadingscreen_min_duration", "4", { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED })
+local cvLoadingScreenMinDuration = CreateConVar(
+    "ttt2_loadingscreen_min_duration",
+    "4",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED }
+)
 
 loadingscreen = loadingscreen or {}
 
@@ -123,13 +129,11 @@ if CLIENT then
 
     ---
     -- @realm client
-    -- stylua: ignore
-    local cvLoadingScreen = CreateConVar("ttt2_enable_loadingscreen", "1", {FCVAR_ARCHIVE})
+    local cvLoadingScreen = CreateConVar("ttt2_enable_loadingscreen", "1", { FCVAR_ARCHIVE })
 
     ---
     -- @realm client
-    -- stylua: ignore
-    local cvLoadingScreenTips = CreateConVar("ttt_tips_enable", "1", {FCVAR_ARCHIVE})
+    local cvLoadingScreenTips = CreateConVar("ttt_tips_enable", "1", { FCVAR_ARCHIVE })
 
     loadingscreen.state = LS_HIDDEN
     loadingscreen.timeStateChange = SysTime()

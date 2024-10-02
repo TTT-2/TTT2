@@ -36,18 +36,30 @@ else
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local dna_mode = CreateConVar("ttt2_dna_radar", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Toggles the DNA Scanner functionality")
+    local dna_mode = CreateConVar(
+        "ttt2_dna_radar",
+        "0",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Toggles the DNA Scanner functionality"
+    )
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local dna_slots = CreateConVar("ttt2_dna_scanner_slots", "4", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Defines the maximum amount of DNA slots")
+    local dna_slots = CreateConVar(
+        "ttt2_dna_scanner_slots",
+        "4",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Defines the maximum amount of DNA slots"
+    )
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local dna_radar_cd = CreateConVar("ttt2_dna_radar_cooldown", "5.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Defines the cooldown in seconds")
+    local dna_radar_cd = CreateConVar(
+        "ttt2_dna_radar_cooldown",
+        "5.0",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Defines the cooldown in seconds"
+    )
 
     hook.Add("TTT2SyncGlobals", "TTT2SyncDNAScannerGlobals", function()
         SetGlobalBool(dna_mode:GetName(), dna_mode:GetBool())
@@ -301,7 +313,6 @@ function SWEP:AddPlayerSample(corpse, killer)
 
         ---
         -- @realm shared
-        -- stylua: ignore
         hook.Run("TTTFoundDNA", owner, killer, corpse)
 
         self:Report(true, "dna_killer")
@@ -355,7 +366,6 @@ function SWEP:AddItemSample(ent)
 
             ---
             -- @realm shared
-            -- stylua: ignore
             hook.Run("TTTFoundDNA", owner, ply, ent)
 
             self:Report(true, "dna_object")

@@ -144,13 +144,12 @@ end
 if SERVER then
     ---
     -- @realm server
-    -- stylua: ignore
-    local cvDoorHealth = CreateConVar("ttt2_doors_health", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+    local cvDoorHealth = CreateConVar("ttt2_doors_health", "100", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local cvDoorPropHealth = CreateConVar("ttt2_doors_prop_health", "50", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+    local cvDoorPropHealth =
+        CreateConVar("ttt2_doors_prop_health", "50", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
     ---
     -- Locks a door.
@@ -345,8 +344,9 @@ if SERVER then
 
         ---
         -- @realm server
-        -- stylua: ignore
-        if hook.Run("TTT2BlockDoorDestruction", self, ply) then return end
+        if hook.Run("TTT2BlockDoorDestruction", self, ply) then
+            return
+        end
 
         -- if door is destroyed, spawn a prop in the world
         local doorProp = ents.Create("prop_physics")
@@ -409,7 +409,6 @@ if SERVER then
 
             ---
             -- @realm server
-            -- stylua: ignore
             hook.Run("TTT2DoorDestroyed", doorProp, ply)
         end)
 

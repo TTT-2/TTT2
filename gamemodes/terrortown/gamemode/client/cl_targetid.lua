@@ -19,23 +19,21 @@ targetid.Initialize()
 
 ---
 -- @realm client
--- stylua: ignore
 local cvMinimalisticTid = CreateConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
--- stylua: ignore
 local cvDrawHalo = CreateConVar("ttt_entity_draw_halo", "1", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
--- stylua: ignore
-local cvEnableSpectatorsoutline = CreateConVar("ttt2_enable_spectatorsoutline", "1", { FCVAR_ARCHIVE, FCVAR_USERINFO })
+local cvEnableSpectatorsoutline =
+    CreateConVar("ttt2_enable_spectatorsoutline", "1", { FCVAR_ARCHIVE, FCVAR_USERINFO })
 
 ---
 -- @realm client
--- stylua: ignore
-local cvEnableOverheadicons = CreateConVar("ttt2_enable_overheadicons", "1", { FCVAR_ARCHIVE, FCVAR_USERINFO })
+local cvEnableOverheadicons =
+    CreateConVar("ttt2_enable_overheadicons", "1", { FCVAR_ARCHIVE, FCVAR_USERINFO })
 
 surface.CreateAdvancedFont(
     "TargetID_Key",
@@ -196,8 +194,8 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 
         ---
         -- @realm client
-        -- stylua: ignore
-        local shouldDraw, material, color = hook.Run("TTT2ModifyOverheadIcon", ply, shouldDrawDefault)
+        local shouldDraw, material, color =
+            hook.Run("TTT2ModifyOverheadIcon", ply, shouldDrawDefault)
 
         if shouldDraw == false or not shouldDrawDefault then
             continue
@@ -283,7 +281,6 @@ function GM:HUDDrawTargetID()
 
     ---
     -- @realm client
-    -- stylua: ignore
     if hook.Run("HUDShouldDraw", "TTTPropSpec") then
         DrawPropSpecLabels(client)
     end
@@ -299,7 +296,6 @@ function GM:HUDDrawTargetID()
 
     ---
     -- @realm client
-    -- stylua: ignore
     local changedEnt = hook.Run("TTTModifyTargetedEntity", ent, distance)
 
     if changedEnt then
@@ -341,7 +337,6 @@ function GM:HUDDrawTargetID()
     -- now run a hook that can be used by addon devs that changes the appearance
     -- of the targetid
     -- @realm client
-    -- stylua: ignore
     hook.Run("TTTRenderEntityInfo", tData)
 
     local data = tData.data

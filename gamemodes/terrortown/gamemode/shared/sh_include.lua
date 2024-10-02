@@ -183,7 +183,6 @@ end
 
 ---
 -- @realm shared
--- stylua: ignore
 hook.Run("TTT2ModifyFiles", TTTFiles)
 
 if SERVER then

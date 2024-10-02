@@ -40,7 +40,6 @@ if SERVER then
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTT2PostButtonInitialization", buttonList)
     end
 

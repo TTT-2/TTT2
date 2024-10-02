@@ -9,8 +9,8 @@ end -- this is a serverside-ony module
 
 ---
 -- @realm server
--- stylua: ignore
-local cvSpawnWaveInterval = CreateConVar("ttt_spawn_wave_interval", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvSpawnWaveInterval =
+    CreateConVar("ttt_spawn_wave_interval", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 local pairs = pairs
 local Vector = Vector

@@ -9,7 +9,6 @@ local table = table
 ---
 -- @realm client
 -- @internal
--- stylua: ignore
 local changesVersion = CreateConVar("changes_version", "v0.0.0.0", FCVAR_ARCHIVE)
 
 local changes, currentVersion
@@ -2207,7 +2206,7 @@ function CreateChanges()
             <li>Removed <code>draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)</code> and <code>draw.SeamlessWebImage(url, parentwidth, parentheight, xrep, yrep, color)</code> from the draw module</li>
             <li>Due to <code>GM:TTT2PlayerReady</code> now being called for every player, addon devs have to make sure to check the player on the client</li>
         </ul>
-        
+
     ]],
         os.time({ year = 2024, month = 09, day = 20 })
     )
@@ -2215,7 +2214,6 @@ function CreateChanges()
     ---
     -- run hook for other addons to add their changelog as well
     -- @realm client
-    -- stylua: ignore
     hook.Run("TTT2AddChange", changes, currentVersion)
 end
 

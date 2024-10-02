@@ -84,7 +84,6 @@ local function CreateAvatarMaterial(id64, size)
 
     ---
     -- @realm client
-    -- stylua: ignore
     local data = hook.Run("TTT2FetchAvatar", id64, avatarSize)
 
     if data then

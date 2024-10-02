@@ -14,29 +14,23 @@ end
 
 ---
 -- @realm client
--- stylua: ignore
 local cvEnableSoundInteract = CreateConVar("ttt2_enable_sound_interact", "1", { FCVAR_ARCHIVE })
 ---
 -- @realm client
--- stylua: ignore
 local cvLevelSoundInteract = CreateConVar("ttt2_level_sound_interact", "1", { FCVAR_ARCHIVE })
 
 ---
 -- @realm client
--- stylua: ignore
 local cvEnableSoundButtons = CreateConVar("ttt2_enable_sound_buttons", "1", { FCVAR_ARCHIVE })
 ---
 -- @realm client
--- stylua: ignore
 local cvLevelSoundButtons = CreateConVar("ttt2_level_sound_buttons", "1", { FCVAR_ARCHIVE })
 
 ---
 -- @realm client
--- stylua: ignore
 local cvEnableSoundMessage = CreateConVar("ttt2_enable_sound_message", "0", { FCVAR_ARCHIVE })
 ---
 -- @realm client
--- stylua: ignore
 local cvLevelSoundMessage = CreateConVar("ttt2_level_sound_message", "1", { FCVAR_ARCHIVE })
 
 ---

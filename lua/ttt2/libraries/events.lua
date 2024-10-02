@@ -152,7 +152,6 @@ if SERVER then
         ---
         -- run a hook with the newly added event
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTT2AddedEvent", name, newEvent)
     end
 

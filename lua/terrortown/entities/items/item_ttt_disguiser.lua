@@ -123,8 +123,9 @@ else -- SERVER
 
         ---
         -- @realm server
-        -- stylua: ignore
-        if hook.Run("TTTToggleDisguiser", ply, state) then return end
+        if hook.Run("TTTToggleDisguiser", ply, state) then
+            return
+        end
 
         ply:SetNWBool("disguised", state)
 

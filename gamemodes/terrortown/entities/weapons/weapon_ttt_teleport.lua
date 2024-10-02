@@ -9,8 +9,7 @@ if SERVER then
 
     ---
     -- @realm server
-    -- stylua: ignore
-    ttt_telefrags = CreateConVar("ttt_teleport_telefrags", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+    ttt_telefrags = CreateConVar("ttt_teleport_telefrags", "1", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
 end
 
 DEFINE_BASECLASS("weapon_tttbase")

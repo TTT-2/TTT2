@@ -118,7 +118,6 @@ function PANEL:AddPlayerRow(ply)
 
     ---
     -- @realm client
-    -- stylua: ignore
     hook.Run("TTT2ScoreboardAddPlayerRow", ply)
 
     local row = vgui.Create("TTTScorePlayerRow", self)

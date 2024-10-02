@@ -33,7 +33,6 @@ function ROLE:IsSelectable(avoidHook)
             and GetConVar("ttt_" .. self.name .. "_enabled"):GetBool()
             ---
             -- @realm server
-            -- stylua: ignore
             and (avoidHook or not hook.Run("TTT2RoleNotSelectable", self))
 end
 

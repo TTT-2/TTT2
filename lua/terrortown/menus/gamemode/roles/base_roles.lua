@@ -165,6 +165,5 @@ function CLGAMEMODESUBMENU:Populate(parent)
     -- run a hook to add role specific custom convars
     self.roleData:AddToSettingsMenu(parent)
 
-    -- stylua: ignore
     hook.Run("TTT2OnRoleAddToSettingsMenu", self.roleData, parent)
 end

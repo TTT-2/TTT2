@@ -6,8 +6,14 @@
 if SERVER then
     ---
     -- @realm server
-    -- stylua: ignore
-    local cv_tbutton = CreateConVar("ttt2_tbutton_admin_show", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Always show the buttons to admins in range", 0, 1)
+    local cv_tbutton = CreateConVar(
+        "ttt2_tbutton_admin_show",
+        "0",
+        { FCVAR_ARCHIVE, FCVAR_NOTIFY },
+        "Always show the buttons to admins in range",
+        0,
+        1
+    )
 
     hook.Add("TTT2SyncGlobals", "AddTButtonGlobals", function()
         SetGlobalBool(cv_tbutton:GetName(), cv_tbutton:GetBool())

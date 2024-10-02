@@ -251,7 +251,6 @@ function shop.CanBuyEquipment(ply, equipmentName)
     ---
     -- @note Keep compatibility with old addons
     -- @realm server
-    -- stylua: ignore
     if not hook.Run("TTTCanOrderEquipment", ply, oldId, isItem) then
         return false, shop.statusCode.BLOCKEDBYOLDHOOK
     end
@@ -259,7 +258,6 @@ function shop.CanBuyEquipment(ply, equipmentName)
     ---
     -- @note Add our own hook with more consistent class parameter and some more information
     -- @realm server
-    -- stylua: ignore
     local allow, ignoreCost = hook.Run("TTT2CanOrderEquipment", ply, equipmentName, isItem, credits)
     if not allow then
         return false, shop.statusCode.BLOCKEDBYTTT2HOOK
@@ -343,13 +341,11 @@ function shop.BuyEquipment(ply, equipmentName)
         ---
         -- @note Keep compatibility with old addons
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTTOrderedEquipment", ply, oldId, isItem)
 
         ---
         -- @note Add our own hook with more consistent class parameter
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTT2OrderedEquipment", ply, equipmentName, isItem, credits, ignoreCost)
     end
 
@@ -387,8 +383,14 @@ function shop.TryRerollShop(ply)
         shop.ForceRerollShop(ply)
         ---
         -- @realm server
-        -- stylua: ignore
-        hook.Run("TTT2OrderedEquipment", ply, "reroll_shop", false, GetGlobalInt("ttt2_random_shop_reroll_cost"), false)
+        hook.Run(
+            "TTT2OrderedEquipment",
+            ply,
+            "reroll_shop",
+            false,
+            GetGlobalInt("ttt2_random_shop_reroll_cost"),
+            false
+        )
     end
 
     return true
@@ -430,7 +432,6 @@ function shop.TransferCredits(ply, targetPlyId64, credits)
 
         ---
         -- @realm server
-        -- stylua: ignore
         local allow, _ = hook.Run("TTT2CanTransferCredits", ply, target, credits)
         if allow == false then
             return
@@ -442,7 +443,6 @@ function shop.TransferCredits(ply, targetPlyId64, credits)
             target:AddCredits(credits)
             ---
             -- @realm server
-            -- stylua: ignore
             hook.Run("TTT2OnTransferCredits", ply, target, credits, false)
         else
             -- The would be recipient is dead, which the sender may not know.
@@ -453,7 +453,6 @@ function shop.TransferCredits(ply, targetPlyId64, credits)
                 CORPSE.SetCredits(rag, CORPSE.GetCredits(rag, 0) + credits)
                 ---
                 -- @realm server
-                -- stylua: ignore
                 hook.Run("TTT2OnTransferCredits", ply, target, credits, false)
             end
         end
