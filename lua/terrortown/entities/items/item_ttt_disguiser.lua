@@ -110,6 +110,7 @@ if CLIENT then
         )
     end)
 else -- SERVER
+    -- @ignore
     local function SetDisguise(ply, cmd, args)
         if
             not IsValid(ply)
