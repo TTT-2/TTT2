@@ -11,18 +11,15 @@ end
 
 ---
 -- @realm client
--- stylua: ignore
-local cv_selectedVSkin = CreateConVar("ttt2_selected_vskin", "dark_ttt2", {FCVAR_ARCHIVE})
+local cv_selectedVSkin = CreateConVar("ttt2_selected_vskin", "dark_ttt2", { FCVAR_ARCHIVE })
 
 ---
 -- @realm client
--- stylua: ignore
-local cv_blurVSkin = CreateConVar("ttt2_vskin_blur", 1, {FCVAR_ARCHIVE})
+local cv_blurVSkin = CreateConVar("ttt2_vskin_blur", 1, { FCVAR_ARCHIVE })
 
 ---
 -- @realm client
--- stylua: ignore
-local cv_colorVSkin = CreateConVar("ttt2_vskin_color", 1, {FCVAR_ARCHIVE})
+local cv_colorVSkin = CreateConVar("ttt2_vskin_color", 1, { FCVAR_ARCHIVE })
 
 vskin = vskin or {}
 
@@ -78,7 +75,6 @@ function vskin.UpdatedVSkin(oldSkinName, skinName)
     ---
     -- Run hook for other addons to use
     -- @realm client
-    -- stylua: ignore
     hook.Run("TTT2UpdatedVSkin", oldSkinName, skinName)
 end
 

@@ -8,29 +8,23 @@ dmgindicator = {
     cv = {
         ---
         -- @realm client
-        -- stylua: ignore
         enable = CreateConVar("ttt_dmgindicator_enable", "1", FCVAR_ARCHIVE),
 
         ---
         -- @realm client
-        -- stylua: ignore
         mode = CreateConVar("ttt_dmgindicator_mode", "default", FCVAR_ARCHIVE),
 
         ---
         -- @realm client
-        -- stylua: ignore
         duration = CreateConVar("ttt_dmgindicator_duration", "1.5", FCVAR_ARCHIVE),
 
         ---
         -- @realm client
-        -- stylua: ignore
         maxdamage = CreateConVar("ttt_dmgindicator_maxdamage", "50.0", FCVAR_ARCHIVE),
 
         ---
         -- @realm client
-        -- stylua: ignore
-        maxalpha = CreateConVar("ttt_dmgindicator_maxalpha", "255", FCVAR_ARCHIVE)
-,
+        maxalpha = CreateConVar("ttt_dmgindicator_maxalpha", "255", FCVAR_ARCHIVE),
     },
 }
 

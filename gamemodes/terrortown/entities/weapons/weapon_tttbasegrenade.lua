@@ -62,8 +62,8 @@ AccessorFunc(SWEP, "pull_time", "PullTime", FORCE_NUMBER)
 
 ---
 -- @realm server
--- stylua: ignore
-local cvNadeThrowDuringPrep = CreateConVar("ttt_nade_throw_during_prep", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local cvNadeThrowDuringPrep =
+    CreateConVar("ttt_nade_throw_during_prep", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
 
 ---
 -- @ignore
@@ -103,7 +103,6 @@ end
 if CLIENT then
     ---
     -- @realm client
-    -- stylua: ignore
     local cvEnableTrajectoryUI = CreateConVar("ttt2_grenade_trajectory_ui", 0, FCVAR_ARCHIVE)
 
     local cvCrosshairOpacity = GetConVar("ttt_crosshair_opacity")

@@ -298,7 +298,6 @@ if SERVER then
         -- Call hook that a new event is about to be added, can be canceled or
         -- modified from that hook
         -- @realm server
-        -- stylua: ignore
         if hook.Run("TTT2OnTriggeredEvent", self.type, event) == false then
             return false
         end

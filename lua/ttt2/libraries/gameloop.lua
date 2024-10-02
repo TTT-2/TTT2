@@ -15,77 +15,89 @@ end
 
 ---
 -- @realm server
--- stylua: ignore
-local cvLevelTimeLimit = CreateConVar("ttt_time_limit_minutes", "75", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+local cvLevelTimeLimit = CreateConVar(
+    "ttt_time_limit_minutes",
+    "75",
+    SERVER and { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED } or FCVAR_REPLICATED
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local cvRoundLimit = CreateConVar("ttt_round_limit", "6", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
-
-
----
--- @realm server
--- stylua: ignore
-local cvDetectiveMode = CreateConVar("ttt_sherlock_mode", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+local cvRoundLimit = CreateConVar(
+    "ttt_round_limit",
+    "6",
+    SERVER and { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED } or FCVAR_REPLICATED
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local cvHasteMode = CreateConVar("ttt_haste", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+local cvDetectiveMode = CreateConVar(
+    "ttt_sherlock_mode",
+    "1",
+    SERVER and { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED } or FCVAR_REPLICATED
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local cvSessionLimits = CreateConVar("ttt_session_limits_enabled", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+local cvHasteMode = CreateConVar(
+    "ttt_haste",
+    "1",
+    SERVER and { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED } or FCVAR_REPLICATED
+)
+
+---
+-- @realm server
+local cvSessionLimits = CreateConVar(
+    "ttt_session_limits_enabled",
+    "1",
+    SERVER and { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED } or FCVAR_REPLICATED
+)
 
 gameloop = {}
 
 if SERVER then
     ---
     -- @realm server
-    -- stylua: ignore
-    local cvDurationPrepPhase = CreateConVar("ttt_preptime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+    local cvDurationPrepPhase =
+        CreateConVar("ttt_preptime_seconds", "30", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local cvDurationFirstPrepPhase = CreateConVar("ttt_firstpreptime", "60", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+    local cvDurationFirstPrepPhase =
+        CreateConVar("ttt_firstpreptime", "60", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local cvDurationRound = CreateConVar("ttt_roundtime_minutes", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+    local cvDurationRound =
+        CreateConVar("ttt_roundtime_minutes", "10", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local cvDurationEndPhase = CreateConVar("ttt_posttime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+    local cvDurationEndPhase =
+        CreateConVar("ttt_posttime_seconds", "30", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local cvTimeHasteStarting = CreateConVar("ttt_haste_starting_minutes", "5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+    local cvTimeHasteStarting =
+        CreateConVar("ttt_haste_starting_minutes", "5", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local cvMinPlayers = CreateConVar("ttt_minimum_players", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+    local cvMinPlayers = CreateConVar("ttt_minimum_players", "2", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local cvPreventWin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+    local cvPreventWin = CreateConVar("ttt_debug_preventwin", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local cvNameChangeKick = CreateConVar("ttt_namechange_kick", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+    local cvNameChangeKick =
+        CreateConVar("ttt_namechange_kick", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local cvNameChangeKickBanTime = CreateConVar("ttt_namechange_bantime", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+    local cvNameChangeKickBanTime =
+        CreateConVar("ttt_namechange_bantime", "10", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
     -- defines if this is the first round played on this level, some special
     -- care should be taken if it is the first round
@@ -130,7 +142,6 @@ if SERVER then
 
         ---
         -- @realm server
-        -- stylua: ignore
         local shouldDelayRound, lengthDelay = hook.Run("TTTDelayRoundStartForVote")
 
         if shouldDelayRound then
@@ -180,12 +191,10 @@ if SERVER then
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTT2PrePrepareRound", timePrepPhase)
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTTPrepareRound")
 
         LANG.Msg("round_begintime", { num = timePrepPhase })
@@ -240,12 +249,10 @@ if SERVER then
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTT2PreBeginRound")
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTTBeginRound")
     end
 
@@ -285,12 +292,10 @@ if SERVER then
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTT2PreEndRound", result, timeEndPhase)
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTTEndRound", result)
     end
 
@@ -398,7 +403,6 @@ if SERVER then
                 or ply.spawn_nick == ply:Nick()
                 ---
                 -- @realm server
-                -- stylua: ignore
                 or hook.Run("TTTNameChangeKick", ply)
             then
                 continue
@@ -449,12 +453,10 @@ if SERVER then
         else
             ---
             -- @realm server
-            -- stylua: ignore
             local win = hook.Run("TTT2PreWinChecker")
 
             ---
             -- @realm server
-            -- stylua: ignore
             win = win or hook.Run("TTTCheckForWin")
 
             if win == WIN_NONE then
@@ -630,7 +632,6 @@ if SERVER then
 
             ---
             -- @realm server
-            -- stylua: ignore
             hook.Run("TTT2LoadNextMap", nextMap, roundsLeft, timeLeft)
         else
             LANG.Msg("limit_left", { num = roundsLeft, time = math.ceil(timeLeft / 60) })
@@ -695,8 +696,12 @@ end
 if CLIENT then
     ---
     -- @realm client
-    -- stylua: ignore
-    local cvSoundCues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE, "Optional sound cues on round start and end")
+    local cvSoundCues = CreateConVar(
+        "ttt_cl_soundcues",
+        "0",
+        FCVAR_ARCHIVE,
+        "Optional sound cues on round start and end"
+    )
 
     local cues = {
         Sound("ttt/thump01e.mp3"),
@@ -770,17 +775,14 @@ if CLIENT then
             ---
             -- Can enter PREP from any phase due to ttt_roundrestart
             -- @realm shared
-            -- stylua: ignore
             hook.Run("TTTPrepareRound")
         elseif oldRoundState == ROUND_PREP and newRoundState == ROUND_ACTIVE then
             ---
             -- @realm shared
-            -- stylua: ignore
             hook.Run("TTTBeginRound")
         elseif oldRoundState == ROUND_ACTIVE and newRoundState == ROUND_POST then
             ---
             -- @realm shared
-            -- stylua: ignore
             hook.Run("TTTEndRound")
         end
 
@@ -820,7 +822,6 @@ if CLIENT then
     net.Receive("TTT_ClearClientState", function()
         ---
         -- @realm client
-        -- stylua: ignore
         hook.Run("ClearClientState")
     end)
 

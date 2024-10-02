@@ -119,7 +119,6 @@ function ENT:GiveHealth(ply, healthMax)
 
             ---
             -- @realm shared
-            -- stylua: ignore
             if hook.Run("TTTPlayerUsedHealthStation", ply, self, healed) == false then
                 return false
             end

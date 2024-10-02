@@ -73,7 +73,6 @@ end
 
 ---
 -- @realm client
--- stylua: ignore
 local cv_ttt_show_gestures = CreateConVar("ttt_show_gestures", "1", FCVAR_ARCHIVE)
 
 ---
@@ -275,7 +274,6 @@ function GM:SetupMove(ply, mv, cmd)
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2PlayerReady", ply)
 
     -- check if a resolution change happened while
@@ -286,7 +284,6 @@ function GM:SetupMove(ply, mv, cmd)
     if oldScrH ~= ScrH() or oldScrW ~= ScrW() then
         ---
         -- @realm client
-        -- stylua: ignore
         hook.Run("OnScreenSizeChanged", oldScrW, oldScrH)
     end
 
@@ -305,7 +302,6 @@ net.Receive("TTT2NotifyPlayerReadyOnClients", function()
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2PlayerReady", ply)
 
     -- Cache avatar of the new player
@@ -425,6 +421,11 @@ function plymeta:SetSettingOnServer(identifier, value)
 
     ---
     -- @realm shared
-    -- stylua: ignore
-    hook.Run("TTT2PlayerSettingChanged", self, identifier, oldValue, self.playerSettings[identifier])
+    hook.Run(
+        "TTT2PlayerSettingChanged",
+        self,
+        identifier,
+        oldValue,
+        self.playerSettings[identifier]
+    )
 end

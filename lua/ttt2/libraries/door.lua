@@ -20,18 +20,18 @@ end
 
 ---
 -- @realm client
--- stylua: ignore
-local cvDestructableDoorForced = CreateConVar("ttt2_doors_force_pairs", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvDestructableDoorForced =
+    CreateConVar("ttt2_doors_force_pairs", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm client
--- stylua: ignore
-local cvDestructableDoor = CreateConVar("ttt2_doors_destructible", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvDestructableDoor =
+    CreateConVar("ttt2_doors_destructible", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm client
--- stylua: ignore
-local cvDestructableDoorLocked = CreateConVar("ttt2_doors_locked_indestructible", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvDestructableDoorLocked =
+    CreateConVar("ttt2_doors_locked_indestructible", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- DOOR SPAWNFLAG ENUMS
@@ -213,7 +213,6 @@ if SERVER then
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTT2PostDoorSetup", doors)
 
         local amountDoors = #doors
@@ -242,7 +241,6 @@ else -- CLIENT
 
         ---
         -- @realm client
-        -- stylua: ignore
         hook.Run("TTT2PostDoorSetup", doors)
     end)
 end
@@ -571,7 +569,6 @@ if SERVER then
         if name == "lock" then
             ---
             -- @realm server
-            -- stylua: ignore
             local shouldCancel = hook.Run("TTT2BlockDoorLock", ent, activator, caller)
 
             if shouldCancel then
@@ -593,7 +590,6 @@ if SERVER then
         elseif name == "unlock" then
             ---
             -- @realm server
-            -- stylua: ignore
             local shouldCancel = hook.Run("TTT2BlockDoorUnlock", ent, activator, caller)
 
             if shouldCancel then
@@ -620,7 +616,6 @@ if SERVER then
 
             ---
             -- @realm server
-            -- stylua: ignore
             local shouldCancel = hook.Run("TTT2BlockDoorClose", ent, activator, caller)
 
             if shouldCancel then
@@ -635,7 +630,6 @@ if SERVER then
         elseif name == "use" and not ent:IsDoorOpen() then
             ---
             -- @realm server
-            -- stylua: ignore
             local shouldCancel = hook.Run("TTT2BlockDoorOpen", ent, activator, caller)
 
             if shouldCancel then

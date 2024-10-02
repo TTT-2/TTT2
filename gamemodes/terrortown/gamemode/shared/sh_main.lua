@@ -215,12 +215,10 @@ function GM:TTT2Initialize()
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2RolesLoaded")
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2BaseRoleInit")
 
     DefaultEquipment = GetDefaultEquipment()
@@ -359,8 +357,8 @@ local ttt_playercolors_serious_count = #ttt_playercolors.serious
 
 ---
 -- @realm shared
--- stylua: ignore
-local colormode = CreateConVar("ttt_playercolor_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+local colormode =
+    CreateConVar("ttt_playercolor_mode", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED })
 
 ---
 -- @param string model The selected (default) playermodel

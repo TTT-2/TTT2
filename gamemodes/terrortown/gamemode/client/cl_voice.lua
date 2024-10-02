@@ -22,21 +22,21 @@ local MutedState
 VOICE.cv = {
     ---
     -- @realm client
-    -- stylua: ignore
     duck_spectator = CreateConVar("ttt2_voice_duck_spectator", "0", { FCVAR_ARCHIVE }),
     ---
     -- @realm client
-    -- stylua: ignore
-    duck_spectator_amount = CreateConVar("ttt2_voice_duck_spectator_amount", "0", { FCVAR_ARCHIVE }),
+    duck_spectator_amount = CreateConVar(
+        "ttt2_voice_duck_spectator_amount",
+        "0",
+        { FCVAR_ARCHIVE }
+    ),
 
     ---
     -- @realm client
-    -- stylua: ignore
     scaling_mode = CreateConVar("ttt2_voice_scaling", "linear", { FCVAR_ARCHIVE }),
 
     ---
     -- @realm client
-    -- stylua: ignore
     activation_mode = CreateConVar("ttt2_voice_activation", "ptt", { FCVAR_ARCHIVE }),
 }
 
@@ -258,7 +258,6 @@ function VOICE.CanTeamEnable()
 
     ---
     -- @realm client
-    -- stylua: ignore
     if hook.Run("TTT2CanUseVoiceChat", client, true) == false then
         return false
     end
@@ -290,7 +289,6 @@ function VOICE.CanEnable()
 
     ---
     -- @realm client
-    -- stylua: ignore
     if hook.Run("TTT2CanUseVoiceChat", client, false) == false then
         return false
     end
@@ -375,7 +373,6 @@ function GM:PlayerStartVoice(ply)
 
     ---
     -- @realm client
-    -- stylua: ignore
     mode = hook.Run("TTT2ModifyVoiceChatMode", ply, mode) or mode
 
     VOICE.SetVoiceMode(ply, mode)

@@ -20,8 +20,7 @@ end
 
 ---
 -- @realm server
--- stylua: ignore
-local cvCustomModels = CreateConVar("ttt2_use_custom_models", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvCustomModels = CreateConVar("ttt2_use_custom_models", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 local initialDefaultStates = {
     selected = {

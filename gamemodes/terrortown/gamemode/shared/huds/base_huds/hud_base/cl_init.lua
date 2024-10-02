@@ -307,8 +307,15 @@ end
 function HUD:DrawElemAndChildren(elem)
     ---
     -- @realm client
-    -- stylua: ignore
-    if not elem.initialized or not elem.type or not hook.Run("HUDShouldDraw", elem.type) or not self:ShouldShow(elem.type) or not elem:ShouldDraw() then return end
+    if
+        not elem.initialized
+        or not elem.type
+        or not hook.Run("HUDShouldDraw", elem.type)
+        or not self:ShouldShow(elem.type)
+        or not elem:ShouldDraw()
+    then
+        return
+    end
 
     local children = elem:GetChildren()
 

@@ -37,7 +37,6 @@ local function UpdateTransferSubmitButton()
 
         ---
         -- @realm client
-        -- stylua: ignore
         local allow, msg = hook.Run("TTT2CanTransferCredits", client, ply, CREDITS_PER_XFER)
 
         if allow == false then
