@@ -812,6 +812,7 @@ if CLIENT then
         local index = nameToIndex[accessName]
 
         if not index then
+            -- @ignore
             local function OnWaitEndFunc()
                 database.GetValue(accessName, itemName, key, OnReceiveFunc)
             end

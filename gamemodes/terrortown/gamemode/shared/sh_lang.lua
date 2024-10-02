@@ -128,6 +128,7 @@ if SERVER then
 
     concommand.Add("_ttt_request_serverlang", ServerLangRequest)
 else -- CLIENT
+    -- @ignore
     local function RecvMsg()
         local name = net.ReadString()
         local mode = net.ReadUInt(MSG_MODE_BITS)

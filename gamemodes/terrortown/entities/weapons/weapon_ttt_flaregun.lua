@@ -78,6 +78,7 @@ end
 local SendScorches
 
 if CLIENT then
+    -- @ignore
     local function ReceiveScorches()
         local ent = net.ReadEntity()
         local num = net.ReadUInt(8)
