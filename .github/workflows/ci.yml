@@ -2,7 +2,7 @@ name: CI
 
 env:
   GLUALINT_VERSION: 1.26.0
-  NEODOC_VERSION: 0.1.6
+  NEODOC_VERSION: 0.2.0
   STYLUA_VERSION: 0.20.0
 
 # Controls when the action will run. Triggers the workflow on push or pull request
