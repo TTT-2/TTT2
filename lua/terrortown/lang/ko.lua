@@ -1746,7 +1746,7 @@ L.label_sprint_max = "Max sprinting stamina"
 L.label_sprint_stamina_consumption = "Stamina consumption factor"
 L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
 L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
-L.label_crowbar_pushforce = "Crowbar push force" ]]--
+L.label_crowbar_pushforce = "Crowbar push force" --]]
 
 -- 2022-07-02
 L.header_playersettings_falldmg = "추락 데미지 설정"
@@ -1816,7 +1816,7 @@ L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
 L.label_voice_scaling = "Voice Volume Scaling Mode"
 L.label_voice_scaling_mode_linear = "Linear"
 L.label_voice_scaling_mode_power4 = "Power 4"
-L.label_voice_scaling_mode_log = "Logarithmic"]]--
+L.label_voice_scaling_mode_log = "Logarithmic"--]]
 
 -- 2023-10-07
 L.search_title = "시체 조사 결과 - {player}"
@@ -1956,7 +1956,7 @@ mode 0: This is standard TTT behavior. Everyone can search and confirm bodies. T
 
 mode 1: This mode increases the importance of public policing roles by limiting the confirmation option to them. This also means that taking credits and reporting bodies is now also possible before confirming a body. Everybody can still search dead bodies and find the information, but they are unable to announce the found information.
 
-mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]--
+mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.--]]
 
 -- 2023-10-19
 L.label_grenade_trajectory_ui = "수류탄 궤적 표시기"
@@ -2143,7 +2143,7 @@ For the poltergeist, this would affect each "thump" and the final explosion.
 0.5 = Deal half the amount of damage.
 2 = Deal twice the amount of damage.
 
-Note: Some weapons might not use this value which causes this modifier to be ineffective.]]--
+Note: Some weapons might not use this value which causes this modifier to be ineffective.--]]
 
 -- 2023-12-24
 L.binoc_help_reload = "타겟 초기화."
@@ -2230,7 +2230,7 @@ Toggle (Activate on Join): Like 'Toggle' but your mic gets activated when joinin
 When shopping roles die, their credits can be picked up by other players with shopping roles.
 
 When this option is disabled, only players that can pick up credits can see them on a body.
-When enabled, all players can see credits on a body.]]--
+When enabled, all players can see credits on a body.--]]
 
 -- 2024-05-13
 --L.menu_commands_title = "Admin Commands"
@@ -2282,13 +2282,13 @@ L.header_loadingscreen = "Loading Screen"
 L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
 
 L.label_enable_loadingscreen = "Enable the loading screen"
-L.label_enable_loadingscreen_tips = "Enable tips on loading screen"]]--
+L.label_enable_loadingscreen_tips = "Enable tips on loading screen"--]]
 
 -- 2024-05-25
 --[[L.help_round_restart_reset = [[
 Restart a round or reset the level.
 
-Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]--
+Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.--]]
 
 --[[L.label_button_level_reset = "reset level"
 
@@ -2297,7 +2297,7 @@ L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
 L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"
 
 -- 2024-06-23
-L.header_roles_derandomize = "Role Derandomization"]]--
+L.header_roles_derandomize = "Role Derandomization"--]]
 
 --[[L.help_roles_derandomize = [[
 Role derandomization can be used to make role distribution feel more fair over the course of a session.
@@ -2317,7 +2317,7 @@ mode 3: Base roles AND sub-roles - Derandomization is performed for both base ro
 L.label_roles_derandomize_mode_none = "mode 0: Disabled"
 L.label_roles_derandomize_mode_base_only = "mode 1: Base roles only"
 L.label_roles_derandomize_mode_sub_only = "mode 2: Sub-roles only"
-L.label_roles_derandomize_mode_base_and_sub = "mode 3: Base roles AND sub-roles"]]--
+L.label_roles_derandomize_mode_base_and_sub = "mode 3: Base roles AND sub-roles"--]]
 
 --[[L.help_roles_derandomize_min_weight = [[
 Derandomization is performed by making the random player selections during role distribution use a weight associated with each role for each player, and that weight increases by 1 each time the player does not get assigned that role. These weights are not persisted between connections, or across maps.
@@ -2328,7 +2328,7 @@ For example, given player A with a weight of 1, and player B with a weight of 5,
 
 The minimum weight, therefore, effectively controls how much each round affects a player's chance at being selected, with higher values causing it to be affected less. The default value of 1 means that each round causes a fairly significant increase in chance, and conversely, that it is extremely unlikely that a player will get the same role twice in a row.
 
-Changes to this value will not take effect until players reconnect or the map changes.]]--
+Changes to this value will not take effect until players reconnect or the map changes.--]]
 --[[L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
 
 -- 2024-08-17
@@ -2345,13 +2345,13 @@ L.header_commands_player_force_role = "Force Player Role"
 
 L.label_button_player_force_role = "force role"
 
-L.label_player_role = "Select role"]]--
+L.label_player_role = "Select role"--]]
 
 -- 2024-09-16
 --[[L.help_enable_loadingscreen_server = [[
 The loadingscreen settings also exist on the client. They are hidden if disabled on the server.
 
-The minimum display time is there to give the player time to read the tips. If the reload of the map takes longer than the minimum time, the loadingscreen is shown as long as it needs to be. In general a reload time of 0.5 to 1 second is to be expected.]]--
+The minimum display time is there to give the player time to read the tips. If the reload of the map takes longer than the minimum time, the loadingscreen is shown as long as it needs to be. In general a reload time of 0.5 to 1 second is to be expected.--]]
 
 --[[L.label_enable_loadingscreen_server = "Enable the loadingscreen serverwide"
 L.label_loadingscreen_min_duration = "Minimum loadingscreen display time"
@@ -2359,4 +2359,4 @@ L.label_loadingscreen_min_duration = "Minimum loadingscreen display time"
 -- 2024-09-18
 L.label_keyhelper_leave_vehicle = "leave vehicle"
 L.name_vehicle = "Vehicle"
-L.vehicle_enter = "Press [{usekey}] to enter vehicle"]]--
+L.vehicle_enter = "Press [{usekey}] to enter vehicle"--]]
