@@ -582,7 +582,7 @@ L.tip38 = "설치형 장비들(라디오나 C4계열)은 우클릭으로 벽에 
 
 L.tip39 = "C4를 해체하다가 실패하여 발생하는 폭발은 C4가 시간이 되어 폭발하는 것 보다 더 적은 범위를 가집니다."
 
-L.tip40 = "만약 타이머에 'Haste Mode'라고 적혀있다면, 라운드가 그 시간 후에 끝난다는 소리입니다. 하지만 누군가 사망할 시 제한시간이 늘어납니다. (팀포 2의 오버타임처럼) 이를 이용하여 트레이터가 계속 움직이도록 할 수 있습니다."
+L.tip40 = "만약 타이머에 '헤이스트 모드'라고 적혀있다면, 라운드가 그 시간 후에 끝난다는 소리입니다. 하지만 누군가 사망할 시 제한시간이 늘어납니다. (팀포 2의 오버타임처럼) 이를 이용하여 트레이터가 계속 움직이도록 할 수 있습니다."
 
 -- Round report
 L.report_title = "라운드 보고"
@@ -869,11 +869,6 @@ L.shop_selected = "{role} 선택됨"
 L.shop_settings_desc = "Random Shop ConVars에 맞게 상점을 수정합니다. 저장 잊지 마세요!"
 
 L.bindings_new = "{name}에 대한 새로운 바인드 키: {key}"
-
--- 번역 필요 Need to translate
---L.hud_default_failed = "Failed to set the HUD {hudname} as new default. You don't have permission to do that, or this HUD doesn't exist."
---L.hud_forced_failed = "Failed to force the HUD {hudname}. You don't have permission to do that, or this HUD doesn't exist."
---.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have permission to do that."
 
 L.shop_role_select = "역할 선택"
 L.shop_role_selected = "{role} 역할의 상점이 선택되었습니다!"
@@ -1219,7 +1214,7 @@ L.desc_event_selected = "{amount} 명에게 팀과 역할이 배정되었습니�
 L.desc_event_spawn = "{player} 가 스폰되었습니다."
 
 -- Name of a trap that killed us that has not been named by the mapper
-L.trap_something = "something"
+L.trap_something = "무언가"
 
 -- Kill events
 L.desc_event_kill_suicide = "자살이었습니다."
@@ -1249,7 +1244,7 @@ L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) 를 {attacker}가 태워�
 L.desc_event_kill_burn_using = "{victim} ({vrole} / {vteam}) 를 {trap}로 {attacker} ({arole} / {ateam}) 가 태워죽였습니다."
 
 L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) 를 {attacker}가 때려죽였습니다."
-L.desc_event_kill_club_using = "{victim} ({vrole} / {vteam}) was pummeled to death by {attacker} ({arole} / {ateam}) using {trap}."
+L.desc_event_kill_club_using = "{victim} ({vrole} / {vteam}) 를 {attacker} ({arole} / {ateam})가 {trap}를 이용해서 죽였습니다."
 
 L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) 를 {attacker}가 찔러죽였습니다."
 L.desc_event_kill_slash_using = "{victim} ({vrole} / {vteam}) was cut up by {attacker} ({arole} / {ateam}) using {trap}."
@@ -1315,17 +1310,6 @@ L.equip_added = "추가됨"
 L.equip_inherit_added = "추가됨 (계승)"
 L.equip_inherit_removed = "추가되지 않음 (계승)"
 
--- 2021-06-09
---L.layering_not_layered = "Not layered"
---L.layering_layer = "Layer {layer}"
---L.header_rolelayering_role = "{role} layering"
---L.header_rolelayering_baserole = "Base role layering"
---L.submenu_administration_rolelayering_title = "Role Layering"
---L.header_rolelayering_info = "Role layering information"
---L.help_rolelayering_roleselection = "The role distribution process is split into two stages. In the first stage base roles are distributed, which are innocent, traitor and those listed in the 'base role layer' box below. The second stage is used to upgrade those base roles to a subrole."
---L.help_rolelayering_layers = "From each layer only one role is selected. First the roles from the custom layers are distributed starting from the first layer until the last is reached or no more roles can be upgraded. Whichever happens first, if upgradeable slots are still available, the unlayered roles will be distributed as well."
---L.scoreboard_voice_tooltip = "Scroll to change the volume"
-
 -- 2021-06-15
 L.header_shop_linker = "세팅"
 L.label_shop_linker_set = "상점 타입 선택:"
@@ -1364,171 +1348,9 @@ L.spawn_ammo_rifle = "라이플 탄약 스폰"
 L.spawn_ammo_shotgun = "샷건 탄약 스폰"
 L.spawn_player_random = "랜덤 플레이어 스폰"
 
---L.spawn_weapon_ammo = "(Ammo: {ammo})"
-
---L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
-
---L.spawn_type_weapon = "This is a weapon spawn"
---L.spawn_type_ammo = "This is an ammunition spawn"
---L.spawn_type_player = "This is a player spawn"
-
---L.spawn_remove = "Press [{secondaryfire}] to remove this spawn"
-
---L.submenu_administration_entspawn_title = "Spawn Editor"
---L.header_entspawn_settings = "Spawn Editor Settings"
---L.button_start_entspawn_edit = "Start Spawn Edit"
---L.button_delete_all_spawns = "Delete all Spawns"
-
---L.label_dynamic_spawns_enable = "Enable dynamic spawns for this map"
---L.label_dynamic_spawns_global_enable = "Enable dynamic spawns for all maps"
-
---L.header_equipment_weapon_spawn_setup = "Weapon Spawn Settings"
-
---[[ L.help_spawn_editor_info = [[
-The spawn editor is used to place, remove and edit spawns in the world. These spawns are for weapons, ammunition and players.
-
-These spawns are saved in files located in 'data/ttt/weaponspawnscripts/'. They can be deleted for a hard reset. The initial spawn files are created from spawns found on the map and in the original TTT weapon spawn scripts. Pressing the reset button always reverts to the initial state.
-
-It should be noted that this spawn system uses dynamic spawns. This is most interesting for weapons because it no longer defines a specific weapon, but a type of weapons. For example instead of a TTT shotgun spawn, there is now a general shotgun spawn where any weapon defined as shotgun can spawn. The spawn type for each weapon can be set in the 'Edit Equipment' menu. This makes it possible for any weapon to spawn on the map, or to disable certain default weapons.
-
-Keep in mind that many changes only take effect after a new round has started.]]
---L.help_spawn_editor_enable = "On some maps it might be advised to use the original spawns found on the map without replacing them with the dynamic system. Changing this option below only affects the currently active map, so the dynamic system will still be used for every other map."
---L.help_spawn_editor_hint = "Hint: To leave the spawn editor, reopen the gamemode menu."
---[[L.help_spawn_editor_spawn_amount = [[
-There currently are {weapon} weapon spawns, {ammo} ammunition spawns and {player} player spawns on this map.
-Click 'start spawn edit' to change this amount.
-
-{weaponrandom}x Random weapon spawn
-{weaponmelee}x Melee weapon spawn
-{weaponnade}x Grenade weapon spawn
-{weaponshotgun}x Shotgun weapon spawn
-{weaponheavy}x Heavy weapon spawn
-{weaponsniper}x Sniper weapon spawn
-{weaponpistol}x Pistol weapon spawn
-{weaponspecial}x Special weapon spawn
-
-{ammorandom}x Random ammo spawn
-{ammodeagle}x Deagle ammo spawn
-{ammopistol}x Pistol ammo spawn
-{ammomac10}x Mac10 ammo spawn
-{ammorifle}x Rifle ammo spawn
-{ammoshotgun}x Shotgun ammo spawn
-
-{playerrandom}x Random player spawn]]
-
---L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly in world"
---L.equipmenteditor_name_spawn_type = "Select spawn type"
---[[L.equipmenteditor_desc_auto_spawnable = [[
-The TTT2 spawn system allows every weapon to spawn in the world. By default only weapons marked as 'AutoSpawnable' by the creator will spawn in the world, however this can be changed from within this menu.
-
-Most of the equipment is set to 'special weapon spawns' by default. This means that equipment only spawns on random weapon spawns. However it is possible to place special weapon spawns in the world or change the spawn type here to use other existing spawn types.]]
-
---L.pickup_error_inv_cached = "You cannot pick this up right now because your inventory is cached."
 
 -- 2021-09-02
---L.submenu_administration_playermodels_title = "플레이어 모델"
---L.header_playermodels_general = "General Player Model Settings"
---L.header_playermodels_selection = "Select Player Model Pool"
-
---L.label_enforce_playermodel = "Enforce role player model"
---L.label_use_custom_models = "Use a randomly selected player model"
---L.label_prefer_map_models = "Prefer map specific models over default models"
---L.label_select_model_per_round = "Select a new random model each round (only on map change if disabled)"
-
---[[L.help_prefer_map_models = [[
-Some maps define their own player models. By default these models have a higher priority than those that are assigned automatically. By disabling this setting, map specific models are disabled.
-
-Role specific models always have a higher priority and are unaffected by this setting.]]
---[[L.help_enforce_playermodel = [[
-Some roles have custom player models. They can be disabled which can be relevant for compatibility with some player model selectors.
-Random default models can still be selected, if this setting is disabled.]]
---[[L.help_use_custom_models = [[
-By default only the CS:S Phoenix player model is assigned to all players. By enabling this option however it is possible to select a player model pool. With this setting enabled each player will still be assigned the same player model, however it is a random model from the defined model pool.
-
-This selection of models can be extended by installing more player models.]]
-
--- 2021-10-06
---L.menu_server_addons_title = "Server Addons"
---L.menu_server_addons_description = "Server-wide admin only settings for addons."
-
---L.tooltip_finish_score_penalty_alive_teammates = "Alive teammates penalty: {score}"
---L.finish_score_penalty_alive_teammates = "Alive teammates penalty:"
---L.tooltip_kill_score_suicide = "Suicide: {score}"
---L.kill_score_suicide = "Suicide:"
---L.tooltip_kill_score_team = "Team kill: {score}"
---L.kill_score_team = "Team kill:"
-
--- 2021-10-09
---[[L.help_models_select = [[
-Left click on the models to add them to the player model pool. Left click again to remove them. Right clicking toggles between enabled and disabled detective hats for the focused model.
-
-The small indicator in the top left shows if the player model has a head hitbox. The icon below shows if this model is applicable for a detective hat.]]
-
---L.menu_roles_title = "Role Settings"
---L.menu_roles_description = "Set up the spawning, equipment credits and more."
-
---L.submenu_administration_roles_general_title = "General Role Settings"
-
---L.header_roles_info = "Role Information"
---L.header_roles_selection = "Role Selection Parameters"
---L.header_roles_tbuttons = "Traitor Buttons Access"
---L.header_roles_credits = "Role Equipment Credits"
---L.header_roles_additional = "Additional Role Settings"
---L.header_roles_reward_credits = "Reward Equipment Credits"
-
---L.help_roles_default_team = "Default team: {team}"
---L.help_roles_unselectable = "This role is not distributable. It is not considered in the role distribution process. Most of the times this means that this is a role that is manually assigned during the round through an event like a revival, a sidekick deagle or something similar."
---L.help_roles_selectable = "This role is distributable. If all criteria is met, this role is considered in the role distribution process."
---L.help_roles_credits = "Equipment credits are used to buy equipment in the shop. It mostly makes sense to give them only for those roles that have access to the shops. However, since it is possible to find credits on corpses, you can also give starting credits to roles as a reward to their killer."
---L.help_roles_selection_short = "The role distribution per player defines the percentage of players that are assigned this role. For example, if the value is set to '0.2' every fifth player receives this role."
---[[L.help_roles_selection = [[
-The role distribution per player defines the percentage of players that are assigned this role. For example, if the value is set to '0.2' every fifth player receives this role. This also means that at least 5 players are needed for this role to be distributed at all.
-Keep in mind that all of this only applies if the role is considered for distribution process.
-
-The aforementioned role distribution has a special integration with the lower limit of players. If the role is considered for distribution and the minimum value is below the value given by the distribution factor, but the amount of players is equal or greater than the lower limit, a single player can still receive this role. The distribution process then works as usual for the second player.]]
---L.help_roles_award_info = "Some roles (if enabled in their credits settings) receive equipment credits if a certain percentage of enemies has died. Related values can be tweaked here."
---L.help_roles_award_pct = "When this percentage of enemies are dead, specific roles are awarded equipment credits."
---L.help_roles_award_repeat = "Whether the credit award is handed out multiple times. For example, if the percentage is set to '0.25', and this setting is enabled, players will be awarded credits at '25%', '50%' and '75%' dead enemies respectively."
---L.help_roles_advanced_warning = "WARNING: These are advanced settings that can completely mess up the role distribution process. When in doubt keep all values at '0'. This value means that no limits are applied and the role distribution will try to assign as many roles as possible."
---[[L.help_roles_max_roles = [[
-The term roles here includes both the base roles and the subroles. By default, there is no limit on how many different roles can be assigned. However, here are two different ways to limit them.
-
-1. Limit them by a fixed amount.
-2. Limit them by a percentage.
-
-The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
---[[L.help_roles_max_baseroles = [[
-Base roles are only those roles others inherit from. For example, the Innocent role is a base role, while a Pharaoh is a subrole of this role. By default, there is no limit on how many different base roles can be assigned. However, here are two different ways to limit them.
-
-1. Limit them by a fixed amount.
-2. Limit them by a percentage.
-
-The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
-
---L.label_roles_enabled = "Enable role"
---L.label_roles_min_inno_pct = "Innocent distribution per player"
---L.label_roles_pct = "Role distribution per player"
---L.label_roles_max = "Upper limit of players assigned for this role"
---L.label_roles_random = "Chance this role is distributed"
---L.label_roles_min_players = "Lower limit of players to consider distribution"
---L.label_roles_tbutton = "Role can use Traitor buttons"
---L.label_roles_credits_starting = "Starting credits"
---L.label_roles_credits_award_pct = "Credit reward percentage"
---L.label_roles_credits_award_size = "Credit reward size"
---L.label_roles_credits_award_repeat = "Credit reward repeat"
---L.label_roles_newroles_enabled = "Enable custom roles"
---L.label_roles_max_roles = "Upper role limit"
---L.label_roles_max_roles_pct = "Upper role limit by percentage"
---L.label_roles_max_baseroles = "Upper base role limit"
---L.label_roles_max_baseroles_pct = "Upper base role limit by percentage"
---L.label_detective_hats = "Enable hats for policing roles like the Detective (if player model allows to have them)"
-
---L.ttt2_desc_innocent = "An Innocent has no special abilities. They have to find the evil ones among the terrorists and kill them. But they have to be careful not to kill their teammates."
---L.ttt2_desc_traitor = "The Traitor is the enemy of the Innocent. They have an equipment menu with which they are being able to buy special equipment. They have to kill everyone but their teammates."
---L.ttt2_desc_detective = "The Detective is the one whom the Innocents can trust. But who even is an Innocent? The mighty Detective has to find all the evil terrorists. The equipment in their shop may help them with this task."
-
--- 2021-10-10
---L.button_reset_models = "Reset Player Models"
+L.submenu_administration_playermodels_title = "플레이어 모델"
 
 -- 2021-10-13
 L.help_roles_credits_award_kill = "크레딧을 얻는 또 다른 방법이 있습니다. 탐정과 같은 HVT 타겟을 죽이는 것입니다. 만약 이 기능이 켜져있다면, 특정한 양의 크레딧을 얻습니다."
@@ -1590,7 +1412,6 @@ L.header_playersettings_armor = "방어구 시스템 설정"
 L.help_killer_dna_range = "플레이어가 다른 플레이어에 의해 죽임을 당하면, 그들의 시체에는 DNA 샘플이 남게 됩니다. 아래 설정은 DNA 샘플이 남는 최대 거리를 설정합니다. 살인자가 희생자가 죽을 때 이 값보다 더 멀리 있으면 시체에는 샘플이 남지 않습니다."
 L.help_killer_dna_basetime = "살인자가 더 멀리 있을수록 DNA 샘플이 부패되는데 더 짧은 시간이 필요하게 됩니다."
 L.help_dna_radar = "TTT2의 DNA 스캐너는, 장착시 선택된 DNA 샘플의 거리와 방향을 표시합니다. 기존 TTT DNA 스캐너 모드도 있습니다. 이 모드를 선택 할 시 쿨다운마다 위치를 업데이트합니다."
---L.help_idle = "The idle mode is used to forcefully move idle players into the spectator mode. To leave this mode, they will have to disable it in their 'gameplay' menu."
 L.help_namechange_kick = [[
 이미 진행된 라운드 도중 이름을 변경하는것은 기본적으로 금지되어 있습니다. 이를 시도한 플레이어는 서버에서 퇴장됩니다.
 
@@ -1621,132 +1442,13 @@ L.help_item_armor_dynamic = [[
 
 다이나믹 아머가 활성화된 경우, 방탄 값이 플레이어에게 적용되는 피해가 15% 감소됩니다.]]
 L.help_sherlock_mode = "셜록 모드는 클래식 TTT 모드입니다. 셜록 모드가 비활성화된 경우, 사망한 시체를 확인할 수 없으며, 점수판에서는 모든 플레이어가 살아있는 것으로 표시되며, 관전자는 생존 플레이어와 대화할 수 있습니다."
---[[L.help_prop_possession = [[
-Prop possession can be used by spectators to possess props lying in the world and use the slowly recharging 'punch-o-meter' to move said prop around.
-
-The maximum value of the 'punch-o-meter' consists of a possession base value, where the kills/deaths difference clamped inbetween two defined limits is added. The meter slowly recharges over time. The set recharge time is the time needed to recharge a single point in the 'punch-o-meter'.]]
 L.help_karma = "플레이어들은 일정한 카르마 점수로 시작하며, 팀원을 공격하거나 처치할 경우 카르마 점수를 잃습니다. 잃는 카르마 점수는 공격하거나 처치한 상대의 카르마 점수에 따라 달라집니다. 카르마 점수가 낮을수록 입히는 피해가 줄어듭니다."
 L.help_karma_strict = "제한된 카르마 설정이 활성화되면, 카르마가 낮아질수록 피해 감소 벌칙 수치가 더 빨리 증가합니다. 비활성화 시에는 800 이상의 카르마에서는 별 영향이 없습니다. 제한된 카르마 모드를 활성화하면, 불필요한 킬에 대한 강력한 처벌이 있지만, 비활성화시엔 팀원을 자주 죽이는 플레이어에게만 해를 끼칩니다."
 L.help_karma_max = "최대 카르마 값을 1000 이상으로 설정해도, 1000 이상의 카르마를 가진 플레이어에게 추가 데미지 보너스를 제공하지는 않습니다."
 L.help_karma_ratio = "만약 두 사람이 같은 팀에 속해 있다면, 피해의 비율을 따져 공격자의 카르마가 얼마나 감소하는지를 따집니다. 팀을 죽였을 경우엔 추가적인 벌칙이 부여됩니다."
 L.help_karma_traitordmg_ratio = "만약 둘이 다른 팀에 속할 경우, 피해의 비율은 공격자의 카르마가 증가시킵니다. 적을 처치할 경우 추가적인 보너스가 적용됩니다."
 L.help_karma_bonus = "라운드 동안 카르마를 얻는 두 가지 방법이 있습니다. 첫 번째는 라운드 종료 시 모든 플레이어에게 적용되는 카르마 복원입니다. 그리고 두 번째로, 팀원을 쏘거나 죽이지 않았을 경우 보너스 카르마가 주어집니다."
---[[L.help_karma_clean_half = [[
-When a player's Karma is above the starting level (meaning the Karma max has been configured to be higher than that), all their Karma increases will be reduced based on how far their Karma is above that starting level. So it goes up slower the higher it is.
-
-This reduction goes in a curve of exponential decay: initially it's fast, and it slows down as the increment gets smaller. This convar sets at what point the bonus has been halved (so the half-life). With the default value of 0.25, if the starting amount of Karma is 1000 and the max 1500, and a player has Karma 1125 ((1500 - 1000) * 0.25 = 125), then his clean round bonus will be 30 / 2 = 15. So to make the bonus go down faster you’d set this convar lower, to make it go down slower you’d increase it towards 1.]]
 L.help_max_slots = "한 슬롯당 최대 무기 수를 설정합니다. '-1'은 제한이 없음을 의미합니다."
---[[ L.help_item_armor_value = "This is the armor value given by the armor item in dynamic mode. If classic mode is enabled (see 'Administration' -> 'Player Settings') then every value greater than 0 is counted as existing armor."
-
-L.label_killer_dna_range = "Max kill range to leave DNA"
-L.label_killer_dna_basetime = "Sample life base time"
-L.label_dna_scanner_slots = "DNA sample slots"
-L.label_dna_radar = "Enable classic DNA scanner mode"
-L.label_dna_radar_cooldown = "DNA scanner cooldown"
-L.label_radar_charge_time = "Recharge time after being used"
-L.label_crowbar_shove_delay = "Cooldown after crowbar push"
-L.label_idle = "Enable idle mode"
-L.label_idle_limit = "Maximum idle time in seconds"
-L.label_namechange_kick = "Enable name change kick"
-L.label_namechange_bantime = "Banned time in minutes after kick"
-L.label_log_damage_for_console = "Enable damage logging in console"
-L.label_damagelog_save = "Save damage log to disk"
-L.label_debug_preventwin = "Prevent any win condition [debug]"
-L.label_bots_are_spectators = "Bots are always spectators"
-L.label_tbutton_admin_show = "Show traitor buttons to admins"
-L.label_ragdoll_carrying = "Enable ragdoll carrying"
-L.label_prop_throwing = "Enable prop throwing"
-L.label_weapon_carrying = "Enable weapon carrying"
-L.label_weapon_carrying_range = "Weapon carry range"
-L.label_prop_carrying_force = "Prop pickup force"
-L.label_teleport_telefrags = "Kill blocking player(s) when teleporting (telefrag)"
-L.label_allow_discomb_jump = "Allow disco jump for grenade thrower"
-L.label_spawn_wave_interval = "Spawn wave interval in seconds"
-L.label_voice_enable = "Enable voice chat"
-L.label_voice_drain = "Enable the voice chat battery feature"
-L.label_voice_drain_normal = "Drain per tick for normal players"
-L.label_voice_drain_admin = "Drain per tick for admins and public policing roles"
-L.label_voice_drain_recharge = "Recharge rate per tick of not voice chatting"
-L.label_locational_voice = "Enable proximity voice chat for living players"
-L.label_armor_on_spawn = "Player armor on (re-)spawn"
-L.label_prep_respawn = "Enable instant respawn during preparing phase"
-L.label_preptime_seconds = "Preparing time in seconds"
-L.label_firstpreptime_seconds = "First preparing time in seconds"
-L.label_roundtime_minutes = "Fixed round time in minutes"
-L.label_haste = "Enable haste mode"
-L.label_haste_starting_minutes = "Haste mode starting time in minutes"
-L.label_haste_minutes_per_death = "Additional time in minutes per death"
-L.label_posttime_seconds = "Postround time in seconds"
-L.label_round_limit = "Upper limit of rounds"
-L.label_time_limit_minutes = "Upper limit of playtime in minutes"
-L.label_nade_throw_during_prep = "Enable grenade throwing during preparing time"
-L.label_postround_dm = "Enable deathmatch after round ended"
-L.label_session_limits_enabled = "Enable session limits"
-L.label_spectator_chat = "Enable spectators chatting with everybody"
-L.label_lastwords_chatprint = "Print last words to chat if killed while typing"
-L.label_identify_body_woconfirm = "Identify corpse without pressing the 'confirm' button"
-L.label_announce_body_found = "Announce that a body was found when the body was confirmed"
-L.label_confirm_killlist = "Announce kill list of confirmed corpse"
-L.label_dyingshot = "Shoot on death if in ironsights [experimental]"
-L.label_armor_block_headshots = "Enable armor blocking headshots"
-L.label_armor_block_blastdmg = "Enable armor blocking blast damage"
-L.label_armor_dynamic = "Enable dynamic armor"
-L.label_armor_value = "Amount of armor given by the armor item"
-L.label_armor_damage_block_pct = "Damage percentage taken by armor"
-L.label_armor_damage_health_pct = "Damage percentage taken by player"
-L.label_armor_enable_reinforced = "Enable reinforced armor"
-L.label_armor_threshold_for_reinforced = "Reinforced armor threshold"
-L.label_sherlock_mode = "Enable sherlock mode"
-L.label_highlight_admins = "Highlight server admins"
-L.label_highlight_dev = "Highlight TTT2 developer"
-L.label_highlight_vip = "Highlight TTT2 supporter"
-L.label_highlight_addondev = "Highlight TTT2 addon developer"
-L.label_highlight_supporter = "Highlight others"
-L.label_enable_hud_element = "Enable {elem} HUD element"
-L.label_spec_prop_control = "Enable prop possession"
-L.label_spec_prop_base = "Possession base value"
-L.label_spec_prop_maxpenalty = "Lower possession bonus limit"
-L.label_spec_prop_maxbonus = "Upper possession bonus limit"
-L.label_spec_prop_force = "Possession push force"
-L.label_spec_prop_rechargetime = "Recharge time in seconds"
-L.label_doors_force_pairs = "Force close-by doors as double doors"
-L.label_doors_destructible = "Enable destructible doors"
-L.label_doors_locked_indestructible = "Initially locked doors are indestructible"
-L.label_doors_health = "Door health"
-L.label_doors_prop_health = "Destructed door health"
-L.label_minimum_players = "Minimum player amount to start round"
-L.label_karma = "Enable Karma"
-L.label_karma_strict = "Enable strict Karma"
-L.label_karma_starting = "Starting Karma"
-L.label_karma_max = "Maximum Karma"
-L.label_karma_ratio = "Penalty ratio for team damage"
-L.label_karma_kill_penalty = "Kill penalty for team kill"
-L.label_karma_round_increment = "Karma restoration"
-L.label_karma_clean_bonus = "Clean round bonus"
-L.label_karma_traitordmg_ratio = "Bonus ratio for enemy damage"
-L.label_karma_traitorkill_bonus = "Kill bonus for enemy kill"
-L.label_karma_clean_half = "Clean round bonus reduction"
-L.label_karma_persist = "Karma persists over map changes"
-L.label_karma_low_autokick = "Automatically kick players with low Karma"
-L.label_karma_low_amount = "Low Karma threshold"
-L.label_karma_low_ban = "Ban picked players with low Karma"
-L.label_karma_low_ban_minutes = "Ban time in minutes"
-L.label_karma_debugspam = "Enable debug output to console about Karma changes"
-L.label_max_melee_slots = "Max melee slots"
-L.label_max_secondary_slots = "Max secondary slots"
-L.label_max_primary_slots = "Max primary slots"
-L.label_max_nade_slots = "Max grenade slots"
-L.label_max_carry_slots = "Max carry slots"
-L.label_max_unarmed_slots = "Max unarmed slots"
-L.label_max_special_slots = "Max special slots"
-L.label_max_extra_slots = "Max extra slots"
-L.label_weapon_autopickup = "Enable automatic weapon pickup"
-L.label_sprint_enabled = "Enable sprinting"
-L.label_sprint_max = "Max sprinting stamina"
-L.label_sprint_stamina_consumption = "Stamina consumption factor"
-L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
-L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
-L.label_crowbar_pushforce = "Crowbar push force" --]]
 
 -- 2022-07-02
 L.header_playersettings_falldmg = "추락 데미지 설정"
@@ -1761,62 +1463,11 @@ L.help_falldmg_exponent = [[
 이 값 조정 시 주의가 필요합니다. 너무 높게 설정하면 작은 낙하도 치명적일 수 있으며, 너무 낮게 설정하면 매우 높은 높이에서도 플레이어가 데미지를 입지 않고 떨어질 수 있습니다.]]
 
 -- 2023-02-08
---L.testpopup_title = "A Test Popup, now with a multiline title, how NICE!"
---L.testpopup_subtitle = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
 
 L.hudeditor_chat_hint1 = "[TTT2][INFO] 요소 위에 마우스를 올리고 [왼쪽 마우스 버튼]을 누른 채로 마우스를 움직여서 이동하거나 크기를 조정할 수 있습니다."
 L.hudeditor_chat_hint2 = "[TTT2][INFO] 크기 조정을 위해 ALT 키를 누른 채로 누르세요."
 L.hudeditor_chat_hint3 = "[TTT2][INFO] SHIFT 키를 누른 채로 움직이면 축을 따라 이동하고 종횡비를 유지할 수 있습니다."
 L.hudeditor_chat_hint4 = "[TTT2][INFO] 우클릭 -> '닫기'를 눌러 HUD 편집기를 종료하세요!"
-
---[[L.guide_nothing_title = "Nothing here yet!"
-L.guide_nothing_desc = "This is work in progress, help us by contributing to the project on GitHub."
-
-L.sb_rank_tooltip_developer = "TTT2 Developer"
-L.sb_rank_tooltip_vip = "TTT2 Supporter"
-L.sb_rank_tooltip_addondev = "TTT2 Addon Developer"
-L.sb_rank_tooltip_admin = "Server Admin"
-L.sb_rank_tooltip_streamer = "Streamer"
-L.sb_rank_tooltip_heroes = "TTT2 Heroes"
-L.sb_rank_tooltip_team = "Team"
-
-L.tbut_adminarea = "ADMIN AREA:"
-
--- 2023-08-10
-L.equipmenteditor_name_damage_scaling = "Damage Scaling"
-
--- 2023-08-11
-L.equipmenteditor_name_allow_drop = "Allow Drop"
-L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
-
-L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
-L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
-
-L.drop_on_death_type_default = "Default (weapon-defined)"
-L.drop_on_death_type_force = "Force Drop on Death"
-L.drop_on_death_type_deny = "Deny Drop on Death"
-
--- 2023-08-26
-L.equipmenteditor_name_kind = "Equipment Slot"
-L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
-
-L.slot_weapon_melee = "Melee Slot"
-L.slot_weapon_pistol = "Pistol Slot"
-L.slot_weapon_heavy = "Heavy Slot"
-L.slot_weapon_nade = "Grenade Slot"
-L.slot_weapon_carry = "Carry Slot"
-L.slot_weapon_unarmed = "Unarmed Slot"
-L.slot_weapon_special = "Special Slot"
-L.slot_weapon_extra = "Extra Slot"
-L.slot_weapon_class = "Class Slot"
-
--- 2023-10-04
-L.label_voice_duck_spectator = "Duck spectator voices"
-L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
-L.label_voice_scaling = "Voice Volume Scaling Mode"
-L.label_voice_scaling_mode_linear = "Linear"
-L.label_voice_scaling_mode_power4 = "Power 4"
-L.label_voice_scaling_mode_log = "Logarithmic"--]]
 
 -- 2023-10-07
 L.search_title = "시체 조사 결과 - {player}"
@@ -1944,19 +1595,6 @@ L.corpse_hint_no_inspect_details = "탐정만이 이 시체의 자세한 정보�
 L.corpse_hint_inspect_limited_details = "탐정만이 이 시체를 확인 할 수 있습니다."
 L.corpse_hint_spectator = "[{usekey}] 키를 눌러 시체 정보 확인"
 L.corpse_hint_public_policing_searched = "[{usekey}] 키를 눌러 탐정이 알아낸 정보를 보기"
-
---[[L.label_inspect_confirm_mode = "Select body search mode"
-L.choice_inspect_confirm_mode_0 = "mode 0: standard TTT"
-L.choice_inspect_confirm_mode_1 = "mode 1: limited confirm"
-L.choice_inspect_confirm_mode_2 = "mode 2: limited search"
-L.help_inspect_confirm_mode = [[
-There are three different body search/confirm modes in this gamemode. The selection of this mode has huge influences to the importance of public policing roles like the detective.
-
-mode 0: This is standard TTT behavior. Everyone can search and confirm bodies. To report a body or to take the credits from it, the body first has to be confirmed. This makes it a bit harder for shopping roles to sneakily steal credits. However innocent players that want to report the body to call a public policing player need to confirm first as well.
-
-mode 1: This mode increases the importance of public policing roles by limiting the confirmation option to them. This also means that taking credits and reporting bodies is now also possible before confirming a body. Everybody can still search dead bodies and find the information, but they are unable to announce the found information.
-
-mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.--]]
 
 -- 2023-10-19
 L.label_grenade_trajectory_ui = "수류탄 궤적 표시기"
@@ -2117,9 +1755,9 @@ L.body_confirm_one = "{finder} 가 {victim} 의 사망을 확인했습니다."
 L.body_confirm_more = "{finder} 가 {count} 명의 사망을 확인했습니다. 사망자: {victims}."
 
 -- 2023-12-19
-L.builtin_marker = "Built-in."
-L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
-L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+L.builtin_marker = "빌트인"
+L.equipmenteditor_desc_builtin = "이 장비는 빌트인입니다. 기본 TTT2에 포함되어 있습니다!"
+L.help_roles_builtin = "이 역할은 빌트인입니다. 기본 TTT2에 포함되어 있습니다"
 L.header_equipment_info = "장비 정보"
 
 
@@ -2134,19 +1772,10 @@ L.label_enable_bobbing_strafe = "마우스 회전 시 카메라 움직임 키기
 
 L.help_enable_dynamic_fov = "플레이어의 속도에 FOV가 적용됩니다. 예를 들어, 플레이어가 이동할 때 FOV가 증가하여 속도를 시각적으로 나타냅니다."
 L.help_enable_bobbing_strafe = "걷거나 수영하거나 떨어질 때 약간의 카메라 흔들림을 표현합니다."
--- 2023-12-20
---[[L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
-For a shotgun, this would affect each pellet.
-For a rifle, this would affect just the bullet.
-For the poltergeist, this would affect each "thump" and the final explosion.
-
-0.5 = Deal half the amount of damage.
-2 = Deal twice the amount of damage.
-
-Note: Some weapons might not use this value which causes this modifier to be ineffective.--]]
 
 -- 2023-12-24
 L.binoc_help_reload = "타겟 초기화."
+L.throw_no_room = "이 장치를 떨어트릴 공간이 없습니다."
 L.cl_sb_row_sresult_direct_conf = "직접 확인"
 L.cl_sb_row_sresult_pub_police = "탐정 확인"
 
@@ -2194,169 +1823,3 @@ L.throw_no_room = "이 장치를 떨어트릴 공간이 없습니다."
 L.label_crosshair_static_gap_length = "정적 크로스헤어 활성화"
 L.label_crosshair_size_gap = "크로스헤어 공간 배율"
 
--- 2024-03-31
---L.help_locational_voice = "Proximity chat is TTT2's implementation of locational 3D voice. Players are only audible in a set radius around them and become quieter the farther away they are."
---[[L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. If this option enabled, proximity chat is also enabled in the preparing phase.
-
-Note: Proximity chat is always disabled during the post round phase.]]
---L.help_voice_duck_spectator = "Muffling spectators makes other spectators quieter in comparison to living players. This can be useful if you want to listen closely to the discussions of the living players."
-
---[[L.help_equipmenteditor_configurable_clip = [[The configurable size defines the amount of uses the weapon has when bought in the shop or spawned in the world.
-
-Note: This setting is only available for weapons that enable this feature.]]
---L.label_equipmenteditor_configurable_clip = "Configurable clip size"
-
--- 2024-04-06
---[[L.help_locational_voice_range = [[This option constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
-
-Set to 0 to disable this cut-off.]]
-
--- 2024-04-07
---[[L.help_voice_activation = [[Changes the way your microphone is activated for global voice chat. These all use your 'Global Voice Chat' keybinding. Team voice chat is always push-to-talk.
-
-Push-to-Talk: Hold down the key to talk.
-Push-to-Mute: Your mic is always on, hold down the key to mute yourself.
-Toggle: Press the key to toggle your mic on/off.
-Toggle (Activate on Join): Like 'Toggle' but your mic gets activated when joining the server.]]
---L.label_voice_activation = "Voice Chat Activation Mode"
---L.label_voice_activation_mode_ptt = "Push to Talk"
---L.label_voice_activation_mode_ptm = "Push to Mute"
---L.label_voice_activation_mode_toggle_disabled = "Toggle"
---L.label_voice_activation_mode_toggle_enabled = "Toggle (Activate on Join)"
-
--- 2024-04-08
---L.label_inspect_credits_always = "Allow all players to see credits on dead bodies"
---[[L.help_inspect_credits_always = [[
-When shopping roles die, their credits can be picked up by other players with shopping roles.
-
-When this option is disabled, only players that can pick up credits can see them on a body.
-When enabled, all players can see credits on a body.--]]
-
--- 2024-05-13
---L.menu_commands_title = "Admin Commands"
---L.menu_commands_description = "Change maps, spawn bots and edit player roles."
-
---L.submenu_commands_maps_title = "Maps"
-
---L.header_maps_prefixes = "Enable/Disable Maps by their Prefix"
---L.header_maps_select = "Select and Change Maps"
-
---L.button_change_map = "Change Map"
-
--- 2024-05-20
---L.submenu_commands_commands_title = "Commands"
-
---[[L.header_commands_round_restart = "Round Restart"
-L.header_commands_player_slay = "Slay Player"
-L.header_commands_player_teleport = "Teleport Player to Focused Point"
-L.header_commands_player_respawn = "Respawn Player at Focused Point"
-L.header_commands_player_add_credits = "Add Equipment Credits"
-L.header_commands_player_set_health = "Set Health"
-L.header_commands_player_set_armor = "Set Armor"
-
-L.label_button_round_restart = "round restart"
-L.label_button_player_slay = "slay player"
-L.label_button_player_teleport = "teleport player"
-L.label_button_player_respawn = "respawn player"
-L.label_button_player_add_credits = "add credits"
-L.label_button_player_set_health = "set health"
-L.label_button_player_set_armor = "set armor"
-
-L.label_slider_add_credits = "Set credit amount"
-L.label_slider_set_health = "Set health"
-L.label_slider_set_armor = "Set armor"
-
-L.label_player_select = "Select affected player"
-L.label_execute_command = "Execute command"
-
--- 2024-05-22
-L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
-L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
-L.tip40 = "On the left side of your screen are icons showing current equipment or status effects applied to you."
-L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
-L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
-L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
-
-L.header_loadingscreen = "Loading Screen"
-
-L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
-
-L.label_enable_loadingscreen = "Enable the loading screen"
-L.label_enable_loadingscreen_tips = "Enable tips on loading screen"--]]
-
--- 2024-05-25
---[[L.help_round_restart_reset = [[
-Restart a round or reset the level.
-
-Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.--]]
-
---[[L.label_button_level_reset = "reset level"
-
-L.loadingscreen_round_restart_title = "Starting new round"
-L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
-L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"
-
--- 2024-06-23
-L.header_roles_derandomize = "Role Derandomization"--]]
-
---[[L.help_roles_derandomize = [[
-Role derandomization can be used to make role distribution feel more fair over the course of a session.
-
-In essence, when it is enabled, a player's chance of receiving a role increases while they have not been assigned that role. While this can feel more fair, this also enables metagaming, where a player can guess that another will be traitor-aligned based on the fact that they have not been traitor aligned in several rounds. Do not enable this option if this is undesirable.
-
-There are 4 modes:
-
-mode 0: Disabled - No derandomization is done.
-
-mode 1: Base roles only - Derandomization is performed for base roles only. Sub-roles will be selected randomly. These are roles like Innocent and Traitor.
-
-mode 2: Sub-roles only - Derandomization is performed for sub-roles only. Base roles will be selected randomly. Note that sub-roles are only assigned to players which have already been selected for their base role.
-
-mode 3: Base roles AND sub-roles - Derandomization is performed for both base roles and sub-roles.]]
---[[L.label_roles_derandomize_mode = "Derandomization mode"
-L.label_roles_derandomize_mode_none = "mode 0: Disabled"
-L.label_roles_derandomize_mode_base_only = "mode 1: Base roles only"
-L.label_roles_derandomize_mode_sub_only = "mode 2: Sub-roles only"
-L.label_roles_derandomize_mode_base_and_sub = "mode 3: Base roles AND sub-roles"--]]
-
---[[L.help_roles_derandomize_min_weight = [[
-Derandomization is performed by making the random player selections during role distribution use a weight associated with each role for each player, and that weight increases by 1 each time the player does not get assigned that role. These weights are not persisted between connections, or across maps.
-
-Each time a player is assigned a role, the corresponding weight is reset to this minimum weight. This weight does not have any absolute meaning; it can only be interpreted with respect to other weights.
-
-For example, given player A with a weight of 1, and player B with a weight of 5, player B is 5 times more likely than player A to be selected. However, if player A had a weight of 4, player B is only 5/4 times more likely to be selected.
-
-The minimum weight, therefore, effectively controls how much each round affects a player's chance at being selected, with higher values causing it to be affected less. The default value of 1 means that each round causes a fairly significant increase in chance, and conversely, that it is extremely unlikely that a player will get the same role twice in a row.
-
-Changes to this value will not take effect until players reconnect or the map changes.--]]
---[[L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
-
--- 2024-08-17
-L.name_button_default = "Button"
-L.name_button_rotating = "Lever"
-
-L.button_default = "Press [{usekey}] to trigger"
-L.button_rotating = "Press [{usekey}] to flip"
-
-L.undefined_key = "???"
-
--- 2024-08-18
-L.header_commands_player_force_role = "Force Player Role"
-
-L.label_button_player_force_role = "force role"
-
-L.label_player_role = "Select role"--]]
-
--- 2024-09-16
---[[L.help_enable_loadingscreen_server = [[
-The loadingscreen settings also exist on the client. They are hidden if disabled on the server.
-
-The minimum display time is there to give the player time to read the tips. If the reload of the map takes longer than the minimum time, the loadingscreen is shown as long as it needs to be. In general a reload time of 0.5 to 1 second is to be expected.--]]
-
---[[L.label_enable_loadingscreen_server = "Enable the loadingscreen serverwide"
-L.label_loadingscreen_min_duration = "Minimum loadingscreen display time"
-
--- 2024-09-18
-L.label_keyhelper_leave_vehicle = "leave vehicle"
-L.name_vehicle = "Vehicle"
-L.vehicle_enter = "Press [{usekey}] to enter vehicle"--]]
