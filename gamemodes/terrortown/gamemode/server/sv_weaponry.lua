@@ -92,7 +92,7 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon, isPickupProbe)
             mask = MASK_SOLID,
         }, wep)
 
-        if tr.Fraction == 1.0 or tr.Entity == ply then
+        if (tr.Fraction == 1.0 or tr.Entity == ply) and not tr.StartSolid then
             wep:SetPos(ply:GetShootPos())
         end
     end

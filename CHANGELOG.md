@@ -12,6 +12,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the loadingscreen disable causing an error (by @TimGoll)
 - Fixed the rounds left always displaying one less than actually left (by @TimGoll)
 - Fixed rendering glitches in the loading screen (by @TimGoll)
+- Fixed weapon pickup through walls (by @MrXonte)
 
 ### Changed
 
