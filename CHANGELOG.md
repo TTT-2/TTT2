@@ -4,6 +4,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added diagnostic information to the addonchecker output.
+  - This also includes a Garry's Mod version check which triggers a warning if TTT2 is not compatible. First baseline version is '240313' (by @NickCloudAT)
+
 ### Fixed
 
 - Fixed missing translation for None role error by removing it (by @mexikoedi)
