@@ -730,32 +730,16 @@ function addonChecker.Check()
 
     print("=============================================================")
 
-    print(
-        "\n"
-        .. "Current TTT2 version: "
-        .. GAMEMODE.Version
-        .. "\n"
-    )
+    print("\n" .. "Current TTT2 version: " .. GAMEMODE.Version .. "\n")
 
     if tonumber(VERSION) < TTT2_GMOD_MIN_VERSION then
-        ErrorNoHalt(
-            "Incompatible Garry's Mod version detected: "
-            .. VERSION
-            .. "\n"
-            .. "\n"
-        )
+        ErrorNoHalt("Incompatible Garry's Mod version detected: " .. VERSION .. "\n" .. "\n")
     else
-        print(
-            "Current Garry's Mod version: "
-            .. VERSION
-            .. "\n"
-        )
+        print("Current Garry's Mod version: " .. VERSION .. "\n")
     end
 
     print(
-        "Minimum required Garry's Mod version for TTT2 to work: "
-        .. TTT2_GMOD_MIN_VERSION
-        .. "\n"
+        "Minimum required Garry's Mod version for TTT2 to work: " .. TTT2_GMOD_MIN_VERSION .. "\n"
     )
 
     print("=============================================================")
