@@ -138,7 +138,7 @@ local function RenderHook()
         for i = 1, #thermalvisionList do
             local entry = thermalvisionList[i]
             local ent = entry.ent
-            
+
             if not IsValid(ent) or (ent:IsPlayer() and (ent:IsSpec() or ent:IsGhost())) then
                 continue
             end
