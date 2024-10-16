@@ -251,7 +251,7 @@ if SERVER then
     -- the player that is currently searching the body.
     -- @param Player inspector The player that searches the corpse
     -- @param Entity rag The ragdoll entity that is searched
-    -- @param[default=false] boolen isCovert Whether the body search is covert or announced
+    -- @param[default=false] boolean isCovert Whether the body search is covert or announced
     -- @param[default=false] boolean isLongRange Whether the search is long or short range
     -- @return table The scene data table
     -- @realm server
