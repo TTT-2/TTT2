@@ -1655,8 +1655,10 @@ function GM:TTT2PostPlayerDeath(victim, inflictor, attacker) end
 
 ---
 -- Use this hook to change/cancel the deathscream sound.
--- @param table Table containing all data for the deathscream.
--- @return[default=true] nil|boolean Return false to supress the deathscream.
+-- @param table Table containing all data for the deathscream (victim, sound, isSilent).
+-- @return[default=true] nil|boolean Return false to suppress the deathscream.
+-- @hook
+-- @realm server
 function GM:TTT2PlayDeathScream(tbl)
     return true
 end
