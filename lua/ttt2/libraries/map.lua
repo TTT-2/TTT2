@@ -503,6 +503,7 @@ local mapsWSIDs = {}
 
 if SERVER then
     -- by default cs, de and test maps should be hidden
+    -- while gm, ttt and ttt2 maps should be shown
 
     ---
     -- @realm server
@@ -514,7 +515,19 @@ if SERVER then
 
     ---
     -- @realm server
+    CreateConVar("ttt2_enable_map_prefix_gm", "1", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+
+    ---
+    -- @realm server
     CreateConVar("ttt2_enable_map_prefix_test", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+
+    ---
+    -- @realm server
+    CreateConVar("ttt2_enable_map_prefix_ttt", "1", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+
+    ---
+    -- @realm server
+    CreateConVar("ttt2_enable_map_prefix_ttt2", "1", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
 
     ---
     -- Initializes the map list. Searches the file system for available maps, scans those maps
