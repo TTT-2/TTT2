@@ -502,19 +502,32 @@ local mapsPrefixes = {}
 local mapsWSIDs = {}
 
 if SERVER then
-    -- by default cs, de and test maps should be hidden
+    -- by default cs, de, gm and test maps should be hidden
+    -- while ttt and ttt2 maps should be shown
 
     ---
     -- @realm server
-    CreateConVar("ttt2_enable_map_prefix_cs", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+    CreateConVar("ttt2_enable_map_prefix_cs", "0", { FCVAR_ARCHIVE })
 
     ---
     -- @realm server
-    CreateConVar("ttt2_enable_map_prefix_de", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+    CreateConVar("ttt2_enable_map_prefix_de", "0", { FCVAR_ARCHIVE })
 
     ---
     -- @realm server
-    CreateConVar("ttt2_enable_map_prefix_test", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+    CreateConVar("ttt2_enable_map_prefix_gm", "0", { FCVAR_ARCHIVE })
+
+    ---
+    -- @realm server
+    CreateConVar("ttt2_enable_map_prefix_test", "0", { FCVAR_ARCHIVE })
+
+    ---
+    -- @realm server
+    CreateConVar("ttt2_enable_map_prefix_ttt", "1", { FCVAR_ARCHIVE })
+
+    ---
+    -- @realm server
+    CreateConVar("ttt2_enable_map_prefix_ttt2", "1", { FCVAR_ARCHIVE })
 
     ---
     -- Initializes the map list. Searches the file system for available maps, scans those maps
@@ -570,7 +583,7 @@ if SERVER then
 
             ---
             -- @realm server
-            CreateConVar(convarName, "1", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+            CreateConVar(convarName, "0", { FCVAR_ARCHIVE })
 
             -- because these convars are generated dynamically, replicated convars do not work here
             SetGlobalBool(convarName, GetConVar(convarName):GetBool())
