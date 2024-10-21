@@ -680,10 +680,9 @@ local function PlayDeathSound(victim, isSilent)
     local tbl = {
         victim = victim,
         sound = deathsounds[math.random(deathsounds_count)],
-        silent = isSilent,
     }
 
-    if not hook.Run("TTT2PlayDeathScream", tbl) or tbl["silent"] then return end
+    if not hook.Run("TTT2PlayDeathScream", tbl, isSilent) then return end
 
     sound.Play(tbl["sound"], victim:GetShootPos(), 90, 100)
 end
@@ -1656,11 +1655,12 @@ function GM:TTT2PostPlayerDeath(victim, inflictor, attacker) end
 ---
 -- Use this hook to change/cancel the deathscream sound.
 -- @param table Table containing all data for the deathscream (victim, sound, isSilent).
+-- @param boolean isSilent If this is true, the deathscream will be silenced.
 -- @return[default=true] nil|boolean Return false to suppress the deathscream.
 -- @hook
 -- @realm server
-function GM:TTT2PlayDeathScream(tbl)
-    return true
+function GM:TTT2PlayDeathScream(tbl, isSilent)
+    return not isSilent
 end
 
 ---
