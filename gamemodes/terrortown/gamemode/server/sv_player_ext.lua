@@ -1410,6 +1410,10 @@ function plymeta:CanSafeDropAmmo(wep)
     if not IsValid(self) or not (IsValid(wep) and wep.AmmoEnt) then
         return false
     end
+    
+	if wep.AmmoEnt == "" then
+		return false
+	end
 
     local tr = TraceAmmoDrop(self)
 
