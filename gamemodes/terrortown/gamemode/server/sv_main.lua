@@ -68,90 +68,107 @@ local playerGetAll = player.GetAll
 
 ---
 -- @realm server
--- stylua: ignore
-local cvPreferMapModels = CreateConVar("ttt2_prefer_map_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvPreferMapModels =
+    CreateConVar("ttt2_prefer_map_models", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-local cvSelectModelPerRound = CreateConVar("ttt2_select_model_per_round", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvSelectModelPerRound =
+    CreateConVar("ttt2_select_model_per_round", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-local cvSelectUniqueModelPerPlayer = CreateConVar("ttt2_select_unique_model_per_player", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvSelectUniqueModelPerPlayer =
+    CreateConVar("ttt2_select_unique_model_per_player", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-CreateConVar("ttt_haste_minutes_per_death", "0.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_haste_minutes_per_death", "0.5", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 -- Credits
 
 ---
 -- @realm server
--- stylua: ignore
-CreateConVar("ttt_credits_award_pct", "0.35", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_credits_award_pct", "0.35", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-CreateConVar("ttt_credits_award_size", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_credits_award_size", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-CreateConVar("ttt_credits_award_repeat", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_credits_award_repeat", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-CreateConVar("ttt_credits_award_kill", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_credits_award_kill", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-local idle_enabled = CreateConVar("ttt_idle", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local idle_enabled = CreateConVar("ttt_idle", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-local idle_time = CreateConVar("ttt_idle_limit", "180", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local idle_time = CreateConVar("ttt_idle_limit", "180", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Respawn if dead in preparing time")
+CreateConVar(
+    "ttt2_prep_respawn",
+    "0",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "Respawn if dead in preparing time"
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local map_switch_delay = CreateConVar("ttt2_map_switch_delay", "15", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Time that passes before the map is changed after the last round ends or the timer runs out", 0)
+local map_switch_delay = CreateConVar(
+    "ttt2_map_switch_delay",
+    "15",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "Time that passes before the map is changed after the last round ends or the timer runs out",
+    0
+)
 
 ---
 -- @realm server
--- stylua: ignore
-CreateConVar("ttt_identify_body_woconfirm", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Toggles whether ragdolls should be confirmed in gameloop.IsDetectiveMode() without clicking on confirm espacially")
+CreateConVar(
+    "ttt_identify_body_woconfirm",
+    "1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "Toggles whether ragdolls should be confirmed in gameloop.IsDetectiveMode() without clicking on confirm espacially"
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local confirm_team = CreateConVar("ttt2_confirm_team", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Show team of confirmed player")
+local confirm_team = CreateConVar(
+    "ttt2_confirm_team",
+    "0",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "Show team of confirmed player"
+)
 
 ---
 -- @realm server
--- stylua: ignore
-CreateConVar("ttt2_confirm_killlist", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Confirm players in kill list")
+CreateConVar(
+    "ttt2_confirm_killlist",
+    "1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "Confirm players in kill list"
+)
 
 ---
 -- @realm server
--- stylua: ignore
-CreateConVar("ttt_enforce_playermodel", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Whether or not to enforce terrorist playermodels. Set to 0 for compatibility with Enhanced Playermodel Selector")
+CreateConVar(
+    "ttt_enforce_playermodel",
+    "1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "Whether or not to enforce terrorist playermodels. Set to 0 for compatibility with Enhanced Playermodel Selector"
+)
 
 ---
 -- @realm server
--- stylua: ignore
-CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_newroles_enabled", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 -- Pool some network names.
 util.AddNetworkString("TTT_GameMsg")
@@ -229,12 +246,10 @@ function GM:Initialize()
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2Initialize")
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2FinishedLoading")
 
     -- load default TTT2 language files or mark them as downloadable on the server
@@ -314,7 +329,6 @@ function GM:Initialize()
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("PostInitialize")
 end
 
@@ -362,7 +376,6 @@ function GM:InitPostEntity()
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTTInitPostEntity")
 
     -- load entity spawns from file / map
@@ -384,8 +397,9 @@ function GM:InitPostEntity()
 
         -- Check if an equipment has an id or ignore it
         -- @realm server
-        -- stylua: ignore
-        if not hook.Run("TTT2RegisterWeaponID", eq) then continue end
+        if not hook.Run("TTT2RegisterWeaponID", eq) then
+            continue
+        end
 
         -- Insert data into role fallback tables
         InitDefaultEquipment(eq)
@@ -408,8 +422,7 @@ function GM:InitPostEntity()
         ---
         -- @name ttt2_elem_toggled_[HUDELEMENT_NAME]
         -- @realm server
-        -- stylua: ignore
-        local ret = CreateConVar(nm, "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+        local ret = CreateConVar(nm, "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
         SetGlobalBool(nm, ret:GetBool())
 
@@ -423,17 +436,14 @@ function GM:InitPostEntity()
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("PostInitPostEntity")
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("InitFallbackShops")
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("LoadedFallbackShops")
 
     -- initialize the equipment
@@ -499,7 +509,6 @@ function GM:SyncGlobals()
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTT2SyncGlobals")
 end
 
@@ -585,7 +594,6 @@ function GM:PostCleanupMap()
     entspawn.SetForcedRandomSpawn(true)
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTT2PostCleanupMap")
 
     door.SetUp()
@@ -626,7 +634,6 @@ function TellTraitorsAboutTraitors()
 
         ---
         -- @realm server
-        -- stylua: ignore
         local shouldShow = hook.Run("TTT2TellTraitors", tmp, v)
 
         if shouldShow == false or tmp == nil or #tmp == 0 then
@@ -697,7 +704,6 @@ end
 net.Receive("TTT2FinishedReloading", function(_, ply)
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTT2PlayerFinishedReloading", ply)
 end)
 
@@ -738,17 +744,14 @@ function GM:OnReloaded()
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2RolesLoaded")
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2BaseRoleInit")
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2FinishedLoading")
 end
 
@@ -887,7 +890,6 @@ function GM:TTTCheckForWin()
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTT2ModifyWinningAlives", aliveTeams)
 
     local checkedTeams = {}
@@ -977,7 +979,6 @@ function GM:TTT2PrePrepareRound(duration)
 
     ---
     -- @realm server
-    -- stylua: ignore
     self.playercolor = hook.Run("TTTPlayerColor", self.playermodel)
 end
 

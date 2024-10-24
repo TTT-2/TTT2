@@ -4,43 +4,75 @@
 if SERVER then
     ---
     -- @realm server
-    -- stylua: ignore
-    local maxMeleeSlots = CreateConVar("ttt2_max_melee_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of melee weapons, a player can carry (-1 = infinite)")
+    local maxMeleeSlots = CreateConVar(
+        "ttt2_max_melee_slots",
+        "1",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Maximum amount of melee weapons, a player can carry (-1 = infinite)"
+    )
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local maxSecondarySlots = CreateConVar("ttt2_max_secondary_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of secondary weapons, a player can carry (-1 = infinite)")
+    local maxSecondarySlots = CreateConVar(
+        "ttt2_max_secondary_slots",
+        "1",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Maximum amount of secondary weapons, a player can carry (-1 = infinite)"
+    )
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local maxPrimarySlots = CreateConVar("ttt2_max_primary_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of primary weapons, a player can carry (-1 = infinite)")
+    local maxPrimarySlots = CreateConVar(
+        "ttt2_max_primary_slots",
+        "1",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Maximum amount of primary weapons, a player can carry (-1 = infinite)"
+    )
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local maxNadeSlots = CreateConVar("ttt2_max_nade_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of grenades, a player can carry (-1 = infinite)")
+    local maxNadeSlots = CreateConVar(
+        "ttt2_max_nade_slots",
+        "1",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Maximum amount of grenades, a player can carry (-1 = infinite)"
+    )
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local maxCarrySlots = CreateConVar("ttt2_max_carry_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of carry tools, a player can carry (-1 = infinite)")
+    local maxCarrySlots = CreateConVar(
+        "ttt2_max_carry_slots",
+        "1",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Maximum amount of carry tools, a player can carry (-1 = infinite)"
+    )
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local maxUnarmedSlots = CreateConVar("ttt2_max_unarmed_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of unarmed slots, a player can have (-1 = infinite)")
+    local maxUnarmedSlots = CreateConVar(
+        "ttt2_max_unarmed_slots",
+        "1",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Maximum amount of unarmed slots, a player can have (-1 = infinite)"
+    )
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local maxSpecialSlots = CreateConVar("ttt2_max_special_slots", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of special weapons, a player can carry (-1 = infinite)")
+    local maxSpecialSlots = CreateConVar(
+        "ttt2_max_special_slots",
+        "2",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Maximum amount of special weapons, a player can carry (-1 = infinite)"
+    )
 
     ---
     -- @realm server
-    -- stylua: ignore
-    local maxExtraSlots = CreateConVar("ttt2_max_extra_slots", "-1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of extra weapons, a player can carry (-1 = infinite)")
+    local maxExtraSlots = CreateConVar(
+        "ttt2_max_extra_slots",
+        "-1",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Maximum amount of extra weapons, a player can carry (-1 = infinite)"
+    )
 
     hook.Add("TTT2SyncGlobals", "AddInventoryGlobals", function()
         SetGlobalInt(maxMeleeSlots:GetName(), maxMeleeSlots:GetInt())

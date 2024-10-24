@@ -6,7 +6,6 @@
 
 local baseclass = baseclass
 local pairs = pairs
--- stylua: ignore
 local CreateConVar = CreateConVar
 
 if SERVER then
@@ -91,63 +90,96 @@ local function SetupData(roleData)
     if not roleData.notSelectable and SERVER then
         ---
         -- @realm server
-        -- stylua: ignore
-        CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+        CreateConVar(
+            "ttt_" .. roleData.name .. "_pct",
+            tostring(conVarData.pct or 1),
+            { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+        )
 
         ---
         -- @realm server
-        -- stylua: ignore
-        CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+        CreateConVar(
+            "ttt_" .. roleData.name .. "_max",
+            tostring(conVarData.maximum or 1),
+            { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+        )
 
         ---
         -- @realm server
-        -- stylua: ignore
-        CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+        CreateConVar(
+            "ttt_" .. roleData.name .. "_min_players",
+            tostring(conVarData.minPlayers or 1),
+            { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+        )
 
         -- if we don't compare detective here, roles will never get assigned
         if not roleData.builtin or roleData.index == ROLE_DETECTIVE then
             ---
             -- @realm server
-            -- stylua: ignore
-            CreateConVar("ttt_" .. roleData.name .. "_karma_min", tostring(conVarData.minKarma or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+            CreateConVar(
+                "ttt_" .. roleData.name .. "_karma_min",
+                tostring(conVarData.minKarma or 0),
+                { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+            )
 
             ---
             -- @realm server
-            -- stylua: ignore
-            CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+            CreateConVar(
+                "ttt_" .. roleData.name .. "_random",
+                tostring(conVarData.random or 100),
+                { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+            )
 
             ---
             -- @realm server
-            -- stylua: ignore
-            CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+            CreateConVar(
+                "ttt_" .. roleData.name .. "_enabled",
+                "1",
+                { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+            )
         end
     end
 
     ---
     -- @realm shared
-    -- stylua: ignore
-    CreateConVar("ttt_" .. roleData.name .. "_traitor_button", tostring(conVarData.traitorButton or 0), SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+    CreateConVar(
+        "ttt_" .. roleData.name .. "_traitor_button",
+        tostring(conVarData.traitorButton or 0),
+        SERVER and { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED } or FCVAR_REPLICATED
+    )
 
     ---
     -- @realm shared
-    -- stylua: ignore
-    CreateConVar("ttt2_ragdoll_pinning_" .. roleData.name, tostring(conVarData.ragdollPinning or 0), SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+    CreateConVar(
+        "ttt2_ragdoll_pinning_" .. roleData.name,
+        tostring(conVarData.ragdollPinning or 0),
+        SERVER and { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED } or FCVAR_REPLICATED
+    )
 
     if SERVER then
         ---
         -- @realm server
-        -- stylua: ignore
-        CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+        CreateConVar(
+            "ttt_" .. roleData.abbr .. "_credits_starting",
+            tostring(conVarData.credits or 0),
+            { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+        )
 
         ---
         -- @realm server
-        -- stylua: ignore
-        CreateConVar("ttt_" .. roleData.abbr .. "_credits_award_dead_enb", tostring(conVarData.creditsAwardDeadEnable or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+        CreateConVar(
+            "ttt_" .. roleData.abbr .. "_credits_award_dead_enb",
+            tostring(conVarData.creditsAwardDeadEnable or 0),
+            { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+        )
 
         ---
         -- @realm server
-        -- stylua: ignore
-        CreateConVar("ttt_" .. roleData.abbr .. "_credits_award_kill_enb", tostring(conVarData.creditsAwardKillEnable or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+        CreateConVar(
+            "ttt_" .. roleData.abbr .. "_credits_award_kill_enb",
+            tostring(conVarData.creditsAwardKillEnable or 0),
+            { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+        )
 
         local shopFallbackValue
 
@@ -160,14 +192,23 @@ local function SetupData(roleData)
 
         ---
         -- @realm server
-        -- stylua: ignore
-        SetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback", CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", shopFallbackValue, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
+        SetGlobalString(
+            "ttt_" .. roleData.abbr .. "_shop_fallback",
+            CreateConVar(
+                "ttt_" .. roleData.abbr .. "_shop_fallback",
+                shopFallbackValue,
+                { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+            ):GetString()
+        )
 
         if conVarData.traitorKill then
             ---
             -- @realm server
-            -- stylua: ignore
-            CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+            CreateConVar(
+                "ttt_credits_" .. roleData.name .. "kill",
+                tostring(conVarData.traitorKill),
+                { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+            )
         end
     else -- CLIENT
         roleData.icon = roleData.icon or ("vgui/ttt/dynamic/roles/icon_" .. roleData.abbr)

@@ -27,8 +27,13 @@ function SPEED:HandleSpeedCalculation(ply, moveData)
 
     ---
     -- @realm shared
-    -- stylua: ignore
-    local returnMultiplier = hook.Run("TTTPlayerSpeedModifier", ply, isSlowed, moveData, speedMultiplierModifier) or 1
+    local returnMultiplier = hook.Run(
+        "TTTPlayerSpeedModifier",
+        ply,
+        isSlowed,
+        moveData,
+        speedMultiplierModifier
+    ) or 1
 
     local oldval = ply:GetSpeedMultiplier()
     ply.speedModifier = baseMultiplier * returnMultiplier * speedMultiplierModifier[1]

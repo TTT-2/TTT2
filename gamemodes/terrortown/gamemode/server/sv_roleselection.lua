@@ -22,36 +22,63 @@ roleselection.subroleLayers = {}
 roleselection.cv = {
     ---
     -- @realm server
-    -- stylua: ignore
-    ttt_max_roles = CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles"),
+    ttt_max_roles = CreateConVar(
+        "ttt_max_roles",
+        "0",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Maximum amount of different roles"
+    ),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    ttt_max_roles_pct =  CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0"),
+    ttt_max_roles_pct = CreateConVar(
+        "ttt_max_roles_pct",
+        "0",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0"
+    ),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    ttt_max_baseroles = CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles"),
+    ttt_max_baseroles = CreateConVar(
+        "ttt_max_baseroles",
+        "0",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Maximum amount of different baseroles"
+    ),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0"),
+    ttt_max_baseroles_pct = CreateConVar(
+        "ttt_max_baseroles_pct",
+        "0",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0"
+    ),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    ttt_role_derandomize_mode = CreateConVar("ttt_role_derandomize_mode", tostring(ROLE_DERAND_BOTH), {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "The mode to use for role selection derandomization", ROLE_DERAND_NONE, ROLE_DERAND_BOTH),
+    ttt_role_derandomize_mode = CreateConVar(
+        "ttt_role_derandomize_mode",
+        tostring(ROLE_DERAND_BOTH),
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "The mode to use for role selection derandomization",
+        ROLE_DERAND_NONE,
+        ROLE_DERAND_BOTH
+    ),
 
     ---
     -- NOTE: Currently the minimum is 1. In theory, it could be set to 0, which would mean that players cannot get the same role (or subrole, according to the mode)
     -- twice in a row. I suspect we'd need some special handling in role distribution to make that not get stuck in an infinite loop or have some other undesirable
     -- behavior in certain cases.
     -- @realm server
-    -- stylua: ignore
-    ttt_role_derandomize_min_weight = CreateConVar("ttt_role_derandomize_min_weight", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "The minimum weight a player can have with derandomize on", 1),
+    ttt_role_derandomize_min_weight = CreateConVar(
+        "ttt_role_derandomize_min_weight",
+        "10",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "The minimum weight a player can have with derandomize on",
+        1
+    ),
 }
 
 -- saving and loading
@@ -297,7 +324,6 @@ function roleselection.GetSelectablePlayers(plys)
         ---
         -- Everyone on the spec team is in specmode
         -- @realm server
-        -- stylua: ignore
         if not ply:GetForceSpec() and not hook.Run("TTT2DisableRoleSelection", ply) then
             tmp[#tmp + 1] = ply
         end
@@ -477,7 +503,6 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTT2ModifyLayeredBaseRoles", layeredBaseRolesTbl, availableBaseRolesTbl)
 
     local baseroleLoopTbl = { -- just contains available / selectable baseroles
@@ -546,7 +571,6 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTT2ModifyLayeredSubRoles", layeredSubRolesTbl, availableSubRolesTbl)
 
     -- Counts max distributable subroles after cleanup
@@ -646,7 +670,6 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTT2ModifySelectableRoles", selectableRoles)
 
     roleselection.selectableRoles = selectableRoles
@@ -814,7 +837,6 @@ local function SelectForcedRoles(plys, selectableRoles)
 
             ---
             -- @realm server
-            -- stylua: ignore
             hook.Run("TTT2ReceivedForcedRole", ply, subrole)
         end
 
@@ -1040,7 +1062,6 @@ function roleselection.SelectRoles(plys, maxPlys)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTT2ModifyFinalRoles", roleselection.finalRoles)
 
     local minWeight = roleselection.cv.ttt_role_derandomize_min_weight:GetInt()

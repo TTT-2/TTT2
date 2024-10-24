@@ -11,28 +11,25 @@ PROPSPEC = {}
 
 ---
 -- @realm server
--- stylua: ignore
-local cvPropspecToggle = CreateConVar("ttt_spec_prop_control", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvPropspecToggle = CreateConVar("ttt_spec_prop_control", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-local cvPropspecBase = CreateConVar("ttt_spec_prop_base", "8", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvPropspecBase = CreateConVar("ttt_spec_prop_base", "8", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-local cvPropspecMin = CreateConVar("ttt_spec_prop_maxpenalty", "-6", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvPropspecMin =
+    CreateConVar("ttt_spec_prop_maxpenalty", "-6", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-local cvPropspecMax = CreateConVar("ttt_spec_prop_maxbonus", "16", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvPropspecMax = CreateConVar("ttt_spec_prop_maxbonus", "16", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-local cvPropspecDashMulitplier = CreateConVar("ttt_spec_prop_dash", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvPropspecDashMulitplier =
+    CreateConVar("ttt_spec_prop_dash", "2", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- Forces a @{Player} to spectate an @{Entity}
@@ -135,8 +132,7 @@ end
 
 ---
 -- @realm server
--- stylua: ignore
-local propspec_force = CreateConVar("ttt_spec_prop_force", "110", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local propspec_force = CreateConVar("ttt_spec_prop_force", "110", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- Triggers an event based on the pressed key
@@ -226,8 +222,8 @@ end
 
 ---
 -- @realm server
--- stylua: ignore
-local propspec_retime = CreateConVar("ttt_spec_prop_rechargetime", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local propspec_retime =
+    CreateConVar("ttt_spec_prop_rechargetime", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- Recharges the amount of punches a @{Player} can do (if possible)

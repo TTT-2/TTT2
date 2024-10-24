@@ -16,11 +16,10 @@ local function GetTextForPlayer(ply)
 
         ---
         -- @realm client
-        -- stylua: ignore
         if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
             return GetTranslation("info_popup_" .. roleData.name)
         else
-            return GetPTranslation("info_popup_" .. roleData.name, {menukey = menukey})
+            return GetPTranslation("info_popup_" .. roleData.name, { menukey = menukey })
         end
     else
         local traitors = roles.GetTeamMembers(TEAM_TRAITOR)
@@ -48,22 +47,29 @@ local function GetTextForPlayer(ply)
 
             ---
             -- @realm client
-            -- stylua: ignore
             if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
-                return GetPTranslation("info_popup_" .. roleData.name, {traitorlist = traitorlist})
+                return GetPTranslation(
+                    "info_popup_" .. roleData.name,
+                    { traitorlist = traitorlist }
+                )
             else
-                return GetPTranslation("info_popup_" .. roleData.name, {menukey = menukey, traitorlist = traitorlist})
+                return GetPTranslation(
+                    "info_popup_" .. roleData.name,
+                    { menukey = menukey, traitorlist = traitorlist }
+                )
             end
         else
             local fallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
 
             ---
             -- @realm client
-            -- stylua: ignore
             if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
                 return GetTranslation("info_popup_" .. roleData.name .. "_alone")
             else
-                return GetPTranslation("info_popup_" .. roleData.name .. "_alone", {menukey = menukey})
+                return GetPTranslation(
+                    "info_popup_" .. roleData.name .. "_alone",
+                    { menukey = menukey }
+                )
             end
         end
     end
@@ -71,7 +77,6 @@ end
 
 ---
 -- @realm client
--- stylua: ignore
 local startshowtime = CreateConVar("ttt_startpopup_duration", "17", FCVAR_ARCHIVE)
 
 local function drawFunc(s, w, h)

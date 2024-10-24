@@ -12,89 +12,71 @@ KARMA = {
 KARMA.cv = {
     ---
     -- @realm server
-    -- stylua: ignore
-    enabled = CreateConVar("ttt_karma", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    enabled = CreateConVar("ttt_karma", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    strict = CreateConVar("ttt_karma_strict", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    strict = CreateConVar("ttt_karma_strict", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    starting = CreateConVar("ttt_karma_starting", "1000", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    starting = CreateConVar("ttt_karma_starting", "1000", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    max = CreateConVar("ttt_karma_max", "1000", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    max = CreateConVar("ttt_karma_max", "1000", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    ratio = CreateConVar("ttt_karma_ratio", "0.001", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    ratio = CreateConVar("ttt_karma_ratio", "0.001", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    killpenalty = CreateConVar("ttt_karma_kill_penalty", "15", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    killpenalty = CreateConVar("ttt_karma_kill_penalty", "15", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    roundheal = CreateConVar("ttt_karma_round_increment", "5", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    roundheal = CreateConVar("ttt_karma_round_increment", "5", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    clean = CreateConVar("ttt_karma_clean_bonus", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    clean = CreateConVar("ttt_karma_clean_bonus", "30", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    tbonus = CreateConVar("ttt_karma_traitorkill_bonus", "40", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    tbonus = CreateConVar("ttt_karma_traitorkill_bonus", "40", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    tratio = CreateConVar("ttt_karma_traitordmg_ratio", "0.0003", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    tratio = CreateConVar("ttt_karma_traitordmg_ratio", "0.0003", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    debug = CreateConVar("ttt_karma_debugspam", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    debug = CreateConVar("ttt_karma_debugspam", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    persist = CreateConVar("ttt_karma_persist", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    persist = CreateConVar("ttt_karma_persist", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    falloff = CreateConVar("ttt_karma_clean_half", "0.25", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    falloff = CreateConVar("ttt_karma_clean_half", "0.25", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    autokick = CreateConVar("ttt_karma_low_autokick", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    autokick = CreateConVar("ttt_karma_low_autokick", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    kicklevel = CreateConVar("ttt_karma_low_amount", "450", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    kicklevel = CreateConVar("ttt_karma_low_amount", "450", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    autoban = CreateConVar("ttt_karma_low_ban", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+    autoban = CreateConVar("ttt_karma_low_ban", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    -- stylua: ignore
-    bantime = CreateConVar("ttt_karma_low_ban_minutes", "60", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-,
+    bantime = CreateConVar("ttt_karma_low_ban_minutes", "60", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 }
 
 local config = KARMA.cv
@@ -335,7 +317,6 @@ end
 function KARMA.GivePenalty(ply, penalty, victim, reason)
     ---
     -- @realm server
-    -- stylua: ignore
     if not hook.Run("TTTKarmaGivePenalty", ply, penalty, victim) then
         KARMA.DoKarmaChange(ply, -penalty, reason)
     end
@@ -396,7 +377,6 @@ local function WasAvoidable(attacker, victim, dmginfo)
 
         ---
         -- @realm server
-        -- stylua: ignore
         local mutiplier = hook.Run("TTT2KarmaPenaltyMultiplier", attacker, victim, dmginfo)
 
         if mutiplier then
@@ -808,8 +788,9 @@ local reason = "Karma too low"
 function KARMA.CheckAutoKick(ply)
     ---
     -- @realm server
-    -- stylua: ignore
-    if ply:GetBaseKarma() > config.kicklevel:GetInt() or hook.Run("TTTKarmaLow", ply) == false then return end
+    if ply:GetBaseKarma() > config.kicklevel:GetInt() or hook.Run("TTTKarmaLow", ply) == false then
+        return
+    end
 
     ServerLog(ply:Nick() .. " autokicked/banned for low karma.\n")
 

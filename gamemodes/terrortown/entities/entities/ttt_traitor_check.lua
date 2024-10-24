@@ -49,7 +49,6 @@ function ENT:CountValidPlayers(activator, caller, data)
 
         ---
         -- @realm server
-        -- stylua: ignore
         local _, team = hook.Run("TTT2ModifyLogicRoleCheck", ply, self, activator, caller, data)
 
         -- only count if it is a evil role

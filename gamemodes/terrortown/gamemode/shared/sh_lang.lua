@@ -114,7 +114,6 @@ if SERVER then
 
     ---
     -- @realm server
-    -- stylua: ignore
     local cv_ttt_lang_serverdefault = CreateConVar("ttt_lang_serverdefault", "en", FCVAR_ARCHIVE)
 
     local function ServerLangRequest(ply, cmd, args)
@@ -129,6 +128,7 @@ if SERVER then
 
     concommand.Add("_ttt_request_serverlang", ServerLangRequest)
 else -- CLIENT
+    -- @ignore
     local function RecvMsg()
         local name = net.ReadString()
         local mode = net.ReadUInt(MSG_MODE_BITS)

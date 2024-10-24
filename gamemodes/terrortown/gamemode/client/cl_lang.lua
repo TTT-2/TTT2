@@ -14,7 +14,6 @@ local pairs = pairs
 
 ---
 -- @realm client
--- stylua: ignore
 local cv_ttt_language = CreateConVar("ttt_language", "auto", FCVAR_ARCHIVE)
 
 LANG.DefaultLanguage = "en"
@@ -347,7 +346,6 @@ function LANG.SetActiveLanguage(langName)
         if oldName ~= langName then
             ---
             -- @realm client
-            -- stylua: ignore
             hook.Run("TTTLanguageChanged", oldName, langName)
         end
     else

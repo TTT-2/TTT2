@@ -32,13 +32,16 @@ local hook = hook
 
 ---
 -- @realm server
--- stylua: ignore
-local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "If detective mode, announce when someone's body is found")
+local cvBodyfound = CreateConVar(
+    "ttt_announce_body_found",
+    "1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "If detective mode, announce when someone's body is found"
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 local soundsSearch = {
     Sound("player/footsteps/snow1.wav"),
@@ -119,8 +122,9 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 
     ---
     -- @realm server
-    -- stylua: ignore
-    if not hook.Run("TTTCanIdentifyCorpse", ply, rag) then return end
+    if not hook.Run("TTTCanIdentifyCorpse", ply, rag) then
+        return
+    end
 
     local finder = ply:Nick()
     local nick = CORPSE.GetPlayerNick(rag, "")
@@ -132,8 +136,11 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 
         ---
         -- @realm server
-        -- stylua: ignore
-        if deadply and not deadply:Alive() and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false then
+        if
+            deadply
+            and not deadply:Alive()
+            and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false
+        then
             deadply:ConfirmPlayer(true)
 
             SendPlayerToEveryone(deadply)
@@ -143,12 +150,10 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTTBodyFound", ply, deadply, rag)
 
         ---
         -- @realm server
-        -- stylua: ignore
         if hook.Run("TTT2SetCorpseFound", deadply, ply, rag) ~= false then
             CORPSE.SetFound(rag, true)
         end
@@ -259,8 +264,9 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 
     ---
     -- @realm server
-    -- stylua: ignore
-    if not hook.Run("TTTCanSearchCorpse", ply, rag, isCovert, isLongRange) then return end
+    if not hook.Run("TTTCanSearchCorpse", ply, rag, isCovert, isLongRange) then
+        return
+    end
 
     local sceneData = bodysearch.AssimilateSceneData(ply, rag, isCovert, isLongRange)
 
@@ -551,7 +557,6 @@ function CORPSE.Create(ply, attacker, dmginfo, realPlayerCorpse)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTT2ModifyRagdollVelocity", ply, rag, v)
 
     for i = 0, num do
@@ -584,7 +589,6 @@ function CORPSE.Create(ply, attacker, dmginfo, realPlayerCorpse)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTTOnCorpseCreated", rag, ply)
 
     return rag -- we'll be speccing this

@@ -87,7 +87,6 @@ local function RoleChatMsg(sender, msg)
         or TEAMS[senderTeam].alone
         ---
         -- @realm server
-        -- stylua: ignore
         or hook.Run("TTT2AvoidTeamChat", sender, senderTeam, msg) == false
     then
         return
@@ -267,8 +266,8 @@ end
 
 ---
 -- @realm server
--- stylua: ignore
-local cv_ttt_spectators_chat_globally = CreateConVar("ttt_spectators_chat_globally", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local cv_ttt_spectators_chat_globally =
+    CreateConVar("ttt_spectators_chat_globally", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
 
 ---
 -- Returns whether or not the @{Player} can see the other @{Player}'s chat.
@@ -311,7 +310,6 @@ function GM:PlayerCanSeePlayersChat(text, teamOnly, listener, sender)
                 and not listener:GetSubRoleData().disabledTeamChatRecv
                 ---
                 -- @realm server
-                -- stylua: ignore
                 and hook.Run("TTT2CanSeeChat", listener, sender, teamOnly) ~= true
             )
         or senderIsSpectator and listenerIsSpectator -- If the sender and listener are spectators
@@ -398,8 +396,10 @@ function GM:PlayerSay(ply, text, teamOnly)
         elseif not team_spec then -- General Chat handling
             ---
             -- @realm server
-            -- stylua: ignore
-            if ply:GetSubRoleData().disabledGeneralChat or hook.Run("TTT2AvoidGeneralChat", ply, text) == false then
+            if
+                ply:GetSubRoleData().disabledGeneralChat
+                or hook.Run("TTT2AvoidGeneralChat", ply, text) == false
+            then
                 return ""
             end
         end
@@ -410,8 +410,7 @@ end
 
 ---
 -- @realm server
--- stylua: ignore
-local ttt_lastwords = CreateConVar("ttt_lastwords_chatprint", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local ttt_lastwords = CreateConVar("ttt_lastwords_chatprint", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 local LastWordContext = {
     [KILL_NORMAL] = "",
@@ -524,8 +523,9 @@ local function ttt_radio_send(ply, cmd, args)
 
     ---
     -- @realm server
-    -- stylua: ignore
-    if hook.Run("TTTPlayerRadioCommand", ply, msgName, msgTarget) then return end
+    if hook.Run("TTTPlayerRadioCommand", ply, msgName, msgTarget) then
+        return
+    end
 
     net.Start("TTT_RadioMsg")
     net.WritePlayer(ply)

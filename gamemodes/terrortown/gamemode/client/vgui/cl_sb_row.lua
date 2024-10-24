@@ -142,7 +142,6 @@ function PANEL:Init()
     ---
     -- Let hooks add their custom columns
     -- @realm client
-    -- stylua: ignore
     hook.Run("TTTScoreboardColumns", self)
 
     for i = 1, #self.cols do
@@ -254,7 +253,6 @@ local function ColorForPlayer(ply)
     if IsValid(ply) then
         ---
         -- @realm client
-        -- stylua: ignore
         local c = hook.Run("TTTScoreboardColorForPlayer", ply)
 
         -- verify that we got a proper color
@@ -288,7 +286,6 @@ function PANEL:Paint(width, height)
 
     ---
     -- @realm client
-    -- stylua: ignore
     local c = hook.Run("TTTScoreboardRowColorForPlayer", ply)
 
     surface.SetDrawColor(clr(c))
@@ -664,7 +661,6 @@ function PANEL:DoRightClick()
 
     ---
     -- @realm client
-    -- stylua: ignore
     local close = hook.Run("TTTScoreboardMenu", menu)
     if close then
         menu:Remove()

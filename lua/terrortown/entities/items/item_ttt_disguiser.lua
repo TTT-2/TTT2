@@ -110,6 +110,7 @@ if CLIENT then
         )
     end)
 else -- SERVER
+    -- @ignore
     local function SetDisguise(ply, cmd, args)
         if
             not IsValid(ply)
@@ -123,8 +124,9 @@ else -- SERVER
 
         ---
         -- @realm server
-        -- stylua: ignore
-        if hook.Run("TTTToggleDisguiser", ply, state) then return end
+        if hook.Run("TTTToggleDisguiser", ply, state) then
+            return
+        end
 
         ply:SetNWBool("disguised", state)
 

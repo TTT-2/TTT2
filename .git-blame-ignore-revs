@@ -2,3 +2,5 @@
 #
 # Run stylua formatter on entire codebase
 df7bf4216cf31d680c0d95bd576e46193ce2dcd6
+# Run stylua after removing many `-- stylua: ignore` statements
+cd4b56c390418d14bfa69e511ea9b8405eff12a0

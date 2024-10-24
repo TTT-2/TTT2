@@ -313,7 +313,6 @@ if CLIENT then
             -- now run a hook that can be used by addon devs that changes the appearance
             -- of the radar vision
             -- @realm client
-            -- stylua: ignore
             hook.Run("TTT2RenderMarkerVisionInfo", mvData)
 
             local params = mvData.params

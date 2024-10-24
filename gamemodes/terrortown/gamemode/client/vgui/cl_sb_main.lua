@@ -23,13 +23,21 @@ ttt_include("vgui__cl_sb_team")
 ---
 -- @realm client
 -- @todo add Team!
--- stylua: ignore
-local cv_ttt_scoreboard_sorting = CreateConVar("ttt_scoreboard_sorting", "name", FCVAR_ARCHIVE, "name | role | karma | score | deaths | ping")
+local cv_ttt_scoreboard_sorting = CreateConVar(
+    "ttt_scoreboard_sorting",
+    "name",
+    FCVAR_ARCHIVE,
+    "name | role | karma | score | deaths | ping"
+)
 
 ---
 -- @realm client
--- stylua: ignore
-local cv_ttt_scoreboard_ascending = CreateConVar("ttt_scoreboard_ascending", "1", FCVAR_ARCHIVE, "Should scoreboard ordering be in ascending order")
+local cv_ttt_scoreboard_ascending = CreateConVar(
+    "ttt_scoreboard_ascending",
+    "1",
+    FCVAR_ARCHIVE,
+    "Should scoreboard ordering be in ascending order"
+)
 
 GROUP_TERROR = 1
 GROUP_NOTFOUND = 2
@@ -66,7 +74,6 @@ function ScoreGroup(ply)
 
     ---
     -- @realm client
-    -- stylua: ignore
     local group = hook.Run("TTTScoreGroup", ply)
 
     if group then -- If that hook gave us a group, use it
@@ -200,7 +207,6 @@ function PANEL:Init()
 
     ---
     -- @realm client
-    -- stylua: ignore
     hook.Run("TTTScoreGroups", self.ply_frame:GetCanvas(), self.ply_groups)
 
     -- the various score column headers
@@ -224,7 +230,6 @@ function PANEL:Init()
     ---
     -- Let hooks add their column headers (via AddColumn() or AddFakeColumn())
     -- @realm client
-    -- stylua: ignore
     hook.Run("TTTScoreboardColumns", self)
 
     self:UpdateScoreboard()

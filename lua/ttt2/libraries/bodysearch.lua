@@ -56,8 +56,11 @@ CORPSE_KILL_DIRECTION_SIDE = 3
 -- mode 0: normal behavior, everyone can search/confirm bodies
 -- mode 1: only public policing roles can confirm bodies, but everyone can still see all data in the menu
 -- mode 2: only public policing roles can confirm and search bodies
--- stylua: ignore
-local cvInspectConfirmMode = CreateConVar("ttt2_inspect_confirm_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+local cvInspectConfirmMode = CreateConVar(
+    "ttt2_inspect_confirm_mode",
+    "0",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED }
+)
 
 ---
 -- @realm shared
@@ -65,8 +68,11 @@ local cvInspectConfirmMode = CreateConVar("ttt2_inspect_confirm_mode", "0", {FCV
 -- on (1), default: all roles can see credits on a body
 -- NOTE: On is default only for compatability. Many players seem to expect it to not be the case by default,
 --       so perhaps it'd be a good idea to default to off.
--- stylua: ignore
-local cvCreditsVisibleToAll = CreateConVar("ttt2_inspect_credits_always_visible", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+local cvCreditsVisibleToAll = CreateConVar(
+    "ttt2_inspect_credits_always_visible",
+    "1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED }
+)
 
 local materialWeaponFallback = Material("vgui/ttt/missing_equip_icon")
 
@@ -91,7 +97,6 @@ end
 function bodysearch.CanTakeCredits(ply, rag, isLongRange)
     ---
     -- @realm shared
-    -- stylua: ignore
     local hookOverride = hook.Run("TTT2CanTakeCredits", ply, rag, isLongRange)
     if hookOverride ~= nil then
         return hookOverride
@@ -177,7 +182,6 @@ if SERVER then
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTT2ModifyCorpseCallRadarRecipients", plyTable, rag, ply)
 
         -- show indicator in radar to detectives
@@ -193,7 +197,6 @@ if SERVER then
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTT2CalledPolicingRole", plyTable, ply, rag, CORPSE.GetPlayer(rag))
     end)
 
@@ -212,7 +215,6 @@ if SERVER then
 
         ---
         -- @realm shared
-        -- stylua: ignore
         if hook.Run("TTT2GiveFoundCredits", ply, rag) == false then
             return false
         end
@@ -234,7 +236,6 @@ if SERVER then
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTT2OnGiveFoundCredits", ply, rag, credits)
 
         -- update clients so their UIs can be updated
@@ -250,7 +251,7 @@ if SERVER then
     -- the player that is currently searching the body.
     -- @param Player inspector The player that searches the corpse
     -- @param Entity rag The ragdoll entity that is searched
-    -- @param[default=false] boolen isCovert Whether the body search is covert or announced
+    -- @param[default=false] boolean isCovert Whether the body search is covert or announced
     -- @param[default=false] boolean isLongRange Whether the search is long or short range
     -- @return table The scene data table
     -- @realm server
@@ -406,7 +407,6 @@ if CLIENT then
         local eq = {} -- placeholder for the hook, not used right now
         ---
         -- @realm shared
-        -- stylua: ignore
         hook.Run("TTTBodySearchEquipment", searchStreamData, eq)
 
         searchStreamData.show = LocalPlayer() == searchStreamData.base.inspector
@@ -1014,7 +1014,6 @@ if CLIENT then
 
         ---
         -- @realm client
-        -- stylua: ignore
         hook.Run("TTTBodySearchPopulate", search, raw)
 
         return search

@@ -59,27 +59,22 @@ local materialLeaveVehicle = Material("vgui/ttt/hudhelp/leave_vehicle")
 
 ---
 -- @realm client
--- stylua: ignore
 local cvEnableCore = CreateConVar("ttt2_keyhelp_show_core", "1", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
--- stylua: ignore
 local cvEnableExtra = CreateConVar("ttt2_keyhelp_show_extra", "0", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
--- stylua: ignore
 local cvEnableEquipment = CreateConVar("ttt2_keyhelp_show_equipment", "1", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
--- stylua: ignore
 local cvEnableBoxBlur = CreateConVar("ttt2_hud_enable_box_blur", "1", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
--- stylua: ignore
 local cvEnableDescription = CreateConVar("ttt2_hud_enable_description", "1", FCVAR_ARCHIVE)
 
 keyhelp = keyhelp or {}

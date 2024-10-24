@@ -218,6 +218,5 @@ function CLGAMEMODESUBMENU:Populate(parent)
         )
     end
 
-    -- stylua: ignore
     hook.Run("TTT2OnEquipmentAddToSettingsMenu", equipment, parent)
 end
