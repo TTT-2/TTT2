@@ -498,79 +498,79 @@ L.tips_panel_title = "팁"
 L.tips_panel_tip = "팁:"
 
 -- Tip texts
-L.tip1 = "트레이터는 조용히 시체를 탐색 할 수 있습니다. 조용히 시체를 탐색하려면 시체를 보고 {walkkey}키와 {usekey} 키를 누르세요."
+--L.tip1 = "Traitors can search a corpse silently, without confirming the death, by holding {walkkey} and pressing {usekey} on the corpse."
 
-L.tip2 = "C4 폭발 시간을 길게 할수록, 와이어의 개수는 늘어납니다. 이는 이노센트가 해체할때 더 어렵게 만들 뿐더러, C4의 삡 소리 또한 작고, 가끔 들리게 합니다. "
+--L.tip2 = "Arming a C4 explosive with a longer timer will increase the number of wires that cause it to explode instantly when an innocent attempts to disarm it. It will also beep softer and less often."
 
-L.tip3 = "탐정은 시체가 마지막으로 본 사람을 알 수 있습니다. 하지만 이것은 시체가 마지막으로 본 사람일 뿐입니다. 만약 뒤에서 총격을 당했다면 마지막으로 본 사람이 살해자가 아닐 수 있습니다."
+--L.tip3 = "Detectives can search a corpse to find who is 'reflected in its eyes'. This is the last person the dead guy saw. That does not have to be the killer if they were shot in the back."
 
-L.tip4 = "아무도 당신이 죽은 줄 모를겁니다. 시체를 찾고, 그게 당신이라는것을 밝혀낼 때 까지는요."
+--L.tip4 = "No one will know you have died until they find your dead body and identify you by searching it."
 
-L.tip5 = "트레이터가 탐정을 죽이면, 즉시 크레딧을 보상으로 받습니다"
+--L.tip5 = "When a Traitor kills a Detective, they instantly receive a credit reward."
 
-L.tip6 = "트레이터가 사망하면, 모든 탐정이 크레딧을 보상으로 받습니다."
+--L.tip6 = "When a Traitor dies, all Detectives are rewarded equipment credits."
 
-L.tip7 = "트레이터가 눈에 띌 정도로 이노센트를 죽인다면, 크레딧을 보상으로 받습니다."
+--L.tip7 = "When the Traitors have made significant progress in killing innocents, they will receive an equipment credit as reward."
 
-L.tip8 = "트레이터와 탐정은 시체에서 사용되지 않은 크레딧을 회수 할 수 있습니다."
+--L.tip8 = "Shopping roles can collect unspent equipment credits from the dead bodies of other shopping roles such as Traitors and Detectives."
 
-L.tip9 = "폴터가이스트는 어느 프롭이든 치명적인 무기로 만들 수 있습니다. 각각의 충격파는, 주변에 있는 어떤 사람이던 다치게 할 수 있습니다."
+--L.tip9 = "The Poltergeist can turn any physics object into a deadly projectile. Each punch is accompanied by a blast of energy hurting anyone nearby."
 
-L.tip10 = "트레이터나 탐정으로 플레이할때, 오른쪽 위에 뜨는 메세지에 집중하세요. 당신에게 중요할 수 있습니다."
+--L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
 
-L.tip11 = "트레이터나 탐정으로 플레이할때, 당신의 동료들이 활약할수록 추가 크레딧을 얻습니다. 쓰는걸 잊지 마세요!"
+--L.tip11 = "The Detectives' DNA Scanner can be used to gather DNA samples from weapons and items and then scan to find the location of the player who used them. Useful when you can get a sample from a corpse or a disarmed C4!"
 
-L.tip12 = "탐정의 DNA 스캐너는 무기나 아이템에서 사용한 사람의 DNA를 추출 할 수 있습니다. 시체에서 얻은 DNA나 C4를 해체하고 얻은 DNA는 특히 유용 할 수 있습니다!"
+--L.tip12 = "When you are close to someone you kill, some of your DNA is left on the corpse. This DNA can be used with a Detective's DNA Scanner to find your current location. Better hide the body after you knife someone!"
 
-L.tip13 = "누군가를 가까이서 죽이면, 당신의 DNA가 시체에 남습니다. DNA는 탐정이 DNA 스캐너를 사용하여 당신의 현재 위치를 추적 할 수 있습니다. 칼을 사용하여 누구를 죽였다면, 시체를 잘 숨기도록 하세요!"
+--L.tip13 = "The further you are away from someone you kill, the faster your DNA sample on their body will decay."
 
-L.tip14 = "누군가를 죽였을때 장거리에서 죽였다면, DNA 샘플이 부패하는데 시간이 빨라집니다."
+--L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
 
-L.tip15 = "당신이 트레이터고 누굴 저격하려고 하나요? 그럼 변장 기구를 사용하는걸 고려해 보십시오. 빗맞춘다면, 안전한 곳으로 도망친 후, 변장을 풀어버리세요. 누가 쐈는지 알지도 못할겁니다."
+--L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
 
-L.tip16 = "트레이터로 플레이 할때, 텔레포터는 누군가 추적하는것을 따돌리는데에 큰 도움을 줄 겁니다. 그리고 큰 맵이라면, 이동하는데에도 큰 도움을 줄 수 있습니다. 지정된 곳이 안전한곳인지 확인하세요!"
+--L.tip16 = "Are the innocents all grouped up and hard to pick off? Consider trying out the Radio to play sounds of C4 or a firefight to lead some of them away."
 
-L.tip17 = "이노센트들이 모두 뭉쳐다니나요? 라디오로 C4나 총격소리를 재생시킨다면, 몇몇을 무리에서 떨어트릴 수 있을겁니다."
+--L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
 
-L.tip18 = "트레이터로 라디오를 사용할 때, 라디오를 배치 후 장비 메뉴에서 소리를 재생 할 수 있습니다. 재생 버튼을 여러번 눌러 여러 소리를 대기열에 추가할 수 있습니다."
+--L.tip18 = "As Detective, if you have leftover credits you could give a trusted Innocent a Defuser. Then you can spend your time doing the serious investigative work and leave the risky bomb defusal to them."
 
-L.tip19 = "탐정으로 플레이 할때, 남는 크레딧이 있다면 믿을만한 이노센트에게 해체 키트를 선물해 줄 수 있습니다. 그러고 나서, 이노센트에게 리스크가 큰 해체를 맞기고, 다른 중요한 일에 집중 할 수 있습니다."
+--L.tip19 = "The Detectives' Binoculars allow long-range searching and identifying of corpses. Bad news if the Traitors were hoping to use a corpse as bait. Of course, while using the Binoculars a Detective is unarmed and distracted..."
 
-L.tip20 = "탐정의 망원경은 먼 거리에서 시체의 신원을 확인 할 수 있습니다. 트레이터가 시체를 미끼로 사용했다면, 안좋은 뉴스겠네요. 당연한 말이지만, 망원경을 사용하는 탐정은 시선이 다른 곳으로 팔려있고, 비무장 상태일 겁니다."
+--L.tip20 = "The Detectives' Health Station lets wounded players recover. Of course, those wounded people could be Traitors..."
 
-L.tip21 = "탐정의 치료 스테이션은 부상당한 다른 플레이어들이 와서 치료 받을 수 있습니다. 당연하게도, 그 중에 트레이터도 있을 수 있습니다."
+--L.tip21 = "The Health Station records a DNA sample of everyone who uses it. Detectives can use this with the DNA Scanner to find out who has been healing up."
 
-L.tip22 = "치료 스테이션은 사용자의 DNA 샘플을 남깁니다. 탐정은 이걸로 누구 여기서 치료를 받았는지 파악 할 수 있습니다."
+--L.tip22 = "Unlike weapons and C4, the Radio equipment for Traitors does not contain a DNA sample of the person who planted it. Don't worry about Detectives finding it and blowing your cover."
 
-L.tip23 = "무기와 다르게, C4와 라디오는 설치자의 DNA를 남기지 않습니다. 탐정이 이를 발견하는것을 겁내지 마세요, 들키지 않을 겁니다."
+--L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
 
-L.tip24 = "{helpkey} 키를 눌러 짧은 튜토리얼과 TTT 옵션을 설정 할 수 있습니다. 예를들어, 팁을 영원히 꺼버릴 수 있습니다."
+--L.tip24 = "When a Detective searches a body, the result is available to all players via the scoreboard by clicking on the name of the dead person."
 
-L.tip25 = "탐정이 시체를 조사하면, 모든 사람들에게 이 사람이 죽은 사람이라는게 알려집니다."
+--L.tip25 = "In the scoreboard, a magnifying glass icon next to someone's name indicates you have search information about that person. If the icon is bright, the data comes from a Detective and may contain additional information."
 
-L.tip26 = "스코어보드에서, 이름 옆에 있는 돋보기 아이콘은, 이 사람에 대해 조사를 마쳤다는 소리입니다. 만약 이 아이콘이 밝아진다면, 탐정에게서 온 자료이며, 추가적인 정보가 있을 수 있습니다."
+--L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
 
-L.tip27 = "탐정으로 플레이 할 때, 닉네임 옆에 있는 돋보기 아이콘은 탐정이 이미 이 시체를 조사했다는 소리이며, 결과는 모든 사람들에게 전해집니다."
+--L.tip27 = "Spectators can press {mutekey} to cycle through muting other spectators or living players."
 
-L.tip28 = "관전자들은 {mutekey} 키로 다른 관전자나 살아있는 사람을 뮤트 할 수 있습니다."
+--L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
 
-L.tip29 = "이 서버에 추가적인 언어가 설치되어 있다면, 세팅 메뉴에서 언제든지 언어를 바꿀 수 있습니다."
+--L.tip29 = "Quickchat or 'radio' commands can be used by pressing {zoomkey}."
 
-L.tip30 = "퀵쳇이나 라디오 커맨드는 {zoomkey}를 눌러 사용할 수 있습니다."
+--L.tip30 = "The Crowbar's secondary fire will push other players."
 
-L.tip31 = "관전자 시점에서, {duckkey} 키를 누르면 마우스 커서가 보여지고, 팁 패널을 누를 수 있게 됩니다. 다시 {duckkey}를 눌러 관전모드로 전환 가능합니다."
+--L.tip31 = "Firing through the ironsights of a weapon will slightly increase your accuracy and decrease recoil. Crouching does not."
 
-L.tip32 = "빠루의 우클릭은 사람들을 밀칩니다."
+--L.tip32 = "Smoke grenades are effective indoors, especially for creating confusion in crowded rooms."
 
-L.tip33 = "우클릭을 눌러 조준사격하는건 정확성을 높이고 반동을 줄입니다. 앉기는 이에 해당하지 않습니다."
+--L.tip33 = "As Traitor, remember you can carry dead bodies and hide them from the prying eyes of the innocent and their Detectives."
 
-L.tip34 = "연막탄은 실내에서 매우 효과적입니다. 사람들이 모여있는 실내에서 특히 힘을 발휘합니다."
+--L.tip34 = "On the scoreboard, click the name of a living player and you can select a tag for them such as 'suspect' or 'friend'. This tag will show up if you have them under your crosshair."
 
-L.tip35 = "트레이터로 플레이 할 때, 시체를 들어 탐정과 이노센트의 시야 밖으로 숨겨버릴 수 있습니다."
+--L.tip35 = "Many of the placeable equipment items (such as C4, Radio) can be stuck on walls using secondary fire."
 
-L.tip36 = "튜토리얼은 {helpkey}키를 눌러 활성화 가능합니다. 게임을 플레이 하는데 중요한 키 배치를 볼 수 있습니다."
+--L.tip36 = "C4 that explodes due to a mistake in disarming it has a smaller explosion than C4 that reaches zero on its timer."
 
-L.tip37 = "스코어보드에서, 살아있는 사람을 눌러 '용의자' 혹은 '동료'로 마크할 수 있습니다. 이 태그는 대상에게 크로스헤어를 가져다 댈 시 보이기도 합니다."
+--L.tip37 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases. This mode puts the pressure on the traitors to keep things moving."
 
 -- Round report
 L.report_title = "라운드 보고"
@@ -2273,16 +2273,16 @@ L.label_crosshair_size_gap = "크로스헤어 공간 배율"
 --L.label_execute_command = "Execute command"
 
 -- 2024-05-22
-L.tip38 = "설치형 장비들(라디오나 C4계열)은 우클릭으로 벽에 붙일 수 있습니다."
-L.tip39 = "C4를 해체하다가 실패하여 발생하는 폭발은 C4가 시간이 되어 폭발하는 것 보다 더 적은 범위를 가집니다."
-L.tip40 = "만약 타이머에 '헤이스트 모드'라고 적혀있다면, 라운드가 그 시간 후에 끝난다는 소리입니다. 하지만 누군가 사망할 시 제한시간이 늘어납니다. (팀포 2의 오버타임처럼) 이를 이용하여 트레이터가 계속 움직이도록 할 수 있습니다."
+--L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
+--L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
+--L.tip40 = "On the left side of your screen are icons showing current equipment or status effects applied to you."
 --L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
 --L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
 --L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
 
 --L.header_loadingscreen = "Loading Screen"
 
---L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
+--L.help_enable_loadingscreen = "The loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
 
 --L.label_enable_loadingscreen = "Enable the loading screen"
 --L.label_enable_loadingscreen_tips = "Enable tips on loading screen"
@@ -2352,12 +2352,12 @@ L.tip40 = "만약 타이머에 '헤이스트 모드'라고 적혀있다면, 라�
 
 -- 2024-09-16
 --L.help_enable_loadingscreen_server = [[
---The loadingscreen settings also exist on the client. They are hidden if disabled on the server.
+--The loading screen settings also exist on the client. They are hidden if disabled on the server.
 --
---The minimum display time is there to give the player time to read the tips. If the reload of the map takes longer than the minimum time, the loadingscreen is shown as long as it needs to be. In general a reload time of 0.5 to 1 second is to be expected.]]
+--The minimum display time is there to give the player time to read the tips. If the reload of the map takes longer than the minimum time, the loading screen is shown as long as it needs to be. In general a reload time of 0.5 to 1 second is to be expected.]]
 
---L.label_enable_loadingscreen_server = "Enable the loadingscreen serverwide"
---L.label_loadingscreen_min_duration = "Minimum loadingscreen display time"
+--L.label_enable_loadingscreen_server = "Enable the loading screen serverwide"
+--L.label_loadingscreen_min_duration = "Minimum loading screen display time"
 
 -- 2024-09-18
 --L.label_keyhelper_leave_vehicle = "leave vehicle"
