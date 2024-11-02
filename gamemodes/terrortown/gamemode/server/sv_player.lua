@@ -682,7 +682,7 @@ local function PlayDeathSound(victim, isSilent)
         sound = deathsounds[math.random(deathsounds_count)],
     }
 
-    if not hook.Run("TTT2PlayDeathScream", tbl, isSilent) then return end
+    if hook.Run("TTT2PlayDeathScream", tbl, isSilent) == false then return end
 
     sound.Play(tbl["sound"], victim:GetShootPos(), 90, 100)
 end
