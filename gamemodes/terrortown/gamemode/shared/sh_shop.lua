@@ -67,7 +67,7 @@ end
 -- Returns if the equipment is already bought for the player
 -- @param Player ply The player to check
 -- @param string equipmentName The name of the equipment to check
--- @return bool If the Equipment was bought
+-- @return boolean If the Equipment was bought
 -- @realm shared
 function shop.IsBoughtFor(ply, equipmentName)
     return shop.buyTable[ply] and shop.buyTable[ply][equipmentName]
@@ -76,7 +76,7 @@ end
 ---
 -- Returns if the equipment is already globally bought by a player
 -- @param string equipmentName The name of the equipment to check
--- @return bool If the Equipment was globally bought
+-- @return boolean If the Equipment was globally bought
 -- @realm shared
 function shop.IsGlobalBought(equipmentName)
     return shop.globalBuyTable[equipmentName]
@@ -86,7 +86,7 @@ end
 -- Returns if the equipment is already bought for the players team
 -- @param Player ply The player to check the team of
 -- @param string equipmentName The name of the equipment to check
--- @return bool If the Equipment was bought by a teammate
+-- @return boolean If the Equipment was bought by a teammate
 -- @realm shared
 function shop.IsTeamBoughtFor(ply, equipmentName)
     local team = ply:GetTeam()
@@ -150,7 +150,7 @@ end
 -- Check if an equipment is currently buyable for a player
 -- @param Player ply The player to buy the equipment for
 -- @param string equipmentName The name of the equipment to buy
--- @return bool True, if equipment can be bought
+-- @return boolean True, if equipment can be bought
 -- @return number The shop.statusCode, that lead to the decision
 -- @realm shared
 function shop.CanBuyEquipment(ply, equipmentName)
@@ -274,7 +274,7 @@ end
 -- Buys for player the equipment with the corresponding Id
 -- @param Player ply The player to buy the equipment for
 -- @param string equipmentName The name of the equipment to buy
--- @return bool True, if equipment can be bought
+-- @return boolean True, if equipment can be bought
 -- @return number The shop.statusCode, that lead to the decision
 -- @realm shared
 function shop.BuyEquipment(ply, equipmentName)
@@ -355,7 +355,7 @@ end
 ---
 -- Check if the player can reroll their shop
 -- @param Player ply The player to reroll the shop for
--- @return bool True, if shop can be rerolled
+-- @return boolean True, if shop can be rerolled
 -- @realm shared
 function shop.CanRerollShop(ply)
     return GetGlobalBool("ttt2_random_shops")
@@ -369,7 +369,7 @@ end
 -- Reroll shop for player and subtract the credits of it
 -- @note Use `shop.ForceRerollShop(ply)` to reroll without cost and restrictions
 -- @param Player ply The player to reroll the shop for
--- @return bool True, if shop was successfully rerolled
+-- @return boolean True, if shop was successfully rerolled
 -- @realm shared
 function shop.TryRerollShop(ply)
     if not shop.CanRerollShop(ply) then
@@ -398,9 +398,9 @@ end
 
 ---
 -- Transfer credits from one player to another
--- @param Player The player to transfer the credits from
--- @param string The SteamID64 of the player to transfer the credits to
--- @param number The number of credits to transfer
+-- @param Player ply The player to transfer the credits from
+-- @param string targetPlyId64 The SteamID64 of the player to transfer the credits to
+-- @param number credits The number of credits to transfer
 -- @realm shared
 function shop.TransferCredits(ply, targetPlyId64, credits)
     if not IsValid(ply) or not isstring(targetPlyId64) or not isnumber(credits) or credits <= 0 then
