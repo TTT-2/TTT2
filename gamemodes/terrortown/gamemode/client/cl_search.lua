@@ -42,7 +42,7 @@ net.Receive("TTT2SendConfirmMsg", function()
         sid64 = nil
     end
 
-    local img = draw.GetAvatarMaterial(sid64, "medium")
+    local img = playeravatar.GetMaterial(sid64, PLAYERAVATAR_SIZE.medium)
 
     ---
     -- @realm client
@@ -214,7 +214,7 @@ function SEARCHSCREEN:Show(data)
     profileBox:Dock(LEFT)
     profileBox:SetModel(data.playerModel)
     profileBox:SetPlayerIcon(
-        playerDataKnown and draw.GetAvatarMaterial(data.sid64, "medium")
+        playerDataKnown and playeravatar.GetMaterial(data.sid64, PLAYERAVATAR_SIZE.medium)
             or materialPlayerIconUnknown
     )
     profileBox:SetPlayerRoleColor(playerDataKnown and data.roleColor or COLOR_SLATEGRAY)
