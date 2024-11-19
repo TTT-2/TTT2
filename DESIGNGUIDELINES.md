@@ -14,8 +14,8 @@ The icons are always white on a transparent background, no other colors or backg
 
 ## Role Icons
 
-Different to the shop icons the role icons do need mipmapping to allow for clean rescaling (TODO: more mipmapping filter information). Since the icons can be rendered quite large, they should be saved in a resolution of 512x512px. They are always white on transparent background without a shadow and a padding of x pixels.
+Different to the shop icons the role icons do need mipmapping to allow for clean rescaling (TODO more mipmapping filter information). Since the icons can be rendered quite large, they should be saved in a resolution of 512x512px. They are always white on transparent background without a shadow and a padding of x pixels.
 
 ## Workshop
 
-TODO: Link example files of workshop designs
+TODO Link example files of workshop designs

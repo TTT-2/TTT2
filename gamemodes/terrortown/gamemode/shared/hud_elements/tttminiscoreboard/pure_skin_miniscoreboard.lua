@@ -145,7 +145,8 @@ local function GetMSBColorForPlayer(ply)
 end
 
 function HUDELEMENT:Draw()
-    -- just update every 0.1 seconds; TODO maybe add a client ConVar
+    -- TODO: maybe add a client ConVar
+    -- just update every 0.1 seconds
     if self.lastUpdate + 0.1 < CurTime() then
         local plys = util.GetFilteredPlayers(function(ply)
             return ply:WasActiveInRound()
