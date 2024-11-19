@@ -1270,7 +1270,7 @@ function plymeta:AnimPerformGesture(act)
     net.Broadcast()
 end
 
--- TODO REMOVE THIS
+-- TODO: REMOVE THIS (???)
 
 hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
     for ply, tbl in pairs(pendingItems) do

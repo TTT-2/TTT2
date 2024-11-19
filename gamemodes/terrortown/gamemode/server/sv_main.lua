@@ -694,8 +694,8 @@ function PrintResultMessage(result)
             end
         end
 
-        LANG.Msg("win_" .. result) -- TODO translation
-        ServerLog("Result: " .. result .. " wins.\n") -- TODO translation
+        LANG.Msg("win_" .. result) -- TODO: translation
+        ServerLog("Result: " .. result .. " wins.\n") -- TODO: translation
 
         return
     end

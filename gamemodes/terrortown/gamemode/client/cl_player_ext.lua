@@ -237,6 +237,7 @@ end
 net.Receive("TTT_Equipment", UpdateEquipment)
 
 -- Deletes old avatars and caches new ones
+-- TODO: I don't like that this is called "Cache" but really it refreshes ...
 local function CacheAllPlayerAvatars(ply)
     local plys = IsPlayer(ply) and { ply } or player.GetAll()
 

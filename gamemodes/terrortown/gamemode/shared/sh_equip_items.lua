@@ -586,6 +586,8 @@ if SERVER then
                 for k = 1, #cachedTbl do
                     local equip = cachedTbl[k]
 
+                    -- TODO: This is duplicated code from `sh_shop.lua` `shop.CanBuyEquipment()`
+                    -- and additionally is missing checks for the various item limitations
                     if equip.notBuyable then
                         continue
                     end
@@ -1186,7 +1188,7 @@ if SERVER then
 
         if fallback ~= roleData.name then
             return
-        end -- TODO why? remove and replace SHOP_UNSET with index of the current role
+        end -- TODO: why? remove and replace SHOP_UNSET with index of the current role
 
         ---
         -- @realm server
@@ -1380,7 +1382,7 @@ else -- CLIENT
             Equipment = Equipment or {}
 
             if not Equipment[subrole] then
-                GetEquipmentForRole(nil, subrole, true) -- TODO test
+                GetEquipmentForRole(nil, subrole, true) -- TODO: test
             end
 
             for _, equip in pairs(tbl) do

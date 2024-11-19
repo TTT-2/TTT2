@@ -6,6 +6,8 @@
 -- @author tkindanight
 -- @module none
 
+-- TODO: Rename to `global`? Maybe move (some) global vars here?
+
 if SERVER then
     AddCSLuaFile()
 end
