@@ -38,6 +38,12 @@ net.Receive("TTT2SendConfirmMsg", function()
     end
 
     -- checking for bots
+    -- TODO: This is not how this works
+    -- see the note about bots here: https://wiki.facepunch.com/gmod/Player:SteamID64#description
+    -- GMOD uses Universe=1 Type=4 Instance=1 and an incrementing ID
+    -- we could theoretically check for this, but just setting an empty string
+    -- for every bot seems easier
+    -- ref: https://developer.valvesoftware.com/wiki/SteamID
     if sid64 == "" then
         sid64 = nil
     end
