@@ -6,13 +6,17 @@ end
 -- Entity Crash Catcher v2
 -- This script detects entities that are moving too fast, leading to a potential server crash
 -- Original by code_gs, Ambro, DarthTealc, TheEMP, and LuaTenshi; v2 by code_gs
--- GitHub: https://github.com/Kefta/Entity-Crash-Catcher
+-- GitHub: https://github.com/Kefta/gs_crazyphysics
 -- Facepunch: http://facepunch.com/showthread.php?t=1347114
+-- Webarchive (Jul 2016):
+-- https://web.archive.org/web/20160715215105/https://facepunch.com/showthread.php?t=1347114
 
 -- Use in conjunction with these convars:
 RunConsoleCommand("sv_crazyphysics_defuse", "1")
 RunConsoleCommand("sv_crazyphysics_remove", "1")
 --RunConsoleCommand("sv_crazyphysics_warning", "1") -- Enable if you want to be warned about bodies being removed
+
+-- TODO: Investigate possible improvements and move File to a better place?
 
 ------------------- Script -------------------
 local function DebugMessage(
@@ -208,7 +212,7 @@ local function SetAbsVelocity(pEntity, vAbsVelocity)
             -- First subtract out the parent's abs velocity to get a relative
             -- velocity measured in world space
             -- Transform relative velocity into parent space
-            -- FIXME
+            -- FIXME:
             --pEntity:SetSaveValue("m_vecVelocity", (vAbsVelocity - pMoveParent:_GetAbsVelocity()):IRotate(pMoveParent:EntityToWorldTransform()))
             pEntity:SetSaveValue("velocity", vAbsVelocity)
         else
@@ -280,7 +284,7 @@ local function IdentifyCorpse(pCorpse)
     end
 
     if corpseConfig.announce_body_found:GetBool() then
-        if corpseConfig.confirm_team:GetBool() then -- TODO adjust the new messages
+        if corpseConfig.confirm_team:GetBool() then -- TODO: adjust the new messages
             LANG.Msg("body_found", {
                 finder = "The Server",
                 victim = CORPSE.GetPlayerNick(pCorpse, nil) or pPlayer:GetName(),

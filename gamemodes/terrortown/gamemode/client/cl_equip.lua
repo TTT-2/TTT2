@@ -183,7 +183,7 @@ local function PreqLabels(parent, x, y)
         end
     end
 
-    -- TODO add global limited
+    -- TODO: add global limited
     tbl.bought = vgui.Create("DLabel", parent)
     --tbl.bought:SetTooltip(GetTranslation("equip_help_stock"))
     tbl.bought:CopyPos(tbl.credits)

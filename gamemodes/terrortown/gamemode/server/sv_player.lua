@@ -614,7 +614,7 @@ function GM:PlayerDisconnected(ply)
             ply:Kill()
         end
 
-        -- TODO ?
+        -- TODO: ?
         -- Prevent the disconnected player from being in the resends
         ply:SetRole(ROLE_NONE)
     end

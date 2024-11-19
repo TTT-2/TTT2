@@ -479,7 +479,7 @@ net.Receive("TTT_RoleList", ReceiveRoleList)
 function GM:ClearClientState()
     self:HUDClear()
 
-    -- todo: stuff like this should be in their respective files inside the hooks
+    -- TODO: stuff like this should be in their respective files inside the hooks
     -- maybe even the prepare round hook? this mess has to go
 
     local client = LocalPlayer()

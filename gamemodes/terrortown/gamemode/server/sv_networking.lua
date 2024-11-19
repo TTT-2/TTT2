@@ -56,7 +56,7 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
                 if
                     p:GetSubRoleData().disableSync
                     and rs == ROUND_ACTIVE
-                    -- TODO this has to be reworked
+                    -- TODO: this has to be reworked
                     and not p:RoleKnown()
                     ---
                     -- @realm server
@@ -196,7 +196,7 @@ function SendConfirmedTeam(team, ply_or_rf)
     end
 
     local _func = function(p)
-        return p:RoleKnown() -- TODO rework
+        return p:RoleKnown() -- TODO: rework
     end
 
     SendTeamList(team, ply_or_rf, _func)
@@ -236,7 +236,7 @@ function SendFullStateUpdate()
 
             if
                 not roleDataSyncTo.unknownTeam and teamSyncFrom == teamSyncTo
-                or plySyncFrom:RoleKnown() -- TODO rework
+                or plySyncFrom:RoleKnown() -- TODO: rework
                 or table.HasValue(roleDataSyncFrom.visibleForTeam, teamSyncTo)
                 or table.HasValue(roleDataSyncTo.networkRoles, roleDataSyncFrom)
                 or roleDataSyncFrom.isPublicRole
@@ -336,7 +336,7 @@ local function ttt_request_rolelist(plySyncTo)
 
             if
                 not roleDataSyncTo.unknownTeam and plySyncFrom:GetTeam() == team
-                or plySyncFrom:RoleKnown() -- TODO rework
+                or plySyncFrom:RoleKnown() -- TODO: rework
                 or table.HasValue(roleDataSyncFrom.visibleForTeam, plySyncTo:GetTeam())
                 or table.HasValue(roleDataSyncTo.networkRoles, roleDataSyncFrom)
                 or roleDataSyncFrom.isPublicRole

@@ -139,6 +139,7 @@ REVIVAL_BITS = 2
 -- @see roles.GetList
 -- @realm shared
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetRoles()
     return roles.GetList()
 end
@@ -150,6 +151,7 @@ end
 -- @see roles.GetList
 -- @realm shared
 -- @deprecated
+-- TODO: Log Deprecation message
 function SortRolesTable(tbl)
     roles.SortTable(tbl)
 end
@@ -161,6 +163,7 @@ end
 -- @see roles.GetByIndex
 -- @realm shared
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetRoleByIndex(index)
     return roles.GetByIndex(index)
 end
@@ -172,6 +175,7 @@ end
 -- @see roles.GetByName
 -- @realm shared
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetRoleByName(name)
     return roles.GetByName(name)
 end
@@ -183,6 +187,7 @@ end
 -- @see roles.GetByAbbr
 -- @realm shared
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetRoleByAbbr(abbr)
     return roles.GetByAbbr(abbr)
 end
@@ -194,6 +199,7 @@ end
 -- @realm shared
 -- @see ROLE:GetStartingCredits
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetStartingCredits(abbr)
     local roleData = roles.GetByAbbr(abbr)
 
@@ -207,6 +213,7 @@ end
 -- @realm shared
 -- @see ROLE:IsShoppingRole
 -- @deprecated
+-- TODO: Log Deprecation message
 function IsShoppingRole(subrole)
     local roleData = roles.GetByIndex(subrole)
 
@@ -219,6 +226,7 @@ end
 -- @realm shared
 -- @see roles.GetShopRoles
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetShopRoles()
     return roles.GetShopRoles()
 end
@@ -230,6 +238,7 @@ end
 -- @realm shared
 -- @see ROLE:IsBaseRole
 -- @deprecated
+-- TODO: Log Deprecation message
 function IsBaseRole(roleData)
     return roleData:IsBaseRole()
 end
@@ -241,6 +250,7 @@ end
 -- @realm shared
 -- @see ROLE:GetBaseRole
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetBaseRole(subrole)
     return roles.GetByIndex(subrole):GetBaseRole()
 end
@@ -254,6 +264,7 @@ if SERVER then
     -- @realm server
     -- @see ROLE:IsSelectable
     -- @deprecated
+-- TODO: Log Deprecation message
     function IsRoleSelectable(roleData, avoidHook)
         return roleData:IsSelectable(avoidHook)
     end
@@ -266,6 +277,7 @@ end
 -- @realm shared
 -- @see ROLE:GetSubRoles
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetSubRoles(subrole)
     local roleData = roles.GetByIndex(subrole)
 
@@ -279,6 +291,7 @@ end
 -- @realm shared
 -- @see roles.GetDefaultTeamRole
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetDefaultTeamRole(team)
     return roles.GetDefaultTeamRole(team)
 end
@@ -290,6 +303,7 @@ end
 -- @realm shared
 -- @see roles.GetDefaultTeamRoles
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetDefaultTeamRoles(team)
     return roles.GetDefaultTeamRoles(team)
 end
@@ -301,6 +315,7 @@ end
 -- @realm shared
 -- @see roles.GetTeamMembers
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetTeamMembers(team)
     return roles.GetTeamMembers(team)
 end
@@ -311,6 +326,7 @@ end
 -- @realm shared
 -- @see roles.GetWinTeams
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetWinTeams()
     return roles.GetWinTeams()
 end
@@ -321,6 +337,7 @@ end
 -- @realm shared
 -- @see roles.GetAvailableTeams
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetAvailableTeams()
     return roles.GetAvailableTeams()
 end
@@ -331,6 +348,7 @@ end
 -- @realm shared
 -- @see roles.GetSortedRoles
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetSortedRoles()
     return roles.GetSortedRoles()
 end
@@ -367,6 +385,7 @@ end
 -- @return table list of @{Player}
 -- @realm shared
 -- @deprecated
+-- TODO: Log Deprecation message
 function GetTraitors()
     local trs = {}
     local plys = player.GetAll()
@@ -388,11 +407,12 @@ end
 -- @return number
 -- @realm shared
 -- @deprecated
+-- TODO: Log Deprecation message
 function CountTraitors()
     return #GetTraitors()
 end
 
--- TODO move to client file
+-- TODO: move to client file
 if CLIENT then
     local SafeTranslate
 
@@ -513,13 +533,14 @@ OPEN_NOTOGGLE = 4 -- movelinear
 MUTE_NONE = 0
 MUTE_TERROR = 1
 MUTE_ALL = 2
-MUTE_SPEC = 1002 -- TODO why not 3?
+MUTE_SPEC = 1002 -- TODO: why not 3?
 
 -- Drop On Death override types
 DROP_ON_DEATH_TYPE_DEFAULT = 0
 DROP_ON_DEATH_TYPE_FORCE = 1
 DROP_ON_DEATH_TYPE_DENY = 2
 
+-- TODO: Move to colors/global library/extension/class
 COLOR_SPEC = Color(155, 155, 15)
 
 COLOR_WHITE = Color(255, 255, 255, 255)
