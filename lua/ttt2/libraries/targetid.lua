@@ -560,6 +560,11 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
         then
             tData:SetSubtitle(ParT("corpse_hint_inspect_limited", key_params))
             tData:AddDescriptionLine(TryT("corpse_hint_inspect_limited_details"))
+        elseif
+            bodysearch.GetInspectConfirmMode() == 0
+            and not GetConVar("ttt_identify_body_woconfirm"):GetBool()
+        then
+            tData:SetSubtitle(ParT("corpse_hint_without_confirm", key_params))
         else
             tData:SetSubtitle(ParT("corpse_hint", key_params))
         end

@@ -2366,3 +2366,6 @@ L.body_confirm_one = "{finder} bekräftade att {victim} har dött."
 --L.label_keyhelper_leave_vehicle = "leave vehicle"
 --L.name_vehicle = "Vehicle"
 --L.vehicle_enter = "Press [{usekey}] to enter vehicle"
+
+-- 2024-11-27
+--L.corpse_hint_without_confirm = "Press [{usekey}] to search."

@@ -2366,3 +2366,6 @@ L.label_loadingscreen_min_duration = "Temps d'affichage minimum de l'écran de c
 L.label_keyhelper_leave_vehicle = "sortir du véhicule"
 L.name_vehicle = "Véhicule"
 L.vehicle_enter = "Appuyez sur [{usekey}] pour entrer dans le véhicule"
+
+-- 2024-11-27
+--L.corpse_hint_without_confirm = "Press [{usekey}] to search."
