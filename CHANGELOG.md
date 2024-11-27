@@ -6,6 +6,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Added Korean translation (by @Kojap)
 - Added diagnostic information to the addonchecker output.
   - This also includes a Garry's Mod version check which triggers a warning if TTT2 is not compatible. First baseline version is '240313' (by @NickCloudAT)
 
@@ -19,6 +20,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed rendering glitches in the loading screen (by @TimGoll)
 - Fixed weapon pickup through walls (by @MrXonte)
 - Fixed spectating player still being visible through thermalvision after killing that player (by @MrXonte)
+- Fixed Magneto-stick not using C_Hands (by @SvveetMavis)
 - Fixed console error when dropping ammo for weapons with no AmmoEnt (by @MrXonte)
 
 ### Changed
@@ -27,6 +29,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated Turkish localization (by @NovaDiablox)
 - Updated targetID to use `Vehicle:GetDriver` instead of the `ttt_driver` NWEntity (by @Histalek)
 - Updated Russian and English localization files (by @Satton2)
+- Updated old TTT HUD to show name of spectated player (by @somefnfplayerlol)
+- Changes to the enabled map prefixes will not be announced to players anymore (by @Histalek)
+- By default only `ttt` and `ttt2` map prefixes are enabled (by @Histalek)
 
 ## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
 
