@@ -2363,3 +2363,6 @@ L.label_crosshair_size_gap = "크로스헤어 공간 배율"
 --L.label_keyhelper_leave_vehicle = "leave vehicle"
 --L.name_vehicle = "Vehicle"
 --L.vehicle_enter = "Press [{usekey}] to enter vehicle"
+
+-- 2024-11-27
+--L.corpse_hint_without_confirm = "Press [{usekey}] to search."
