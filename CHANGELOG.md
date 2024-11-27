@@ -30,6 +30,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Updated French translation (by @MisterClems)
 - Updated Turkish localization (by @NovaDiablox)
+- Updated Russian localization (by @Satton2)
 - Updated targetID to use `Vehicle:GetDriver` instead of the `ttt_driver` NWEntity (by @Histalek)
 - Updated Russian and English localization files (by @Satton2)
 - Updated old TTT HUD to show name of spectated player (by @somefnfplayerlol)
