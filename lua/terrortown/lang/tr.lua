@@ -2366,3 +2366,6 @@ L.label_loadingscreen_min_duration = "Minimum yükleme ekranı görüntüleme s�
 L.label_keyhelper_leave_vehicle = "araçtan çık"
 L.name_vehicle = "Araç"
 L.vehicle_enter = "Araca girmek için [{usekey}] tuşuna bas"
+
+-- 2024-11-27
+--L.corpse_hint_without_confirm = "Press [{usekey}] to search."
