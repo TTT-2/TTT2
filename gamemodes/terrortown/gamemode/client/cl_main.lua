@@ -484,7 +484,7 @@ function GM:ClearClientState()
 
     local client = LocalPlayer()
 
-    if not client:IsReady() then
+    if not IsValid(client) or not client:IsReady() then
         return
     end
 

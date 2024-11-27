@@ -22,6 +22,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed spectating player still being visible through thermalvision after killing that player (by @MrXonte)
 - Fixed Magneto-stick not using C_Hands (by @SvveetMavis)
 - Fixed console error when dropping ammo for weapons with no AmmoEnt (by @MrXonte)
+- Fixed client error for a not fully initialized client (by @Histalek)
 - Fixed the targetID corpse hint not respecting `ttt_identify_body_woconfirm` (by @Histalek)
 - Fixed the beacon not being properly translated when placed (by @Histalek)
 
