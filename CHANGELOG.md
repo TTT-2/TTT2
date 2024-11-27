@@ -22,6 +22,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed spectating player still being visible through thermalvision after killing that player (by @MrXonte)
 - Fixed Magneto-stick not using C_Hands (by @SvveetMavis)
 - Fixed console error when dropping ammo for weapons with no AmmoEnt (by @MrXonte)
+- Fixed randomshop containing equipment which minimum playeramount was not satisfied (by @Histalek)
 
 ### Changed
 
