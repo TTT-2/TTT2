@@ -10,7 +10,7 @@ DEFINE_BASECLASS("ttt_base_placeable")
 
 if CLIENT then
     ENT.Icon = "vgui/ttt/icon_beacon"
-    ENT.PrintName = "Beacon"
+    ENT.PrintName = "beacon_name"
 end
 
 ENT.Base = "ttt_base_placeable"
