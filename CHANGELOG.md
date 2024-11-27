@@ -20,6 +20,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed rendering glitches in the loading screen (by @TimGoll)
 - Fixed weapon pickup through walls (by @MrXonte)
 - Fixed spectating player still being visible through thermalvision after killing that player (by @MrXonte)
+- Fixed Magneto-stick not using C_Hands (by @SvveetMavis)
 
 ### Changed
 
