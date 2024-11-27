@@ -568,6 +568,8 @@ if SERVER then
                 RANDOMSHOP[ply] = RANDOMTEAMSHOPS[GetShopFallback(srd.index)]
             end
         else -- every player has his own shop
+            local activePlys = util.GetActivePlayers()
+
             for i = 1, #tmpTbl do
                 local ply = tmpTbl[i]
                 local srd = ply:GetSubRoleData()
@@ -590,6 +592,12 @@ if SERVER then
                     -- and additionally is missing checks for the various item limitations
                     if equip.notBuyable then
                         continue
+                    end
+
+                    if equip.minPlayers and equip.minPlayers > 1 then
+                        if #activePlys < equip.minPlayers then
+                            continue
+                        end
                     end
 
                     if equip.NoRandom then
