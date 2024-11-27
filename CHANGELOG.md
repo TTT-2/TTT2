@@ -23,6 +23,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed Magneto-stick not using C_Hands (by @SvveetMavis)
 - Fixed console error when dropping ammo for weapons with no AmmoEnt (by @MrXonte)
 - Fixed the targetID corpse hint not respecting `ttt_identify_body_woconfirm` (by @Histalek)
+- Fixed the beacon not being properly translated when placed (by @Histalek)
 
 ### Changed
 
