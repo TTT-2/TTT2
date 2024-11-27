@@ -2370,4 +2370,4 @@ L.name_vehicle = "Транспорт"
 L.vehicle_enter = "[{usekey}] Сесть в транспорт."
 
 -- 2024-11-27
---L.corpse_hint_without_confirm = "Press [{usekey}] to search."
+L.corpse_hint_without_confirm = "[{usekey}] Осмотреть тело."
