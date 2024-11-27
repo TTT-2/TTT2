@@ -28,6 +28,7 @@ if CLIENT then
     SWEP.Icon = "vgui/ttt/icon_magneto_stick"
 
     SWEP.ViewModelFlip = false
+    SWEP.ViewModelFOV = 54
 end
 
 SWEP.Base = "weapon_tttbase"
@@ -36,7 +37,8 @@ SWEP.AutoSpawnable = false
 
 SWEP.notBuyable = true
 
-SWEP.ViewModel = Model("models/weapons/v_stunbaton.mdl")
+SWEP.UseHands = true
+SWEP.ViewModel  = Model("models/weapons/c_stunstick.mdl")
 SWEP.WorldModel = Model("models/weapons/w_stunbaton.mdl")
 
 SWEP.Primary.ClipSize = -1
