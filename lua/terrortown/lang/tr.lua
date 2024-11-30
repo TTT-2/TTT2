@@ -170,7 +170,7 @@ L.sb_playing = "Şu anda bu sunucuda oynuyorsunuz..."
 L.sb_mapchange = "{num} rauntta veya {time} içinde harita değişecektir."
 L.sb_mapchange_disabled = "Oturum sınırları devre dışı."
 
-L.sb_mia = "Kayıp"
+L.sb_mia = "Çatışmada Kayıp"
 L.sb_confirmed = "Onaylanmış Ölü"
 
 L.sb_ping = "Gecikme"
@@ -2368,4 +2368,4 @@ L.name_vehicle = "Araç"
 L.vehicle_enter = "Araca girmek için [{usekey}] tuşuna bas"
 
 -- 2024-11-27
---L.corpse_hint_without_confirm = "Press [{usekey}] to search."
+L.corpse_hint_without_confirm = "Aramak için [{usekey}] tuşuna bas."
