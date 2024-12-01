@@ -34,9 +34,11 @@ end
 -- @deprecated
 -- @realm shared
 function AccessorFuncDT(tbl, varname, name)
-    ErrorNoHaltWithStack(
-        "[DEPRECATION WARNING] Using `AccessorFuncDT` is deprecated and will be removed in a future version."
+    Deprecation(
+        "Using `AccessorFuncDT` is deprecated and will be removed in a future version.",
+        "Instead replace `:DTVar()` calls on the entity with `:NetworkVar()`."
     )
+
     tbl["Get" .. name] = function(s)
         return s.dt and s.dt[varname]
     end
@@ -65,8 +67,9 @@ function Key(binding, default)
 end
 
 ---
--- Debugging function
--- @param number level required level
+-- Debugging function to print console messages
+-- only when `developer` is set to a value higher than `level`
+-- @param number level Minimum required level for ... to be printed.
 -- @param any ... anything that should be printed
 -- @realm shared
 function Dev(level, ...)
@@ -75,7 +78,6 @@ function Dev(level, ...)
     end
 
     Msg("[TTT dev]")
-    -- table.concat does not tostring, derp
 
     local params = { ... }
 
@@ -84,6 +86,29 @@ function Dev(level, ...)
     end
 
     Msg("\n")
+end
+
+---
+-- Trigger an error only shown to `developer 1` informing about a deprecation
+-- @param string deprecation Message explaining what is being deprecated
+-- @param string[opt] remediation Message explaining how this can be fixed
+-- @realm shared
+function Deprecation(deprecation, remediation)
+    if not cvars or cvars.Number("developer", 0) < 1 then
+        return
+    end
+
+    -- stacklevel 1: `Deprecation()`; stacklevel 2: deprecated function;
+    -- stacklevel 3: function using the deprecated function
+    local debugInfo = debug.getinfo(3)
+    ErrorNoHalt(
+        "[DEPRECATION WARNING] ",
+        deprecation,
+        "\n\t",
+        remediation,
+        "\n\t",
+        "Deprecated function used here: " .. debugInfo["source"] .. ":" .. debugInfo["currentline"]
+    )
 end
 
 ---
