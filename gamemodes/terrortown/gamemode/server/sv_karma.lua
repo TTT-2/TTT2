@@ -99,6 +99,17 @@ KARMA.reason = {
     [KARMA_UNKNOWN] = "karma_unknown_tooltip",
 }
 
+-- This is super stupid because it is essentially a copy of the english translation
+local reason_lookup = {
+    ["karma_teamkill_tooltip"] = "Teammate killed",
+    ["karma_teamhurt_tooltip"] = "Teammate damaged",
+    ["karma_enemykill_tooltip"] = "Enemy killed",
+    ["karma_enemyhurt_tooltip"] = "Enemy damaged",
+    ["karma_cleanround_tooltip"] = "Clean round",
+    ["karma_roundheal_tooltip"] = "Karma restoration",
+    ["karma_unknown_tooltip"] = "Unknown",
+}
+
 local IsValid = IsValid
 local hook = hook
 local playerGetAll = player.GetAll
@@ -204,10 +215,17 @@ function KARMA.ResetRoundChanges()
             continue
         end
 
-        Dev(1, "\nFor Player " .. ply:GetName())
+        Dev(1, Format("Karma summary for Player '%s':", ply:GetName()))
 
         for reason, karma in pairs(reasonList) do
-            Dev(1, "An amount of " .. karma .. " was changed for the reason of " .. reason)
+            Dev(
+                1,
+                Format(
+                    "Karma was changed by %i for the reason of '%s'",
+                    karma,
+                    reason_lookup[reason]
+                )
+            )
         end
     end
 end
@@ -364,7 +382,15 @@ function KARMA.ApplyKarma(ply)
     ply:SetDamageFactor(math.Clamp(df, 0.1, 1.0))
 
     if IsDebug() then
-        Dev(1, Format("%s has karma %f and gets df %f", ply:Nick(), ply:GetBaseKarma(), df))
+        Dev(
+            1,
+            Format(
+                "%s has karma %i and will deal %i%% damage",
+                ply:Nick(),
+                ply:GetBaseKarma(),
+                df * 100
+            )
+        )
     end
 end
 
@@ -429,7 +455,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
             Dev(
                 1,
                 Format(
-                    "%s (%f) hurt %s (%f) and gets REWARDED %f",
+                    "%s (%i) hurt %s (%i) and gets REWARDED %i",
                     attacker:Nick(),
                     attacker:GetLiveKarma(),
                     victim:Nick(),
@@ -454,7 +480,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
         Dev(
             1,
             Format(
-                "%s (%f) hurt %s (%f) and gets penalised for %f",
+                "%s (%i) hurt %s (%i) and gets penalised for %i",
                 attacker:Nick(),
                 attacker:GetLiveKarma(),
                 victim:Nick(),
@@ -494,7 +520,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
             Dev(
                 1,
                 Format(
-                    "%s (%f) killed %s (%f) and gets REWARDED %f",
+                    "%s (%i) killed %s (%i) and gets REWARDED %i",
                     attacker:Nick(),
                     attacker:GetLiveKarma(),
                     victim:Nick(),
@@ -519,7 +545,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
         Dev(
             1,
             Format(
-                "%s (%f) killed %s (%f) and gets penalised for %f",
+                "%s (%i) killed %s (%i) and gets penalised for %i",
                 attacker:Nick(),
                 attacker:GetLiveKarma(),
                 victim:Nick(),
@@ -829,7 +855,7 @@ function KARMA.PrintAll(printfn)
 
         printfn(
             Format(
-                "%s : Live = %f -- Base = %f -- Dmg = %f\n",
+                "%s : Live = %i -- Base = %i -- Dmg = %i%%\n",
                 ply:Nick(),
                 ply:GetLiveKarma(),
                 ply:GetBaseKarma(),
