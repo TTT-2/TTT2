@@ -505,8 +505,8 @@ function GM:SyncGlobals()
         )
     end
 
-    SetGlobalBool("ttt2_confirm_team", confirm_team:GetBool())
     SetGlobalBool(identify_body_woconfirm:GetName(), identify_body_woconfirm:GetBool())
+    SetGlobalBool(confirm_team:GetName(), confirm_team:GetBool())
 
     ---
     -- @realm server
@@ -523,6 +523,10 @@ end)
 
 cvars.AddChangeCallback(identify_body_woconfirm:GetName(), function(cv, old, new)
     SetGlobalBool(identify_body_woconfirm:GetName(), tobool(tonumber(new)))
+end)
+
+cvars.AddChangeCallback(confirm_team:GetName(), function(cv, old, new)
+    SetGlobalBool(confirm_team:GetName(), tobool(tonumber(new)))
 end)
 
 ---
