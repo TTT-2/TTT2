@@ -132,24 +132,6 @@ local map_switch_delay = CreateConVar(
 
 ---
 -- @realm server
-local confirm_team = CreateConVar(
-    "ttt2_confirm_team",
-    "0",
-    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
-    "Show team of confirmed player"
-)
-
----
--- @realm server
-CreateConVar(
-    "ttt2_confirm_killlist",
-    "1",
-    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
-    "Confirm players in kill list"
-)
-
----
--- @realm server
 CreateConVar(
     "ttt_enforce_playermodel",
     "1",
@@ -496,8 +478,6 @@ function GM:SyncGlobals()
         )
     end
 
-    SetGlobalBool(confirm_team:GetName(), confirm_team:GetBool())
-
     ---
     -- @realm server
     hook.Run("TTT2SyncGlobals")
@@ -509,10 +489,6 @@ end)
 
 cvars.AddChangeCallback(idle_enabled:GetName(), function(cv, old, new)
     SetGlobalBool(idle_enabled:GetName(), tobool(tonumber(new)))
-end)
-
-cvars.AddChangeCallback(confirm_team:GetName(), function(cv, old, new)
-    SetGlobalBool(confirm_team:GetName(), tobool(tonumber(new)))
 end)
 
 ---

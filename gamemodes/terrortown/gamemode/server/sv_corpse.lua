@@ -58,6 +58,24 @@ CORPSE.cv.announce_body_found = CreateConVar(
 
 ---
 -- @realm server
+CORPSE.cv.confirm_team = CreateConVar(
+    "ttt2_confirm_team",
+    "0",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "Show team of confirmed player"
+)
+
+---
+-- @realm server
+CORPSE.cv.confirm_killlist = CreateConVar(
+    "ttt2_confirm_killlist",
+    "1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "Confirm players in kill list"
+)
+
+---
+-- @realm server
 CORPSE.cv.ragdoll_collide = CreateConVar("ttt_ragdoll_collide", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 -- networked data abstraction layer
@@ -167,7 +185,7 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
         local rd = roles.GetByIndex(subrole)
         local roletext = "body_found_" .. rd.abbr
         local clr = rag.role_color
-        local bool = GetGlobalBool("ttt2_confirm_team")
+        local bool = config.confirm_team:GetBool()
 
         net.Start("TTT2SendConfirmMsg")
 
@@ -201,7 +219,7 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
         net.Broadcast()
     end
 
-    if GetConVar("ttt2_confirm_killlist"):GetBool() then
+    if config.confirm_killlist:GetBool() then
         -- Handle kill list
         local ragKills = rag.kills
 
