@@ -76,7 +76,8 @@ CORPSE.cv.confirm_killlist = CreateConVar(
 
 ---
 -- @realm server
-CORPSE.cv.ragdoll_collide = CreateConVar("ttt_ragdoll_collide", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
+CORPSE.cv.ragdoll_collide =
+    CreateConVar("ttt_ragdoll_collide", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 -- networked data abstraction layer
 local dti = CORPSE.dti
