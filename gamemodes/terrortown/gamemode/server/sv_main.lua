@@ -132,15 +132,6 @@ local map_switch_delay = CreateConVar(
 
 ---
 -- @realm server
-local identify_body_woconfirm = CreateConVar(
-    "ttt_identify_body_woconfirm",
-    "1",
-    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
-    "Toggles whether ragdolls should be confirmed in gameloop.IsDetectiveMode() without clicking on confirm espacially"
-)
-
----
--- @realm server
 local confirm_team = CreateConVar(
     "ttt2_confirm_team",
     "0",
@@ -505,7 +496,6 @@ function GM:SyncGlobals()
         )
     end
 
-    SetGlobalBool(identify_body_woconfirm:GetName(), identify_body_woconfirm:GetBool())
     SetGlobalBool(confirm_team:GetName(), confirm_team:GetBool())
 
     ---
@@ -519,10 +509,6 @@ end)
 
 cvars.AddChangeCallback(idle_enabled:GetName(), function(cv, old, new)
     SetGlobalBool(idle_enabled:GetName(), tobool(tonumber(new)))
-end)
-
-cvars.AddChangeCallback(identify_body_woconfirm:GetName(), function(cv, old, new)
-    SetGlobalBool(identify_body_woconfirm:GetName(), tobool(tonumber(new)))
 end)
 
 cvars.AddChangeCallback(confirm_team:GetName(), function(cv, old, new)

@@ -30,19 +30,6 @@ local IsValid = IsValid
 local ConVarExists = ConVarExists
 local hook = hook
 
----
--- @realm server
-local cvBodyfound = CreateConVar(
-    "ttt_announce_body_found",
-    "1",
-    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
-    "If detective mode, announce when someone's body is found"
-)
-
----
--- @realm server
-local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
-
 local soundsSearch = {
     Sound("player/footsteps/snow1.wav"),
     Sound("player/footsteps/snow2.wav"),
@@ -60,8 +47,22 @@ ttt_include("sh_corpse")
 
 util.AddNetworkString("TTT2SendConfirmMsg")
 
+---
+-- @realm server
+CORPSE.cv.announce_body_found = CreateConVar(
+    "ttt_announce_body_found",
+    "1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "If detective mode, announce when someone's body is found"
+)
+
+---
+-- @realm server
+CORPSE.cv.ragdoll_collide = CreateConVar("ttt_ragdoll_collide", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
+
 -- networked data abstraction layer
 local dti = CORPSE.dti
+local config = CORPSE.cv
 
 ---
 -- Sets a CORPSE found state
@@ -160,7 +161,7 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
     end
 
     -- Announce body
-    if cvBodyfound:GetBool() and notConfirmed then
+    if config.announce_body_found:GetBool() and notConfirmed then
         local subrole = rag.was_role
         local team = rag.was_team
         local rd = roles.GetByIndex(subrole)
@@ -278,7 +279,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
         end
 
         if
-            GetConVar("ttt_identify_body_woconfirm"):GetBool()
+            config.identify_body_woconfirm:GetBool()
             and gameloop.IsDetectiveMode()
             and not isCovert
         then
@@ -640,7 +641,7 @@ function CORPSE.GetPlayerTeam(rag)
 end
 
 hook.Add("ShouldCollide", "TTT2RagdollCollide", function(ent1, ent2)
-    if cvRagCollide:GetBool() then
+    if config.ragdoll_collide:GetBool() then
         return
     end
 

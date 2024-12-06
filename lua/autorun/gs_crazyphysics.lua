@@ -176,7 +176,7 @@ hook.Add("Initialize", "TTT2GSCrazyPhysics", function()
             prop_ragdoll = true,
         }
 
-        cv_ttt_announce_body_found = GetConVar("ttt_announce_body_found")
+        cv_ttt_announce_body_found = CORPSE.cv.announce_body_found
         cv_ttt2_confirm_killlist = GetConVar("ttt2_confirm_killlist")
     end
 end)
