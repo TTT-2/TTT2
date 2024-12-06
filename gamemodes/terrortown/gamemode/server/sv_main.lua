@@ -132,7 +132,7 @@ local map_switch_delay = CreateConVar(
 
 ---
 -- @realm server
-CreateConVar(
+local identify_body_woconfirm = CreateConVar(
     "ttt_identify_body_woconfirm",
     "1",
     { FCVAR_NOTIFY, FCVAR_ARCHIVE },
@@ -506,6 +506,7 @@ function GM:SyncGlobals()
     end
 
     SetGlobalBool("ttt2_confirm_team", confirm_team:GetBool())
+    SetGlobalBool(identify_body_woconfirm:GetName(), identify_body_woconfirm:GetBool())
 
     ---
     -- @realm server
@@ -518,6 +519,10 @@ end)
 
 cvars.AddChangeCallback(idle_enabled:GetName(), function(cv, old, new)
     SetGlobalBool(idle_enabled:GetName(), tobool(tonumber(new)))
+end)
+
+cvars.AddChangeCallback(identify_body_woconfirm:GetName(), function(cv, old, new)
+    SetGlobalBool(identify_body_woconfirm:GetName(), tobool(tonumber(new)))
 end)
 
 ---
