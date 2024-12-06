@@ -24,6 +24,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed console error when dropping ammo for weapons with no AmmoEnt (by @MrXonte)
 - Fixed client error for a not fully initialized client (by @Histalek)
 - Fixed the targetID corpse hint not respecting `ttt_identify_body_woconfirm` (by @Histalek)
+- Fixed networked values for `ttt_identify_body_woconfirm` and `ttt2_confirm_team` not being updated properly when changed (by @Wryyyong)
 - Fixed the beacon not being properly translated when placed (by @Histalek)
 
 ### Changed
