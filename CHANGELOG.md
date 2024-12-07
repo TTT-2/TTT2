@@ -24,7 +24,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed console error when dropping ammo for weapons with no AmmoEnt (by @MrXonte)
 - Fixed client error for a not fully initialized client (by @Histalek)
 - Fixed the targetID corpse hint not respecting `ttt_identify_body_woconfirm` (by @Histalek)
-- Fixed networked values for `ttt_identify_body_woconfirm` and `ttt2_confirm_team` not being updated properly when changed (by @Wryyyong)
 - Fixed the beacon not being properly translated when placed (by @Histalek)
 
 ### Changed
@@ -37,6 +36,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated old TTT HUD to show name of spectated player (by @somefnfplayerlol)
 - Changes to the enabled map prefixes will not be announced to players anymore (by @Histalek)
 - By default only `ttt` and `ttt2` map prefixes are enabled (by @Histalek)
+- Updated `ttt_identify_body_woconfirm` to be replicated across the server and client (by @Wryyyong)
 
 ## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
 
