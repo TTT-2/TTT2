@@ -115,6 +115,15 @@ if SERVER then
     local mathRound = math.Round
     local mathFloor = math.floor
 
+    local cv_ttt2_confirm_killlist
+
+    hook.Add("Initialize", "TTT2BodySearch", function()
+        -- Change check if your terrortown folder is named something different
+        if engine.ActiveGamemode():lower() == "terrortown" and TTT2 and istable(CORPSE) then
+            cv_ttt2_confirm_killlist = CORPSE.cv.confirm_killlist
+        end
+    end)
+
     util.AddNetworkString("ttt2_client_reports_corpse")
     util.AddNetworkString("ttt2_client_confirm_corpse")
     util.AddNetworkString("ttt2_credits_were_taken")
@@ -356,7 +365,7 @@ if SERVER then
 
         -- build list of people this player killed, but only if convar is enabled
         sceneData.killEntityIDList = {}
-        if GetConVar("ttt2_confirm_killlist"):GetBool() then
+        if cv_ttt2_confirm_killlist:GetBool() then
             local ragKills = rag.kills or {}
 
             for i = 1, #ragKills do

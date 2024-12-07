@@ -133,33 +133,6 @@ local map_switch_delay = CreateConVar(
 ---
 -- @realm server
 CreateConVar(
-    "ttt_identify_body_woconfirm",
-    "1",
-    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
-    "Toggles whether ragdolls should be confirmed in gameloop.IsDetectiveMode() without clicking on confirm espacially"
-)
-
----
--- @realm server
-local confirm_team = CreateConVar(
-    "ttt2_confirm_team",
-    "0",
-    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
-    "Show team of confirmed player"
-)
-
----
--- @realm server
-CreateConVar(
-    "ttt2_confirm_killlist",
-    "1",
-    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
-    "Confirm players in kill list"
-)
-
----
--- @realm server
-CreateConVar(
     "ttt_enforce_playermodel",
     "1",
     { FCVAR_NOTIFY, FCVAR_ARCHIVE },
@@ -504,8 +477,6 @@ function GM:SyncGlobals()
             GetConVar("ttt_" .. abbr .. "_shop_fallback"):GetString()
         )
     end
-
-    SetGlobalBool("ttt2_confirm_team", confirm_team:GetBool())
 
     ---
     -- @realm server
