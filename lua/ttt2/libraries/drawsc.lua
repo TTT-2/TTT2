@@ -34,8 +34,8 @@ drawsc = {}
 -- @param number y The y position of the outlined box
 -- @param number w The width of the outlined box
 -- @param number h The height of the outlined box
--- @param[default=1] number t The thickness of the outline
--- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
+-- @param number t? The thickness of the outline, defaults to `1`
+-- @param Color color? The color of the line, defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function drawsc.OutlinedBox(x, y, w, h, t, color)
@@ -58,8 +58,8 @@ end
 -- @param number y The y position of the rectangle
 -- @param number w The width of the rectangle
 -- @param number h The height of the rectangle
--- @param[default=1] number t The thickness of the line
--- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
+-- @param number t? The thickness of the line, defaults to `1`
+-- @param Color color? The color of the line, defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function drawsc.OutlinedShadowedBox(x, y, w, h, t, color)
@@ -83,7 +83,7 @@ end
 -- @param number y The y position to start the box
 -- @param number w The width of the box
 -- @param number h The height of the box
--- @param[default=Color(255, 255, 255, 255)] Color color The color of the box
+-- @param Color color? The color of the box, defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function drawsc.Box(x, y, w, h, color)
@@ -99,7 +99,7 @@ end
 -- @param number y The y position to start the box
 -- @param number w The width of the box
 -- @param number h The height of the box
--- @param[default=Color(255, 255, 255, 255)] Color color The color of the box
+-- @param Color color? The color of the box, defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function drawsc.ShadowedBox(x, y, w, h, color)
@@ -121,7 +121,7 @@ end
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle
--- @param[default=Color(255, 255, 255, 255)] Color color The color of the circle
+-- @param Color color? The color of the circle, defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function drawsc.OutlinedCircle(x, y, r, color)
@@ -136,7 +136,7 @@ end
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle
--- @param[default=Color(255, 255, 255, 255)] Color color The color of the circle
+-- @param Color color? The color of the circle, defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function drawsc.OutlinedShadowedCircle(x, y, r, color)
@@ -159,8 +159,8 @@ end
 -- @param number w width The width
 -- @param number h height The height
 -- @param Material material The material
--- @param[default=255] number alpha The opacity of the material
--- @param[default=Color(255, 255, 255, 255)] Color col the alpha value will be ignored
+-- @param number alpha? The opacity of the material, defaults to `255`
+-- @param Color color? the alpha value will be ignored
 -- @2D
 -- @realm client
 function drawsc.FilteredTexture(x, y, w, h, material, alpha, color)
@@ -185,8 +185,8 @@ end
 -- @param number w width The width
 -- @param number h height The height
 -- @param Material material The material
--- @param[default=255] number alpha The opacity of the material
--- @param[default=Color(255, 255, 255, 255)] Color col the alpha value will be ignored
+-- @param number alpha? The opacity of the material, defaults to `255`
+-- @param Color color? the alpha value will be ignored
 -- @2D
 -- @realm client
 function drawsc.FilteredShadowedTexture(x, y, w, h, material, alpha, color)
@@ -208,7 +208,7 @@ end
 -- Draws an advanced text (scalable)
 -- @note The size is scaled by the global scale factor
 -- @param string text The text to be drawn
--- @param[default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
+-- @param string font? The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}. defaults to `DefaultBold`
 -- @param number x The x coordinate
 -- @param number y The y coordinate
 -- @param Color color The color of the text. Uses the Color structure.
@@ -216,7 +216,7 @@ end
 -- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number yalign The alignment of the y coordinate using
 -- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
--- @param[default=0] number angle The rotational angle in degree
+-- @param number angle? The rotational angle in degree
 -- @2D
 -- @realm client
 function drawsc.AdvancedText(text, font, x, y, color, xalign, yalign, angle)
@@ -240,7 +240,7 @@ end
 -- Draws an advanced text (scalable) with a drop shadow
 -- @note The size is scaled by the global scale factor
 -- @param string text The text to be drawn
--- @param[default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
+-- @param string font? The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}. defaults to `DefaultBold`
 -- @param number x The x coordinate
 -- @param number y The y coordinate
 -- @param Color color The color of the text. Uses the Color structure.
@@ -248,7 +248,7 @@ end
 -- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number yalign The alignment of the y coordinate using
 -- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
--- @param[default=0] number angle The rotational angle in degree
+-- @param number angle? The rotational angle in degree
 -- @2D
 -- @realm client
 function drawsc.AdvancedShadowedText(text, font, x, y, color, xalign, yalign, angle)
@@ -274,7 +274,7 @@ end
 -- @param number y The horizontal position
 -- @param number w width The width in reference to the vertical position
 -- @param number h height The height in reference to the horizontal position
--- @param[default=1] number fraction The blur fraction. The higher, the blurrier
+-- @param number fraction? The blur fraction. The higher, the blurrier, defaults to `1`
 -- @2D
 -- @realm client
 function drawsc.BlurredBox(x, y, w, h, fraction)

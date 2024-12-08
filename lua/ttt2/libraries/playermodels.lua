@@ -85,8 +85,8 @@ end
 -- Checks if a provided model is in the selection pool.
 -- @warning As client you must give an OnReceiveFunction as data might be gathered from the server first
 -- @param string name The name of the model
--- @param[opt] function OnReceiveFunc(value) only for the client the function to be called with the returned value if the model is selectable
--- @return[opt] boolean Returns true, if the model is in the selection pool on the server only
+-- @param function OnReceiveFunc? only for the client the function to be called with the returned value if the model is selectable
+-- @return boolean|nil Returns true, if the model is in the selection pool on the server only
 -- @realm shared
 function playermodels.IsSelectedModel(name, OnReceiveFunc)
     local _, isSelected = database.GetValue(
@@ -107,8 +107,8 @@ end
 -- Checks if a provided model is hattable.
 -- @warning As client you must give an OnReceiveFunction as data might be gathered from the server first
 -- @param string name The name of the model
--- @param[opt] function OnReceiveFunc(value) only for the client  the function to be called with the returned value if the model is hattable
--- @return[opt] boolean Returns true, if the model is hattable on the server only
+-- @param function OnReceiveFunc? only for the client  the function to be called with the returned value if the model is hattable
+-- @return boolean|nil Returns true, if the model is hattable on the server only
 -- @realm shared
 function playermodels.IsHattableModel(name, OnReceiveFunc)
     local _, isHattable = database.GetValue(
@@ -306,8 +306,8 @@ end
 -- Applies a detective hat to the provided player. Doesn't check if the player's model
 -- allows a hat. Use the Filter function for this.
 -- @param Player ply The player that should receive the hat
--- @param[opt] function Filter The filter function that has to return true to apply a hat
--- @param[opt] string hatName The class name of the hat entity, if different from the detective's hat.
+-- @param function Filter? The filter function that has to return true to apply a hat
+-- @param string hatName? The class name of the hat entity, if different from the detective's hat.
 -- @realm server
 function playermodels.ApplyPlayerHat(ply, Filter, hatName)
     if IsValid(ply.hat) or (isfunction(Filter) and not Filter(ply)) then

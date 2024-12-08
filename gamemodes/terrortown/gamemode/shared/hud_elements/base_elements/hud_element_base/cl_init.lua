@@ -57,7 +57,7 @@ HUDELEMENT.edit_live_data = {
 -- all children of this hud element, while also passing extra parameters
 -- to this the function.
 -- @param string funcName
--- @param[opt] any ... parameters to call the given function with
+-- @param any ...? parameters to call the given function with
 -- @realm client
 function HUDELEMENT:ApplyToChildren(funcName, ...)
     if not funcName then
@@ -150,7 +150,7 @@ function HUDELEMENT:Draw() end
 ---
 -- This function is called to decide whether or not an element should be drawn.
 -- Override it to let your element be drawn only in specific situations.
--- @return[default=true] boolean
+-- @return boolean
 -- @hook
 -- @realm client
 function HUDELEMENT:ShouldDraw()
@@ -160,8 +160,8 @@ end
 ---
 -- Checks whether an hud element is resizeable.
 -- Override it to change the resizing behaviour.
--- @return[default=true] boolean
--- @return[default=true] boolean
+-- @return boolean
+-- @return boolean
 -- @hook
 -- @realm client
 function HUDELEMENT:IsResizable()
@@ -171,7 +171,7 @@ end
 ---
 -- Checks whether an hud element's aspect ratio is locked.
 -- Override it to change the behaviour.
--- @return[default=false] boolean
+-- @return boolean
 -- @hook
 -- @realm client
 function HUDELEMENT:AspectRatioIsLocked()
@@ -181,7 +181,7 @@ end
 ---
 -- Checks whether an hud element's borders are inherited by it's parent.
 -- Override it to change the resizing behaviour.
--- @return[default=false] boolean
+-- @return boolean
 -- @hook
 -- @realm client
 function HUDELEMENT:InheritParentBorder()

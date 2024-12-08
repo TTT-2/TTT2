@@ -57,7 +57,7 @@ end
 
 ---
 -- @param number mode
--- @param[default=false] boolean triggerFunction
+-- @param boolean triggerFunction? defaults to `false`
 -- @realm client
 function PANEL:SetMode(mode, triggerFunction)
     if triggerFunction then

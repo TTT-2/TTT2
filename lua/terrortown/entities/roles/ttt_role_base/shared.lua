@@ -188,7 +188,7 @@ function ROLE:Initialize() end
 
 ---
 -- Returns the starting credits of a @{ROLE} based on ConVar settings or default traitor settings
--- @return[default=0] number
+-- @return number
 -- @realm shared
 function ROLE:GetStartingCredits()
     local cv = GetConVar("ttt_" .. self.abbr .. "_credits_starting")
@@ -198,7 +198,7 @@ end
 
 ---
 -- Returns whether a @{ROLE} is able to access the shop based on ConVar settings
--- @return[default=false] boolean
+-- @return boolean
 -- @realm shared
 function ROLE:IsShoppingRole()
     if self.subrole == ROLE_NONE then

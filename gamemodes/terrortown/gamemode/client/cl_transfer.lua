@@ -17,8 +17,8 @@ local selected_sid
 -- @param Player sender that wants to send credits
 -- @param Player recipient that would receive the credits
 -- @param number credits_per_xfer that would be transferred
--- @return[default=nil] boolean which disallows a transaction when false
--- @return[default=nil] string for the client which offers info related to the transaction
+-- @return boolean which disallows a transaction when false
+-- @return string for the client which offers info related to the transaction
 -- @hook
 -- @realm client
 function GM:TTT2CanTransferCredits(sender, recipient, credits_per_xfer) end

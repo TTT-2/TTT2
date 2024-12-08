@@ -16,7 +16,7 @@ function PANEL:Init()
 end
 
 ---
--- @param[default=5] number padding
+-- @param number padding? defaults to `5`
 -- @realm client
 function PANEL:SetPadding(padding)
     self.m_iPadding = padding

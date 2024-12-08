@@ -39,7 +39,7 @@ if SERVER then
 
     ---
     -- Sends a message to (a) specific target(s) in their selected language
-    -- @param[opt] number|table|Player arg1 the target(s) that should receive this message
+    -- @param number|table|Player arg1? the target(s) that should receive this message
     -- @param string arg2 the translation key name
     -- @param any arg3
     -- @param any arg4 params

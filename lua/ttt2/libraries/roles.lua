@@ -308,7 +308,7 @@ end
 ---
 -- Get a role by name (a copy)
 -- @param string name role name
--- @param[opt] table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @param table retTbl? this table will be modified and returned. If nil, a new table will be created.
 -- @return table returns the modified retTbl or the new role table
 -- @realm shared
 function roles.Get(name, retTbl)
@@ -405,7 +405,7 @@ end
 ---
 -- Get the role table by the role id
 -- @param number index subrole id
--- @param[default=roles.NONE] table A fallback table that is used if the role is not found
+-- @param table fallback? A fallback table that is used if the role is not found
 -- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
 function roles.GetByIndex(index, fallback)

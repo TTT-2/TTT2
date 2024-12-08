@@ -452,7 +452,7 @@ end
 -- @param number y
 -- @param number dw
 -- @param number dh
--- @return[default=true] boolean
+-- @return boolean
 -- @realm client
 function PANEL:PaintAt(x, y, dw, dh)
     dw, dh = dw or self:GetWide(), dh or self:GetTall()

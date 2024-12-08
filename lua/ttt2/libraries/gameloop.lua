@@ -302,7 +302,7 @@ if SERVER then
     ---
     -- Is called after round end and cleans up the current round, calls the map cleanup and
     -- therefore prepares the start of the next round.
-    -- @param[opt] boolean keepRoundCount Set to true to prevent the round count decrease
+    -- @param boolean keepRoundCount? Set to true to prevent the round count decrease
     -- @internal
     -- @realm server
     function gameloop.Post(keepRoundCount)
@@ -341,7 +341,7 @@ if SERVER then
     ---
     -- Clears the client state. This is needed for a new round to clear everything carried
     -- over from the previous round.
-    -- @param[opt] Player ply Define a player here to only clear their state, leave nil to clear all players
+    -- @param Player ply? Define a player here to only clear their state, leave nil to clear all players
     -- @internal
     -- @realm server
     function gameloop.ClearClientState(ply)
@@ -532,7 +532,7 @@ if SERVER then
 
     ---
     -- Decresed the amount of rounds left to be played on this level.
-    -- @param[default=1] number num The amount it is decreased by
+    -- @param number num? The amount it is decreased by, defaults to `1`
     -- @internal
     -- @realm server
     function gameloop.DecreaseRoundsLeft(num)
@@ -650,7 +650,7 @@ if SERVER then
     ---
     -- This function is used to trigger the round syncing. It is called automatically if
     -- the state is updated by @{gameloop.SetRoundState}.
-    -- @param[opt] Player ply if nil, this will broadcast to every connected @{PLayer}
+    -- @param Player ply? If nil, this will broadcast to every connected @{Player}
     -- @realm server
     function gameloop.SendRoundState(ply)
         net.Start("TTT_RoundState")

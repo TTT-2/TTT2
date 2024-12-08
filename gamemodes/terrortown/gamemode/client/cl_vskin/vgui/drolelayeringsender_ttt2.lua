@@ -22,7 +22,7 @@ function PANEL:GetPadding()
 end
 
 ---
--- @param[default=0] number padding
+-- @param number padding
 -- @realm client
 function PANEL:SetPadding(padding)
     self.m_iPadding = padding
@@ -36,7 +36,7 @@ function PANEL:GetLeftMargin()
 end
 
 ---
--- @param[default=0] number leftMargin
+-- @param number leftMargin
 -- @realm client
 function PANEL:SetLeftMargin(leftMargin)
     self.m_iLeftMargin = leftMargin

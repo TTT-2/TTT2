@@ -876,7 +876,7 @@ end
 
 ---
 -- Returns whether or not the default death sound should be muted.
--- @return[default=true] boolean Mute death sound
+-- @return boolean Mute death sound
 -- @note Used here to kill the hl2 beep
 -- @hook
 -- @realm server
@@ -1104,7 +1104,7 @@ end
 -- OnPlayerHitGround.
 -- @param Player ply
 -- @param number speed
--- @return[default=0] number
+-- @return number
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:GetFallDamage
@@ -1580,7 +1580,7 @@ end
 -- See @{GM:GravGunPickupAllowed} for the Gravity Gun pickup variant.
 -- @param Player ply The @{Player} trying to pick up something.
 -- @param Entity ent The @{Entity} the @{Player} attempted to pick up.
--- @return[default=false] boolean Allow the @{Player} to pick up the @{Entity} or not.
+-- @return boolean Allow the @{Player} to pick up the @{Entity} or not.
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:AllowPlayerPickup
@@ -1595,7 +1595,7 @@ end
 -- Mods/plugins that add such a system should override this.
 -- @param Player ply @{Player} who tried to taunt
 -- @param number act Act ID of the taunt player tries to do, see <a href="https://wiki.facepunch.com/gmod/Enums/ACT">ACT_Enums</a>
--- @return[default=false] boolean Return false to disallow player taunting
+-- @return boolean Return false to disallow player taunting
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerShouldTaunt
@@ -1617,7 +1617,7 @@ function GM:TTT2CheckCreditAward(victim, attacker) end
 -- Use this hook to override whether a given player is allowed to take credits from a given corpse.
 -- @param Player ply The player that tries to take credits
 -- @param Entity rag The ragdoll where the credits should be taken from
--- @param[default=false] isLongRange Whether the search is a long range search
+-- @param boolean isLongRange? Whether the search is a long range search, defaults to `false`
 -- @return nil|boolean Return true/false to override if the player is able to take credits
 -- @hook
 -- @realm server

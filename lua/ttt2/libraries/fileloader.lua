@@ -20,11 +20,11 @@ fileloader = fileloader or {}
 -- Sets up files by scanning through directories and including them into the runtime.
 -- @note Has to be run on both server and client for client and shared files.
 -- @param string path The absolute path to search in, has to end with `/`
--- @param[default=false] boolean deepsearch If true, files are searched one level down inside all available subfolders
--- @param[default=SHARED_FILE] number realm The realm where the file should be included
--- @param[opt] function callback A function that is called after the file is included
--- @param[opt] function preFolderCallback A function that is called before the load of the given folder is started
--- @param[opt] function postFolderCallback A function that is called after the load of the given folder is finished
+-- @param boolean deepsearch? If set to true, files are searched one level down inside all available subfolders
+-- @param number realm? The realm where the file should be included, defaults to `SHARED_FILE`
+-- @param function callback? A function that is called after the file is included
+-- @param function preFolderCallback? A function that is called before the load of the given folder is started
+-- @param function postFolderCallback? A function that is called after the load of the given folder is finished
 -- @realm shared
 function fileloader.LoadFolder(
     path,

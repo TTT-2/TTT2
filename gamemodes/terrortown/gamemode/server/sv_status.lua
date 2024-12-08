@@ -14,7 +14,7 @@ util.AddNetworkString("ttt2_status_effect_remove_all")
 -- Adds a status for a given @{Player}
 -- @param Player ply The @{Player} that should receive this status update
 -- @param string id The id of the registered @{STATUS}
--- @param[default=1] number active_icon The numeric id of a specific status icon
+-- @param number active_icon? The numeric id of a specific status icon, defaults to `1`
 -- @realm server
 function STATUS:AddStatus(ply, id, active_icon)
     net.Start("ttt2_status_effect_add")
@@ -27,7 +27,7 @@ end
 -- Changes the active icon for a specifiv active effect for a given @{Player}
 -- @param Player ply The @{Player} that should receive this status update
 -- @param string id The id of the registered @{STATUS}
--- @param[default=1] number active_icon The numeric id of a specific status icon
+-- @param number active_icon? The numeric id of a specific status icon, defaults to `1`
 -- @realm server
 function STATUS:SetActiveIcon(ply, id, active_icon)
     net.Start("ttt2_status_effect_set_id")
@@ -42,8 +42,8 @@ end
 -- @param string id The id of the registered @{STATUS}
 -- @param number duration The duration of the @{STATUS}. If the time elapsed,
 -- the @{STATUS} will be removed automatically
--- @param[default=false] boolean showDuration Whether the duration should be shown
--- @param[default=1] number active_icon The numeric id of a specific status icon
+-- @param boolean showDuration? Whether the duration should be shown, defaults to `false`
+-- @param number active_icon? The numeric id of a specific status icon, defaults to `1`
 -- @realm server
 function STATUS:AddTimedStatus(ply, id, duration, showDuration, active_icon)
     net.Start("ttt2_status_effect_add_timed")

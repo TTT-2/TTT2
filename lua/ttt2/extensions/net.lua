@@ -103,7 +103,7 @@ net.Receive(NETMSG_REQUEST_NEXT_SPLIT, SendNextSplit)
 --
 -- @param string messageId A unique message id similar to the network strings
 -- @param table data The data table to send, this will be reconstructed at the destination.
--- @param[opt] table|player plys SERVERSIDE only! Optional, use it to send a stream to a single player or a group of players otherwise it's broadcasted.
+-- @param table|player plys? SERVERSIDE only! Optional, use it to send a stream to a single player or a group of players otherwise it's broadcasted.
 -- @realm shared
 function net.SendStream(messageId, data, plys)
     local encodedString = pon.encode(data)
@@ -134,7 +134,7 @@ end
 -- @param string messageId a unique message id similar to the network strings
 -- @param number streamId the current stream number the split is requested for
 -- @param number split the part of the Stream that should be sent
--- @param[opt] table|player plys SERVERSIDE only! Optional, use it to send a stream to a single player or a group of players.
+-- @param table|player plys? SERVERSIDE only! Optional, use it to send a stream to a single player or a group of players.
 -- @realm shared
 -- @internal
 local function RequestNextSplit(messageId, streamId, split, plys)

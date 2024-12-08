@@ -24,8 +24,8 @@ end
 
 ---
 -- Sets the size of the moveable children
--- @param[default=64] number w The width
--- @param[default=64] number h The height
+-- @param number w? The width, defaults to `64`
+-- @param number h? The height, defaults to `64`
 -- @realm client
 function PANEL:SetChildSize(w, h)
     self.childW = w
@@ -48,7 +48,7 @@ function PANEL:GetLeftMargin()
 end
 
 ---
--- @param[default=0] number leftMargin The left margin
+-- @param number leftMargin? The left margin, defaults to `0`
 -- @realm client
 function PANEL:SetLeftMargin(leftMargin)
     self.m_iLeftMargin = leftMargin

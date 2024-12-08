@@ -33,7 +33,7 @@ end
 ---
 -- Adds a status to the currently active ones
 -- @param string id The id of the registered @{STATUS}
--- @param[default=1] number active_icon The numeric id of a specific status icon
+-- @param number active_icon? The numeric id of a specific status icon, defaults to `1`
 -- @realm client
 function STATUS:AddStatus(id, active_icon)
     if STATUS.registered[id] == nil then
@@ -50,8 +50,8 @@ end
 -- @param string id The id of the registered @{STATUS}
 -- @param number duration The duration of the @{STATUS}. If the time elapsed,
 -- the @{STATUS} will be removed automatically
--- @param[default=false] boolean showDuration Whether the duration should be shown
--- @param[default=1] number active_icon The numeric id of a specific status icon
+-- @param boolean showDuration? Whether the duration should be shown, defaults to `false`
+-- @param number active_icon? The numeric id of a specific status icon, defaults to `1`
 -- @realm client
 function STATUS:AddTimedStatus(id, duration, showDuration, active_icon)
     if self.registered[id] == nil or duration == 0 then
@@ -80,7 +80,7 @@ end
 ---
 -- Changes the active icon for a specifiv active effect for a given @{Player}
 -- @param string id The id of the registered @{STATUS}
--- @param[default=1] number active_icon The numeric id of a specific status icon
+-- @param number active_icon? The numeric id of a specific status icon, defaults to `1`
 -- @realm client
 function STATUS:SetActiveIcon(id, active_icon)
     if STATUS.active[id] == nil then

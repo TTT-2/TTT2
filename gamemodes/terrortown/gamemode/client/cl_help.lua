@@ -258,7 +258,7 @@ HELPSCRN.Show = HELPSCRN.ShowMainMenu
 
 ---
 -- Returns the name of the currently opened menu, returns nil if no menu is opened.
--- @return[default=nil] string The id of the opened menu or nil
+-- @return string The id of the opened menu or nil
 -- @realm client
 function HELPSCRN:GetOpenMenu()
     if not self:IsVisible() then

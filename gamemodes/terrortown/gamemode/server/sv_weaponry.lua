@@ -30,8 +30,8 @@ local cv_ttt_detective_hats =
 -- @note Prevent @{Player}s from picking up multiple @{Weapon}s of the same type etc
 -- @param Player ply The @{Player} attempting to pick up the @{Weapon}
 -- @param Weapon wep The @{Weapon} entity in question
--- @param[opt] number dropBlockingWeapon should the weapon stored in the same slot be dropped
--- @param[opt] boolean isPickupProbe Set this to true to mark this hook run as probe
+-- @param number dropBlockingWeapon? should the weapon stored in the same slot be dropped
+-- @param boolean isPickupProbe? Set this to true to mark this hook run as probe
 -- @return boolean Allowed pick up or not
 -- @return number errorCode
 -- 1 - Player is spectator

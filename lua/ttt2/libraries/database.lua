@@ -94,7 +94,7 @@ end
 -- Call this function if a value was received
 -- @param number index The local index of the database
 -- @param string itemName The name of the item in the database
--- @param[opt] string key The name of the key in the database, or all keys
+-- @param string key? The name of the key in the database, or all keys
 -- @realm shared
 -- @internal
 local function ValueReceived(index, itemName, key)
@@ -117,7 +117,7 @@ end
 -- Check if a value was already received via network
 -- @param number index the local index of the database
 -- @param string itemName the name of the item in the database
--- @param[opt] string key the name of the key in the database, otherwise check all keys
+-- @param string key? the name of the key in the database, otherwise check all keys
 -- @realm shared
 -- @internal
 local function IsValueReceived(index, itemName, key)
@@ -283,10 +283,10 @@ end
 -- Adds a callback to be called when the given sql table entries change
 -- @note itemName and key can both be `nil`. The callback function then gets called on a change of every item or every key
 -- @param string accessName the chosen accessName registered for a given database. HAS NOT TO BE the real database-name! And does not have to be registered yet!
--- @param[opt] string itemName The name of the item in the database. Leave `nil` if you want a callback for every item
--- @param[opt] string key The name of the key in the database. Leave `nil` if you want a callback for every key
+-- @param string itemName? The name of the item in the database. Leave `nil` if you want a callback for every item
+-- @param string key? The name of the key in the database. Leave `nil` if you want a callback for every key
 -- @param function The callback function(accessName, itemName, key, oldValue, newValue), it's only called if the value actually changed
--- @param[opt] string identifier An identifier by which you can remove the callback more granular
+-- @param string identifier? An identifier by which you can remove the callback more granular
 -- @realm shared
 function database.AddChangeCallback(accessName, itemName, key, callback, identifier)
     -- Allow every accessName in case the database is only later registered
@@ -332,9 +332,9 @@ end
 -- Removes a callback if an identifier was registered
 -- @note itemName and key can both be `nil`. The callback function then gets removed for all items or keys with that identifier
 -- @param string accessName the chosen accessName registered for a given database. HAS NOT TO BE the real database-name!
--- @param[opt] string itemName The name of the item in the database. Leave `nil` if you want to remove callbacks for every item with the given identifier
--- @param[opt] string key The name of the key in the database. Leave `nil` if you want to remove callbacks for every key with the given identifier
--- @param[opt] string identifier The identifier by which the callbacks to remove are filtered
+-- @param string itemName? The name of the item in the database. Leave `nil` if you want to remove callbacks for every item with the given identifier
+-- @param string key? The name of the key in the database. Leave `nil` if you want to remove callbacks for every key with the given identifier
+-- @param string identifier? The identifier by which the callbacks to remove are filtered
 -- @realm shared
 function database.RemoveChangeCallback(accessName, itemName, key, identifier)
     callbacks = callbackIdentifiers[identifier]
@@ -704,8 +704,8 @@ end
 -- @note on the client plyIdentifier is unused and always sends to the server
 -- @param number identifier the identifiers used in send and receive messages, defined in `MESSAGE_`-enums
 -- @param any data the data for the send method. Can contain anything and is defined above each send or receive method itself
--- @param[opt] any registerIndex the index of the database you want to send an update for. INDEX_NONE when no index is given or every player registered player should receive the info
--- @param[opt] string plyIdentifier (serverside-only) the player identifier to determine who receives the message, defined in `SEND_TO_PLY_`-enums or can be a plyID64
+-- @param any registerIndex? the index of the database you want to send an update for. INDEX_NONE when no index is given or every player registered player should receive the info
+-- @param string plyIdentifier? (serverside-only) the player identifier to determine who receives the message, defined in `SEND_TO_PLY_`-enums or can be a plyID64
 -- @realm shared
 -- @internal
 local function SendUpdateNextTick(identifier, data, registerIndex, plyIdentifier)
@@ -970,7 +970,7 @@ if SERVER then
     -- Checks if the player has the necessary accessLevel
     -- @note Only Admins can write to the database, no matter the accessLevel
     -- @param number index the local index of the database
-    -- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
+    -- @param string plyID64? the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
     -- @return boolean,boolean hasReadAccess, hasWriteAccess, if the player can read from or write to the database
     -- @realm server
     -- @internal
@@ -999,7 +999,7 @@ if SERVER then
     -- Synchronizes all registered Databases with the given players defined by the plyIdentifier
     -- @note This is used internally to sync between server and client, you dont need to call it manually
     -- @param string plyIdentifier the player identifier to determine who receives the message, defined in `SEND_TO_PLY_`-enums or can be a plyID64
-    -- @param[opt] string identifier the identifier used to get correct onreceive functions
+    -- @param string identifier? the identifier used to get correct onreceive functions
     -- @realm server
     -- @internal
     function database.SyncRegisteredDatabases(plyIdentifier, identifier)
@@ -1044,9 +1044,9 @@ if SERVER then
     -- @param string databaseName the real name of the database
     -- @param string accessName the name to quickly access databases and differentiate between a pseudo used accessName and the migrated actual databaseName
     -- @param table savingKeys the savingKeys = {keyName = {typ, bits, default, ..}, ..} defining the keyNames and their information
-    -- @param[default = TTT2_DATABASE_ACCESS_ADMIN] number accessLevel the access level needed to get values of a database, defined in `TTT2_DATABASE_ACCESS_`-enums (_ANY, _ADMIN, _SERVER)
+    -- @param number accessLevel? the access level needed to get values of a database, defined in `TTT2_DATABASE_ACCESS_`-enums (_ANY, _ADMIN, _SERVER), defaults to `TTT2_DATABASE_ACCESS_ADMIN`
     -- @note If accessLevel is set to TTT2_DATABASE_ACCESS_SERVER it fully prevents any client read- and write-access, whereas TTT2_DATABASE_ACCESS_ANY only gives read-, but not write-access to anyone
-    -- @param[opt] table additionalData the data that doesnt belong to a database but might be needed for other purposes like enums
+    -- @param table additionalData? the data that doesnt belong to a database but might be needed for other purposes like enums
     -- @return boolean isSuccessful if the database exists and is successfully registered
     -- @realm server
     function database.Register(databaseName, accessName, savingKeys, accessLevel, additionalData)
@@ -1137,8 +1137,8 @@ if SERVER then
     -- @note While itemName and key are optional, leaving them out only gets the saved and converted sql Tables, they dont include every possible item with their default values.
     -- So to get default Values you have to specify itemName and key. This is designed to be used for single requests.
     -- @param string accessName the chosen networkable name of the sql table
-    -- @param[opt] string itemName the name or primaryKey of the item inside of the sql table, if not given selects whole sql table
-    -- @param[opt] string key the name of the key in the database, is ignored when no itemName is given, if not given selects whole item
+    -- @param string itemName? the name or primaryKey of the item inside of the sql table, if not given selects whole sql table
+    -- @param string key? the name of the key in the database, is ignored when no itemName is given, if not given selects whole item
     -- @return boolean if the requested item and/or key was successfully registered in the sql datatable
     -- @return any, the value that was saved in the database or the default
     -- @realm server
@@ -1267,7 +1267,7 @@ if SERVER then
     -- @param string itemName the name or primaryKey of the item inside of the sql table
     -- @param string key the name of the key in the database
     -- @param any value the value you want to set in the database
-    -- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
+    -- @param string plyID64? the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
     -- @realm server
     function database.SetValue(accessName, itemName, key, value, plyID64)
         local index = nameToIndex[accessName]
@@ -1469,7 +1469,7 @@ if SERVER then
     -- Reset the database and send a message to the client
     -- @note It is restricted to players with TTT2_DATABASE_ACCESS_ADMIN or higher at all times
     -- @param string accessName the chosen networkable name of the sql table
-    -- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
+    -- @param string plyID64? the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
     -- @realm server
     function database.Reset(accessName, plyID64)
         local index = nameToIndex[accessName]
