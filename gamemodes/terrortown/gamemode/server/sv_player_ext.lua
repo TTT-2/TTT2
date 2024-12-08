@@ -832,13 +832,13 @@ end
 ---
 -- Revives a @{Player}
 -- @param[default=3] number delay The delay of the revive
--- @param[opt] function OnRevive The @{function} that should be run if the @{Player} revives
--- @param[opt] function DoCheck An additional checking @{function}
--- @param[default=false] boolean needsCorpse Whether the dead @{Player} @{CORPSE} is needed
--- @param[default=REVIVAL_BLOCK_NONE] number blockRound Stops the round from ending if this is set to someting other than 0
--- @param[opt] function OnFail This @{function} is called if the revive fails
--- @param[opt] Vector spawnPos The position where the player should be spawned, accounts for minor obstacles
--- @param[opt] Angle spawnEyeAngle The eye angles of the revived players
+-- @param function OnRevive? The @{function} that should be run if the @{Player} revives
+-- @param function DoCheck? An additional checking @{function}
+-- @param boolean needsCorpse? Whether the dead @{Player} @{CORPSE} is needed, defaults to false
+-- @param number blockRound? Set the desired behaviour with the REVIVAL_BLOCK_ enum, defaults to `REVIVAL_BLOCK_NONE`
+-- @param function OnFail? This @{function} is called if the revive fails
+-- @param Vector spawnPos? The position where the player should be spawned, accounts for minor obstacles
+-- @param Angle spawnEyeAngle? The eye angles of the revived players
 -- @realm server
 function plymeta:Revive(
     delay,
@@ -950,7 +950,7 @@ end
 ---
 -- Cancel the ongoing revival process.
 -- @param[default="message_revival_canceled"] string failMessage The fail message that should be displayed for the client
--- @param[opt] boolean silent If silent is true, no sound and text will be displayed
+-- @param boolean silent? If silent is true, no sound and text will be displayed
 -- @realm server
 function plymeta:CancelRevival(failMessage, silent)
     if not self:IsReviving() then
@@ -1051,7 +1051,7 @@ end
 -- Sends a revival reason that is displayed in the clients revival HUD element.
 -- It supports a language identifier for translated strings.
 -- @param[default=nil] string name The text or the language identifier, nil to reset
--- @param[opt] table params The params table used for @{LANG.GetParamTranslation}
+-- @param table params? The params table used for @{LANG.GetParamTranslation}
 -- @realm server
 function plymeta:SendRevivalReason(name, params)
     net.Start("TTT2SetRevivalReason")
@@ -1227,7 +1227,7 @@ end
 
 ---
 -- Update player corpse state
--- @param[opt] boolean announceRole
+-- @param boolean announceRole?
 -- @realm server
 function plymeta:ConfirmPlayer(announceRole)
     if self:GetNWFloat("t_first_found", -1) < 0 then
@@ -1335,7 +1335,7 @@ end
 -- Checks if the player has space in front of them to drop a weapon.
 -- @param Vector pos The position from where the drop should start
 -- @param Vector aim The aim vector or the general drop vector
--- @param[opt] Weapon wep The weapon that should be dropped; add it as a parameter
+-- @param Weapon wep? The weapon that should be dropped; add it as a parameter
 -- to have it on the trace ignore list
 -- @return boolean Returns if there is space for a weapon to be dropped
 -- @realm server
@@ -1563,10 +1563,10 @@ end
 -- This function simplifies the weapon pickup process for a player by
 -- handling all the needed calls.
 -- @param Weapon wep The weapon entity that should be picked up
--- @param[opt] boolean ammoOnly If set to true, the player will only attempt to pick up the ammo from the weapon. The weapon will not be picked up even if the player doesn't have a weapon of this type, and the weapon will be removed if the player picks up any ammo from it
--- @param[default=false] boolean forcePickup Should the pickup been forced (ignores the cv_auto_pickup cvar)
--- @param[default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
--- @param[opt] boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
+-- @param boolean ammoOnly? If set to true, the player will only attempt to pick up the ammo from the weapon. The weapon will not be picked up even if the player doesn't have a weapon of this type, and the weapon will be removed if the player picks up any ammo from it
+-- @param boolean forcePickup? Should the pickup be forced (ignores the cv_auto_pickup cvar), defaults to false
+-- @param boolean dropBlockingWeapon? Should the currently selecten weapon be dropped, defaults to false
+-- @param boolean shouldAutoSelect? Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @return Weapon if successful, nil if not
 -- @realm server
 function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, shouldAutoSelect)

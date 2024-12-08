@@ -851,7 +851,7 @@ end
 
 ---
 -- Resets the equipment item table to the provided one
--- @param[opt] table items The table with the item entities
+-- @param table items? The table with the item entities
 -- @realm shared
 function plymeta:SetEquipmentItems(items)
     self.equipmentItems = items or {}
@@ -872,7 +872,7 @@ end
 ---
 -- Given an equipment id, returns if @{Player} owns this. Given nil, returns if
 -- @{Player} has any equipment item.
--- @param[opt] string id
+-- @param string id?
 -- @return boolean
 -- @realm shared
 function plymeta:HasEquipmentItem(id)

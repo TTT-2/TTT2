@@ -91,7 +91,7 @@ end
 ---
 -- Trigger an error only shown to `developer 1` informing about a deprecation
 -- @param string deprecation Message explaining what is being deprecated
--- @param string[opt] remediation Message explaining how this can be fixed
+-- @param string remediation? Message explaining how this can be fixed
 -- @realm shared
 function Deprecation(deprecation, remediation)
     if not cvars or cvars.Number("developer", 0) < 1 then

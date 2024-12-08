@@ -121,9 +121,9 @@ end
 
 ---
 -- Sets the title of the specific radar vision element
--- @param[default=""] string text The text that should be displayed
--- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
--- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
+-- @param string text? The text that should be displayed, defaults to `""`
+-- @param Color color? The color of the line, defaults to `COLOR_WHITE`
+-- @param table inline_icons? A table of materials that should be rendered in front of the text
 -- @realm client
 function MARKER_VISION_DATA:SetTitle(text, color, inline_icons)
     self.params.displayInfo.title = {
@@ -135,9 +135,9 @@ end
 
 ---
 -- Sets the subtitle of the specific radar vision element
--- @param[default=""] string text The text that should be displayed
--- @param[default=Color(210, 210, 210, 255)] Color color The color of the line
--- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
+-- @param string text? The text that should be displayed
+-- @param Color color? The color of the line, defaults to `COLOR_LLGRAY`
+-- @param table inline_icons? A table of materials that should be rendered in front of the text
 -- @realm client
 function MARKER_VISION_DATA:SetSubtitle(text, color, inline_icons)
     self.params.displayInfo.subtitle = {
@@ -149,9 +149,9 @@ end
 
 ---
 -- Adds a line of text to the description area of the radar vision element
--- @param[default=""] string text The text that should be displayed
--- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
--- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
+-- @param string text? The text that should be displayed, defaults to `""`
+-- @param Color color? The color of the line, defaults to `COLOR_WHITE`
+-- @param table inline_icons? A table of materials that should be rendered in front of the text
 -- @return number The amount of description lines that are currently in the table
 -- @realm client
 function MARKER_VISION_DATA:AddDescriptionLine(text, color, inline_icons)

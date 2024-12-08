@@ -203,7 +203,7 @@ end
 
 ---
 -- Spawns all available players.
--- @param[opt] boolean deadOnly Set to true to only respawn dead players
+-- @param boolean deadOnly? Set to true to only respawn dead players
 -- @realm server
 function entspawn.SpawnPlayers(deadOnly)
     local waveDelay = cvSpawnWaveInterval:GetFloat()

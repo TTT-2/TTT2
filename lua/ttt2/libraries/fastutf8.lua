@@ -45,7 +45,7 @@ end
 -- maps f over s's utf8 characters f can accept args: (visual_index, utf8_character, byte_index)
 -- @param string s The string to map over
 -- @param func f The function to map over the string
--- @param[opt] boolean no_subs If true, the function will not yield the utf8 characters
+-- @param boolean no_subs? If true, the function will not yield the utf8 characters
 -- @realm shared
 fastutf8.map = function(s, f, no_subs)
     local i = 0
@@ -69,7 +69,7 @@ end
 ---
 -- generator function -- to iterate over all utf8 chars
 -- @param string s The string to iterate over
--- @param[opt] boolean no_subs If true, the generator will not yield the utf8 characters
+-- @param boolean no_subs? If true, the generator will not yield the utf8 characters
 -- @return func Returns a generator function
 -- @realm shared
 fastutf8.chars = function(s, no_subs)
@@ -128,7 +128,7 @@ end
 -- a utf8-safe string.sub()
 -- @param string s The string to get the substring from
 -- @param number i The start index
--- @param[opt] number j The end index
+-- @param number j? The end index
 -- @return string Returns the substring
 -- @realm shared
 fastutf8.sub = function(s, i, j)

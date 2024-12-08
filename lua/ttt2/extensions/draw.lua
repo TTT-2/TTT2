@@ -684,9 +684,9 @@ end
 -- for the length) if the text without the limiting char is too long for the provided width.
 -- @param string text The text that may be limited in length
 -- @param number width The maximum width that should be used to limit the text
--- @param[default="DefaultBold"] string font The font ID
--- @param[opt] string limitChar The limiting character(s) that might be appended to the end
--- @param[default=1.0] number scale The UI scale factor
+-- @param string font The font ID, defaults to `DefaultBold`
+-- @param string limitChar? The limiting character(s) that might be appended to the end
+-- @param number scale The UI scale factor, defaults to `1.0`
 -- @return string The length limited text
 -- @realm client
 function draw.GetLimitedLengthText(text, width, font, limitChar, scale)

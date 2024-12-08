@@ -191,7 +191,7 @@ end
 -- This @{function} adds missing values into a table
 -- @param table target
 -- @param table source
--- @param[opt] boolean iterable
+-- @param boolean iterable?
 -- @realm shared
 function table.AddMissing(target, source, iterable)
     if #source == 0 then

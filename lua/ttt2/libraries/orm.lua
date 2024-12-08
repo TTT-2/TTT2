@@ -19,7 +19,7 @@ local ORMOBJECT = {}
 ---
 -- Returns an object relational model according to the specified databasetable. Does nothing if no databasetable with the given name exists.
 -- @param string tableName The name of the table in the database to create a model for.
--- @param[opt] boolean force If set to `true` the function will not return a cached version of the model.
+-- @param boolean force? If set to `true` the function will not return a cached version of the model.
 -- @return ORMMODEL|nil Returns the model of the database table or nil if the database table does not exist.
 -- @realm shared
 function orm.Make(tableName, force)
@@ -144,7 +144,7 @@ end
 
 ---
 -- Creates a new object of the model.
--- @param[opt] table data Preexisting data the object should be initialized with.
+-- @param table data? Preexisting data the object should be initialized with.
 -- @return ORMOBJECT The created object.
 -- @realm shared
 function ORMMODEL:New(data)

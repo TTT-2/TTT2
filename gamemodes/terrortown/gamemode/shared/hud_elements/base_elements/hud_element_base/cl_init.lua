@@ -57,7 +57,7 @@ HUDELEMENT.edit_live_data = {
 -- all children of this hud element, while also passing extra parameters
 -- to this the function.
 -- @param string funcName
--- @param[opt] any ... parameters to call the given function with
+-- @param any ...? parameters to call the given function with
 -- @realm client
 function HUDELEMENT:ApplyToChildren(funcName, ...)
     if not funcName then

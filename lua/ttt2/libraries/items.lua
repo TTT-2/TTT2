@@ -158,7 +158,7 @@ end
 ---
 -- Get an item by name (a copy)
 -- @param string name item name
--- @param[opt] table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @param table retTbl? this table will be modified and returned. If nil, a new table will be created.
 -- @return table returns the modified retTbl or the new item table
 -- @realm shared
 function items.Get(name, retTbl)

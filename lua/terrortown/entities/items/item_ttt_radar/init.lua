@@ -186,8 +186,8 @@ end
 -- Creates a new radar point
 -- @param Player ply The player that will see this radar point
 -- @param Vector pos The position of the radar point
--- @param[opt] Entity ent The entity that is used for this radar point
--- @param[opt] Color color A color for this radar point, this overwrites the normal color
+-- @param Entity ent? The entity that is used for this radar point
+-- @param Color color? A color for this radar point, this overwrites the normal color
 -- @return table
 -- @realm server
 function RADAR.CreateTargetTable(ply, pos, ent, color)

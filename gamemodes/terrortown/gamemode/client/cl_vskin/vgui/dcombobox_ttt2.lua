@@ -281,9 +281,9 @@ end
 
 ---
 -- Choose option by index, title is not settable
--- @param[opt] string title is unused as it cant be set anymore
+-- @param string title? is unused as it cant be set anymore
 -- @param number index the option id
--- @param[default=false] boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param boolean ignoreConVar? To avoid endless loops, separated setting of convars and UI values, defaults to false
 -- @realm client
 -- @deprecated Giving titles is not possible anymore. Use `PANEL:ChooseOptionID` instead
 function PANEL:ChooseOption(title, index, ignoreConVar)

@@ -144,8 +144,8 @@ end
 -- Translates a given string and automatically decides between param translation and normal
 -- translation based on the given data. Can also translate the params if so desired.
 -- @param string name string key identifier for the translated @{string}
--- @param[opt] table params The params that can be insterted into the translated string
--- @param[opt] boolean translateParams Whether the params should be translated as well
+-- @param table params? The params that can be insterted into the translated string
+-- @param boolean translateParams? Whether the params should be translated as well
 -- @return string The translated string
 -- @realm client
 function LANG.GetDynamicTranslation(name, params, translateParams)

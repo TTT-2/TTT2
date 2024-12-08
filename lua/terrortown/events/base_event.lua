@@ -62,7 +62,7 @@ end
 -- Sets the score data table to the event. If the score is nil, the existing score
 -- will be removed for this player.
 -- @param string ply64 The steamID64 of the affected player
--- @param[opt] table score The score data table that should be set
+-- @param table score? The score data table that should be set
 -- @realm shared
 function EVENT:SetPlayerScore(ply64, score)
     if not ply64 then
@@ -75,7 +75,7 @@ end
 ---
 -- Sets the karma changes data table to the event.
 -- @param string sid64 The steamID64 of the affected player
--- @param[opt] table karma The karma changes data table that should be set
+-- @param table karma? The karma changes data table that should be set
 -- @realm shared
 function EVENT:SetPlayerKarma(sid64, karma)
     if not sid64 then

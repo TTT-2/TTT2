@@ -187,7 +187,7 @@ end
 -- Sets the title of the specific targetID element
 -- @param[default=""] string text The text that should be displayed
 -- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
--- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
+-- @param table inline_icons? A table of materials that should be rendered in front of the text
 -- @realm client
 function TARGET_DATA:SetTitle(text, color, inline_icons)
     self.params.displayInfo.title = {
@@ -201,7 +201,7 @@ end
 -- Sets the subtitle of the specific targetID element
 -- @param[default=""] string text The text that should be displayed
 -- @param[default=Color(210, 210, 210, 255)] Color color The color of the line
--- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
+-- @param table inline_icons? A table of materials that should be rendered in front of the text
 -- @realm client
 function TARGET_DATA:SetSubtitle(text, color, inline_icons)
     self.params.displayInfo.subtitle = {
@@ -215,7 +215,7 @@ end
 -- Adds a line of text to the description area of the targetID element
 -- @param[default=""] string text The text that should be displayed
 -- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
--- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
+-- @param table inline_icons? A table of materials that should be rendered in front of the text
 -- @return number The amount of description lines that are currently in the table
 -- @realm client
 function TARGET_DATA:AddDescriptionLine(text, color, inline_icons)
