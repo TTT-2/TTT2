@@ -214,7 +214,7 @@ function shop.CanBuyEquipment(ply, equipmentName)
 
     -- if we have a pending order because we are in a confined space, don't
     -- start a new one
-    if timer.Exists("give_equipment" .. ply:UniqueID()) then
+    if timer.Exists("give_equipment" .. ply:SteamID64()) then
         return false, shop.statusCode.PENDINGORDER
     end
 
