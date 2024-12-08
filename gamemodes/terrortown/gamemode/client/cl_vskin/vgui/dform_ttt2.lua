@@ -875,7 +875,7 @@ function PANEL:MakeImageCheckBox(data, base)
 end
 
 -- Adds an icon layout to the form
--- @param[default=10] number spacing The spacing between the elements
+-- @param number spacing? The spacing between the elements, defaults to `10`
 -- @return Panel The created panel
 -- @realm client
 function PANEL:MakeIconLayout(spacing)

@@ -307,7 +307,7 @@ end
 
 ---
 -- Checks if a player with the defuser weapon is in range.
--- @return[default=false] boolean
+-- @return boolean
 -- @realm shared
 function ENT:IsDefuserInRange()
     local center = self:GetPos()

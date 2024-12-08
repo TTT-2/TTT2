@@ -11,7 +11,7 @@ local string = string
 -- @param string name
 -- @param Entity|Player activator
 -- @param Entity|Player caller
--- @return[default=true] boolean
+-- @return boolean
 -- @realm shared
 function ENT:AcceptInput(name, activator, caller)
     if name == "TraitorWin" then

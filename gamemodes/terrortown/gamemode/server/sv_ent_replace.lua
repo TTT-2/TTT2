@@ -120,7 +120,7 @@ end
 ---
 -- Checks whether the given map is able to import @{Entity} based on the map's data
 -- @param string map
--- @return[default=false] boolean
+-- @return boolean
 -- @realm server
 -- @internal
 function ents.TTT.CanImportEntities(map)

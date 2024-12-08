@@ -71,7 +71,7 @@ if CLIENT then
 
     ---
     -- Sets the current charge of the voice battery.
-    -- @param[default=0] number Charge The new battery charge
+    -- @param number Charge? The new battery charge, defaults to `0`
     -- @realm client
     function voicebattery.SetCharge(charge)
         voicebattery.currentCharge = charge or 0

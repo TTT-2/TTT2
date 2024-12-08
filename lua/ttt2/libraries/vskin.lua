@@ -110,7 +110,7 @@ end
 
 ---
 -- Sets the background blur state.
--- @param[default=true] boolean state
+-- @param boolean state? defaults to `true`
 -- @realm client
 function vskin.SetBlurBackground(state)
     cv_blurVSkin:SetBool(state == nil and true or state)
@@ -127,7 +127,7 @@ end
 
 ---
 -- Sets the background color state.
--- @param[default=true] boolean state
+-- @param boolean state? defaults to `true`
 -- @realm client
 function vskin.SetColorBackground(state)
     cv_colorVSkin:SetBool(state == nil and true or state)
@@ -144,7 +144,7 @@ end
 
 ---
 -- Returns the background color of the currently selected vskin.
--- @return[default=Color(255, 255, 255, 255)] Color The background color
+-- @return Color The background color
 -- @realm client
 function vskin.GetBackgroundColor()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -158,7 +158,7 @@ end
 
 ---
 -- Returns the accent color of the currently selected vskin.
--- @return[default=Color(255, 255, 255, 255)] Color The accent color
+-- @return Color The accent color
 -- @realm client
 function vskin.GetAccentColor()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -172,7 +172,7 @@ end
 
 ---
 -- Returns the dark accent color of the currently selected vskin.
--- @return[default=Color(255, 255, 255, 255)] Color The dark accent color
+-- @return Color The dark accent color
 -- @realm client
 function vskin.GetDarkAccentColor()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -186,7 +186,7 @@ end
 
 ---
 -- Returns the scrollbar color of the currently selected vskin.
--- @return[default=Color(255, 255, 255, 255)] Color The scrollbar color
+-- @return Color The scrollbar color
 -- @realm client
 function vskin.GetScrollbarColor()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -200,7 +200,7 @@ end
 
 ---
 -- Returns the screen color of the currently selected vskin.
--- @return[default=Color(255, 255, 255, 255)] Color The scrollbar color
+-- @return Color The scrollbar color
 -- @realm client
 function vskin.GetScreenColor()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -214,7 +214,7 @@ end
 
 ---
 -- Returns the shadow color of the currently selected vskin.
--- @return[default=Color(255, 255, 255, 255)] Color The shadow color
+-- @return Color The shadow color
 -- @realm client
 function vskin.GetShadowColor()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -228,7 +228,7 @@ end
 
 ---
 -- Returns the title text color of the currently selected vskin.
--- @return[default=Color(255, 255, 255, 255)] Color The title text color
+-- @return Color The title text color
 -- @realm client
 function vskin.GetTitleTextColor()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -242,7 +242,7 @@ end
 
 ---
 -- Returns the shadow size of the currently selected vskin.
--- @return[default=5] number The shadow size
+-- @return number The shadow size
 -- @realm client
 function vskin.GetShadowSize()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -256,7 +256,7 @@ end
 
 ---
 -- Returns the header height of the currently selected vskin.
--- @return[default=45] number The header height
+-- @return number The header height
 -- @realm client
 function vskin.GetHeaderHeight()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -270,7 +270,7 @@ end
 
 ---
 -- Returns the collapsable height of the currently selected vskin.
--- @return[default=45] number The collapsable height
+-- @return number The collapsable height
 -- @realm client
 function vskin.GetCollapsableHeight()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -284,7 +284,7 @@ end
 
 ---
 -- Returns the border size of the currently selected vskin.
--- @return[default=3] number The border size
+-- @return number The border size
 -- @realm client
 function vskin.GetBorderSize()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -298,7 +298,7 @@ end
 
 ---
 -- Returns the corner radius of the currently selected vskin.
--- @return[default=6] number The corner radius
+-- @return number The corner radius
 -- @realm client
 function vskin.GetCornerRadius()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]

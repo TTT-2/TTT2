@@ -250,7 +250,7 @@ local tickInterval = engine.TickInterval()
 -- This changes the function SetNextPrimaryFire of all weapons, but filters out all weapons not based on the weapon_tttbase
 -- This compensates for weapons not having the same timesteps as the serverside-tickrate, which otherwise would lead to a lower firerate on average
 -- @param number nextTime The time you want to have the next primary attack available
--- @param[opt] boolean skipTickrateFix If you want to use the old function and just SetNextPrimaryFire without Tickrate Fix
+-- @param boolean skipTickrateFix? If you want to use the old function and just SetNextPrimaryFire without Tickrate Fix
 -- @realm shared
 function weaponMetaTable:SetNextPrimaryFire(nextTime, skipTickrateFix)
     if not skipTickrateFix and not shouldSkipWeapon(self) then
@@ -699,10 +699,10 @@ if CLIENT then
     ---
     -- Adds a help text for the weapon to the HUD.
     -- @deprecated TTT legacy function. Do not use for new addons!
-    -- @param[opt] string primary_text first line of the help text
-    -- @param[optchain] string secondary_text second line of the help text
-    -- @param[optchain][default=false] boolean translate should the text get translated
-    -- @param[optchain] table extraKeyParams parameters for @{Lang.GetParamTranslation}
+    -- @param string primary_text? first line of the help text
+    -- @param string secondary_text? second line of the help text
+    -- @param boolean translate? should the text get translated, defaults to false
+    -- @param table extraKeyParams? parameters for @{Lang.GetParamTranslation}
     -- @realm client
     function SWEP:AddHUDHelp(primary_text, secondary_text, translate, extraKeyParams)
         local primary = primary_text
@@ -728,8 +728,8 @@ if CLIENT then
 
     ---
     -- Adds a help text for the weapon to the HUD.
-    -- @param[opt] string primary_text description for primaryfire
-    -- @param[optchain] string secondary_text description for secondaryfire
+    -- @param string primary_text? description for primaryfire
+    -- @param string secondary_text? description for secondaryfire
     -- @realm client
     function SWEP:AddTTT2HUDHelp(primary, secondary)
         self:ClearHUDHelp()
@@ -758,7 +758,7 @@ if CLIENT then
     -- Adds an additional line to the help text.
     -- @{SWEP:AddTTT2HUDHelp} needs to be called first
     -- @param string text text to be displayed on the line
-    -- @param[opt] Material|string materialOrBinding icon or description for the concerning key
+    -- @param Material|string materialOrBinding? icon or description for the concerning key
     -- @realm client
     function SWEP:AddHUDHelpLine(text, materialOrBinding)
         if not self.HUDHelp then
@@ -1209,7 +1209,7 @@ end
 
 ---
 -- Called when player has just switched to this weapon.
--- @return[default=true] boolean
+-- @return boolean
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Deploy
 -- @realm shared
 function SWEP:Deploy()
@@ -1462,7 +1462,7 @@ end
 ---
 -- Dummy functions that will be replaced when SetupDataTables runs. These are
 -- here for when that does not happen (due to e.g. stacking base classes)
--- @return[default=-1] number
+-- @return number
 -- @realm shared
 function SWEP:GetIronsightsTime()
     return -1
@@ -1477,7 +1477,7 @@ function SWEP:SetIronsightsTime() end
 ---
 -- Dummy functions that will be replaced when SetupDataTables runs. These are
 -- here for when that does not happen (due to e.g. stacking base classes)
--- @return[default=false] boolean
+-- @return boolean
 -- @realm shared
 function SWEP:GetIronsightsPredicted()
     return false

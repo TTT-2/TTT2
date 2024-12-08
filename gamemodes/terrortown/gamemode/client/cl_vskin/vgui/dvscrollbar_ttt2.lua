@@ -49,7 +49,7 @@ function PANEL:Value()
 end
 
 ---
--- @return[default=1] number
+-- @return number
 -- @realm client
 function PANEL:BarScale()
     if self.barSize == 0 then
@@ -139,7 +139,7 @@ function PANEL:AnimateTo(scrll, length, delay, ease)
 end
 
 ---
--- @return[default=0] number
+-- @return number
 -- @realm client
 function PANEL:GetScroll()
     if not self.enabled then
@@ -150,7 +150,7 @@ function PANEL:GetScroll()
 end
 
 ---
--- @return[default=0] number
+-- @return number
 -- @realm client
 function PANEL:GetOffset()
     if not self.enabled then

@@ -547,7 +547,7 @@ concommand.Add("_ttt_radio_send", ttt_radio_send)
 -- @param string msgName The message identifier, such as `quick_yes` for `Yes.`
 -- @param number|string msgTarget The target part of the command (an entity index if it's a
 -- player or identified corpse, an identifier like "quick_nobody" if not)
--- @return[default=nil] boolean Return true to not send this message
+-- @return boolean Return true to not send this message
 -- @hook
 -- @realm server
 function GM:TTTPlayerRadioCommand(ply, msgName, msgTarget) end
@@ -557,7 +557,7 @@ function GM:TTTPlayerRadioCommand(ply, msgName, msgTarget) end
 -- @param Player reader The @{Player} who can receive chat
 -- @param Player sender The @{Player} who sends the text message
 -- @param boolean isTeam Are they trying to use the team chat
--- @return[default=true] boolean Return true if the reader should be able to see the message of the sender, false if they shouldn't
+-- @return boolean Return true if the reader should be able to see the message of the sender, false if they shouldn't
 -- @hook
 -- @realm server
 function GM:TTT2CanSeeChat(reader, sender, isTeam)

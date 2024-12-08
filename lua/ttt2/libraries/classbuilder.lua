@@ -52,13 +52,13 @@ classbuilder = classbuilder or {}
 -- that are loaded as classes. Supports inheriting from base class.
 -- @note Has to be run on both server and client for client and shared files.
 -- @param string path The absolute path to search in, has to end with `/`
--- @param[default=SHARED_FILE] number realm The realm where the file should be included
+-- @param number realm? The realm where the file should be included, defaults to `SHARED_FILE`
 -- @param string scope The scope where the new class will be registered, for example `ITEM`
--- @param[opt] function OnInitialization This callback function is called on initialization of the class
--- @param[default=false] boolean shouldInherit Set this to true if this class should inherit from its base
--- @param[opt] function SpecialCheck A function that makes a special check, inheritance is blocked if false is returned
--- @param[opt] table passthrough A table that can be passed through if the classdata table should be extended
--- @param[opt] function PostInherit A callback function that is called for all classes post inheritance
+-- @param function OnInitialization? This callback function is called on initialization of the class
+-- @param boolean shouldInherit? Set this to true if this class should inherit from its base
+-- @param function SpecialCheck? A function that makes a special check, inheritance is blocked if false is returned
+-- @param table passthrough? A table that can be passed through if the classdata table should be extended
+-- @param function PostInherit? A callback function that is called for all classes post inheritance
 -- @return table Returns a table of all the created classes
 -- @realm shared
 function classbuilder.BuildFromFolder(

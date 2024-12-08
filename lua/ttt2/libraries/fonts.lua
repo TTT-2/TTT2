@@ -48,7 +48,7 @@ end
 ---
 -- Adds a font to the font list.
 -- @param string name The name of the font
--- @param[default=13] number baseSize The basesize of this font
+-- @param number baseSize? The basesize of this font, defaults to `13`
 -- @param table fontData
 -- @internal
 -- @realm client

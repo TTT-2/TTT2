@@ -126,7 +126,7 @@ end
 -- Identifies the corpse, registers it and announces it to the players, if possible.
 -- @param Player ply The player that tries to identify the body
 -- @param Entity rag The ragdoll entity that is searched
--- @param[default=0] number searchUID The unique search ID that is used to keep track of the search for the UI
+-- @param number searchUID? The unique search ID that is used to keep track of the search for the UI, defaults to `0`
 -- @realm server
 function CORPSE.IdentifyBody(ply, rag, searchUID)
     if not ply:IsTerror() or not ply:Alive() then
@@ -697,7 +697,7 @@ function GM:TTT2CalledPolicingRole(policingPlys, finder, ragdoll, deadply) end
 -- @note removed boolean "was_traitor". Team is available with `corpse.was_team`
 -- @param Player ply The player that tries to identify the corpse
 -- @param Entity rag The ragdoll that was found
--- @return[default=true] boolean Return true to allow corpse identification, false to block
+-- @return boolean Return true to allow corpse identification, false to block
 -- @hook
 -- @realm server
 function GM:TTTCanIdentifyCorpse(ply, rag)
@@ -709,7 +709,7 @@ end
 -- inspected the dead body.
 -- @param Player ply The player that tries to confirm the corpse
 -- @param Entity rag The ragdoll that was found
--- @param[default=nil] boolean Return false to block confirmation
+-- @return Return false to block confirmation
 -- @hook
 -- @realm server
 function GM:TTT2ConfirmPlayer(ply, rag) end
@@ -758,7 +758,7 @@ function GM:TTT2ModifyCorpseCallRadarRecipients(notifiedPlayers, rag, ply) end
 -- @param Entity rag The ragdoll that should be searched
 -- @param boolean isCovert Is the search hidden
 -- @param boolean isLongRange Is the search performed from a long range
--- @return[default=true] boolean Return false to block search
+-- @return boolean Return false to block search
 -- @hook
 -- @realm server
 function GM:TTTCanSearchCorpse(ply, rag, isCovert, isLongRange)

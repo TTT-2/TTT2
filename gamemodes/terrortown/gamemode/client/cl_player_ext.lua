@@ -115,8 +115,8 @@ end
 
 -- Creates an elliptic nick for a given length.
 -- @param number width The maximum width that should be used to limit the nick
--- @param[default="DefaultBold"] string font The font ID
--- @param[default=1.0] number scale The UI scale factor
+-- @param string font? The font ID, defaults to `DefaultBold`
+-- @param number scale? The UI scale factor, defaults to `1.0`
 -- @return string The length limited nick
 -- @realm client
 function plymeta:NickElliptic(width, font, scale)
@@ -312,8 +312,8 @@ end)
 ---
 -- Sets a revival reason that is displayed in the revival HUD element.
 -- It supports a language identifier for translated strings.
--- @param[default=nil] string name The text or the language identifier, nil to reset
--- @param[opt] table params The params table used for @{LANG.GetParamTranslation}
+-- @param string name? The text or the language identifier, nil to reset
+-- @param table params? The params table used for @{LANG.GetParamTranslation}
 -- @realm client
 function plymeta:SetRevivalReason(name, params)
     self.revivalReason = {}
@@ -383,7 +383,7 @@ end)
 
 ---
 -- Returns if a player has a revival reason set.
--- @return[default=false] boolean Returns if a player has a revival reason
+-- @return boolean Returns if a player has a revival reason
 -- @realm client
 function plymeta:HasRevivalReason()
     return (self.revivalReason and self.revivalReason.name and self.revivalReason.name ~= "")
@@ -392,7 +392,7 @@ end
 
 ---
 -- Returns the current revival reason.
--- @return[default={}] table The revival reason table
+-- @return table The revival reason table
 -- @realm client
 function plymeta:GetRevivalReason()
     return self.revivalReason or {}

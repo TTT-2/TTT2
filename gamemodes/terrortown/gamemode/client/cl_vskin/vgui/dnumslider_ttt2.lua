@@ -114,21 +114,21 @@ function PANEL:SetMinMax(min, max)
 end
 
 ---
--- @return[default=0] number
+-- @return number
 -- @realm client
 function PANEL:GetMin()
     return self.m_numMin or 0
 end
 
 ---
--- @return[default=0] number
+-- @return number
 -- @realm client
 function PANEL:GetMax()
     return self.m_numMax or 0
 end
 
 ---
--- @return[default=0] number
+-- @return number
 -- @realm client
 function PANEL:GetRange()
     return self:GetMax() - self:GetMin()

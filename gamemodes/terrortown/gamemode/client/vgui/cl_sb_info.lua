@@ -38,7 +38,7 @@ function PANEL:UpdatePlayerData()
 end
 
 ---
--- @return[default=true] boolean
+-- @return boolean
 -- @realm client
 function PANEL:Paint()
     return true

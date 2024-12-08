@@ -256,7 +256,7 @@ end
 -- Can be used to prevent a player from using this button.
 -- @param Entity ent The traitor button entity
 -- @param Player ply The player that tries to use this button
--- @return[default=true] boolean Return false to prevent the button use
+-- @return boolean Return false to prevent the button use
 -- @return string Return a string to show an error message if the usage was blocked
 -- @hook
 -- @realm server
@@ -268,7 +268,7 @@ end
 -- Can be used to prevent admins from toggling modes this button.
 -- @param Entity ent The traitor button entity
 -- @param Player ply The player that tries to toggle this button
--- @return[default=true] boolean Return false to prevent the button toggle
+-- @return boolean Return false to prevent the button toggle
 -- @return string Return a string to show an error message if the toggle was blocked
 -- @hook
 -- @realm server
@@ -324,7 +324,7 @@ end
 
 ---
 -- Fix for traitor buttons having awkward init/render behavior, in the event that a map has been optimized with area portals.
--- @return[default=TRANSMIT_ALWAYS] number
+-- @return number
 -- @realm server
 function ENT:UpdateTransmitState()
     return TRANSMIT_ALWAYS

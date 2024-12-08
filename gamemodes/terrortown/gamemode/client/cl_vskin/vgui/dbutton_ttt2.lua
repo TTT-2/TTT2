@@ -122,8 +122,8 @@ end
 
 ---
 -- @param Material icon
--- @param[default=false] boolean is_shadowed
--- @param[default=32] number size
+-- @param boolean is_shadowed? defaults to `false`
+-- @param number size? defaults to `32`
 -- @realm client
 function PANEL:SetIcon(icon, is_shadowed, size)
     self.data.icon = icon

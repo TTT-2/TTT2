@@ -33,8 +33,8 @@ plyspawn = plyspawn or {}
 -- @param Player ply The player entity that should spawn, this parameter is needed
 -- to make sure there is enough space for this specific playermodel.
 -- @param Vector pos The respawn position
--- @param[default=false] boolean force Should the respawn be forced? This means killing other players that block this position
--- @param[opt] table|Entity filter A table of entities or an entity that should be ignored by this check
+-- @param boolean force? Should the respawn be forced? This means killing other players that block this position, default to false
+-- @param table|Entity filter? A table of entities or an entity that should be ignored by this check
 -- @return boolean Returns if the spawn point is safe
 -- @realm server
 function plyspawn.IsSpawnPointSafe(ply, pos, force, filter)
@@ -120,7 +120,7 @@ end
 -- @param Player ply The player entity that should spawn, this parameter is needed
 -- to make sure there is enough space for this specific playermodel.
 -- @param Vector pos The given position
--- @param[default=1] number radiusMultiplier The radius multiplayer to calculate the new positions
+-- @param number radiusMultiplier? The radius multiplayer to calculate the new positions, default to `1`
 -- @return table A table of position vectors
 -- @realm server
 function plyspawn.GetSpawnPointsAroundSpawn(ply, pos, radiusMultiplier)
@@ -156,7 +156,7 @@ end
 -- @param Player ply The player entity that should spawn, this parameter is needed
 -- to make sure there is enough space for this specific playermodel.
 -- @param Vector unsafePos The unsafe spawn position
--- @param[default=1] number radiusMultiplier The radius multiplayer to calculate the new positions
+-- @param number radiusMultiplier? The radius multiplayer to calculate the new positions, defaults to `1`
 -- @return Vector|nil Returns the safe spawn position, nil if none was found
 -- @realm server
 function plyspawn.MakeSpawnPointSafe(ply, unsafePos, radiusMultiplier)

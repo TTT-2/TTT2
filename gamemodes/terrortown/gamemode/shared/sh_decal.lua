@@ -26,7 +26,7 @@ if CLIENT then
     -- @param string name The name of this decal type to be rendered
     -- @param Vector startpos The start of the trace
     -- @param Vector endpos The end of the trace
-    -- @param[opt] Entity filter If set, the decal will not be able to be placed on given entity. Can also be a table of entities
+    -- @param Entity filter? If set, the decal will not be able to be placed on given entity. Can also be a table of entities
     -- @return string The unique id of the decal
     -- @realm client
     function util.DecalRemovable(id, name, startpos, endpos, filter)
@@ -138,8 +138,8 @@ if SERVER then
     -- @param string name The name of this decal type to be rendered
     -- @param Vector startpos The start of the trace
     -- @param Vector endpos The end of the trace
-    -- @param[opt] Entity filter If set, the decal will not be able to be placed on given entity. Warning: Must be a table on the server
-    -- @param[opt] Entity playerlist If set, it defines which player will see the decal; visible to all players if not set
+    -- @param Entity filter? If set, the decal will not be able to be placed on given entity. Warning: Must be a table on the server
+    -- @param Entity playerlist? If set, it defines which player will see the decal; visible to all players if not set
     -- @realm server
     function util.DecalRemovable(id, name, startpos, endpos, filter, playerlist)
         if isfunction(filter) then
@@ -169,7 +169,7 @@ if SERVER then
     ---
     -- Removed one specific decal by its id
     -- @param string id The unique id of the decal that should be removed
-    -- @param[opt] Entity playerlist If set, it defines which player will see the decal removal; visible to all players if not set
+    -- @param Entity playerlist? If set, it defines which player will see the decal removal; visible to all players if not set
     -- @realm server
     function util.RemoveDecal(id, playerlist)
         net.Start("TTT2RemoveDecal")
@@ -184,7 +184,7 @@ if SERVER then
 
     ---
     -- Clears all existing decals on the map
-    -- @param[opt] Entity playerlist If set, it defines which player will see the decal removal; visible to all players if not set
+    -- @param Entity playerlist? If set, it defines which player will see the decal removal; visible to all players if not set
     -- @realm server
     function util.ClearDecals(playerlist)
         net.Start("TTT2ClearDecals")
@@ -202,7 +202,7 @@ end
 -- @param string name The name of this decal type to be rendered
 -- @param Vector startpos The start of the trace
 -- @param Vector endpos The end of the trace
--- @param[opt] Entity filter If set, the decal will not be able to be placed on given entity. Warning: Must be a table on the server
+-- @param Entity filter? If set, the decal will not be able to be placed on given entity. Warning: Must be a table on the server
 -- @param table playerlist A list of @{Player}s that should receive the decals
 -- @return string The unique id of the decal
 -- @realm shared
@@ -216,7 +216,7 @@ end
 -- It searches for a target up to 256 away. This function also only traces a line to the bottom, not in a sphere.
 -- @param Vector start The starting position of the trace
 -- @param string effname The decal effect name
--- @param[opt] Entity ignore If set, the decal will not be able to be placed on given entity. Warning: Must be a table on the
+-- @param Entity ignore? If set, the decal will not be able to be placed on given entity. Warning: Must be a table on the
 -- server and functions here are very slow in general.
 -- @realm shared
 function util.PaintDown(start, effname, ignore)
@@ -237,7 +237,7 @@ end
 -- @param number id The unique id of this specific decal
 -- @param Vector start The starting position of the trace
 -- @param string effname The decal effect name
--- @param[opt] Entity ignore If set, the decal will not be able to be placed on given entity. Warning: Must be a table on the
+-- @param Entity ignore? If set, the decal will not be able to be placed on given entity. Warning: Must be a table on the
 -- server and functions here are very slow in general.
 -- @realm shared
 function util.PaintDownRemovable(id, start, effname, ignore)
