@@ -392,7 +392,7 @@ function plymeta:ResetRoundFlags()
     self.radar_charge = 0
     self.decoy = nil
 
-    timer.Remove("give_equipment" .. self:UniqueID())
+    timer.Remove("give_equipment" .. self:SteamID64())
 
     -- corpse
     self:TTT2NETSetBool("body_found", false)
@@ -441,7 +441,7 @@ function plymeta:GiveEquipmentWeapon(cls, callback)
     -- Referring to players by SteamID64 because a player may disconnect while his
     -- unique timer still runs, in which case we want to be able to stop it. For
     -- that we need its name, and hence his SteamID64.
-    local tmr = "give_equipment" .. self:UniqueID()
+    local tmr = "give_equipment" .. self:SteamID64()
 
     if not IsValid(self) or not self:Alive() then
         timer.Remove(tmr)
