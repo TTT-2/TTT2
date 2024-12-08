@@ -91,7 +91,7 @@ end
 -- Checks if a given player is allowed to take credits from a given corpse-
 -- @param Player ply The player that tries to take credits
 -- @param Entity rag The ragdoll where the credits should be taken from
--- @param[default=false] isLongRange Whether the search is a long range search
+-- @param boolean isLongRange? Whether the search is a long range search, defaults to `false`
 -- @return boolean Returns if the player is able to take credits
 -- @realm shared
 function bodysearch.CanTakeCredits(ply, rag, isLongRange)
@@ -214,8 +214,8 @@ if SERVER then
     -- whether the player is able to take those credits or not.
     -- @param Player ply The player that should receive those credits
     -- @param Entity rag The ragdoll entity that is searched
-    -- @param[default=false] boolean isLongRange Whether the search is long or short range
-    -- @param[default=0] number searchUID The UID from this body search, can be ignored if not called from within UI
+    -- @param boolean isLongRange? Whether the search is long or short range, defaults to `false`
+    -- @param number searchUID? The UID from this body search, can be ignored if not called from within UI
     -- @realm server
     function bodysearch.GiveFoundCredits(ply, rag, isLongRange, searchUID)
         if bodysearch.CanTakeCredits(ply, rag, isLongRange) == false then
@@ -260,8 +260,8 @@ if SERVER then
     -- the player that is currently searching the body.
     -- @param Player inspector The player that searches the corpse
     -- @param Entity rag The ragdoll entity that is searched
-    -- @param[default=false] boolean isCovert Whether the body search is covert or announced
-    -- @param[default=false] boolean isLongRange Whether the search is long or short range
+    -- @param boolean isCovert? Whether the body search is covert or announced, defaults to `false`
+    -- @param boolean isLongRange? Whether the search is long or short range, defaults to `false`
     -- @return table The scene data table
     -- @realm server
     function bodysearch.AssimilateSceneData(inspector, rag, isCovert, isLongRange)
@@ -386,7 +386,7 @@ if SERVER then
     ---
     -- Streams the provided scene data to the given clients, is broadcasted if no client is defined.
     -- @param SceneData sceneData The scene data table that should be streamed to the client(s)
-    -- @param[opt] table|player client Optional, use it to send a stream to a single client or a group of clients
+    -- @param table|player client? Optional, use it to send a stream to a single client or a group of clients
     -- @realm server
     function bodysearch.StreamSceneData(sceneData, client)
         net.SendStream("TTT2_BodySearchData", sceneData, client)
@@ -1120,9 +1120,9 @@ if CLIENT then
     -- whole server, depending on the server settings. The server ignores this request if the player
     -- is not allowed to confirm the corpse. The searching player receives credits if they are able to.
     -- @param Entity rag The ragdoll entity whose owner should be confirmed
-    -- @param[default=0] number searchUID The UID of the search, used for keeping track of searches in the UI
-    -- @param[default=false] boolean isLongRange Whether the search is a long range search
-    -- @param[default=false] boolean playerCanTakeCredits Whether or not the player could be able to take credits
+    -- @param number searchUID? The UID of the search, used for keeping track of searches in the UI, defaults to `0`
+    -- @param boolean isLongRange? Whether the search is a long range search, defaults to `false`
+    -- @param boolean playerCanTakeCredits? Whether or not the player could be able to take credits. defaults to `false`
     -- @realm client
     function bodysearch.ClientConfirmsCorpse(rag, searchUID, isLongRange, playerCanTakeCredits)
         local clientRoleData = LocalPlayer():GetSubRoleData()

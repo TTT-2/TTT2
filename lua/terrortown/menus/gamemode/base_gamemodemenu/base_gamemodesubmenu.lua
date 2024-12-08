@@ -25,7 +25,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent) end
 ---
 -- Function to overwrite if the menu should have a button panel.
 -- @note This function should be overwritten but not not called.
--- @return[default=false] boolean Returns if this submenu has a button panel
+-- @return boolean Returns if this submenu has a button panel
 -- @hook
 -- @realm client
 function CLGAMEMODESUBMENU:HasButtonPanel()
@@ -42,7 +42,7 @@ function CLGAMEMODESUBMENU:Initialize() end
 ---
 -- Used to define whether this submenu should be shown at all.
 -- @note This function should be overwritten but not not called.
--- @return[default=true] boolean Returns true if this submenu should be visible
+-- @return boolean Returns true if this submenu should be visible
 -- @hook
 -- @realm client
 function CLGAMEMODESUBMENU:ShouldShow()

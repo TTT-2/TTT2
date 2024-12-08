@@ -389,7 +389,7 @@ if SERVER then
     ---
     -- Returns a specific setting defined by the key.
     -- @param string key The key of the requested setting
-    -- @return[default=0] number The setting value
+    -- @return number The setting value
     -- @realm server
     function entspawnscript.GetSetting(key)
         return settingsList[key] or 0
@@ -757,7 +757,7 @@ end
 -- clients.
 -- @param string key The key where the setting will be stored
 -- @param number|boolean value The value of the setting
--- @param[default=false] boolean omitSaving If set to true, the setting will not be saved
+-- @param boolean omitSaving? If set to true, the setting will not be saved, defaults to `false`
 -- @realm shared
 function entspawnscript.SetSetting(key, value, omitSaving)
     omitSaving = omitSaving or false
@@ -840,7 +840,7 @@ end
 ---
 -- Returns the color for a specific spawnType.
 -- @param number spawnType The type of the spawn
--- @return[default=COLOR_WHITE] Color Returns the color for the spawn type
+-- @return Color Returns the color for the spawn type
 -- @realm shared
 function entspawnscript.GetColorFromSpawnType(spawnType)
     return spawnColors[spawnType] or COLOR_WHITE
@@ -980,8 +980,8 @@ end
 -- @param number entType The entity type of the spawn that should be added
 -- @param Vector pos The position vector of the spawn that should be added
 -- @param Angle ang The angle of the spawn that should be added
--- @param[default=0] number ammo The amount of ammo of the spawn that should be added,
--- only relevant to weapon spawns
+-- @param number ammo? The amount of ammo of the spawn that should be added,
+-- only relevant to weapon spawns, defaults to `0`
 -- @param boolean shouldSync Set to true if it should be synced, set to false if it shouldn't
 -- @param Player ply The player that attempts to add the spawn. Only relevant if synced from
 -- the server to the client for net performance reasons
@@ -1036,8 +1036,8 @@ end
 -- @param number id The numeric id of the spawn that should be removed
 -- @param Vector pos The position vector of the spawn that should be updated
 -- @param Angle ang The angle of the spawn that should be updated
--- @param[default=0] number ammo The amount of ammo of the spawn that should be updated,
--- only relevant to weapon spawns
+-- @param number ammo? The amount of ammo of the spawn that should be updated,
+-- only relevant to weapon spawns, defaults to 0
 -- @param boolean shouldSync Set to true if it should be synced, set to false if it shouldn't
 -- @param Player ply The player that attempts to add the spawn. Only relevant if synced from
 -- the server to the client for net performance reasons

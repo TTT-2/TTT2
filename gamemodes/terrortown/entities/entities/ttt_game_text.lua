@@ -49,7 +49,7 @@ end
 ---
 -- @param string name
 -- @param Entity|Player activator
--- @return[default=true] boolean
+-- @return boolean
 -- @realm shared
 function ENT:AcceptInput(name, activator)
     if name ~= "Display" then

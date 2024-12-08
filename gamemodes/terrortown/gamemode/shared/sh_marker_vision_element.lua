@@ -157,7 +157,7 @@ if SERVER then
     -- @note The receipients should be set first with @{MARKER_VISION_ELEMENT:SetOwner} and
     -- @{MARKER_VISION_ELEMENT:SetVisibleFor}.
     -- @note If the marker vision element was synced already, it is updated on the client.
-    -- @param[opt] table receiverListOverwrite A table of players that should receive the update
+    -- @param table receiverListOverwrite? A table of players that should receive the update
     -- if not the automatic receipient selection should be used.
     -- @realm server
     function MARKER_VISION_ELEMENT:SyncToClients(receiverListOverwrite)

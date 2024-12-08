@@ -207,7 +207,7 @@ map.DummifyFallbackWeaponEnts()
 -- Returns the exptected type of the current map.
 -- @note This function uses caching to improve performance and only reads the
 -- map entities on the first call of the function.
--- @return[default=MAP_TYPE_TERRORTOWN] number Returns the map type of the currently active map
+-- @return number Returns the map type of the currently active map
 -- @realm shared
 function map.GetMapGameType()
     -- return cached map type if already cached

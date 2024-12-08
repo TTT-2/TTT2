@@ -442,7 +442,7 @@ end
 -- Override or hook in plugin for spam prevention and whatnot. Return true
 -- to block a command.
 -- @param string cmd
--- @return[default=nil] boolean
+-- @return boolean
 -- @hook
 -- @realm client
 function GM:TTT2ClientRadioCommand(cmd) end

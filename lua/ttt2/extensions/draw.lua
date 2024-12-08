@@ -44,8 +44,8 @@ end
 -- @param number y The y position of the rectangle
 -- @param number w The width of the rectangle
 -- @param number h The height of the rectangle
--- @param[default=1] number t The thickness of the line
--- @param[default=COLOR_WHITE] Color color The color of the line
+-- @param number t? The thickness of the line, defaults to `1`
+-- @param Color color? The color of the line defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function draw.OutlinedBox(x, y, w, h, t, color)
@@ -66,8 +66,8 @@ local drawOutlinedBox = draw.OutlinedBox
 -- @param number y The y position of the rectangle
 -- @param number w The width of the rectangle
 -- @param number h The height of the rectangle
--- @param[default=1] number t The thickness of the line
--- @param[default=COLOR_WHITE] Color color The color of the line
+-- @param number t? The thickness of the line, defaults to `1`
+-- @param Color color? The color of the line defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function draw.OutlinedShadowedBox(x, y, w, h, t, color)
@@ -87,7 +87,7 @@ end
 -- @param number y The y position to start the box
 -- @param number w The width of the box
 -- @param number h The height of the box
--- @param[default=COLOR_WHITE] Color color The color of the box
+-- @param Color color? The color of the box, defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function draw.Box(x, y, w, h, color)
@@ -103,8 +103,8 @@ local drawBox = draw.Box
 -- @param number y The y position to start the box
 -- @param number w The width of the box
 -- @param number h The height of the box
--- @param[default=Color(255, 255, 255, 255)] Color color The color of the box
--- @param[default=1.0] number scale A scaling factor that is used for the shadows
+-- @param Color color? The color of the box, defaults to `COLOR_WHITE`
+-- @param number scale? A scaling factor that is used for the shadows, defaults to `1`
 -- @2D
 -- @realm client
 function draw.ShadowedBox(x, y, w, h, color, scale)
@@ -127,7 +127,7 @@ end
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle
--- @param[default=COLOR_WHITE] Color color The color of the circle
+-- @param Color color? The color of the circle, defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function draw.OutlinedCircle(x, y, r, color)
@@ -143,8 +143,8 @@ local drawOutlinedCircle = draw.OutlinedCircle
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle
--- @param[default=Color(255,255,255,255)]Color color The color of the circle
--- @param[default=1.0]number scale A scaling factor that is used for the shadows
+-- @param Color color? The color of the circle, defaults to `COLOR_WHITE`
+-- @param number scale? A scaling factor that is used for the shadows, defaults to `1`
 -- @2D
 -- @realm client
 function draw.OutlinedShadowedCircle(x, y, r, color, scale)
@@ -167,7 +167,7 @@ end
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number radius The radius of the circle
--- @param[default=Color(255,255,255,255)]Color color The color of the circle
+-- @param Color color? The color of the circle, defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function draw.Circle(x, y, radius, color)
@@ -185,8 +185,8 @@ local drawCircle = draw.Circle
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle
--- @param[default=Color(255,255,255,255)]Color color The color of the circle
--- @param[default=1.0]number scale A scaling factor that is used for the shadows
+-- @param Color color? The color of the circle, defaults to `COLOR_WHITE`
+-- @param number scale? A scaling factor that is used for the shadows, defaults to `1`
 -- @2D
 -- @realm client
 function draw.ShadowedCircle(x, y, radius, color, scale)
@@ -210,7 +210,7 @@ end
 -- @param number startY The y position to start the line
 -- @param number endX The x position to end the line
 -- @param number endY The y position to end the line
--- @param[default=COLOR_WHITE] Color color The color of the line
+-- @param Color color? The color of the line, defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function draw.Line(startX, startY, endX, endY, color)
@@ -226,7 +226,7 @@ local drawLine = draw.Line
 -- @param number startY The y position to start the line
 -- @param number endX The x position to end the line
 -- @param number endY The y position to end the line
--- @param[default=COLOR_WHITE] Color color The color of the line
+-- @param Color color? The color of the line, defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function draw.ShadowedLine(startX, startY, endX, endY, color)
@@ -247,8 +247,8 @@ end
 -- @param number w width The width in reference to the vertical position
 -- @param number h height The height in reference to the horizontal position
 -- @param Material material
--- @param[default=255] number alpha
--- @param[default=COLOR_WHITE] Color col the alpha value will be ignored
+-- @param number alpha? defaults to `255`
+-- @param Color color? the alpha value will be ignored, defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function draw.Texture(x, y, w, h, material, alpha, color)
@@ -270,9 +270,9 @@ local drawTexture = draw.Texture
 -- @param number w width The width in reference to the vertical position
 -- @param number h height The height in reference to the horizontal position
 -- @param Material material
--- @param[default=255] number alpha
--- @param[default=COLOR_WHITE] Color col the alpha value will be ignored
--- @param[default=1.0] number scale A scaling factor that is used for the shadows
+-- @param number alpha? defaults to `255`
+-- @param Color color? the alpha value will be ignored, defaults to `COLOR_WHITE`
+-- @param number scale? A scaling factor that is used for the shadows, defaults to `1`
 -- @2D
 -- @realm client
 function draw.ShadowedTexture(x, y, w, h, material, alpha, color, scale)
@@ -297,8 +297,8 @@ end
 -- @param number w width The width in reference to the vertical position
 -- @param number h height The height in reference to the horizontal position
 -- @param Material material
--- @param[default=255] number alpha
--- @param[default=COLOR_WHITE] Color col the alpha value will be ignored
+-- @param number alpha? defaults to `255`
+-- @param Color color? the alpha value will be ignored, defaults to `COLOR_WHITE`
 -- @2D
 -- @realm client
 function draw.FilteredTexture(x, y, w, h, material, alpha, color)
@@ -320,9 +320,9 @@ local drawFilteredTexture = draw.FilteredTexture
 -- @param number w width The width in reference to the vertical position
 -- @param number h height The height in reference to the horizontal position
 -- @param Material material
--- @param[default=255] number alpha
--- @param[default=COLOR_WHITE] Color col the alpha value will be ignored
--- @param[default=1.0] number scale A scaling factor that is used for the shadows
+-- @param number alpha? defaults to `255`
+-- @param Color color? the alpha value will be ignored, defaults to `COLOR_WHITE`
+-- @param number scale? A scaling factor that is used for the shadows, defaults to `1`
 -- @2D
 -- @realm client
 function draw.FilteredShadowedTexture(x, y, w, h, material, alpha, color, scale)
@@ -346,7 +346,7 @@ end
 -- @param number y The horizontal position
 -- @param number w width The width in reference to the vertical position
 -- @param number h height The height in reference to the horizontal position
--- @param[default=1] number fraction The blur fraction. The higher, the blurrier
+-- @param number fraction? The blur fraction. The higher, the blurrier, defaults to `1`
 -- @2D
 -- @realm client
 function draw.BlurredBox(x, y, w, h, fraction)
@@ -371,7 +371,7 @@ end
 -- Draws a shadowed text on the screen.
 -- @2D
 -- @param string text The text to be drawn
--- @param[default="DermaDefault"] nil|string font The font. See @{surface.CreateFont} to create your own,
+-- @param string font? The font. See @{surface.CreateFont} to create your own,
 -- or see <a href="https://wiki.facepunch.com/gmod/Default_Fonts">Default</a>
 -- Fonts for a list of default fonts
 -- @param number x The X Coordinate
@@ -404,7 +404,7 @@ local drawShadowedText = draw.ShadowedText
 -- Draws an advanced text (scalable)
 -- @note You should use @{surface.CreateAdvancedFont} before trying to access the font
 -- @param string text The text to be drawn
--- @param[default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
+-- @param string font? The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}. defaults to `DefaultBold`
 -- @param number x The x coordinate
 -- @param number y The y coordinate
 -- @param Color color The color of the text. Uses the Color structure.
@@ -413,8 +413,8 @@ local drawShadowedText = draw.ShadowedText
 -- @param number yalign The alignment of the y coordinate using
 -- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param boolean shadow whether there should be a shadow of the text
--- @param[default=1.0] number scale The text scale (float number)
--- @param[default=0] number angle The rotational angle in degree
+-- @param number scale? The text scale (float number) defaults to `1.0`
+-- @param number angle? The rotational angle in degrees
 -- @2D
 -- @realm client
 function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale, angle)
@@ -628,8 +628,8 @@ end
 -- at new line characters.
 -- @param string text The text that should be wrapped
 -- @param number width The maximal width that the text is allowed to have
--- @param[default="DefaultBold"] string font The font that should be used here
--- @param[default=1.0] number scale The UI scale factor
+-- @param string font? The font that should be used here, defaults to `DefaultBold`
+-- @param number scale? The UI scale factor, defaults to `1.0`
 -- @return table A table with the broken up lines
 -- @return number The width of the longest line
 -- @return number The height of all lines
@@ -662,8 +662,8 @@ end
 
 -- Returns the size of a inserted string
 -- @param string text The text that the length should be calculated
--- @param[default="DefaultBold"] string font The font ID
--- @param[default=1.0] number scale The UI scale factor
+-- @param string font? The font ID, defaults to `DefaultBold`
+-- @param number scale? The UI scale factor, defaults to `1.0`
 -- @return number,number w, h The size of the given text
 -- @warning This function changes the font in surface to the passed font
 -- @2D
@@ -684,9 +684,9 @@ end
 -- for the length) if the text without the limiting char is too long for the provided width.
 -- @param string text The text that may be limited in length
 -- @param number width The maximum width that should be used to limit the text
--- @param[default="DefaultBold"] string font The font ID
--- @param[opt] string limitChar The limiting character(s) that might be appended to the end
--- @param[default=1.0] number scale The UI scale factor
+-- @param string font The font ID, defaults to `DefaultBold`
+-- @param string limitChar? The limiting character(s) that might be appended to the end
+-- @param number scale The UI scale factor, defaults to `1.0`
 -- @return string The length limited text
 -- @realm client
 function draw.GetLimitedLengthText(text, width, font, limitChar, scale)
@@ -800,15 +800,15 @@ local function PrecacheArc(id, x, y, radius, thickness, angleStart, angleEnd, ro
 end
 
 -- A function that draws an arc that can be a full or part circle.
--- @param[default=nil] number identifier The numeric identifier for the caching, automatically set if nil
+-- @param number identifier? The numeric identifier for the caching, automatically set if nil
 -- @param number x The arc center x position
 -- @param number y The arc center y position
 -- @param number radius The arc radius
 -- @param number thickness The arc thickness, the arc is drawn to the inside
--- @param[default=0] number angleStart The arc start angle
--- @param[default=0] number angleEnd The arc end angle
--- @param[default=1] number roughness The arc's roughness, aka degrees per step
--- @param[default=COLOR_WHITE] number color The arc's color
+-- @param number angleStart? The arc start angle
+-- @param number angleEnd? The arc end angle
+-- @param number roughness? The arc's roughness, aka degrees per step, defaults to `1`
+-- @param number color? The arc's color, defaults to `COLOR_WHITE`
 -- @realm client
 function draw.Arc(identifier, x, y, radius, thickness, angleStart, angleEnd, roughness, color)
     identifier = identifier or #cachedArcs
@@ -826,16 +826,16 @@ end
 local drawArc = draw.Arc
 
 -- A function that draws a shadowed arc that can be a full or part circle.
--- @param[default=nil] number identifier The numeric identifier for the caching, automatically set if nil
+-- @param number identifier? The numeric identifier for the caching, automatically set if nil
 -- @param number x The arc center x position
 -- @param number y The arc center y position
 -- @param number radius The arc radius
 -- @param number thickness The arc thickness, the arc is drawn to the inside
--- @param[default=0] number angleStart The arc start angle
--- @param[default=0] number angleEnd The arc end angle
--- @param[default=1] number roughness The arc's roughness, aka degrees per step
--- @param[default=COLOR_WHITE] number color The arc's color
--- @param[default=1.0] number scale A scaling factor that is used for the shadows
+-- @param number angleStart? The arc start angle
+-- @param number angleEnd? The arc end angle
+-- @param number roughness? The arc's roughness, aka degrees per step, defaults to `1`
+-- @param number color? The arc's color, defaults to `COLOR_WHITE`
+-- @param number scale? A scaling factor that is used for the shadows, defaults to `1.0`
 -- @realm client
 function draw.ShadowedArc(
     identifier,

@@ -195,7 +195,7 @@ end
 ---
 -- Returns the starting credits of a @{ROLE} based on ConVar settings or default traitor settings
 -- @param string abbr abbreviation of a @{ROLE}
--- @return[default=0] number
+-- @return number
 -- @realm shared
 -- @see ROLE:GetStartingCredits
 -- @deprecated
@@ -209,7 +209,7 @@ end
 ---
 -- Returns whether a @{ROLE} is able to access the shop based on ConVar settings
 -- @param number subrole subrole id of a @{ROLE}
--- @return[default=false] boolean
+-- @return boolean
 -- @realm shared
 -- @see ROLE:IsShoppingRole
 -- @deprecated
@@ -264,7 +264,7 @@ if SERVER then
     -- @realm server
     -- @see ROLE:IsSelectable
     -- @deprecated
--- TODO: Log Deprecation message
+    -- TODO: Log Deprecation message
     function IsRoleSelectable(roleData, avoidHook)
         return roleData:IsSelectable(avoidHook)
     end

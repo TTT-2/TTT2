@@ -82,7 +82,7 @@ end
 ---
 -- Returns the reference to the submenu class if available.
 -- @param string name The name of the class (usually the type defined by the filename)
--- @return[default=nil] table Returns the reference to the found submenu class
+-- @return table Returns the reference to the found submenu class
 -- @realm client
 function CLGAMEMODEMENU:GetSubmenuByName(name)
     for i = 1, #self.submenus do

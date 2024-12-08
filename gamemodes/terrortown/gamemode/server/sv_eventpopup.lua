@@ -9,9 +9,9 @@ EPOP = EPOP or {}
 -- Adds a translated popup message to the @{EPOP}
 -- @param nil|table|Player plys A table of player that should receive this popup, broadcasts it if nil
 -- @param string|table title The title of the popup that will be displayed in large letters (can be a table with `text` and `color` attribute)
--- @param[opt] string|table subtitle An optional description that will be displayed below the title (can be a table with `text` and `color` attribute)
--- @param[default=4] number displayTime The render duration of the popup
--- @param[default=false] boolean blocking If this is false, this message gets instantly replaced if a new message is added
+-- @param string|table subtitle? An optional description that will be displayed below the title (can be a table with `text` and `color` attribute)
+-- @param number displayTime The render duration of the popup, defaults to `4`
+-- @param boolean blocking? If this is false, this message gets instantly replaced if a new message is added, defaults to false
 -- @realm server
 function EPOP:AddMessage(plys, title, subtitle, displayTime, blocking)
     if not title and not subtitle then

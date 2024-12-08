@@ -17,7 +17,7 @@ local changes, currentVersion
 -- Adds a change into the changes list
 -- @param string version
 -- @param string text
--- @param[opt] number date the date when this update got released
+-- @param number date? the date when this update got released
 -- @realm client
 function AddChange(version, text, date)
     changes = changes or {}

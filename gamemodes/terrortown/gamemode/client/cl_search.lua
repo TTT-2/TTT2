@@ -156,7 +156,7 @@ end
 -- @param Panel parent The parent panel where it should be added to
 -- @param string name A unique name to keep a reference to the item
 -- @param table data The data that is added to the element
--- @param[opt] number height The height of the element
+-- @param number height? The height of the element
 -- @return Panel The box element
 -- @realm client
 function SEARCHSCREEN:MakeInfoItem(parent, name, data, height)

@@ -176,7 +176,7 @@ end
 ---
 -- Returns a shop fallback / shop
 -- @param number subrole id of @{ROLE}
--- @param[opt] table tbl this table will be modified
+-- @param table tbl? this table will be modified
 -- @return number subrole id of the connected fallback
 -- @return number subrole id of role connected with the deepest fallback role (the value returned before)
 -- @internal
@@ -246,7 +246,7 @@ if CLIENT then
     -- Returns a list of equipment that is available for a @{ROLE}
     -- @param Player ply
     -- @param number subrole id of @{ROLE}
-    -- @param[opt] boolean noModification whether the modified equipment (e.g. randomshop) table should be returned or the original one
+    -- @param boolean noModification? whether the modified equipment (e.g. randomshop) table should be returned or the original one
     -- @internal
     -- @todo improve description
     -- @realm client
@@ -851,7 +851,7 @@ end
 -- Checks whether a equipment table has a specific equipment
 -- @param table tbl
 -- @param table equip
--- @return[default=false] boolean
+-- @return boolean
 -- @realm shared
 function EquipmentTableHasValue(tbl, equip)
     if not tbl then
@@ -898,7 +898,7 @@ end
 -- Initializes the fallback shop for a @{ROLE}
 -- @param Role roleData
 -- @param table fallbackTable
--- @param[opt] boolean avoidSet
+-- @param boolean avoidSet?
 -- @internal
 -- @realm shared
 function InitFallbackShop(roleData, fallbackTable, avoidSet)
@@ -1109,7 +1109,7 @@ if SERVER then
     ---
     -- Synces equipment with a @{Player}
     -- @param Player ply
-    -- @param[opt=true] boolean add
+    -- @param boolean add?
     -- @internal
     -- @realm server
     function SyncEquipment(ply, add)
@@ -1150,7 +1150,7 @@ if SERVER then
     -- @param Player ply
     -- @param number role subrole id of a @{ROLE}
     -- @param number equipId
-    -- @param[opt=true] boolean add
+    -- @param boolean add?
     -- @internal
     -- @realm server
     function SyncSingleEquipment(ply, role, equipId, add)

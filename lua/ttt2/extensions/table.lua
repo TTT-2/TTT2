@@ -191,7 +191,7 @@ end
 -- This @{function} adds missing values into a table
 -- @param table target
 -- @param table source
--- @param[opt] boolean iterable
+-- @param boolean iterable?
 -- @realm shared
 function table.AddMissing(target, source, iterable)
     if #source == 0 then
@@ -309,8 +309,8 @@ end
 -- has no effect on the size of the subtables.
 -- @warning For number indexed tables the table has to be iterable.
 -- @param table The table whose biggest subtable should be found.
--- @return[default={}] table The biggest subtable
--- @return[default=0] number|string The index where the biggest subtable was found
+-- @return table The biggest subtable
+-- @return number|string The index where the biggest subtable was found
 -- @realm shared
 function table.GetAndRemoveBiggestSubTable(tbl)
     local subTbl = {}

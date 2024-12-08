@@ -94,7 +94,7 @@ end
 ---
 -- Get an hud by name (a copy)
 -- @param string name hud name
--- @param[opt] table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @param table retTbl? this table will be modified and returned. If nil, a new table will be created.
 -- @return table returns the modified retTbl or the new hud table
 -- @realm shared
 function huds.Get(name, retTbl)

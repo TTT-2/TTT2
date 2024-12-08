@@ -16,7 +16,7 @@ if CLIENT then
 
     ---
     -- Returns the current @{HUD} scale (for this element)
-    -- @return[default=1.0] number
+    -- @return number
     -- @realm client
     -- @deprecated
     function HUDELEMENT:GetHUDScale()
@@ -25,7 +25,7 @@ if CLIENT then
 
     ---
     -- Returns the current @{HUD} base @{Color}
-    -- @return[default=Color(49, 71, 94)] Color
+    -- @return Color
     -- @realm client
     function HUDELEMENT:GetHUDBasecolor()
         local hud = huds.GetStored(HUDManager.GetHUD())

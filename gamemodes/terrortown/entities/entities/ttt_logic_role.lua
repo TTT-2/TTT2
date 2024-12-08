@@ -44,7 +44,7 @@ end
 -- @param Entity|Player activator The initial cause for the input getting triggered (e.g. the player who pushed a button)
 -- @param Entity caller The entity that directly triggered the input (e.g. the button that was pushed)
 -- @param string data The data passed
--- @return[default=true] boolean Return true if the default action should be supressed
+-- @return boolean Return true if the default action should be supressed
 -- @realm server
 function ENT:AcceptInput(name, activator, caller, data)
     if name == "TestActivator" then

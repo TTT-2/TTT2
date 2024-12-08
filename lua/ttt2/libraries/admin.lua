@@ -266,7 +266,7 @@ if SERVER then
     ---
     -- Version announce also used in @{GM:Initialize}.
     -- @note Is printed to console if no player is defined.
-    -- @param[opt] Player ply The player that shoulld receive the version message
+    -- @param Player ply? The player that shoulld receive the version message
     -- @realm server
     function admin.ShowVersion(ply)
         local text = Format(

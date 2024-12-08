@@ -12,7 +12,7 @@ util.AddNetworkString("TTT2CreditTransferUpdate")
 -- @param Player ply The player that attempts to buy something
 -- @param string id id of the @{ITEM} or @{Weapon}, old id for @{ITEM} and class for @{Weapon}
 -- @param boolean isItem True if item, false if weapon
--- @return[default=true] boolean return true to allow buying of an equipment item, false to disallow
+-- @return boolean return true to allow buying of an equipment item, false to disallow
 -- @hook
 -- @realm server
 function GM:TTTCanOrderEquipment(ply, id, isItem)
@@ -179,8 +179,8 @@ concommand.Add("ttt_cheat_credits", CheatCredits, nil, nil, FCVAR_CHEAT)
 -- @param Player sender that wants to send credits
 -- @param Player recipient that would receive the credits
 -- @param number credits_per_xfer that would be transferred
--- @return[default=nil] boolean which disallows a transaction when false
--- @return[default=nil] string for the client which offers info related to the transaction
+-- @return boolean which disallows a transaction when false
+-- @return string for the client which offers info related to the transaction
 -- @hook
 -- @realm server
 function GM:TTT2CanTransferCredits(sender, recipient, credits_per_xfer) end

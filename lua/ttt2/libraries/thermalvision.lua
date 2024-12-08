@@ -247,7 +247,7 @@ end
 ---
 -- Adds entities into the @{Entity} list that should be rendered with thermalvision
 -- @param table ents list of @{Entity} that should be added
--- @param[default=THERMALVISION_MODE_BOTH] thermalvision_mode mode when should the entity be rendererd
+-- @param thermalvision_mode mode? when should the entity be rendererd, defaults to `THERMALVISION_MODE_BOTH`
 -- @realm client
 function thermalvision.Add(ents, mode)
     ents = istable(ents) and ents or { ents }

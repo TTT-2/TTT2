@@ -68,7 +68,7 @@ end
 
 ---
 -- Returns the @{ROLE} SubRole id
--- @return[default=0] number
+-- @return number, defaults to `ROLE_NONE`
 -- @realm shared
 function plymeta:GetSubRole()
     return self.subrole or ROLE_NONE
@@ -76,7 +76,7 @@ end
 
 ---
 -- Returns the @{ROLE} BaseRole id
--- @return[default=0] number
+-- @return number, defaults to `ROLE_NONE`
 -- @realm shared
 function plymeta:GetBaseRole()
     return self.role or ROLE_NONE
@@ -84,7 +84,7 @@ end
 
 ---
 -- Returns the @{ROLE} BaseRole id
--- @return[default=0] number
+-- @return number, defaults to `ROLE_NONE`
 -- @realm shared
 -- @see Player:GetBaseRole
 function plymeta:GetRole()
@@ -321,7 +321,7 @@ end
 
 ---
 -- Returns the current @{ROLE}'s team
--- @return[default=TEAM_NONE] string
+-- @return string
 -- @note If the real role has the flag `alone`, TEAM_NONE will be returned.
 -- Use @{Player:GetRealTeam()} instead if this behavior is not intended.
 -- @realm shared
@@ -444,7 +444,7 @@ end
 
 ---
 -- Returns a @{Player} current SubRole @{ROLE}
--- @return[default=NONE] ROLE
+-- @return ROLE
 -- @realm shared
 function plymeta:GetSubRoleData()
     local rlsList = roles.GetList()
@@ -463,7 +463,7 @@ end
 
 ---
 -- Returns a @{Player} current BaseRole (@{ROLE})
--- @return[default=NONE] ROLE
+-- @return ROLE
 -- @realm shared
 function plymeta:GetBaseRoleData()
     local rlsList = roles.GetList()
@@ -851,7 +851,7 @@ end
 
 ---
 -- Resets the equipment item table to the provided one
--- @param[opt] table items The table with the item entities
+-- @param table items? The table with the item entities
 -- @realm shared
 function plymeta:SetEquipmentItems(items)
     self.equipmentItems = items or {}
@@ -872,7 +872,7 @@ end
 ---
 -- Given an equipment id, returns if @{Player} owns this. Given nil, returns if
 -- @{Player} has any equipment item.
--- @param[opt] string id
+-- @param string id?
 -- @return boolean
 -- @realm shared
 function plymeta:HasEquipmentItem(id)
@@ -1170,7 +1170,7 @@ end
 
 ---
 -- Returns the time when the ongoing revival started.
--- @return[default=@{CurTime()}] number The time when the revival started in seconds
+-- @return number The time when the revival started in seconds
 -- @realm shared
 function plymeta:GetRevivalStartTime()
     return self.revivalStartTime or CurTime()
@@ -1178,7 +1178,7 @@ end
 
 ---
 -- Returns the duration for the ongoing revival.
--- @return[default=1.0] number The time for the revival in seconds
+-- @return number The time for the revival in seconds
 -- @realm shared
 function plymeta:GetRevivalDuration()
     return self.revivalDurarion or 0.0
@@ -1274,8 +1274,8 @@ end
 ---
 -- Set a player's FOV (Field Of View) over a certain amount of time.
 -- @param number fov The angle of perception (FOV); set to 0 to return to default user FOV
--- @param[default=0] number time The time it takes to transition to the FOV expressed in a floating point
--- @param[default=self] Entity requester The requester or "owner" of the zoom event; only this entity will be able to change the player's FOV until it is set back to 0
+-- @param number time? The time it takes to transition to the FOV expressed in a floating point, defaults to `0`
+-- @param Entity requester? The requester or "owner" of the zoom event; only this entity will be able to change the player's FOV until it is set back to 0, defaults to `self`
 -- @realm shared
 function plymeta:SetFOV(fov, time, requester)
     -- if dynamic FOV is disabled, the default function should be used

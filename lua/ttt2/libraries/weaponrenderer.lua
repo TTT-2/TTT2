@@ -405,7 +405,7 @@ end
 -- @param Entity wepModel The weapon mode whose world model should be rendered, in most cases
 -- identical to the first parameter
 -- @param table elements The elements of the world model
--- @param[opt] Player owner The owner entity of the weapon, binds the model to their hands
+-- @param Player owner? The owner entity of the weapon, binds the model to their hands
 -- @realm client
 function weaponrenderer.RenderWorldModel(wep, wepModel, elements, owner)
     -- note: while ShowDefaultWorldModel is set to true in the weapon base, addons such as TFA do not

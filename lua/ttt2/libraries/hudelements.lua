@@ -100,7 +100,7 @@ end
 ---
 -- Get an hud element by name (a copy)
 -- @param string name hud element name
--- @param[opt] table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @param table retTbl? this table will be modified and returned. If nil, a new table will be created.
 -- @return table returns the modified retTbl or the new hud element table
 -- @realm shared
 function hudelements.Get(name, retTbl)

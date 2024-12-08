@@ -560,7 +560,7 @@ end
 -- table instead.
 -- @important You should visit the linked reference, there could be related issues
 -- @param Player ply The @{Player}
--- @return[default=false] boolean True to draw the @{Player}, false to hide
+-- @return boolean True to draw the @{Player}, false to hide
 -- @hook
 -- @realm client
 -- @ref https://wiki.facepunch.com/gmod/GM:ShouldDrawLocalPlayer

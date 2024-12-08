@@ -90,7 +90,7 @@ end
 ---
 -- Enables/Disables the radar vision text and icons, can't be enabled if set
 -- to false from another call
--- @param[default=true] boolean enableText A boolean defining the text state
+-- @param boolean enableText? A boolean defining the text state, defaults to `true`
 -- @realm client
 function MARKER_VISION_DATA:EnableText(enableText)
     -- only set if not already set to false
@@ -105,7 +105,7 @@ end
 ---
 -- Adds a icon to the icon list on the left side of the radar vision element.
 -- @param Material material The material of the icon that should be rendered
--- @param[default=Color(255, 255, 255, 255)] Color color The color of the icon
+-- @param Color color? The color of the icon, defaults to `COLOR_WHITE`
 -- @return number The amount of icons that are currently in the table
 -- @realm client
 function MARKER_VISION_DATA:AddIcon(material, color)
@@ -121,9 +121,9 @@ end
 
 ---
 -- Sets the title of the specific radar vision element
--- @param[default=""] string text The text that should be displayed
--- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
--- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
+-- @param string text? The text that should be displayed, defaults to `""`
+-- @param Color color? The color of the line, defaults to `COLOR_WHITE`
+-- @param table inline_icons? A table of materials that should be rendered in front of the text
 -- @realm client
 function MARKER_VISION_DATA:SetTitle(text, color, inline_icons)
     self.params.displayInfo.title = {
@@ -135,9 +135,9 @@ end
 
 ---
 -- Sets the subtitle of the specific radar vision element
--- @param[default=""] string text The text that should be displayed
--- @param[default=Color(210, 210, 210, 255)] Color color The color of the line
--- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
+-- @param string text? The text that should be displayed
+-- @param Color color? The color of the line, defaults to `COLOR_LLGRAY`
+-- @param table inline_icons? A table of materials that should be rendered in front of the text
 -- @realm client
 function MARKER_VISION_DATA:SetSubtitle(text, color, inline_icons)
     self.params.displayInfo.subtitle = {
@@ -149,9 +149,9 @@ end
 
 ---
 -- Adds a line of text to the description area of the radar vision element
--- @param[default=""] string text The text that should be displayed
--- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
--- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
+-- @param string text? The text that should be displayed, defaults to `""`
+-- @param Color color? The color of the line, defaults to `COLOR_WHITE`
+-- @param table inline_icons? A table of materials that should be rendered in front of the text
 -- @return number The amount of description lines that are currently in the table
 -- @realm client
 function MARKER_VISION_DATA:AddDescriptionLine(text, color, inline_icons)
@@ -168,8 +168,8 @@ end
 
 ---
 -- Sets the collapsed line that is shown at greater distance of the specific radar vision element
--- @param[default=""] string text The text that should be displayed
--- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
+-- @param string text? The text that should be displayed
+-- @param Color color? The color of the line, defaults to `COLOR_WHITE`
 -- @realm client
 function MARKER_VISION_DATA:SetCollapsedLine(text, color)
     self.params.displayInfo.collapsedLine = {

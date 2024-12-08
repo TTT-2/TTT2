@@ -819,8 +819,8 @@ end
 ---
 -- Adds a delay before the round begings. This is called before @{GM:TTTPrepareRound}.
 -- @note Can be used for custom voting systems
--- @return[default=false] boolean Whether there should be a delay
--- @return[default=nil] number Delay in seconds
+-- @return boolean Whether there should be a delay
+-- @return number Delay in seconds
 -- @hook
 -- @realm server
 function GM:TTTDelayRoundStartForVote()

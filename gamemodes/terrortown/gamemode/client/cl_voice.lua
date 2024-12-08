@@ -97,7 +97,7 @@ VOICE.ActivationModes = {
 -- Generates a fake voice spectrum based on the player voice volume that looks like
 -- the restult of an FFT.
 -- @param Player ply The player that should generate a fake voice spectrum
--- @param[default=16] number stepCount Defines the result's resolution
+-- @param number stepCount? Defines the result's resolution, defaults to 16
 -- @return table Returns the table with the fake spectrum
 -- @realm client
 function VOICE.GetFakeVoiceSpectrum(ply, stepCount)

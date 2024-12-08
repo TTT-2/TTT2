@@ -247,7 +247,7 @@ end
 -- Finds the first button associated with a specific binding and returns
 -- the button. Returns KEY_NONE if no button is found.
 -- @param string name
--- @return[default=KEY_NONE] number
+-- @return number
 -- @realm client
 function bind.Find(name)
     if not name then
@@ -357,8 +357,8 @@ end
 -- Adds an entry to the bind.settingsBindings table, to easily present them eg. in a GUI.
 -- @param string name
 -- @param string label
--- @param[opt] string category
--- @param[optchain] number defaultKey
+-- @param string category?
+-- @param number defaultKey
 -- @realm client
 function bind.AddSettingsBinding(name, label, category, defaultKey)
     if not category then
@@ -396,9 +396,9 @@ end
 -- @param string name
 -- @param function OnPressed
 -- @param function OnReleased
--- @param[opt] string|boolean dontShowOrCategory
--- @param[optchain] string settingsLabel
--- @param[optchain] number defaultKey
+-- @param string|boolean dontShowOrCategory?
+-- @param string settingsLabel?
+-- @param number defaultKey?
 -- @realm client
 function bind.Register(name, OnPressed, OnReleased, dontShowOrCategory, settingsLabel, defaultKey)
     if not isfunction(OnPressed) and not isfunction(OnReleased) then

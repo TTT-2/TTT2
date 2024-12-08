@@ -152,9 +152,9 @@ end
 ---
 -- Clears the contents of this frame.
 -- @note If a new size is given, the position of the frame is reset
--- @param[opt] number w The new width
--- @param[opt] number h The new height
--- @param[opt] string title The new title
+-- @param number w? The new width
+-- @param number h? The new height
+-- @param string title? The new title
 -- @realm client
 function PANEL:ClearFrame(w, h, title)
     if isfunction(self.OnClear) and self:OnClear() == false then
