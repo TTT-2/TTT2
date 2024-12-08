@@ -70,7 +70,7 @@ function ENT:AcceptInput(name, activator)
         -- but the implementation literally only checked that a player was not a traitor, therefore the intent is
         -- preserved here since maps aren't likely to be updated
         messageReceiver = GetPlayerFilter(function(p)
-            local plyRoleData = ply:GetSubRoleData()
+            local plyRoleData = p:GetSubRoleData()
             return p:GetTeam() ~= TEAM_TRAITOR and not plyRoleData.disabledTeamChatRecv
         end)
     elseif inputReceiver == RECEIVE_ACTIVATOR then
