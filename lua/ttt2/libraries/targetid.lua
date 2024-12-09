@@ -37,6 +37,15 @@ local materialDestructible = Material("vgui/ttt/tid/tid_destructible")
 local materialDNATargetID = Material("vgui/ttt/dnascanner/dna_hud")
 local materialFire = Material("vgui/ttt/tid/tid_onfire")
 
+local cv_ttt_identify_body_woconfirm
+
+hook.Add("Initialize", "TTT2TargetID", function()
+    -- Change check if your terrortown folder is named something different
+    if engine.ActiveGamemode():lower() == "terrortown" and TTT2 and istable(CORPSE) then
+        cv_ttt_identify_body_woconfirm = CORPSE.cv.identify_body_woconfirm
+    end
+end)
+
 ---
 -- This function makes sure local variables, which use other libraries that are not yet initialized, are initialized later.
 -- It gets called after all libraries are included and `cl_targetid.lua` gets included.
@@ -562,7 +571,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
             tData:AddDescriptionLine(TryT("corpse_hint_inspect_limited_details"))
         elseif
             bodysearch.GetInspectConfirmMode() == 0
-            and not GetConVar("ttt_identify_body_woconfirm"):GetBool()
+            and not cv_ttt_identify_body_woconfirm:GetBool()
         then
             tData:SetSubtitle(ParT("corpse_hint_without_confirm", key_params))
         else
