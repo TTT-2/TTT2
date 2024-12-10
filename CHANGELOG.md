@@ -26,6 +26,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the targetID corpse hint not respecting `ttt_identify_body_woconfirm` (by @Histalek)
 - Fixed the beacon not being properly translated when placed (by @Histalek)
 - Fixed binoculars zooming not being predicted (by @Histalek)
+- Fixed an error when trying to pickup a placed equipment (e.g. beacon) (by @Histalek)
 
 ### Changed
 
