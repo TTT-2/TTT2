@@ -656,7 +656,6 @@ function HUDELEMENT:DrawSize()
         x + w * 0.5,
         y + h * 0.5 - 7,
         COLOR_WHITE,
-        TEXT_ALIGN_CENTER,
         TEXT_ALIGN_CENTER
     )
 end
