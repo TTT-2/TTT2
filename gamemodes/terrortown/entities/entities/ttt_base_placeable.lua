@@ -69,7 +69,7 @@ if CLIENT then
         end
 
         if not self:PlayerCanPickupWeapon(client) then
-            LANG.Msg(client, "pickup_fail", nil, MSG_MSTACK_WARN)
+            LANG.Msg("pickup_fail", nil, MSG_MSTACK_WARN)
 
             self:EmitSound(soundDeny)
 
