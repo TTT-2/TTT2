@@ -115,15 +115,12 @@ end
 ---
 -- @ignore
 function SWEP:SetZoomLevel(level)
-    if CLIENT then
-        return
-    end
-
-    local owner = self:GetOwner()
-
     self:SetZoomAmount(level)
 
-    owner:SetFOV(self.ZoomLevels[level], 0.3)
+    local owner = self:GetOwner()
+    if IsValid(owner) then
+        owner:SetFOV(self.ZoomLevels[level], 0.3)
+    end
 end
 
 ---
