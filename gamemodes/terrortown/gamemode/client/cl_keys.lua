@@ -115,7 +115,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
     elseif string.sub(bindName, 1, 4) == "slot" and pressed then
         local idx = tonumber(string.sub(bindName, 5, -1)) or 1
 
-        -- if radiomenu is open, override weapon select
+        -- If radiomenu is open, override weapon select
         if RADIO.Show then
             RADIO:SendCommand(idx)
         else
@@ -123,15 +123,12 @@ function GM:PlayerBindPress(ply, bindName, pressed)
         end
 
         return true
-    elseif bindName == "+zoom" and pressed then
-        -- open or close radio
+    elseif (bindName == "+zoom" or bindName == "toggle_zoom") and pressed then
+        -- Open or close radio
         RADIO:ShowRadioCommands(not RADIO.Show)
 
         return true
-    elseif bindName == "+voicerecord" then
-        -- This blocks the old Garry's Mod bind
-        return true
-    elseif bindName == "-voicerecord" then
+    elseif bindName == "+voicerecord" or bindName == "-voicerecord" then
         -- This blocks the old Garry's Mod bind
         return true
     elseif bindName == "gm_showteam" and pressed and ply:IsSpec() then
