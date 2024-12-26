@@ -316,11 +316,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
     ply.searchID = sceneData.searchUID
 
     -- play sound when the body was searched
-    if
-        ply:IsTerror()
-        and not isCovert
-        and not isLongRange
-    then
+    if ply:IsTerror() and not isCovert and not isLongRange then
         -- note: These sounds are pretty quiet and are therefore played thrice to increase the volume
         local soundSelected = table.Random(soundsSearch)
 
