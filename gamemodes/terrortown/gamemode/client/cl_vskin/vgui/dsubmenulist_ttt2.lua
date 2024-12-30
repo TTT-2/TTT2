@@ -10,7 +10,7 @@ local PANEL = {}
 AccessorFunc(PANEL, "searchFunction", "SearchFunction")
 
 -- Define sizes
-local heightNavHeader = 10
+local heightNavHeader = 0--10
 local heightNavButton = 50
 
 ---
@@ -172,6 +172,7 @@ function PANEL:SetPadding(padding)
     self.padding = padding
 
     self.navAreaScrollGrid:SetSpaceY(padding)
+    self.navAreaScrollGrid:DockPadding(0, padding, 0, padding)
 end
 
 ---
@@ -188,7 +189,7 @@ function PANEL:PerformLayout()
     self:InvalidateParent(true)
 
     local widthNavContent, heightNavContent = self:GetSize()
-    local heightShift = heightNavHeader + (self.searchBar and heightNavButton + self.padding or 0)
+    local heightShift = heightNavHeader --[[+ self.padding]] + (self.searchBar and heightNavButton or 0)
 
     self:SetSearchBarSize(widthNavContent, heightNavButton)
     self.navAreaScroll:SetSize(widthNavContent, heightNavContent - heightShift)

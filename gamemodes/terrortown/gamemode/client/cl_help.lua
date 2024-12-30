@@ -364,7 +364,7 @@ function HELPSCRN:ShowSubmenu(menuClass)
     local navArea = vgui.Create("DNavPanelTTT2", frame)
     navArea:SetWide(widthNav)
     navArea:SetPos(0, 0)
-    navArea:DockPadding(0, self.padding, 1, self.padding)
+    navArea:DockPadding(0, 0, 1, 0)
     navArea:Dock(LEFT)
 
     local contentArea = vgui.Create("DContentPanelTTT2", frame)
