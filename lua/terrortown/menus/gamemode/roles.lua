@@ -36,13 +36,16 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 
         counter = counter + 1
 
-        virtualSubmenus[counter] = tableCopy(rolesMenuBase)
-        virtualSubmenus[counter].title = roleData.name
-        virtualSubmenus[counter].icon = roleData.iconMaterial
-        virtualSubmenus[counter].roleData = roleData
-        virtualSubmenus[counter].iconBadge = roleData.builtin and builtinIcon
-        virtualSubmenus[counter].iconBadgeSize = 8
-        virtualSubmenus[counter].basemenu = self
+        local virtualSubmenu = tableCopy(rolesMenuBase)
+        virtualSubmenu.title = roleData.name
+        virtualSubmenu.icon = roleData.iconMaterial
+        virtualSubmenu.roleData = roleData
+        virtualSubmenu.iconBadge = roleData.builtin and builtinIcon
+        virtualSubmenu.iconBadgeSize = 8
+        virtualSubmenu.basemenu = self
+        -- make sure that the virtual submenu will be shown
+        function virtualSubmenu:ShouldShow() return true end
+        virtualSubmenus[counter] = virtualSubmenu
     end
 end
 
@@ -60,6 +63,24 @@ end
 -- overwrite and return true to enable a searchbar
 function CLGAMEMODEMENU:HasSearchbar()
     return true
+end
+
+-- override this so that we have non-searched submenus above the search bar
+function CLGAMEMODEMENU:GetVisibleNonSearchedSubmenus()
+    local visibleSubmenus = {}
+    local allSubmenus = self.submenus
+
+    for i = 1, #allSubmenus do
+        local submenu = allSubmenus[i]
+
+        if not submenu:ShouldShow() then
+            continue
+        end
+
+        visibleSubmenus[#visibleSubmenus + 1] = submenu
+    end
+
+    return visibleSubmenus
 end
 
 ---

@@ -63,6 +63,16 @@ function CLGAMEMODEMENU:GetVisibleSubmenus()
 end
 
 ---
+-- Returns a table with references to the submenu classes which should not be searchable
+-- (and which should appear above the search bar, if any).
+-- @note This should be overridden to take advantage of this behavior. By default, it returns an empty table.
+-- @return table Returns a table containing all non-searchable submenus which should be visible.
+-- @realm client
+function CLGAMEMODEMENU:GetVisibleNonSearchedSubmenus()
+    return {}
+end
+
+---
 -- Used to define whether this menu is available for all or only for admins.
 -- @note This function should be overwritten but not called.
 -- @hook
@@ -177,3 +187,23 @@ end
 -- @hook
 -- @realm client
 function CLGAMEMODEMENU:Initialize() end
+
+---
+-- Populates the nav panel contents. The default is what is typically desired,
+-- however this extension point enables certain menus (like the Roles menu)
+-- to be populated in a more fitting way.
+-- @note This function can be overridden to create a custom nav panel.
+-- @param Panel navPanel The nav panel container
+-- @param Panel contentPanel The content panel container
+-- @hook
+-- @realm client
+function CLGAMEMODEMENU:FillNavPanel(navPanel, contentPanel, padding)
+    -- MAKE SEPARATE SUBMENULIST ON THE NAVAREA WITH A CONTENT AREA
+    local submenuList = vgui.Create("DSubmenuListTTT2", navPanel)
+    submenuList:Dock(FILL)
+    submenuList:SetPadding(padding)
+    submenuList:SetBasemenuClass(self, contentPanel)
+
+    -- REFRESH SIZE OF SUBMENULIST FOR CORRECT SUBMENU DEPENDENT SIZE
+    submenuList:InvalidateLayout(true)
+end

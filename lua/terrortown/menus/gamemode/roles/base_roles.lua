@@ -167,3 +167,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
     hook.Run("TTT2OnRoleAddToSettingsMenu", self.roleData, parent)
 end
+
+-- Override this here, because we don't want auto-discovery to show this menu
+function CLGAMEMODESUBMENU:ShouldShow() return false end
