@@ -184,8 +184,19 @@ function PANEL:SelectFirst(index)
         end
     end
 
-    -- If a non-zero index was specified, we don't want to present the unpopulated message, because we're probably doing a search
+    -- If a non-zero index was specified, we don't want to present the unpopulated message, because we're doing a search.
+    -- In that case, we want to display a message that there were no results.
     if index ~= 0 then
+        local w, h = self.contentArea:GetSize()
+
+        local msgLabel = vgui.Create("DLabelTTT2", self.contentArea)
+        msgLabel:SetText("label_menu_search_no_items")
+        msgLabel:SetFont("DermaTTT2Title")
+        msgLabel:Dock(FILL)
+
+        local dummyPnl = vgui.Create("DPanel", self.contentArea)
+        dummyPnl:Dock(LEFT)
+
         return
     end
 

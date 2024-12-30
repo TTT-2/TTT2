@@ -2369,3 +2369,6 @@ L.vehicle_enter = "Press [{usekey}] to enter vehicle"
 
 -- 2024-11-27
 L.corpse_hint_without_confirm = "Press [{usekey}] to search."
+
+-- 2024-12-30
+L.label_menu_search_no_items = "No items matched your search."
