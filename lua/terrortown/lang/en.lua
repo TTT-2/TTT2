@@ -2372,3 +2372,222 @@ L.corpse_hint_without_confirm = "Press [{usekey}] to search."
 
 -- 2024-12-30
 L.label_menu_search_no_items = "No items matched your search."
+
+L.submenu_roles_overview_title = "Roles Overview (READ ME)"
+-- Is there a way to ahve some sort of external file that's possibly-localized?
+L.roles_overview_html = [[
+
+<h1>Overview</h1>
+
+One of TTT2's core mechanics is the <em>role</em>. They control what your
+goals are, who your teammates are, and what you can do. The way that they
+are distributed to players is thus very important. The role distribution
+system is very complicated, and the menus in this tab control almost every
+aspect of that system. For many of the options available, understanding how
+the system as a whole works can be crucial to being able to make the changes
+you want for your server.
+
+<h2>Terminology</h2>
+
+<ul>
+  <li><em>Role</em> &mdash; The role assigned to a player at round start,
+  e.g. <em>Traitor</em>, <em>Innocent</em>, <em>Necromancer</em>, etc.</li>
+  <li><em>Base role</em> (or <em>baserole</em>) &mdash; A <em>role</em>
+  selected first, that acts as a kind of high-level template for the final
+  role a player will recieve. <em>Base roles</em> can be final roles. Ex.
+  <em>Innocent</em>, <em>Traitor</em>, <em>Pirate</em></li>
+  <li><em>Sub role</em> (or <em>subrole</em>) &mdash; A role assigned as a
+  refinement of a <em>base role</em>. Each possible <em>sub role</em> is
+  associated with a <em>base role</em>, such that a player must have been
+  assigned the appropriate <em>base role</em> for them to end up with a
+  <em>sub role</em>. Ex. <em>Detective</em> (I-subrole), <em>Hitman</em>
+  (T-subrole), <em>Survivalist</em> (I-subrole), etc.</li>
+</ul>
+
+<h2>The Algorithm</h2>
+
+<em>Implementation is</em> <code>roleselection.SelectRoles</code>
+
+<ol>
+
+  <li>
+    <p>
+      Determine the number of players that can be given each role.
+      <em>Innocent</em> and <em>Traitor</em> always have available slots.
+    </p>
+    <p>
+      All roles (both base- and sub-roles) get the computed here. Subroles
+      only have selectable slots if their corresponding baseroles do.
+    </p>
+    <p>
+      <em>Implemented in</em>
+      <code>roleselection.GetAllSelectableRolesList</code>
+    </p>
+  </li>
+
+  <li>
+    <p>
+      Select the roles that will actually be distributed, limited by the
+      layer configuration and configured maximum number of roles. This process
+      is sufficiently complicated to be worthy of its own section; details
+      are in the next section.
+    </p>
+    <p>
+      <em>Implemented in</em>
+      <code>roleselection.GetSelectableRolesList</code>
+    </p>
+  </li>
+
+  <li>
+    <p>
+      Assign forced roles. This is mostly simple; there is some extra logic to
+      sanely deal with the case where a player was assigned multiple forced
+      roles. This is not commonly used, but is included for completeness.
+    </p>
+  </li>
+
+  <li>
+    <p>
+      Randomly shuffle the list of players. Though this likely doesn't
+      meaningfully impact the role distribution, it guarantees that there is no
+      dependence on player join order.
+    </p>
+  </li>
+
+  <li>
+    <p>
+      For each selectable baserole (in order <em>Traitor</em>,
+      <em>Innocent</em>, remaining baseroles):
+    </p>
+    <ol type="a">
+      <li>
+        <p>
+          Assign up to the allowed number of players to the baserole. (This
+          will be detailed later.)
+        </p>
+        <p><em>Implemented in</em> <code>SelectBaseRolePlayers</code></p>
+      </li>
+      <li>
+        <p>
+          If the baserole is not <em>Innocent</em>, try to "upgrade" players
+          with that baserole to possible subroles. (This will also be detailed
+          later.)
+        </p>
+        <p><em>Implemented in</em> <code>UpgradeRoles</code></p>
+      </li>
+    </ol>
+  </li>
+
+  <li>
+    <p>
+      All players not yet assigned a role are assigned <em>Innocent</em>.
+    </p>
+  </li>
+
+  <li>
+    <p>
+      All players with the <em>Innocent</em> baserole have their role
+      "upgraded" exactly as in step 5b.
+    </p>
+  </li>
+
+  <li>
+    <p>
+      The hook <code>TTT2ModifyFinalRoles</code> is called to allow other
+      addons to affect final roles.
+    </p>
+  </li>
+
+  <li>
+    <p>
+      Role weights for each player are updated according to their final role.
+      (If the player's final role is a subrole, their corresponding baserole
+      is also updated.)
+    </p>
+  </li>
+
+</ol>
+
+<h3>
+  Role Layering (a.k.a. <code>roleselection.GetSelectableRolesList</code>)
+</h3>
+
+<p>Role layering is the most controllable part of role selection, and the
+worst explained. In short, <em>role layering</em> determines <em>what</em>
+roles can be distributed, but NOT <em>how</em>.</p>
+
+TODO: Even after inspecting the code for quite a while, I don't think I
+understand what it's doing and why.
+
+<h3>Baserole Selection (a.k.a. <code>SelectBaseRolePlayers</code>)</h3>
+
+<p>Recall that we assign ALL players to ONE baserole.</p>
+<p>As long as there are players to assign, and more available slots to
+  assign:</p>
+<ol>
+  <li>
+    <p>Select a player to assign the role to.</p>
+    <p>
+      If <em>role derandomization</em> (see <em>Role Derandomization</em>
+      section in <em>General Role Settings</em> tab) is set to "baseroles
+      only" or "both": Select a random player from the available players
+      weighted by the weight associated with this baserole. (Think of it
+      as if each player occurs multiple times in the list, according to
+      the weight.)
+    </p>
+    <p>
+      If <em>role derandomization</em> is set to "disabled" or "subroles
+      only": Select a random player from the available players, with equal
+      probability.
+    </p>
+  </li>
+
+  <li>
+    <p>
+      If the selected player has enough karma for the role, there are not
+      enough players to fill all slots, a 1/3 chance passes, or the target
+      baserole is <em>Innocent</em>: Remove the player from the list of
+      available players and assign the player the baserole.
+    </p>
+  </li>
+</ol>
+
+<h3>Subrole Selection (a.k.a. <code>UpgradeRoles</code>)</h3>
+
+<p>This is <em>very</em> similar to baserole selection.</p>
+<p>When upgrading roles, ALL subroles associated with a baserole are
+processed together. All players with that baserole are handled together.</p>
+<p>Only subroles that have assignable slots that are not filled are
+considered. (This is relevant in the presence of forced subroles.)</p>
+
+<p>As long as there are players to assignx, and more subroles which
+  are assignable:</p>
+<ol>
+  <li>
+    <p>Select a player to assign the role to.</p>
+    <p>
+      If <em>role derandomization</em> is set to "subroles only" or
+      "both": Select a random player from the available players weighted
+      by the weight associated with this baserole.
+    </p>
+    <p>
+      If <em>role derandomization</em> is set to "disabled" or "baseroles
+      only": Select a random player from the available players, with equal
+      probability.
+    </p>
+  </li>
+
+  <li>
+    <p>
+      If the selected player has enough karma for the role, there are not
+      enough players to fill all slots, or a 1/3 chance passes (this is the
+      same condition as above, and in the code, is a shared function): Remove
+      the player from the list of available players and assign the player the
+      subrole. If the subrole has had all available slots filled, remote it
+      from consideration.
+    </p>
+  </li>
+</ol>
+
+TODO: role weights
+]]
