@@ -44,7 +44,9 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
         virtualSubmenu.iconBadgeSize = 8
         virtualSubmenu.basemenu = self
         -- make sure that the virtual submenu will be shown
-        function virtualSubmenu:ShouldShow() return true end
+        function virtualSubmenu:ShouldShow()
+            return true
+        end
         virtualSubmenus[counter] = virtualSubmenu
     end
 end

@@ -10,7 +10,8 @@ CLGAMEMODESUBMENU.title = "submenu_administration_roles_general_title"
 
 local TryT = LANG.TryTranslation
 
-function CLGAMEMODESUBMENU:Populate(parent)
-end
+function CLGAMEMODESUBMENU:Populate(parent) end
 
-function CLGAMEMODESUBMENU:ShouldShow() return false end
+function CLGAMEMODESUBMENU:ShouldShow()
+    return false
+end

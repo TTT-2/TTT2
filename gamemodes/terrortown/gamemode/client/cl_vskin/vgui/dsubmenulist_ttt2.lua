@@ -5,7 +5,7 @@
 local PANEL = {}
 
 -- Define sizes
-local heightNavHeader = 0--10
+local heightNavHeader = 0 --10
 local heightNavButton = 50
 
 ---
@@ -220,7 +220,9 @@ end
 -- @realm client
 function PANEL:AddSearchTracker()
     if self.scrollTracker then
-        ErrorNoHaltWithStack("ERROR: DSubMenuListTTT2:AddSearchTracker() called multiple times without resetting!")
+        ErrorNoHaltWithStack(
+            "ERROR: DSubMenuListTTT2:AddSearchTracker() called multiple times without resetting!"
+        )
         return
     end
 

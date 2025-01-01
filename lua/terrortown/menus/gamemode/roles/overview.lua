@@ -33,8 +33,8 @@ local htmlEnd = [[
 local TryT = LANG.TryTranslation
 
 function CLGAMEMODESUBMENU:Populate(parent)
-  local html = vgui.Create("DHTML", parent)
-  html:SetSize(500, 640)
-  html:Dock(FILL)
-  html:SetHTML(htmlStart .. TryT("roles_overview_html") .. htmlEnd)
+    local html = vgui.Create("DHTML", parent)
+    html:SetSize(500, 640)
+    html:Dock(FILL)
+    html:SetHTML(htmlStart .. TryT("roles_overview_html") .. htmlEnd)
 end

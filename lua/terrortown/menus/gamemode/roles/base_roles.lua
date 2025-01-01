@@ -169,4 +169,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 end
 
 -- Override this here, because we don't want auto-discovery to show this menu
-function CLGAMEMODESUBMENU:ShouldShow() return false end
+function CLGAMEMODESUBMENU:ShouldShow()
+    return false
+end
