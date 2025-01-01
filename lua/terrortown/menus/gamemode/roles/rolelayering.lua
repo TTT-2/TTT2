@@ -62,6 +62,9 @@ function CLGAMEMODESUBMENU:HasButtonPanel()
 end
 
 hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, layerTable)
+    print("TTT2RecievedRolelayerData", role)
+    PrintTable(layerTable)
+
     local menuReference = HELPSCRN.submenuClass
 
     if not menuReference or HELPSCRN:GetOpenMenu() ~= "administration_rolelayering" then
