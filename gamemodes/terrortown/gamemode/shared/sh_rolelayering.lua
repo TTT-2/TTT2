@@ -110,9 +110,6 @@ if SERVER then
         -- read the table the client requested
         local requestedRoleTable = net.ReadUInt(ROLE_BITS)
 
-        print("net.Recieve(TTT2SyncRolelayerData)", ply:GetName())
-        print("update:", isDataUpdated, "role:", requestedRoleTable)
-
         -- define a table of receivers for the netmessage
         local receiverTable = {}
 
@@ -156,11 +153,6 @@ if SERVER then
             layerTable = roleselection.subroleLayers[requestedRoleTable]
         end
 
-        print(type(layerTable))
-        if type(layerTable) == "table" then
-            PrintTable(layerTable)
-        end
-
         net.Start("TTT2SyncRolelayerData")
         net.WriteUInt(requestedRoleTable, ROLE_BITS)
 
@@ -180,7 +172,6 @@ if CLIENT then
     -- @{roles.GenerateNewRoleID()} @{function}.
     -- @realm client
     function rolelayering.RequestDataFromServer(role)
-        print("rolelayering.RequestDataFromServer", role)
         net.Start("TTT2SyncRolelayerData")
         net.WriteBit(0) -- Request data = 0, Send data = 1
         net.WriteUInt(role or ROLE_NONE, ROLE_BITS)
@@ -196,9 +187,6 @@ if CLIENT then
     -- @{roles.GenerateNewRoleID()} @{function}.
     -- @realm client
     function rolelayering.SendDataToServer(role, layers)
-        print("rolelayering.SendDataToServer", role)
-        PrintTable(layers)
-
         net.Start("TTT2SyncRolelayerData")
         net.WriteBit(1) -- Request data = 0, Send data = 1
 
