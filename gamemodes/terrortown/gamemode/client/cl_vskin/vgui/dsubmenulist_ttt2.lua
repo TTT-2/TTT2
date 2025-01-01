@@ -134,6 +134,9 @@ function PANEL:AddSubmenuButton(submenuClass)
     return settingsButton
 end
 
+---
+-- Resets the submenu list, clearing both the nav buttons and associated content area.
+-- @realm client
 function PANEL:ResetSubmenuList()
     self.navAreaScrollGrid:Clear()
     self.contentArea:Clear()
