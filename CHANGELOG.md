@@ -42,6 +42,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - By default only `ttt` and `ttt2` map prefixes are enabled (by @Histalek)
 - Updated `ttt_identify_body_woconfirm` to be replicated across the server and client (by @Wryyyong)
 - Changed how Ammo is dropped; if drop should be from reserve ammo, now tries to drop a full ammo box instead of a full clip. (by @MrXonte)
+- Moved all role-related admin options into the "Roles" menu (by @nike4613)
+- Improved description of role layering (by @nike4613)
 
 ## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
 
