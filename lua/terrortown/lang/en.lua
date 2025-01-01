@@ -2376,7 +2376,6 @@ L.label_menu_search_no_items = "No items matched your search."
 L.submenu_roles_overview_title = "Roles Overview (READ ME)"
 -- Is there a way to ahve some sort of external file that's possibly-localized?
 L.roles_overview_html = [[
-
 <h1>Overview</h1>
 
 One of TTT2's core mechanics is the <em>role</em>. They control what your
@@ -2418,6 +2417,10 @@ you want for your server.
     <p>
       All roles (both base- and sub-roles) get the computed here. Subroles
       only have selectable slots if their corresponding baseroles do.
+    </p>
+    <p>
+      Each role is assigned a chance that it's distributed. If that chance
+      fails, this step sets the possible number of players to zero.
     </p>
     <p>
       <em>Implemented in</em>
@@ -2512,12 +2515,78 @@ you want for your server.
   Role Layering (a.k.a. <code>roleselection.GetSelectableRolesList</code>)
 </h3>
 
-<p>Role layering is the most controllable part of role selection, and the
-worst explained. In short, <em>role layering</em> determines <em>what</em>
-roles can be distributed, but NOT <em>how</em>.</p>
+<p>Role layering is the most controllable part of role selection, and historically the worst explained. In short, <em>role layering</em>
+determines <em>what</em> roles can be distributed, but NOT <em>how</em>.</p>
 
-TODO: Even after inspecting the code for quite a while, I don't think I
-understand what it's doing and why.
+<p>The algorithm is as follows:</p>
+<ol>
+  <li>
+    <p>For each baserole layer configured (as long as there are enough
+      players that more roles are needed):</p>
+    <ol type="a">
+      <li>
+        <p>
+          Remove all roles in the layer with no available player slots.
+          (This will remove roles which were previously randomly decided
+          to not be distributed.)
+        </p>
+      </li>
+      <li>
+        <p>
+          Select one role from what's left of the layer at random.
+        </p>
+      </li>
+      <li>
+        <p>
+          Add the role to the final list of candidate baseroles.
+        </p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p>Randomly iterate non-layered baseroles. For each such baserole,
+    add the role to the final candidate list.</p>
+  </li>
+  <li>
+    <p>Modify each candidate baserole's available slots so that the sum is the
+      total number of players, preferring candidates added first.</p>
+  </li>
+  <li>
+    <p>Now, subroles. Evaluate once per selectable subrole (including all
+    layered and unlayered subroles for all baseroles in the baserole
+    candidate list):</p>
+    <ol type="a">
+      <li>
+        <p>Randomly select a baserole candidate.</p>
+      </li>
+      <li>
+        <p>
+          If there are any layers defined for that baserole: Select a random
+          subrole from the first available layer. Remove the layer.
+        </p>
+        <p>
+          If there are no layers defined for that baserole: Select a random
+          subrole from the unlayered subroles. Remove that subrole from the
+          unlayered list.
+        </p>
+      </li>
+      <li>
+        <p>Add the selected subrole to the final candidate list.</p>
+      </li>
+      <li>
+        <p>
+          If the baserole has no more subrole layers or subroles: Remove the
+          baserole from further consideration (for this loop ONLY. It stays
+          in the candidate list.)
+        </p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p>The baserole and subrole candidate lists now contain the roles which
+    will be assigned.</p>
+  </li>
+</ol>
 
 <h3>Baserole Selection (a.k.a. <code>SelectBaseRolePlayers</code>)</h3>
 
@@ -2560,7 +2629,7 @@ processed together. All players with that baserole are handled together.</p>
 <p>Only subroles that have assignable slots that are not filled are
 considered. (This is relevant in the presence of forced subroles.)</p>
 
-<p>As long as there are players to assignx, and more subroles which
+<p>As long as there are players to assign, and more subroles which
   are assignable:</p>
 <ol>
   <li>
@@ -2589,5 +2658,4 @@ considered. (This is relevant in the presence of forced subroles.)</p>
   </li>
 </ol>
 
-TODO: role weights
 ]]
