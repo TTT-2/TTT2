@@ -156,7 +156,10 @@ if SERVER then
             layerTable = roleselection.subroleLayers[requestedRoleTable]
         end
 
-        PrintTable(layerTable)
+        print(type(layerTable))
+        if type(layerTable) == "table" then
+            PrintTable(layerTable)
+        end
 
         net.Start("TTT2SyncRolelayerData")
         net.WriteUInt(requestedRoleTable, ROLE_BITS)
