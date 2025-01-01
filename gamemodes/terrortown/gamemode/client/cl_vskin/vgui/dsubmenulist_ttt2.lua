@@ -161,7 +161,7 @@ end
 function PANEL:ExtendSubmenuList(submenuClasses)
     for i = 1, #submenuClasses do
         local submenuClass = submenuClasses[i]
-        local settingsButton = self:AddSubmenuButton(submenuClass)
+        self:AddSubmenuButton(submenuClass)
     end
 
     --self:InvalidateLayout(true)
@@ -187,8 +187,6 @@ function PANEL:SelectFirst(index)
     -- If a non-zero index was specified, we don't want to present the unpopulated message, because we're doing a search.
     -- In that case, we want to display a message that there were no results.
     if index ~= 0 then
-        local w, h = self.contentArea:GetSize()
-
         local msgLabel = vgui.Create("DLabelTTT2", self.contentArea)
         msgLabel:SetText("label_menu_search_no_items")
         msgLabel:SetFont("DermaTTT2Title")
