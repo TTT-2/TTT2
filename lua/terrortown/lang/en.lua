@@ -1311,8 +1311,14 @@ L.header_rolelayering_role = "{role} layering"
 L.header_rolelayering_baserole = "Base role layering"
 L.submenu_administration_rolelayering_title = "Role Layering"
 L.header_rolelayering_info = "Role layering information"
-L.help_rolelayering_roleselection = "The role distribution process is split into two stages. In the first stage base roles are distributed, which are innocent, traitor and those listed in the 'base role layer' box below. The second stage is used to upgrade those base roles to a subrole."
-L.help_rolelayering_layers = "From each layer only one role is selected. First the roles from the custom layers are distributed starting from the first layer until the last is reached or no more roles can be upgraded. Whichever happens first, if upgradeable slots are still available, the unlayered roles will be distributed as well."
+L.help_rolelayering_roleselection = [[
+The role distribution process is split into two stages. In the first stage base roles are distributed, which are Innocent, Traitor and those listed in the 'base role layer' box below. The second stage is used to upgrade those base roles to a subrole.
+
+Further details are available in the overview tab.]]
+L.help_rolelayering_layers = [[
+After determining the assignable roles according to role-specific convars (including the random chance it will be selected at all!), one role from each layer (if there are any) is selected for distribution. After handling the layers, unlayered roles are selected at random. Role selection stops as soon as there are no more slots which need to be filled.
+
+Roles which are not considered due to convar-related requirements are not distributed.]]
 L.scoreboard_voice_tooltip = "Scroll to change the volume"
 
 -- 2021-06-15
