@@ -67,7 +67,7 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 
     local menuReference = HELPSCRN.submenuClass
 
-    if not menuReference or HELPSCRN:GetOpenMenu() ~= "administration_rolelayering" then
+    if not menuReference or HELPSCRN:GetOpenMenu() ~= "roles_rolelayering" then
         return
     end
 
