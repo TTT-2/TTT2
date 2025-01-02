@@ -26,14 +26,27 @@ function ROLE:RemoveRoleLoadout(ply, isRoleChange) end
 -- @return boolean
 -- @realm server
 function ROLE:IsSelectable(avoidHook)
-    return self == roles.INNOCENT
-        or self == roles.TRAITOR
-        or (GetConVar("ttt_newroles_enabled"):GetBool() or self == roles.DETECTIVE)
-            and not self.notSelectable
-            and GetConVar("ttt_" .. self.name .. "_enabled"):GetBool()
-            ---
-            -- @realm server
-            and (avoidHook or not hook.Run("TTT2RoleNotSelectable", self))
+    if self == roles.INNOCENT or self == roles.TRAITOR then
+        return true, ROLEINSPECT_REASON_PASSED
+    end
+
+    if self ~= roles.DETECTIVE and not GetConVar("ttt_newroles_enabled"):GetBool() then
+        return false, ROLEINSPECT_REASON_NOT_ENABLED
+    end
+
+    if self.notSelectable then
+        return false, ROLEINSPECT_REASON_NOT_SELECTABLE
+    end
+
+    if not GetConVar("ttt_" .. self.name .. "_enabled"):GetBool() then
+        return false, ROLEINSPECT_REASON_NOT_ENABLED
+    end
+
+    if not avoidHook and hook.Run("TTT2RoleNotSelectable", self) then
+        return false, ROLEINSPECT_REASON_NOT_SELECTABLE
+    end
+
+    return true, ROLEINSPECT_REASON_PASSED
 end
 
 ---

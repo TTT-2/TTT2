@@ -31,20 +31,32 @@ roleinspect.stageNames = {
 
 -- enum ROLESELECT_DECISION
 -- indicates the decision that was made about a role
-ROLESELECT_DECISION_NONE = 0
-ROLESELECT_DECISION_NOT_CONSIDERED = 1
-ROLESELECT_DECISION_ROLE_ASSIGNED = 2
-ROLESELECT_DECISION_ROLE_NOT_ASSIGNED = 3
+ROLEINSPECT_DECISION_NONE = 0
+ROLEINSPECT_DECISION_CONSIDER = 1
+ROLEINSPECT_DECISION_NOT_CONSIDERED = 2
+ROLEINSPECT_DECISION_ROLE_ASSIGNED = 3
+ROLEINSPECT_DECISION_ROLE_NOT_ASSIGNED = 4
+
+roleinspect.decisionNames = {
+    [ROLEINSPECT_DECISION_NONE] = "roleinspect_decision_none",
+    [ROLEINSPECT_DECISION_CONSIDER] = "roleinspect_decision_consider",
+    [ROLEINSPECT_DECISION_NOT_CONSIDERED] = "roleinspect_decision_not_considered",
+    [ROLEINSPECT_DECISION_ROLE_ASSIGNED] = "roleinspect_decision_role_assigned",
+    [ROLEINSPECT_DECISION_ROLE_NOT_ASSIGNED] = "roleinspect_decision_role_not_assigned",
+}
 
 -- enum ROLEINSPECT_REASON
 -- indicates the reason that a decision was made
 -- The enum values are the language string IDs for the reasons
+
+ROLEINSPECT_REASON_PASSED = "roleinspect_reason_passed" -- All checks passed, this role can move on
 
 -- Reasons for STAGE_PRESELECT
 ROLEINSPECT_REASON_NOT_ENABLED = "roleinspect_reason_not_enabled" -- Role is not enabled
 ROLEINSPECT_REASON_NO_PLAYERS = "roleinspect_reason_no_players" -- Role removed from consideration because there weren't enough players
 ROLEINSPECT_REASON_LOW_PROPORTION = "roleinspect_reason_low_proportion" -- Role not considered because it's distribution ratio rounds to zero
 ROLEINSPECT_REASON_ROLE_CHANCE = "roleinspect_reason_role_chance" -- Role not considered because the distribution chance check failed
+ROLEINSPECT_REASON_NOT_SELECTABLE = "roleinspect_reason_not_selectable" -- Role was marked notSelectable
 ROLEINSPECT_REASON_ROLE_DECISION = "roleinspect_reason_role_decision" -- The role decided that it could not be distributed
 
 -- Reasons for STAGE_LAYERING
@@ -86,7 +98,7 @@ if SERVER then
 
     local function GetRoleTable(stage, role)
         local dstage = GetStageTable(stage)
-        return GetOrAddTable(dstage, role, function()
+        return GetOrAddTable(dstage.roles, role, function()
             return { decisions = {}, extra = {} }
         end)
     end
@@ -107,7 +119,7 @@ if SERVER then
         tbl[#tbl + 1] = info
     end
 
-    function roleinspect.ReportDecision(ply, role, decision, stage, reason)
+    function roleinspect.ReportDecision(stage, role, ply, decision, reason)
         local drole = GetRoleTable(stage, role)
         local decisionTbl = drole.decisions
         decisionTbl[#decisionTbl + 1] = { ply = ply, decision = decision, reason = reason }

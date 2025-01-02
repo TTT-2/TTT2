@@ -294,19 +294,24 @@ end
 -- @internal
 local function GetAvailableRoleAmount(roleData, forced, maxPlys)
     local bool = true
+    local reason = ROLEINSPECT_REASON_FORCED
 
     if not forced then
         local randomCVar = GetConVar("ttt_" .. roleData.name .. "_random")
 
         bool = math.random(100) <= (randomCVar and randomCVar:GetInt() or 100)
+        reason = ROLEINSPECT_REASON_ROLE_CHANCE
     end
 
     if bool then
-        return roleData:GetAvailableRoleCount(maxPlys)
-            - roleselection.GetCurrentRoleAmount(roleData.index)
+        local roleCount, newReason = roleData:GetAvailableRoleCount(maxPlys)
+        if roleCount == 0 then
+            reason = newReason
+        end
+        return roleCount - roleselection.GetCurrentRoleAmount(roleData.index), reason
     end
 
-    return 0
+    return 0, reason
 end
 
 ---
@@ -339,7 +344,9 @@ end
 -- @return table a list of all selectable @{ROLE}s
 -- @realm server
 function roleselection.GetAllSelectableRolesList(maxPlys)
+    roleinspect.ReportStageExtraInfo(ROLEINSPECT_STAGE_PRESELECT, "maxPlayers", maxPlys)
     if maxPlys < 2 then
+        roleinspect.ReportStageExtraInfo(ROLEINSPECT_STAGE_PRESELECT, "finalRoleCounts", {})
         return
     end
 
@@ -349,10 +356,22 @@ function roleselection.GetAllSelectableRolesList(maxPlys)
         forcedRolesTbl[subrole] = true
     end
 
-    local rolesCountTbl = {
-        [ROLE_INNOCENT] = GetAvailableRoleAmount(roles.INNOCENT, true, maxPlys),
-        [ROLE_TRAITOR] = GetAvailableRoleAmount(roles.TRAITOR, true, maxPlys),
+    local defaultRoles = {
+        [ROLE_INNOCENT] = roles.INNOCENT,
+        [ROLE_TRAITOR] = roles.TRAITOR,
     }
+    local rolesCountTbl = {}
+    for k, v in pairs(defaultRoles) do
+        local count, reason = GetAvailableRoleAmount(v, true, maxPlys)
+        rolesCountTbl[k] = count
+        roleinspect.ReportDecision(
+            ROLEINSPECT_STAGE_PRESELECT,
+            k,
+            nil,
+            ROLEINSPECT_DECISION_CONSIDER,
+            ROLEINSPECT_REASON_FORCED
+        )
+    end
 
     local checked = {}
     local rlsList = roles.GetList()
@@ -368,11 +387,19 @@ function roleselection.GetAllSelectableRolesList(maxPlys)
         checked[roleData.index] = true
 
         -- INNOCENT and TRAITOR are all the time selectable
-        if
-            roleData == roles.INNOCENT
-            or roleData == roles.TRAITOR
-            or not roleData:IsSelectable()
-        then
+        if roleData == roles.INNOCENT or roleData == roles.TRAITOR then
+            continue
+        end
+
+        local selectable, reason = roleData:IsSelectable()
+        if not selectable then
+            roleinspect.ReportDecision(
+                ROLEINSPECT_STAGE_PRESELECT,
+                roleData.index,
+                nil,
+                ROLEINSPECT_DECISION_NOT_CONSIDERED,
+                reason or ROLEINSPECT_REASON_ROLE_DECISION
+            )
             continue
         end
 
@@ -387,15 +414,28 @@ function roleselection.GetAllSelectableRolesList(maxPlys)
             if not checked[baseRoleData.index] then
                 checked[baseRoleData.index] = true
 
-                local rolesCount = GetAvailableRoleAmount(
+                local rolesCount, reason = GetAvailableRoleAmount(
                     baseRoleData,
                     forcedRolesTbl[baseRoleData.index],
                     maxPlys
                 )
+                reason = reason or ROLEINSPECT_REASON_ROLE_DECISION
+
+                local decision = ROLEINSPECT_DECISION_NOT_CONSIDERED
 
                 if rolesCount > 0 then
                     rolesCountTbl[baseRoleData.index] = rolesCount
+                    reason = ROLEINSPECT_REASON_PASSED
+                    decision = ROLEINSPECT_DECISION_CONSIDER
                 end
+
+                roleinspect.ReportDecision(
+                    ROLEINSPECT_STAGE_PRESELECT,
+                    baseRoleData.index,
+                    nil,
+                    decision,
+                    reason
+                )
             end
 
             -- continue if baserole is not available
@@ -405,13 +445,27 @@ function roleselection.GetAllSelectableRolesList(maxPlys)
         end
 
         -- now check for subrole availability
-        local rolesCount = GetAvailableRoleAmount(roleData, forcedRolesTbl[roleData.index], maxPlys)
+        local rolesCount, reason =
+            GetAvailableRoleAmount(roleData, forcedRolesTbl[roleData.index], maxPlys)
+        reason = reason or ROLEINSPECT_REASON_ROLE_DECISION
 
+        local decision = ROLEINSPECT_DECISION_NOT_CONSIDERED
         if rolesCount > 0 then
             rolesCountTbl[roleData.index] = rolesCount
+            reason = ROLEINSPECT_REASON_PASSED
+            decision = ROLEINSPECT_DECISION_CONSIDER
         end
+
+        roleinspect.ReportDecision(
+            ROLEINSPECT_STAGE_PRESELECT,
+            roleData.index,
+            nil,
+            decision,
+            reason
+        )
     end
 
+    roleinspect.ReportStageExtraInfo(ROLEINSPECT_STAGE_PRESELECT, "finalRoleCounts", rolesCountTbl)
     return rolesCountTbl
 end
 
@@ -966,6 +1020,7 @@ end
 -- @realm server
 function roleselection.SelectRoles(plys, maxPlys)
     roleselection.selectableRoles = nil -- reset to enable recalculation
+    roleinspect.Reset()
 
     GAMEMODE.LastRole = GAMEMODE.LastRole or {}
 
