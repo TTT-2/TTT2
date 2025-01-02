@@ -29,6 +29,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed binoculars zooming not being predicted (by @Histalek)
 - Fixed an error when trying to pickup a placed equipment (e.g. beacon) (by @Histalek)
 - Fixed corpse searching sound playing when searched by a spectator, searched covertly, or searched long range (by @TW1STaL1CKY)
+- Fixed the mute button in the scoreboard not working (by @TW1STaL1CKY)
 
 ### Changed
 
