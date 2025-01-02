@@ -33,14 +33,14 @@ roleinspect.stageNames = {
 -- indicates the decision that was made about a role
 ROLEINSPECT_DECISION_NONE = 0
 ROLEINSPECT_DECISION_CONSIDER = 1
-ROLEINSPECT_DECISION_NOT_CONSIDERED = 2
+ROLEINSPECT_DECISION_NO_CONSIDER = 2
 ROLEINSPECT_DECISION_ROLE_ASSIGNED = 3
 ROLEINSPECT_DECISION_ROLE_NOT_ASSIGNED = 4
 
 roleinspect.decisionNames = {
     [ROLEINSPECT_DECISION_NONE] = "roleinspect_decision_none",
     [ROLEINSPECT_DECISION_CONSIDER] = "roleinspect_decision_consider",
-    [ROLEINSPECT_DECISION_NOT_CONSIDERED] = "roleinspect_decision_not_considered",
+    [ROLEINSPECT_DECISION_NO_CONSIDER] = "roleinspect_decision_no_consider",
     [ROLEINSPECT_DECISION_ROLE_ASSIGNED] = "roleinspect_decision_role_assigned",
     [ROLEINSPECT_DECISION_ROLE_NOT_ASSIGNED] = "roleinspect_decision_role_not_assigned",
 }
@@ -60,8 +60,10 @@ ROLEINSPECT_REASON_NOT_SELECTABLE = "roleinspect_reason_not_selectable" -- Role 
 ROLEINSPECT_REASON_ROLE_DECISION = "roleinspect_reason_role_decision" -- The role decided that it could not be distributed
 
 -- Reasons for STAGE_LAYERING
-ROLEINSPECT_REASON_LAYER = "roleinspect_reason_layer" -- Role removed from consideration because another role in its layer was chosen
+ROLEINSPECT_REASON_LAYER = "roleinspect_reason_layer" -- Role selected from layer, or removed because another role was chosen
+-- ROLEINSPECT_REASON_NO_PLAYERS can also appear here if we ran out of playercount during allocation
 ROLEINSPECT_REASON_TOO_MANY_ROLES = "roleinspect_reason_too_many_roles" -- Role removed from consideration because enough roles to satisfy playercount have already been selected
+ROLEINSPECT_REASON_NOT_LAYERED = "roleinspect_reason_not_layered" -- Role was selected from the non-layered pool
 
 -- Reasons for STAGE_FORCED
 ROLEINSPECT_REASON_FORCED = "roleinspect_reason_forced"
@@ -103,6 +105,15 @@ if SERVER then
         end)
     end
 
+    local function MaybeClone(data)
+        if type(data) == "table" then
+            return table.FullCopy(data)
+        end
+        return data
+    end
+
+    -- TODO: make roleinspection conditional on whether a client wants it
+
     function roleinspect.Reset()
         roleinspect.decisions = {}
     end
@@ -110,19 +121,20 @@ if SERVER then
     function roleinspect.ReportStageExtraInfo(stage, key, info)
         local dstage = GetStageTable(stage)
         local tbl = GetOrAddTable(dstage.extra, key, EmptyTable)
-        tbl[#tbl + 1] = info
+        tbl[#tbl + 1] = MaybeClone(info)
     end
 
     function roleinspect.ReportRoleExtraInfo(stage, role, key, info)
         local drole = GetRoleTable(stage, role)
         local tbl = GetOrAddTable(drole.extra, key, EmptyTable)
-        tbl[#tbl + 1] = info
+        tbl[#tbl + 1] = MaybeClone(info)
     end
 
-    function roleinspect.ReportDecision(stage, role, ply, decision, reason)
+    function roleinspect.ReportDecision(stage, role, ply, decision, reason, extra)
         local drole = GetRoleTable(stage, role)
         local decisionTbl = drole.decisions
-        decisionTbl[#decisionTbl + 1] = { ply = ply, decision = decision, reason = reason }
+        decisionTbl[#decisionTbl + 1] =
+            { ply = ply, decision = decision, reason = reason, extra = extra }
     end
 
     util.AddNetworkString("TTT2SyncRoleInspectInfo")

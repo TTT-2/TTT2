@@ -397,7 +397,7 @@ function roleselection.GetAllSelectableRolesList(maxPlys)
                 ROLEINSPECT_STAGE_PRESELECT,
                 roleData.index,
                 nil,
-                ROLEINSPECT_DECISION_NOT_CONSIDERED,
+                ROLEINSPECT_DECISION_NO_CONSIDER,
                 reason or ROLEINSPECT_REASON_ROLE_DECISION
             )
             continue
@@ -421,7 +421,7 @@ function roleselection.GetAllSelectableRolesList(maxPlys)
                 )
                 reason = reason or ROLEINSPECT_REASON_ROLE_DECISION
 
-                local decision = ROLEINSPECT_DECISION_NOT_CONSIDERED
+                local decision = ROLEINSPECT_DECISION_NO_CONSIDER
 
                 if rolesCount > 0 then
                     rolesCountTbl[baseRoleData.index] = rolesCount
@@ -449,7 +449,7 @@ function roleselection.GetAllSelectableRolesList(maxPlys)
             GetAvailableRoleAmount(roleData, forcedRolesTbl[roleData.index], maxPlys)
         reason = reason or ROLEINSPECT_REASON_ROLE_DECISION
 
-        local decision = ROLEINSPECT_DECISION_NOT_CONSIDERED
+        local decision = ROLEINSPECT_DECISION_NO_CONSIDER
         if rolesCount > 0 then
             rolesCountTbl[roleData.index] = rolesCount
             reason = ROLEINSPECT_REASON_PASSED
@@ -512,6 +512,10 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
         end
     end
 
+    if maxRoles then
+        roleinspect.ReportStageExtraInfo(ROLEINSPECT_STAGE_LAYERING, "maxRoles", maxRoles)
+    end
+
     -- damn, not again
     local maxBaseroles = roleselection.cv.ttt_max_baseroles:GetInt()
     if maxBaseroles == 0 then
@@ -519,6 +523,10 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
         if maxBaseroles == 0 then
             maxBaseroles = nil
         end
+    end
+
+    if maxBaseroles then
+        roleinspect.ReportStageExtraInfo(ROLEINSPECT_STAGE_LAYERING, "maxBaseroles", maxBaseroles)
     end
 
     -- we have to create a enumerable table to get random results easily
@@ -557,9 +565,31 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
     -- Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
     local layeredBaseRolesTbl = table.Copy(roleselection.baseroleLayers)
 
+    roleinspect.ReportStageExtraInfo(
+        ROLEINSPECT_STAGE_LAYERING,
+        "beforeBaseRoleLayers",
+        layeredBaseRolesTbl
+    )
+    roleinspect.ReportStageExtraInfo(
+        ROLEINSPECT_STAGE_LAYERING,
+        "beforeAvailableBaseRoles",
+        availableBaseRolesTbl
+    )
+
     ---
     -- @realm server
     hook.Run("TTT2ModifyLayeredBaseRoles", layeredBaseRolesTbl, availableBaseRolesTbl)
+
+    roleinspect.ReportStageExtraInfo(
+        ROLEINSPECT_STAGE_LAYERING,
+        "afterBaseRoleLayers",
+        layeredBaseRolesTbl
+    )
+    roleinspect.ReportStageExtraInfo(
+        ROLEINSPECT_STAGE_LAYERING,
+        "afterAvailableBaseRoles",
+        availableBaseRolesTbl
+    )
 
     local baseroleLoopTbl = { -- just contains available / selectable baseroles
         ROLE_TRAITOR,
@@ -569,20 +599,29 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
     local currentlyAvailableRolesAmount = rolesAmountList[ROLE_TRAITOR]
         + rolesAmountList[ROLE_INNOCENT]
 
+    local baseroleExitReason = ROLEINSPECT_REASON_PASSED
+
     -- first of all, we need to select the baseroles. Otherwise, we would select subroles that never gonna be choosen because if the missing baserole
     for i = 1, availableBaseRolesAmount do
         -- if the limit is reached or no available roles left (could happen if removing available roles that weren't already selected in layered "or"-tables), stop selection
-        if
-            currentlyAvailableRolesAmount >= maxPlys
-            or maxRoles and maxRoles <= curRoles
-            or maxBaseroles and maxBaseroles <= curBaseroles
-            or #availableBaseRolesTbl < 1
-        then
+        if currentlyAvailableRolesAmount >= maxPlys then
+            baseroleExitReason = ROLEINSPECT_REASON_NO_PLAYERS
+            break
+        end
+
+        if maxRoles and maxRoles <= curRoles or maxBaseroles and maxBaseroles <= curBaseroles then
+            baseroleExitReason = ROLEINSPECT_REASON_TOO_MANY_ROLES
+            break
+        end
+
+        if #availableBaseRolesTbl < 1 then
+            -- no reason needed; just ran out of roles to distribute
             break
         end
 
         -- the selected role
         local subrole = nil
+        local subroleReason = ROLEINSPECT_REASON_PASSED
 
         -- if there are still defined layer
         if #layeredBaseRolesTbl >= i then
@@ -601,8 +640,24 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
                     continue
                 end
 
-                subrole = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
+                local index = math.random(#cleanedLayerTbl)
+                subrole = cleanedLayerTbl[index]
+                -- once we've selected a role from the layer, we'll never consider this
+                -- layer again. Report all other layers
+                subroleReason = ROLEINSPECT_REASON_LAYER
+                for k = 1, #cleanedLayerTbl do
+                    if k == index then
+                        continue
+                    end
 
+                    roleinspect.ReportDecision(
+                        ROLEINSPECT_STAGE_LAYERING,
+                        cleanedLayerTbl[k],
+                        nil,
+                        ROLEINSPECT_DECISION_NO_CONSIDER,
+                        ROLEINSPECT_REASON_LAYER
+                    )
+                end
                 break
             end
         end
@@ -611,6 +666,7 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
         if not subrole then
             local rnd = math.random(#availableBaseRolesTbl)
             subrole = availableBaseRolesTbl[rnd]
+            subroleReason = ROLEINSPECT_REASON_NOT_LAYERED
 
             table.remove(availableBaseRolesTbl, rnd) -- selected subrole shouldn't get selected multiple times
         end
@@ -621,16 +677,60 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
         selectableRoles[subrole] = amountForThisRole
         baseroleLoopTbl[#baseroleLoopTbl + 1] = subrole
 
+        roleinspect.ReportDecision(
+            ROLEINSPECT_STAGE_LAYERING,
+            subrole,
+            nil,
+            amountForThisRole > 0 and ROLEINSPECT_DECISION_CONSIDER
+                or ROLEINSPECT_DECISION_NO_CONSIDER,
+            subroleReason
+        )
+
         curRoles = curRoles + 1
         curBaseroles = curBaseroles + 1
         currentlyAvailableRolesAmount = currentlyAvailableRolesAmount + amountForThisRole
     end
 
+    -- report the result for all other baseroles not considered, whatever the reason
+    if #availableBaseRolesTbl > 0 then
+        for k = 1, #availableBaseRolesTbl do
+            roleinspect.ReportDecision(
+                ROLEINSPECT_STAGE_LAYERING,
+                availableBaseRolesTbl[k],
+                nil,
+                ROLEINSPECT_DECISION_NO_CONSIDER,
+                baseroleExitReason
+            )
+        end
+    end
+
     local layeredSubRolesTbl = table.Copy(roleselection.subroleLayers) -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
+
+    roleinspect.ReportStageExtraInfo(
+        ROLEINSPECT_STAGE_LAYERING,
+        "beforeSubRoleLayers",
+        layeredSubRolesTbl
+    )
+    roleinspect.ReportStageExtraInfo(
+        ROLEINSPECT_STAGE_LAYERING,
+        "beforeAvailableSubRoles",
+        availableSubRolesTbl
+    )
 
     ---
     -- @realm server
     hook.Run("TTT2ModifyLayeredSubRoles", layeredSubRolesTbl, availableSubRolesTbl)
+
+    roleinspect.ReportStageExtraInfo(
+        ROLEINSPECT_STAGE_LAYERING,
+        "afterSubRoleLayers",
+        layeredSubRolesTbl
+    )
+    roleinspect.ReportStageExtraInfo(
+        ROLEINSPECT_STAGE_LAYERING,
+        "afterAvailableSubRoles",
+        availableSubRolesTbl
+    )
 
     -- Counts max distributable subroles after cleanup
     local maxSubroleCount = 0
@@ -685,9 +785,16 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
         layeredSubRolesTbl[baseRole] = nil
     end
 
+    local subroleExitReason = ROLEINSPECT_REASON_PASSED
+
     -- Now we need to select the subroles randomly and respect layers
     for i = 1, maxSubroleCount do
-        if maxRoles and maxRoles <= curRoles or #baseroleLoopTbl < 1 then
+        if maxRoles and maxRoles <= curRoles then
+            subroleExitReason = ROLEINSPECT_REASON_TOO_MANY_ROLES
+            break
+        end
+
+        if #baseroleLoopTbl < 1 then
             break
         end -- if the limit is reached, stop selection
 
@@ -699,21 +806,49 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
         -- the selected role
         local subrole = nil
+        local subroleReason = nil
 
         -- If there are still defined layers check them first
         if subroleLayers and #subroleLayers >= 1 then
-            subrole = subroleLayers[1][math.random(#subroleLayers[1])]
+            local index = math.random(#subroleLayers[1])
+            subrole = subroleLayers[1][index]
+            subroleReason = ROLEINSPECT_REASON_LAYER
+
+            -- report other layer members
+            for k = 1, #subroleLayers[1] do
+                if k == index then
+                    continue
+                end
+
+                roleinspect.ReportDecision(
+                    ROLEINSPECT_STAGE_LAYERING,
+                    subroleLayers[1][k],
+                    nil,
+                    ROLEINSPECT_DECISION_NO_CONSIDER,
+                    ROLEINSPECT_REASON_LAYER
+                )
+            end
 
             table.remove(subroleLayers, 1)
         else
             -- If no layers left, choose random subrole
             local rnd = math.random(#subrolesUnlayered)
             subrole = subrolesUnlayered[rnd]
+            subroleReason = ROLEINSPECT_REASON_NOT_LAYERED
 
             table.remove(subrolesUnlayered, rnd)
         end
 
         selectableRoles[subrole] = rolesAmountList[subrole]
+
+        roleinspect.ReportDecision(
+            ROLEINSPECT_STAGE_LAYERING,
+            subrole,
+            nil,
+            rolesAmountList[subrole] > 0 and ROLEINSPECT_DECISION_CONSIDER
+                or ROLEINSPECT_DECISION_NO_CONSIDER,
+            subroleReason
+        )
 
         curRoles = curRoles + 1
 
@@ -727,9 +862,51 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
         table.remove(baseroleLoopTbl, cBase)
     end
 
+    -- report the result for other subroles which ended up not considered
+    for baseroleIdx = 1, #baseroleLoopTbl do
+        local baserole = baseroleLoopTbl[baseroleIdx]
+        local subroleLayers = layeredSubRolesTbl[baserole]
+        local subrolesUnlayered = availableSubRolesTbl[baserole]
+
+        -- first, remaining layers
+        if subroleLayers and #subroleLayers > 0 then
+            for i = 1, #subroleLayers do
+                local layer = subroleLayers[i]
+                for j = 1, #layer do
+                    roleinspect.ReportDecision(
+                        ROLEINSPECT_STAGE_LAYERING,
+                        layer[j],
+                        nil,
+                        ROLEINSPECT_DECISION_NO_CONSIDER,
+                        subroleExitReason
+                    )
+                end
+            end
+        end
+
+        -- then, unlayered
+        for i = 1, #subrolesUnlayered do
+            roleinspect.ReportDecision(
+                ROLEINSPECT_STAGE_LAYERING,
+                subrolesUnlayered[i],
+                nil,
+                ROLEINSPECT_DECISION_NO_CONSIDER,
+                subroleExitReason
+            )
+        end
+    end
+
+    roleinspect.ReportStageExtraInfo(ROLEINSPECT_STAGE_LAYERING, "selectableRoles", selectableRoles)
+
     ---
     -- @realm server
     hook.Run("TTT2ModifySelectableRoles", selectableRoles)
+
+    roleinspect.ReportStageExtraInfo(
+        ROLEINSPECT_STAGE_LAYERING,
+        "finalSelectableRoles",
+        selectableRoles
+    )
 
     roleselection.selectableRoles = selectableRoles
 
