@@ -39,11 +39,11 @@ end
 ---
 -- Returns the available amount of this role based on the given amount of available players
 -- @param number ply_count amount of available players
--- @return number selectable amount of this role
+-- @return number,ROLEINSPECT_REASON selectable amount of this role, the ROLEINSPECT_REASON the decision was made, if any
 -- @realm server
 function ROLE:GetAvailableRoleCount(ply_count)
     if ply_count < GetConVar("ttt_" .. self.name .. "_min_players"):GetInt() then
-        return 0
+        return 0, ROLEINSPECT_REASON_NO_PLAYERS
     end
 
     local maxCVar = GetConVar("ttt_" .. self.name .. "_max")
@@ -57,7 +57,7 @@ function ROLE:GetAvailableRoleCount(ply_count)
     local role_count = math.floor(ply_count * GetConVar("ttt_" .. self.name .. "_pct"):GetFloat())
 
     -- make sure there is at least 1 of the role
-    return math.Clamp(role_count, 1, maxAmount)
+    return math.Clamp(role_count, 1, maxAmount), ROLEINSPECT_REASON_LOW_PROPORTION
 end
 
 -- Returns if the role can be awarded credits for a kill. Is is intended to award credits
