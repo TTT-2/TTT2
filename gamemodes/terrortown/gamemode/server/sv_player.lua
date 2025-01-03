@@ -684,7 +684,9 @@ local function PlayDeathSound(victim, isSilent)
 
     ---
     -- @realm server
-    if hook.Run("TTT2PlayDeathScream", tbl, isSilent) == false then return end
+    if hook.Run("TTT2PlayDeathScream", tbl, isSilent) == false then
+        return
+    end
 
     sound.Play(tbl["sound"], victim:GetShootPos(), 90, 100)
 end
@@ -796,9 +798,12 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     local killwep = util.WeaponFromDamage(dmginfo)
 
     ---@cast killwep -nil
-        PlayDeathSound(ply, ply.was_headshot
-        or dmginfo:IsDamageType(DMG_SLASH)
-        or (IsValid(killwep) and killwep.IsSilent))
+        PlayDeathSound(
+            ply,
+            ply.was_headshot
+                or dmginfo:IsDamageType(DMG_SLASH)
+                or (IsValid(killwep) and killwep.IsSilent)
+        )
 
     credits.HandleKillCreditsAward(ply, attacker)
 end
