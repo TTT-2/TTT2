@@ -798,12 +798,12 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     local killwep = util.WeaponFromDamage(dmginfo)
 
     ---@cast killwep -nil
-        PlayDeathSound(
-            ply,
-            ply.was_headshot
-                or dmginfo:IsDamageType(DMG_SLASH)
-                or (IsValid(killwep) and killwep.IsSilent)
-        )
+    PlayDeathSound(
+        ply,
+        ply.was_headshot
+            or dmginfo:IsDamageType(DMG_SLASH)
+            or (IsValid(killwep) and killwep.IsSilent)
+    )
 
     credits.HandleKillCreditsAward(ply, attacker)
 end
