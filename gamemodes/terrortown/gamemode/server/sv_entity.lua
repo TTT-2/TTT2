@@ -10,9 +10,6 @@ FCAP_DIRECTIONAL_USE = 128
 FCAP_USE_ONGROUND = 256
 FCAP_USE_IN_RADIUS = 512
 
--- custom FCAPS possible from 2048 to 268435456
-FCAP_USE_LUA = 2048
-
 local safeCollisionGroups = {
     [COLLISION_GROUP_WEAPON] = true,
 }
@@ -91,18 +88,13 @@ end
 function entmeta:IsUsableEntity(requiredCaps)
     requiredCaps = requiredCaps or 0
 
-    local caps = self:ObjectCaps()
-
     -- special case: TTT specific lua based use interactions
-    -- when were looking for specifically the lua use, return false it not set
-    if
-        bit.band(FCAP_USE_LUA, requiredCaps) > 0
-        and not (self.CanUseKey or self.player_ragdoll or self:IsWeapon())
-    then
-        return false
-    elseif requiredCaps == 0 and (self.CanUseKey or self.player_ragdoll or self:IsWeapon()) then
+    -- when we're looking for specifically the lua use
+    if self:IsWeapon() or self.player_ragdoll or (self:IsScripted() and self.CanUseKey) then
         return true
     end
+
+    local caps = self:ObjectCaps()
 
     if
         bit.band(
