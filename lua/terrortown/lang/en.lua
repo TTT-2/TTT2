@@ -313,11 +313,6 @@ The energy bursts damage people in close proximity.]]
 -- Radio
 L.radio_broken = "Your Radio has been destroyed!"
 
-L.radio_desc = [[
-Plays sounds to distract or deceive.
-
-Place the radio somewhere, and then play sounds on it using the Radio tab in this menu.]]
-
 -- Silenced pistol
 L.sipistol_name = "Silenced Pistol"
 
@@ -2374,6 +2369,12 @@ L.vehicle_enter = "Press [{usekey}] to enter vehicle"
 
 -- 2024-11-27
 L.corpse_hint_without_confirm = "Press [{usekey}] to search."
+
+-- 2025-01-03
+L.radio_desc = [[
+Plays sounds to distract or deceive.
+
+Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
 
 -- 2025-01-05
 L.help_session_limits_mode = [[
