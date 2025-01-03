@@ -364,7 +364,7 @@ function HELPSCRN:ShowSubmenu(menuClass)
     local navArea = vgui.Create("DNavPanelTTT2", frame)
     navArea:SetWide(widthNav)
     navArea:SetPos(0, 0)
-    navArea:DockPadding(0, self.padding, 1, self.padding)
+    navArea:DockPadding(0, 0, 1, 0)
     navArea:Dock(LEFT)
 
     local contentArea = vgui.Create("DContentPanelTTT2", frame)
@@ -376,15 +376,7 @@ function HELPSCRN:ShowSubmenu(menuClass)
     contentArea:DockPadding(self.padding, self.padding, self.padding, self.padding)
     contentArea:Dock(TOP)
 
-    -- MAKE SEPARATE SUBMENULIST ON THE NAVAREA WITH A CONTENT AREA
-    local submenuList = vgui.Create("DSubmenuListTTT2", navArea)
-    submenuList:Dock(FILL)
-    submenuList:SetPadding(self.padding)
-    submenuList:SetBasemenuClass(menuClass, contentArea)
-    submenuList:EnableSearchBar(menuClass:HasSearchbar())
-
-    -- REFRESH SIZE OF SUBMENULIST FOR CORRECT SUBMENU DEPENDENT SIZE
-    submenuList:InvalidateLayout(true)
+    menuClass:FillNavPanel(navArea, contentArea, self.padding)
 
     -- REGISTER REBUILD CALLBACK
     frame.OnRebuild = function(slf)
