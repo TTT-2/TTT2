@@ -682,6 +682,8 @@ local function PlayDeathSound(victim, isSilent)
         sound = deathsounds[math.random(deathsounds_count)],
     }
 
+    ---
+    -- @realm server
     if hook.Run("TTT2PlayDeathScream", tbl, isSilent) == false then return end
 
     sound.Play(tbl["sound"], victim:GetShootPos(), 90, 100)
