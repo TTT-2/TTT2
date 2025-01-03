@@ -2368,3 +2368,6 @@ L.label_loadingscreen_min_duration = "Минимальное время отоб
 L.label_keyhelper_leave_vehicle = "покинуть транспорт"
 L.name_vehicle = "Транспорт"
 L.vehicle_enter = "[{usekey}] Сесть в транспорт."
+
+-- 2024-11-27
+L.corpse_hint_without_confirm = "[{usekey}] Осмотреть тело."

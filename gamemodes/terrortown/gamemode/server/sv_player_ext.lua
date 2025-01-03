@@ -1407,7 +1407,10 @@ end
 -- @return boolean Returns if this weapon's ammo can be dropped
 -- @realm server
 function plymeta:CanSafeDropAmmo(wep)
-    if not IsValid(self) or not (IsValid(wep) and wep.AmmoEnt) then
+    -- We explicitly check for the two common non-existent ammo ents (`nil` and `empty string`) here
+    -- to prevent these from leading to a console error later once they are fed into `ents.Create`.
+    -- There is currently no way to check if the AmmoEnt exists, so this is the best we can do.
+    if not IsValid(self) or not IsValid(wep) or not wep.AmmoEnt or wep.AmmoEnt == "" then
         return false
     end
 
@@ -1462,7 +1465,7 @@ function plymeta:DropAmmo(wep, useClip, amt)
         if useClip then
             amt = wep:Clip1()
         else
-            amt = math.min(wep.Primary.ClipSize, self:GetAmmoCount(wep.Primary.Ammo))
+            amt = math.min(wep.AmmoEnt.AmmoAmount, self:GetAmmoCount(wep.Primary.Ammo))
         end
     end
     local hook_data = { amt }
