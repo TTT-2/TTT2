@@ -117,7 +117,6 @@ if CLIENT then
                         tx,
                         ty - infoH * 0.5,
                         COLOR_WHITE,
-                        TEXT_ALIGN_CENTER,
                         TEXT_ALIGN_CENTER
                     )
                 end
