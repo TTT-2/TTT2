@@ -10,13 +10,19 @@ end
 
 ---
 -- @realm server
--- stylua: ignore
-local cvLoadingScreenEnabled = CreateConVar("ttt2_enable_loadingscreen_server", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED })
+local cvLoadingScreenEnabled = CreateConVar(
+    "ttt2_enable_loadingscreen_server",
+    "1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED }
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local cvLoadingScreenMinDuration = CreateConVar("ttt2_loadingscreen_min_duration", "4", { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED })
+local cvLoadingScreenMinDuration = CreateConVar(
+    "ttt2_loadingscreen_min_duration",
+    "4",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED }
+)
 
 loadingscreen = loadingscreen or {}
 
@@ -70,7 +76,9 @@ function loadingscreen.End()
     end
 
     if SERVER then
-        local duration = loadingscreen.timeBegin - SysTime() + loadingscreen.GetDuration()
+        local duration = (loadingscreen.timeBegin or SysTime())
+            - SysTime()
+            + loadingscreen.GetDuration()
 
         -- this timer makes sure the loading screen is displayed for at least the
         -- time that is set as the minimum time
@@ -103,7 +111,11 @@ if SERVER then
     -- @return number The minimum time
     -- @realm server
     function loadingscreen.GetDuration()
-        return cvLoadingScreenMinDuration:GetFloat()
+        if cvLoadingScreenEnabled:GetBool() then
+            return cvLoadingScreenMinDuration:GetFloat()
+        else
+            return 0
+        end
     end
 end
 
@@ -117,13 +129,11 @@ if CLIENT then
 
     ---
     -- @realm client
-    -- stylua: ignore
-    local cvLoadingScreen = CreateConVar("ttt2_enable_loadingscreen", "1", {FCVAR_ARCHIVE})
+    local cvLoadingScreen = CreateConVar("ttt2_enable_loadingscreen", "1", { FCVAR_ARCHIVE })
 
     ---
     -- @realm client
-    -- stylua: ignore
-    local cvLoadingScreenTips = CreateConVar("ttt_tips_enable", "1", {FCVAR_ARCHIVE})
+    local cvLoadingScreenTips = CreateConVar("ttt_tips_enable", "1", { FCVAR_ARCHIVE })
 
     loadingscreen.state = LS_HIDDEN
     loadingscreen.timeStateChange = SysTime()
@@ -229,7 +239,7 @@ if CLIENT then
 
             text = LANG.GetParamTranslation(
                 "loadingscreen_round_restart_subtitle_limits",
-                { map = game.GetMap(), rounds = roundsLeft, time = timeLeft }
+                { map = game.GetMap(), rounds = roundsLeft + 1, time = timeLeft }
             )
         else
             text = LANG.TryTranslation("loadingscreen_round_restart_subtitle")

@@ -136,8 +136,9 @@ end
 function plymeta:SetDefaultCredits()
     ---
     -- @realm server
-    -- stylua: ignore
-    if hook.Run("TTT2SetDefaultCredits", self) then return end
+    if hook.Run("TTT2SetDefaultCredits", self) then
+        return
+    end
 
     if not self:IsShopper() then
         self:SetCredits(0)
@@ -158,7 +159,6 @@ function plymeta:SetDefaultCredits()
 
     ---
     -- @realm server
-    -- stylua: ignore
     self:SetCredits(math.ceil(hook.Run("TTT2ModifyDefaultTraitorCredits", self, c) or c))
 end
 
@@ -623,12 +623,10 @@ end
 function plymeta:SpawnForRound(deadOnly)
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("PlayerSetModel", self)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTTPlayerSetColor", self)
 
     -- wrong alive status and not a willing spec who unforced after prep started
@@ -927,7 +925,6 @@ function plymeta:Revive(
 
             ---
             -- @realm server
-            -- stylua: ignore
             hook.Run("PlayerLoadout", self, true)
 
             self:SetCredits(CORPSE.GetCredits(corpse, 0))
@@ -1410,7 +1407,10 @@ end
 -- @return boolean Returns if this weapon's ammo can be dropped
 -- @realm server
 function plymeta:CanSafeDropAmmo(wep)
-    if not IsValid(self) or not (IsValid(wep) and wep.AmmoEnt) then
+    -- We explicitly check for the two common non-existent ammo ents (`nil` and `empty string`) here
+    -- to prevent these from leading to a console error later once they are fed into `ents.Create`.
+    -- There is currently no way to check if the AmmoEnt exists, so this is the best we can do.
+    if not IsValid(self) or not IsValid(wep) or not wep.AmmoEnt or wep.AmmoEnt == "" then
         return false
     end
 
@@ -1465,16 +1465,20 @@ function plymeta:DropAmmo(wep, useClip, amt)
         if useClip then
             amt = wep:Clip1()
         else
-            amt = math.min(wep.Primary.ClipSize, self:GetAmmoCount(wep.Primary.Ammo))
+            amt = math.min(wep.AmmoEnt.AmmoAmount, self:GetAmmoCount(wep.Primary.Ammo))
         end
     end
     local hook_data = { amt }
 
     ---
     -- @realm server
-    -- stylua: ignore
     if hook.Run("TTT2DropAmmo", self, hook_data) == false then
-        LANG.Msg(self, useClip and "drop_ammo_prevented" or "drop_reserve_prevented", nil, MSG_MSTACK_WARN)
+        LANG.Msg(
+            self,
+            useClip and "drop_ammo_prevented" or "drop_reserve_prevented",
+            nil,
+            MSG_MSTACK_WARN
+        )
 
         return false
     end
@@ -1535,7 +1539,6 @@ function plymeta:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 
     ---
     -- @realm server
-    -- stylua: ignore
     local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon, true)
 
     self.forcedPickup = false
@@ -1708,7 +1711,6 @@ local function SetPlayerReady(_, ply)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTT2PlayerReady", ply)
 
     -- notify all other players as well that this player is ready

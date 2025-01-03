@@ -137,17 +137,15 @@ local TryT = LANG.TryTranslation
 
 ---
 -- @realm client
--- stylua: ignore
 local cvEnableBobbing = CreateConVar("ttt2_enable_bobbing", "1", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
--- stylua: ignore
 local cvEnableBobbingStrafe = CreateConVar("ttt2_enable_bobbing_strafe", "1", FCVAR_ARCHIVE)
 
 -- @realm client
--- stylua: ignore
-local cvEnableDynamicFOV = CreateConVar("ttt2_enable_dynamic_fov", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvEnableDynamicFOV =
+    CreateConVar("ttt2_enable_dynamic_fov", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 cvars.AddChangeCallback("ttt2_enable_dynamic_fov", function(_, _, valueNew)
     LocalPlayer():SetSettingOnServer("enable_dynamic_fov", tobool(valueNew))
@@ -167,7 +165,6 @@ function GM:Initialize()
 
     ---
     -- @realm client
-    -- stylua: ignore
     hook.Run("TTT2Initialize")
 
     -- load default TTT2 language files or mark them as downloadable on the server
@@ -210,12 +207,10 @@ function GM:Initialize()
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2FinishedLoading")
 
     ---
     -- @realm client
-    -- stylua: ignore
     hook.Run("PostInitialize")
 end
 
@@ -228,7 +223,6 @@ end
 function GM:PostCleanupMap()
     ---
     -- @realm client
-    -- stylua: ignore
     hook.Run("TTT2PostCleanupMap")
 end
 
@@ -248,7 +242,6 @@ function GM:InitPostEntity()
 
     ---
     -- @realm client
-    -- stylua: ignore
     hook.Run("TTTInitPostEntity")
 
     items.MigrateLegacyItems()
@@ -271,8 +264,9 @@ function GM:InitPostEntity()
 
         -- Check if an equipment has an id or ignore it
         -- @realm server
-        -- stylua: ignore
-        if not hook.Run("TTT2RegisterWeaponID", eq) then continue end
+        if not hook.Run("TTT2RegisterWeaponID", eq) then
+            continue
+        end
 
         -- Insert data into role fallback tables
         InitDefaultEquipment(eq)
@@ -294,17 +288,14 @@ function GM:InitPostEntity()
 
     ---
     -- @realm client
-    -- stylua: ignore
     hook.Run("PostInitPostEntity")
 
     ---
     -- @realm client
-    -- stylua: ignore
     hook.Run("InitFallbackShops")
 
     ---
     -- @realm client
-    -- stylua: ignore
     hook.Run("LoadedFallbackShops")
 
     net.Start("TTT2SyncShopsWithServer")
@@ -348,12 +339,10 @@ function GM:OnReloaded()
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2RolesLoaded")
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2BaseRoleInit")
 
     -- load all items
@@ -395,7 +384,6 @@ function GM:OnReloaded()
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2FinishedLoading")
 end
 
@@ -496,7 +484,7 @@ function GM:ClearClientState()
 
     local client = LocalPlayer()
 
-    if not client:IsReady() then
+    if not IsValid(client) or not client:IsReady() then
         return
     end
 
@@ -954,7 +942,6 @@ net.Receive("TTT2PlayerAuthedShared", function(len)
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2PlayerAuthed", steamid64, name)
 end)
 

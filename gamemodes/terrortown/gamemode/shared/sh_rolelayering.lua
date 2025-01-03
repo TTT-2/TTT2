@@ -205,7 +205,6 @@ if CLIENT then
 
         ---
         -- @realm client
-        -- stylua: ignore
         hook.Run("TTT2ReceivedRolelayerData", roleIndex, layerTable)
     end)
 

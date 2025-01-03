@@ -275,7 +275,6 @@ function map.GetWeaponSpawnEntities()
     local hook_weapon_spawns = {}
 
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2MapRegisterWeaponSpawns", hook_weapon_spawns)
 
     FindSpawnEntities(spawns, hook_weapon_spawns)
@@ -302,7 +301,6 @@ function map.GetAmmoSpawnEntities()
     local hook_ammo_spawns = {}
 
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2MapRegisterAmmoSpawns", hook_ammo_spawns)
 
     FindSpawnEntities(spawns, hook_ammo_spawns)
@@ -319,7 +317,6 @@ function map.GetPlayerSpawnEntities()
     local hook_player_spawns = {}
 
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2MapRegisterPlayerSpawns", hook_player_spawns)
 
     FindSpawnEntities(spawns, hook_player_spawns)
@@ -372,7 +369,6 @@ function map.GetSpawnsFromClassTable(spawns)
         local hook_player_spawns = {}
 
         -- @realm shared
-        -- stylua: ignore
         hook.Run("TTT2MapRegisterPlayerSpawns", hook_player_spawns)
 
         local plyType = ttt_player_spawns[cls]
@@ -389,7 +385,6 @@ function map.GetSpawnsFromClassTable(spawns)
         local hook_ammo_spawns = {}
 
         -- @realm shared
-        -- stylua: ignore
         hook.Run("TTT2MapRegisterAmmoSpawns", hook_ammo_spawns)
 
         local ammoType = ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls] or hook_ammo_spawns[cls]
@@ -403,7 +398,6 @@ function map.GetSpawnsFromClassTable(spawns)
         -- next check if it is a weapon spawn
         local hook_weapon_spawns = {}
         -- @realm shared
-        -- stylua: ignore
         hook.Run("TTT2MapRegisterWeaponSpawns", hook_weapon_spawns)
 
         local wepType = ttt_weapon_spawns[cls]
@@ -473,7 +467,6 @@ function map.GetDataFromSpawnEntity(ent, spawnType)
     if spawnType == SPAWN_TYPE_WEAPON then
         local hook_weapon_spawns = {}
         -- @realm shared
-        -- stylua: ignore
         hook.Run("TTT2MapRegisterWeaponSpawns", hook_weapon_spawns)
 
         return ttt_weapon_spawns[cls]
@@ -488,7 +481,6 @@ function map.GetDataFromSpawnEntity(ent, spawnType)
         local hook_ammo_spawns = {}
 
         -- @realm shared
-        -- stylua: ignore
         hook.Run("TTT2MapRegisterAmmoSpawns", hook_ammo_spawns)
 
         return ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls] or hook_ammo_spawns[cls], data
@@ -498,7 +490,6 @@ function map.GetDataFromSpawnEntity(ent, spawnType)
         local hook_player_spawns = {}
 
         -- @realm shared
-        -- stylua: ignore
         hook.Run("TTT2MapRegisterPlayerSpawns", hook_player_spawns)
 
         return ttt_player_spawns[cls] or hook_player_spawns[cls] or ttt_player_spawns_fallback[cls],
@@ -511,22 +502,32 @@ local mapsPrefixes = {}
 local mapsWSIDs = {}
 
 if SERVER then
-    -- by default cs, de and test maps should be hidden
+    -- by default cs, de, gm and test maps should be hidden
+    -- while ttt and ttt2 maps should be shown
 
     ---
     -- @realm server
-    -- stylua: ignore
-    CreateConVar("ttt2_enable_map_prefix_cs", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+    CreateConVar("ttt2_enable_map_prefix_cs", "0", { FCVAR_ARCHIVE })
 
     ---
     -- @realm server
-    -- stylua: ignore
-    CreateConVar("ttt2_enable_map_prefix_de", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+    CreateConVar("ttt2_enable_map_prefix_de", "0", { FCVAR_ARCHIVE })
 
     ---
     -- @realm server
-    -- stylua: ignore
-    CreateConVar("ttt2_enable_map_prefix_test", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+    CreateConVar("ttt2_enable_map_prefix_gm", "0", { FCVAR_ARCHIVE })
+
+    ---
+    -- @realm server
+    CreateConVar("ttt2_enable_map_prefix_test", "0", { FCVAR_ARCHIVE })
+
+    ---
+    -- @realm server
+    CreateConVar("ttt2_enable_map_prefix_ttt", "1", { FCVAR_ARCHIVE })
+
+    ---
+    -- @realm server
+    CreateConVar("ttt2_enable_map_prefix_ttt2", "1", { FCVAR_ARCHIVE })
 
     ---
     -- Initializes the map list. Searches the file system for available maps, scans those maps
@@ -582,8 +583,7 @@ if SERVER then
 
             ---
             -- @realm server
-            -- stylua: ignore
-            CreateConVar(convarName, "1", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+            CreateConVar(convarName, "0", { FCVAR_ARCHIVE })
 
             -- because these convars are generated dynamically, replicated convars do not work here
             SetGlobalBool(convarName, GetConVar(convarName):GetBool())

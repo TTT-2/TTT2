@@ -30,16 +30,6 @@ local IsValid = IsValid
 local ConVarExists = ConVarExists
 local hook = hook
 
----
--- @realm server
--- stylua: ignore
-local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "If detective mode, announce when someone's body is found")
-
----
--- @realm server
--- stylua: ignore
-local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
 local soundsSearch = {
     Sound("player/footsteps/snow1.wav"),
     Sound("player/footsteps/snow2.wav"),
@@ -57,8 +47,41 @@ ttt_include("sh_corpse")
 
 util.AddNetworkString("TTT2SendConfirmMsg")
 
+---
+-- @realm server
+CORPSE.cv.announce_body_found = CreateConVar(
+    "ttt_announce_body_found",
+    "1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "If detective mode, announce when someone's body is found"
+)
+
+---
+-- @realm server
+CORPSE.cv.confirm_team = CreateConVar(
+    "ttt2_confirm_team",
+    "0",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "Show team of confirmed player"
+)
+
+---
+-- @realm server
+CORPSE.cv.confirm_killlist = CreateConVar(
+    "ttt2_confirm_killlist",
+    "1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "Confirm players in kill list"
+)
+
+---
+-- @realm server
+CORPSE.cv.ragdoll_collide =
+    CreateConVar("ttt_ragdoll_collide", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
+
 -- networked data abstraction layer
 local dti = CORPSE.dti
+local config = CORPSE.cv
 
 ---
 -- Sets a CORPSE found state
@@ -119,8 +142,9 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 
     ---
     -- @realm server
-    -- stylua: ignore
-    if not hook.Run("TTTCanIdentifyCorpse", ply, rag) then return end
+    if not hook.Run("TTTCanIdentifyCorpse", ply, rag) then
+        return
+    end
 
     local finder = ply:Nick()
     local nick = CORPSE.GetPlayerNick(rag, "")
@@ -132,8 +156,11 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 
         ---
         -- @realm server
-        -- stylua: ignore
-        if deadply and not deadply:Alive() and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false then
+        if
+            deadply
+            and not deadply:Alive()
+            and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false
+        then
             deadply:ConfirmPlayer(true)
 
             SendPlayerToEveryone(deadply)
@@ -143,25 +170,23 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("TTTBodyFound", ply, deadply, rag)
 
         ---
         -- @realm server
-        -- stylua: ignore
         if hook.Run("TTT2SetCorpseFound", deadply, ply, rag) ~= false then
             CORPSE.SetFound(rag, true)
         end
     end
 
     -- Announce body
-    if cvBodyfound:GetBool() and notConfirmed then
+    if config.announce_body_found:GetBool() and notConfirmed then
         local subrole = rag.was_role
         local team = rag.was_team
         local rd = roles.GetByIndex(subrole)
         local roletext = "body_found_" .. rd.abbr
         local clr = rag.role_color
-        local bool = GetGlobalBool("ttt2_confirm_team")
+        local bool = config.confirm_team:GetBool()
 
         net.Start("TTT2SendConfirmMsg")
 
@@ -195,7 +220,7 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
         net.Broadcast()
     end
 
-    if GetConVar("ttt2_confirm_killlist"):GetBool() then
+    if config.confirm_killlist:GetBool() then
         -- Handle kill list
         local ragKills = rag.kills
 
@@ -259,8 +284,9 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 
     ---
     -- @realm server
-    -- stylua: ignore
-    if not hook.Run("TTTCanSearchCorpse", ply, rag, isCovert, isLongRange) then return end
+    if not hook.Run("TTTCanSearchCorpse", ply, rag, isCovert, isLongRange) then
+        return
+    end
 
     local sceneData = bodysearch.AssimilateSceneData(ply, rag, isCovert, isLongRange)
 
@@ -272,7 +298,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
         end
 
         if
-            GetConVar("ttt_identify_body_woconfirm"):GetBool()
+            config.identify_body_woconfirm:GetBool()
             and gameloop.IsDetectiveMode()
             and not isCovert
         then
@@ -290,12 +316,14 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
     ply.searchID = sceneData.searchUID
 
     -- play sound when the body was searched
-    -- note: These sounds are pretty quiet and are therefore played thrice to increase the volume
-    local soundSelected = table.Random(soundsSearch)
+    if ply:IsTerror() and not isCovert and not isLongRange then
+        -- note: These sounds are pretty quiet and are therefore played thrice to increase the volume
+        local soundSelected = table.Random(soundsSearch)
 
-    rag:EmitSound(soundSelected, 100)
-    rag:EmitSound(soundSelected, 100)
-    rag:EmitSound(soundSelected, 100)
+        rag:EmitSound(soundSelected, 100)
+        rag:EmitSound(soundSelected, 100)
+        rag:EmitSound(soundSelected, 100)
+    end
 
     local roleData = ply:GetSubRoleData()
     if ply:IsActive() and roleData.isPolicingRole and roleData.isPublicRole and not isCovert then
@@ -551,7 +579,6 @@ function CORPSE.Create(ply, attacker, dmginfo, realPlayerCorpse)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTT2ModifyRagdollVelocity", ply, rag, v)
 
     for i = 0, num do
@@ -584,7 +611,6 @@ function CORPSE.Create(ply, attacker, dmginfo, realPlayerCorpse)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTTOnCorpseCreated", rag, ply)
 
     return rag -- we'll be speccing this
@@ -636,7 +662,7 @@ function CORPSE.GetPlayerTeam(rag)
 end
 
 hook.Add("ShouldCollide", "TTT2RagdollCollide", function(ent1, ent2)
-    if cvRagCollide:GetBool() then
+    if config.ragdoll_collide:GetBool() then
         return
     end
 

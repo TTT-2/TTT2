@@ -28,7 +28,7 @@ end
 ---
 -- Adds a @{WEAPON} or an @{ITEM} into the fav table
 -- @param string equipmentId the @{WEAPON} or @{ITEM} id
--- @param bool isFavorite If the equipmentId is a favorite
+-- @param boolean isFavorite If the equipmentId is a favorite
 -- @realm client
 function shop.SetFavoriteState(equipmentId, isFavorite)
     local favOrm = shop.favorites.orm

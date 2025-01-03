@@ -2285,7 +2285,7 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 
 --L.header_loadingscreen = "Loading Screen"
 
---L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
+--L.help_enable_loadingscreen = "The loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
 
 --L.label_enable_loadingscreen = "Enable the loading screen"
 --L.label_enable_loadingscreen_tips = "Enable tips on loading screen"
@@ -2355,14 +2355,17 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 
 -- 2024-09-16
 --L.help_enable_loadingscreen_server = [[
---The loadingscreen settings also exist on the client. They are hidden if disabled on the server.
+--The loading screen settings also exist on the client. They are hidden if disabled on the server.
 --
---The minimum display time is there to give the player time to read the tips. If the reload of the map takes longer than the minimum time, the loadingscreen is shown as long as it needs to be. In general a reload time of 0.5 to 1 second is to be expected.]]
+--The minimum display time is there to give the player time to read the tips. If the reload of the map takes longer than the minimum time, the loading screen is shown as long as it needs to be. In general a reload time of 0.5 to 1 second is to be expected.]]
 
---L.label_enable_loadingscreen_server = "Enable the loadingscreen serverwide"
---L.label_loadingscreen_min_duration = "Minimum loadingscreen display time"
+--L.label_enable_loadingscreen_server = "Enable the loading screen serverwide"
+--L.label_loadingscreen_min_duration = "Minimum loading screen display time"
 
 -- 2024-09-18
 --L.label_keyhelper_leave_vehicle = "leave vehicle"
 --L.name_vehicle = "Vehicle"
 --L.vehicle_enter = "Press [{usekey}] to enter vehicle"
+
+-- 2024-11-27
+--L.corpse_hint_without_confirm = "Press [{usekey}] to search."

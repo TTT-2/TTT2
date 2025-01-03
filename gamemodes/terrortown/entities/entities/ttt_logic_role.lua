@@ -54,8 +54,8 @@ function ENT:AcceptInput(name, activator, caller, data)
 
         ---
         -- @realm server
-        -- stylua: ignore
-        local role, team = hook.Run("TTT2ModifyLogicRoleCheck", activator, self, activator, caller, data)
+        local role, team =
+            hook.Run("TTT2ModifyLogicRoleCheck", activator, self, activator, caller, data)
         local activatorRole = roles.GetByIndex(role, roles.INNOCENT):GetBaseRole()
         local activatorTeam = (gameloop.GetRoundState() == ROUND_PREP) and TEAM_INNOCENT or team
 

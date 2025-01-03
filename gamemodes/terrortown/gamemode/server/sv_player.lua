@@ -18,31 +18,27 @@ if not plymeta then
     return
 end
 
+---
+-- @realm server
+local ttt_bots_are_spectators =
+    CreateConVar("ttt_bots_are_spectators", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-local ttt_bots_are_spectators = CreateConVar("ttt_bots_are_spectators", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local ttt2_bots_lock_on_death =
+    CreateConVar("ttt2_bots_lock_on_death", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-local ttt2_bots_lock_on_death = CreateConVar("ttt2_bots_lock_on_death", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local ttt_dyingshot = CreateConVar("ttt_dyingshot", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-local ttt_dyingshot = CreateConVar("ttt_dyingshot", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_killer_dna_range", "550", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-CreateConVar("ttt_killer_dna_range", "550", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
-CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_killer_dna_basetime", "100", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 util.AddNetworkString("ttt2_damage_received")
 util.AddNetworkString("ttt2_set_player_setting")
@@ -145,17 +141,14 @@ function GM:PlayerSpawn(ply)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("PlayerLoadout", ply, false)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("PlayerSetModel", ply)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTTPlayerSetColor", ply)
 
     ply:SetupHands()
@@ -251,7 +244,6 @@ end
 -- Called whenever a @{Player} spawns and must choose a model.
 -- A good place to assign a model to a @{Player}.
 -- @note This function may not work in your custom gamemode if you have overridden
--- stylua: ignore
 -- your @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Run}.
 -- @param Player ply The @{Player} being chosen
 -- @hook
@@ -262,7 +254,9 @@ function GM:PlayerSetModel(ply)
     -- The player modes has to be applied here since some player model selectors overwrite
     -- this hook to suppress the TTT2 player models. If the model is assigned elsewhere, it
     -- breaks with external model selectors.
-    if not IsValid(ply) then return end
+    if not IsValid(ply) then
+        return
+    end
 
     -- this will call the overwritten internal function to modify the model
     ply:SetModel(ply.defaultModel or GAMEMODE.playermodel)
@@ -623,7 +617,6 @@ net.Receive("TTT2PlayerUseEntity", function(len, ply)
         ent:IsButton()
         ---
         -- @realm server
-        -- stylua: ignore
         and hook.Run("TTT2OnButtonUse", ply, ent, ent:GetInternalVariable("m_toggle_state"))
             == false
     then
@@ -715,12 +708,23 @@ local deathsounds = {
 }
 local deathsounds_count = #deathsounds
 
-local function PlayDeathSound(victim)
+local function PlayDeathSound(victim, isSilent)
     if not IsValid(victim) then
         return
     end
 
-    sound.Play(deathsounds[math.random(deathsounds_count)], victim:GetShootPos(), 90, 100)
+    local tbl = {
+        victim = victim,
+        sound = deathsounds[math.random(deathsounds_count)],
+    }
+
+    ---
+    -- @realm server
+    if hook.Run("TTT2PlayDeathScream", tbl, isSilent) == false then
+        return
+    end
+
+    sound.Play(tbl["sound"], victim:GetShootPos(), 90, 100)
 end
 
 ---
@@ -829,16 +833,13 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
     local killwep = util.WeaponFromDamage(dmginfo)
 
-    -- headshots, knife damage, and weapons tagged as silent all prevent death
-    -- sound from occurring
     ---@cast killwep -nil
-    if
-        not ply.was_headshot
-        and not dmginfo:IsDamageType(DMG_SLASH)
-        and not (IsValid(killwep) and killwep.IsSilent)
-    then
-        PlayDeathSound(ply)
-    end
+    PlayDeathSound(
+        ply,
+        ply.was_headshot
+            or dmginfo:IsDamageType(DMG_SLASH)
+            or (IsValid(killwep) and killwep.IsSilent)
+    )
 
     credits.HandleKillCreditsAward(ply, attacker)
 end
@@ -891,7 +892,6 @@ function GM:PlayerDeath(victim, infl, attacker)
         and gameloop.GetRoundState() == ROUND_ACTIVE
         ---
         -- @realm server
-        -- stylua: ignore
         and not hook.Run("TTT2ShouldSkipHaste", victim, attacker)
     then
         gameloop.IncreasePhaseEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
@@ -903,7 +903,6 @@ function GM:PlayerDeath(victim, infl, attacker)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTT2PostPlayerDeath", victim, infl, attacker)
 end
 
@@ -955,7 +954,6 @@ function GM:PostPlayerDeath(ply)
 
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("PlayerLoadout", ply, false)
     end)
 end
@@ -1168,18 +1166,16 @@ local fallsounds_count = #fallsounds
 
 ---
 -- @realm server
--- stylua: ignore
-local falldmg_enable = CreateConVar("ttt2_falldmg_enable", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local falldmg_enable = CreateConVar("ttt2_falldmg_enable", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-local falldmg_min_vel = CreateConVar("ttt2_falldmg_min_velocity", "450", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local falldmg_min_vel =
+    CreateConVar("ttt2_falldmg_min_velocity", "450", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
--- stylua: ignore
-local falldmg_expo = CreateConVar("ttt2_falldmg_exponent", "1.75", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local falldmg_expo = CreateConVar("ttt2_falldmg_exponent", "1.75", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- Called when a @{Player} makes contact with the ground.
@@ -1273,8 +1269,7 @@ end
 
 ---
 -- @realm server
--- stylua: ignore
-local ttt_postdm = CreateConVar("ttt_postround_dm", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local ttt_postdm = CreateConVar("ttt_postround_dm", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- Called when an entity takes damage. You can modify all parts of the damage info in this hook.
@@ -1298,7 +1293,6 @@ function GM:EntityTakeDamage(ent, dmginfo)
 
     ---
     -- @realm server
-    -- stylua: ignore
     if not hook.Run("AllowPVP") then
         -- if player vs player damage, or if damage versus a prop, then zero
         if ent:IsExplosive() or ent:IsPlayer() and IsValid(att) and att:IsPlayer() then
@@ -1308,16 +1302,16 @@ function GM:EntityTakeDamage(ent, dmginfo)
     elseif ent:IsPlayer() then
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("PlayerTakeDamage", ent, dmginfo:GetInflictor(), att, dmginfo:GetDamage(), dmginfo)
     elseif ent:IsExplosive() then
         -- When a barrel hits a player, that player damages the barrel because
         -- Source physics. This gives stupid results like a player who gets hit
         -- with a barrel being blamed for killing himself or even his attacker.
-        if IsValid(att)
-        and att:IsPlayer()
-        and dmginfo:IsDamageType(DMG_CRUSH)
-        and IsValid(ent:GetPhysicsAttacker())
+        if
+            IsValid(att)
+            and att:IsPlayer()
+            and dmginfo:IsDamageType(DMG_CRUSH)
+            and IsValid(ent:GetPhysicsAttacker())
         then
             dmginfo:SetAttacker(ent:GetPhysicsAttacker())
             dmginfo:ScaleDamage(0)
@@ -1546,7 +1540,6 @@ net.Receive("ttt2_set_player_setting", function(_, ply)
 
     ---
     -- @realm shared
-    -- stylua: ignore
     hook.Run("TTT2PlayerSettingChanged", ply, identifier, oldValue, ply.playerSettings[identifier])
 end)
 
@@ -1701,6 +1694,17 @@ function GM:TTT2ShouldSkipHaste(victim, attacker) end
 -- @hook
 -- @realm server
 function GM:TTT2PostPlayerDeath(victim, inflictor, attacker) end
+
+---
+-- Use this hook to change/cancel the deathscream sound.
+-- @param table Table containing all data for the deathscream (victim, sound, isSilent).
+-- @param boolean isSilent If this is true, the deathscream will be silenced.
+-- @return[default=true] nil|boolean Return false to suppress the deathscream.
+-- @hook
+-- @realm server
+function GM:TTT2PlayDeathScream(tbl, isSilent)
+    return not isSilent
+end
 
 ---
 -- Returns whether PVP is allowed

@@ -18,13 +18,12 @@ local IsEquipment = WEPS.IsEquipment
 
 ---
 -- @realm server
--- stylua: ignore
-local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "1", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
 
 ---
 -- @realm server
--- stylua: ignore
-local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cv_ttt_detective_hats =
+    CreateConVar("ttt_detective_hats", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- Returns whether or not a @{Player} is allowed to pick up a @{Weapon}
@@ -93,7 +92,7 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon, isPickupProbe)
             mask = MASK_SOLID,
         }, wep)
 
-        if tr.Fraction == 1.0 or tr.Entity == ply then
+        if (tr.Fraction == 1.0 or tr.Entity == ply) and not tr.StartSolid then
             wep:SetPos(ply:GetShootPos())
         end
     end
@@ -158,7 +157,6 @@ local function GetLoadoutWeapons(subrole)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTT2ModifyDefaultLoadout", loadout_weapons, subrole)
 
     return loadout_weapons[subrole]
@@ -290,7 +288,6 @@ local function GetLoadoutItems(subrole)
 
     ---
     -- @realm server
-    -- stylua: ignore
     hook.Run("TTT2ModifyDefaultLoadout", loadout_items, subrole)
 
     return loadout_items[subrole]
@@ -375,7 +372,6 @@ end
 ---
 -- Called to give @{Player}s the default set of @{Weapon}s.
 -- @note This function may not work in your custom gamemode if you have overridden your
--- stylua: ignore
 -- @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Run}.
 -- @param Player ply @{Player} to give @{Weapon}s to
 -- @note Note that this is called both when a @{Player} spawns and when a round starts
@@ -384,7 +380,9 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerLoadout
 -- @local
 function GM:PlayerLoadout(ply, isRespawn)
-    if not IsValid(ply) or ply:IsSpec() then return end
+    if not IsValid(ply) or ply:IsSpec() then
+        return
+    end
 
     CleanupInventoryAndNotifyClient(ply)
 
@@ -407,7 +405,9 @@ function GM:PlayerLoadout(ply, isRespawn)
         local has = false
 
         for k2 = 1, #give do
-            if cls ~= give[k2] then continue end
+            if cls ~= give[k2] then
+                continue
+            end
 
             has = true
 
@@ -429,7 +429,9 @@ function GM:PlayerLoadout(ply, isRespawn)
         ply:StripWeapon(cls)
 
         for k = 1, #loudoutWeps do
-            if cls ~= loudoutWeps[k] then continue end
+            if cls ~= loudoutWeps[k] then
+                continue
+            end
 
             table.remove(loudoutWeps, k)
 
@@ -475,7 +477,6 @@ function GM:UpdatePlayerLoadouts()
     for i = 1, #plys do
         ---
         -- @realm server
-        -- stylua: ignore
         hook.Run("PlayerLoadout", plys[i], false)
     end
 end

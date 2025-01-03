@@ -3,8 +3,11 @@
 
 ---
 -- @realm client
--- stylua: ignore
-local current_hud_cvar = CreateConVar("ttt2_current_hud", ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin", {FCVAR_ARCHIVE, FCVAR_USERINFO})
+local current_hud_cvar = CreateConVar(
+    "ttt2_current_hud",
+    ttt2net.GetGlobal({ "hud_manager", "defaultHUD" }) or "pure_skin",
+    { FCVAR_ARCHIVE, FCVAR_USERINFO }
+)
 
 local current_hud_table = nil
 
@@ -36,45 +39,38 @@ function GM:HUDPaint()
 
     ---
     -- @realm client
-    -- stylua: ignore
     if hook.Run("HUDShouldDraw", "TTTTButton") then
         TBHUD:Draw(client)
     end
 
     ---
     -- @realm client
-    -- stylua: ignore
     if hook.Run("HUDShouldDraw", "TTTTargetID") then
         ---
         -- @realm client
-        -- stylua: ignore
         hook.Run("HUDDrawTargetID")
     end
 
     ---
     -- @realm client
-    -- stylua: ignore
     if hook.Run("HUDShouldDraw", "TTT2HUD") then
         HUDManager.DrawHUD()
     end
 
     ---
     -- @realm client
-    -- stylua: ignore
     if hook.Run("HUDShouldDraw", "TTT2KeyHelp") then
         keyhelp.Draw()
     end
 
     ---
     -- @realm client
-    -- stylua: ignore
     if hook.Run("HUDShouldDraw", "TTT2MarkerVision") then
         markerVision.Draw()
     end
 
     ---
     -- @realm client
-    -- stylua: ignore
     if hook.Run("HUDShouldDraw", "TTTRadar") then
         RADAR:Draw(client)
     end
@@ -89,7 +85,15 @@ end
 -- @local
 function GM:PostDrawHUD()
     vguihandler.DrawBackground()
+end
 
+---
+-- Called after all other 2D draw hooks are called. Draws over all VGUI Panels and HUDs.
+-- @2D
+-- @hook
+-- @realm client
+-- @ref https://wiki.facepunch.com/gmod/GM:DrawOverlay
+function GM:DrawOverlay()
     loadingscreen.Handler()
 end
 
@@ -163,7 +167,6 @@ local function UpdateHUD(name)
     ---
     -- Call all listeners
     -- @realm client
-    -- stylua: ignore
     hook.Run("TTT2HUDUpdated", name)
 end
 

@@ -9,8 +9,7 @@ if SERVER then
 
     ---
     -- @realm server
-    -- stylua: ignore
-    ttt_telefrags = CreateConVar("ttt_teleport_telefrags", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+    ttt_telefrags = CreateConVar("ttt_teleport_telefrags", "1", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
 end
 
 DEFINE_BASECLASS("weapon_tttbase")
@@ -132,6 +131,7 @@ local shouldNotCollideList = {
     [COLLISION_GROUP_DEBRIS_TRIGGER] = true,
     [COLLISION_GROUP_INTERACTIVE_DEBRIS] = true,
 }
+-- @ignore
 local function ShouldCollide(ent)
     return not shouldNotCollideList[ent:GetCollisionGroup()]
 end

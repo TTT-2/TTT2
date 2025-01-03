@@ -46,7 +46,6 @@ net.Receive("TTT2SendConfirmMsg", function()
 
     ---
     -- @realm client
-    -- stylua: ignore
     hook.Run("TTT2ConfirmedBody", tbl.finder, tbl.victim)
 
     MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img)
@@ -305,7 +304,6 @@ function SEARCHSCREEN:Show(data)
         local searchAdd = {}
         ---
         -- @realm client
-        -- stylua: ignore
         hook.Run("TTTBodySearchPopulate", searchAdd, data)
         for _, v in pairs(searchAdd) do
             if istable(v.text) then

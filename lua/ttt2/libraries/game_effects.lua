@@ -160,7 +160,6 @@ if SERVER then
     local function vFireTakeDamageReplacement(ent, dmg)
         ---
         -- @realm server
-        -- stylua: ignore
         if hook.Run("vFireSuppressExplosionBehavior") then
             return
         end

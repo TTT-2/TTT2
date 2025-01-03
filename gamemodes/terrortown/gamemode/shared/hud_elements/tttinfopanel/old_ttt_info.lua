@@ -266,11 +266,12 @@ if CLIENT then
             local hastewidth = self.hastewidth
             local bg_colors = self.bg_colors
             local round_y = y + height - self.bgheight
+            local screenwidth = ScrW()
 
             height = self.bgheight
 
             -- move up a little on low resolutions to allow space for spectator hints
-            if ScrW() < 1000 then
+            if screenwidth < 1000 then
                 round_y = round_y - 15
             end
 
@@ -303,6 +304,20 @@ if CLIENT then
                 COLOR_WHITE,
                 TEXT_ALIGN_CENTER
             )
+
+            -- Draw name of spectated player
+            local tgt = client:GetObserverTarget()
+            if IsValid(tgt) and tgt:IsPlayer() then
+                self:ShadowedText(
+                    tgt:Nick(),
+                    "TimeLeft",
+                    screenwidth / 2,
+                    margin,
+                    COLOR_WHITE,
+                    TEXT_ALIGN_CENTER,
+                    TEXT_ALIGN_TOP
+                )
+            end
         end
     end
 end

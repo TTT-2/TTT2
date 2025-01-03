@@ -806,7 +806,7 @@ end
 -- @param number radius The arc radius
 -- @param number thickness The arc thickness, the arc is drawn to the inside
 -- @param[default=0] number angleStart The arc start angle
--- @param[default=0] number angleStart The arc end angle
+-- @param[default=0] number angleEnd The arc end angle
 -- @param[default=1] number roughness The arc's roughness, aka degrees per step
 -- @param[default=COLOR_WHITE] number color The arc's color
 -- @realm client
@@ -832,7 +832,7 @@ local drawArc = draw.Arc
 -- @param number radius The arc radius
 -- @param number thickness The arc thickness, the arc is drawn to the inside
 -- @param[default=0] number angleStart The arc start angle
--- @param[default=0] number angleStart The arc end angle
+-- @param[default=0] number angleEnd The arc end angle
 -- @param[default=1] number roughness The arc's roughness, aka degrees per step
 -- @param[default=COLOR_WHITE] number color The arc's color
 -- @param[default=1.0] number scale A scaling factor that is used for the shadows

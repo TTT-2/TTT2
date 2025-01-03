@@ -5,12 +5,10 @@ local IsValid = IsValid
 
 ---
 -- @realm client
--- stylua: ignore
 CreateConVar("ttt_spectator_mode", "0", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
--- stylua: ignore
 CreateConVar("ttt_mute_team_check", "0")
 
 local function SpectateCallback(cv, old, new)
@@ -297,8 +295,17 @@ function HELPSCRN:BuildContentArea()
 
     ---
     -- @realm client
-    -- stylua: ignore
-    if hook.Run("TTT2OnHelpSubmenuClear", parent, self.currentMenuId, self.lastMenuData, self.submenuClass) == false then return end
+    if
+        hook.Run(
+            "TTT2OnHelpSubmenuClear",
+            parent,
+            self.currentMenuId,
+            self.lastMenuData,
+            self.submenuClass
+        ) == false
+    then
+        return
+    end
 
     parent:Clear()
 

@@ -13,6 +13,17 @@ CORPSE.dti = {
     INT_CREDITS = 0,
 }
 
+CORPSE.cv = {
+    ---
+    -- @realm shared
+    identify_body_woconfirm = CreateConVar(
+        "ttt_identify_body_woconfirm",
+        "1",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED },
+        "Toggles whether ragdolls should be confirmed in gameloop.IsDetectiveMode() without clicking on confirm espacially"
+    ),
+}
+
 local dti = CORPSE.dti
 
 ---

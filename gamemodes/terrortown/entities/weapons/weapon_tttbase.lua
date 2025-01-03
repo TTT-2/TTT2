@@ -266,13 +266,27 @@ end
 
 ---
 -- @realm client
--- stylua: ignore
-local sparkle = CLIENT and CreateConVar("ttt_crazy_sparks", "0", FCVAR_ARCHIVE, "Toggles whether the `cball_bounce` Effect should get triggered on the hit position") or nil
+local sparkle = CLIENT
+        and CreateConVar(
+            "ttt_crazy_sparks",
+            "0",
+            FCVAR_ARCHIVE,
+            "Toggles whether the `cball_bounce` Effect should get triggered on the hit position"
+        )
+    or nil
 
 ---
 -- @realm client
--- stylua: ignore
-local ttt2_hold_aim = CLIENT and CreateConVar("ttt2_hold_aim", 0, FCVAR_ARCHIVE, "Toogles whether you have to hold the key to aim", 0, 1) or nil
+local ttt2_hold_aim = CLIENT
+        and CreateConVar(
+            "ttt2_hold_aim",
+            0,
+            FCVAR_ARCHIVE,
+            "Toogles whether you have to hold the key to aim",
+            0,
+            1
+        )
+    or nil
 
 -- crosshair
 if CLIENT then
@@ -290,67 +304,58 @@ if CLIENT then
 
     ---
     -- @realm client
-    -- stylua: ignore
     local cvOpacitySights = CreateConVar("ttt_ironsights_crosshair_opacity", "0.8", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
-    -- stylua: ignore
     local cvSizeLineCrosshair = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
-    -- stylua: ignore
     local cvSizeGapCrosshair = CreateConVar("ttt_crosshair_size_gap", "1.0", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
-    -- stylua: ignore
     local cvEnableCrosshair = CreateConVar("ttt_enable_crosshair", "1", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
-    -- stylua: ignore
     local cvOpacityCrosshair = CreateConVar("ttt_crosshair_opacity", "1", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
-    -- stylua: ignore
     local cvCrosshairUseWeaponscale = CreateConVar("ttt_crosshair_weaponscale", "1", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
-    -- stylua: ignore
     local cvCrosshairStaticLength = CreateConVar("ttt_crosshair_static_length", "0", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
-    -- stylua: ignore
-    local cvCrosshairStaticGapLength = CreateConVar("ttt_crosshair_static_gap_length", "0", FCVAR_ARCHIVE)
+    local cvCrosshairStaticGapLength =
+        CreateConVar("ttt_crosshair_static_gap_length", "0", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
-    -- stylua: ignore
     local cvThicknessCrosshair = CreateConVar("ttt_crosshair_thickness", "1", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
-    -- stylua: ignore
-    local cvEnableOutlineCrosshair = CreateConVar("ttt_crosshair_outline_enable", "0", FCVAR_ARCHIVE)
+    local cvEnableOutlineCrosshair =
+        CreateConVar("ttt_crosshair_outline_enable", "0", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
-    -- stylua: ignore
-    local cvThicknessOutlineCrosshair = CreateConVar("ttt_crosshair_outline_thickness", "1", FCVAR_ARCHIVE)
+    local cvThicknessOutlineCrosshair =
+        CreateConVar("ttt_crosshair_outline_thickness", "1", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
-    -- stylua: ignore
-    local cvHighContrastOutlineCrosshair = CreateConVar("ttt_crosshair_outline_high_contrast", "0", FCVAR_ARCHIVE)
+    local cvHighContrastOutlineCrosshair =
+        CreateConVar("ttt_crosshair_outline_high_contrast", "0", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
-    -- stylua: ignore
     local cvCrosshairMode = CreateConVar("ttt_crosshair_mode", "0", FCVAR_ARCHIVE)
 
     local cvEnableHUDBoxBlur = GetConVar("ttt2_hud_enable_box_blur")
@@ -1580,7 +1585,6 @@ end
 if CLIENT then
     ---
     -- @realm client
-    -- stylua: ignore
     local ttt_lowered = CreateConVar("ttt_ironsights_lowered", "1", FCVAR_ARCHIVE)
 
     local host_timescale = GetConVar("host_timescale")

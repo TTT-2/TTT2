@@ -229,7 +229,6 @@ function admin.IsAdmin(ply)
 
     ---
     -- @realm server
-    -- stylua: ignore
     return hook.Run("TTT2AdminCheck", ply) or false
 end
 
@@ -237,7 +236,6 @@ if SERVER then
     net.Receive("TTT2AdminCommand", function(_, ply)
         ---
         -- @realm server
-        -- stylua: ignore
         if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then
             return
         end

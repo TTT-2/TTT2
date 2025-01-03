@@ -141,7 +141,6 @@ local function GetMSBColorForPlayer(ply)
 
     ---
     -- @realm client
-    -- stylua: ignore
     return hook.Run("TTT2ModifyMiniscoreboardColor", ply, color) or color
 end
 

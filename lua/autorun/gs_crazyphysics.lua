@@ -105,33 +105,57 @@ end
 
 ---
 -- @realm server
--- stylua: ignore
-local gs_crazyphysics = CreateConVar("gs_crazyphysics", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Enables Lua crazyphysics detection")
+local gs_crazyphysics = CreateConVar(
+    "gs_crazyphysics",
+    "1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "Enables Lua crazyphysics detection"
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local gs_crazyphysics_echo = CreateConVar("gs_crazyphysics_echo", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Inform players of ragdoll freezing/removal")
+local gs_crazyphysics_echo = CreateConVar(
+    "gs_crazyphysics_echo",
+    "0",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "Inform players of ragdoll freezing/removal"
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local gs_crazyphysics_interval = CreateConVar("gs_crazyphysics_interval", "0.1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "How often to check entities for extreme velocity")
+local gs_crazyphysics_interval = CreateConVar(
+    "gs_crazyphysics_interval",
+    "0.1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "How often to check entities for extreme velocity"
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local gs_crazyphysics_speed_defuse = CreateConVar("gs_crazyphysics_speed_defuse", "4000", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Max velocity in in/s an entity can reach before it's frozen")
+local gs_crazyphysics_speed_defuse = CreateConVar(
+    "gs_crazyphysics_speed_defuse",
+    "4000",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "Max velocity in in/s an entity can reach before it's frozen"
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local gs_crazyphysics_speed_remove = CreateConVar("gs_crazyphysics_speed_remove", "6000", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Max velocity in in/s an entity can reach before it's removed")
+local gs_crazyphysics_speed_remove = CreateConVar(
+    "gs_crazyphysics_speed_remove",
+    "6000",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "Max velocity in in/s an entity can reach before it's removed"
+)
 
 ---
 -- @realm server
--- stylua: ignore
-local gs_crazyphysics_defusetime = CreateConVar("gs_crazyphysics_defusetime", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "How long to freeze the entity for during diffusal")
+local gs_crazyphysics_defusetime = CreateConVar(
+    "gs_crazyphysics_defusetime",
+    "1",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+    "How long to freeze the entity for during diffusal"
+)
 
 -- Add entity classes you want checked
 local tEntitiesToCheck = {
@@ -140,8 +164,7 @@ local tEntitiesToCheck = {
 
 local bTTT
 local tIdentifyEntities
-local cv_ttt_announce_body_found
-local cv_ttt2_confirm_killlist
+local corpseConfig
 
 hook.Add("Initialize", "TTT2GSCrazyPhysics", function()
     -- Change check if your terrortown folder is named something different
@@ -152,8 +175,7 @@ hook.Add("Initialize", "TTT2GSCrazyPhysics", function()
             prop_ragdoll = true,
         }
 
-        cv_ttt_announce_body_found = GetConVar("ttt_announce_body_found")
-        cv_ttt2_confirm_killlist = GetConVar("ttt2_confirm_killlist")
+        corpseConfig = CORPSE.cv
     end
 end)
 
@@ -257,8 +279,8 @@ local function IdentifyCorpse(pCorpse)
         end
     end
 
-    if cv_ttt_announce_body_found:GetBool() then
-        if GetGlobalBool("ttt2_confirm_team") then -- TODO adjust the new messages
+    if corpseConfig.announce_body_found:GetBool() then
+        if corpseConfig.confirm_team:GetBool() then -- TODO adjust the new messages
             LANG.Msg("body_found", {
                 finder = "The Server",
                 victim = CORPSE.GetPlayerNick(pCorpse, nil) or pPlayer:GetName(),
@@ -274,7 +296,7 @@ local function IdentifyCorpse(pCorpse)
         end
     end
 
-    if cv_ttt2_confirm_killlist:GetBool() then
+    if corpseConfig.confirm_killlist:GetBool() then
         local tKills = pCorpse.kills
         if tKills then
             for i = 1, #tKills do

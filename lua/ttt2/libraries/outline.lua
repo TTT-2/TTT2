@@ -191,7 +191,6 @@ end
 hook.Add("PostDrawEffects", "RenderOutlines", function()
     ---
     -- @realm client
-    -- stylua: ignore
     hook.Run("PreDrawOutlines")
 
     if ListSize == 0 then

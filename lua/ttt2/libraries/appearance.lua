@@ -11,43 +11,35 @@ end
 
 ---
 -- @realm client
--- stylua: ignore
-local cv_last_width = CreateConVar("ttt2_resolution_last_width", 1920, {FCVAR_ARCHIVE})
+local cv_last_width = CreateConVar("ttt2_resolution_last_width", 1920, { FCVAR_ARCHIVE })
 
 ---
 -- @realm client
--- stylua: ignore
-local cv_last_height = CreateConVar("ttt2_resolution_last_height", 1080, {FCVAR_ARCHIVE})
+local cv_last_height = CreateConVar("ttt2_resolution_last_height", 1080, { FCVAR_ARCHIVE })
 
 ---
 -- @realm client
--- stylua: ignore
-local cv_scale = CreateConVar("ttt2_resolution_scale", 1.0, {FCVAR_ARCHIVE})
+local cv_scale = CreateConVar("ttt2_resolution_scale", 1.0, { FCVAR_ARCHIVE })
 
 ---
 -- @realm client
--- stylua: ignore
-local cv_use_global_color = CreateConVar("ttt2_use_global_color", 0, {FCVAR_ARCHIVE})
+local cv_use_global_color = CreateConVar("ttt2_use_global_color", 0, { FCVAR_ARCHIVE })
 
 ---
 -- @realm client
--- stylua: ignore
-local cv_global_color_r = CreateConVar("ttt2_global_color_r", "30", {FCVAR_ARCHIVE})
+local cv_global_color_r = CreateConVar("ttt2_global_color_r", "30", { FCVAR_ARCHIVE })
 
 ---
 -- @realm client
--- stylua: ignore
-local cv_global_color_g = CreateConVar("ttt2_global_color_g", "160", {FCVAR_ARCHIVE})
+local cv_global_color_g = CreateConVar("ttt2_global_color_g", "160", { FCVAR_ARCHIVE })
 
 ---
 -- @realm client
--- stylua: ignore
-local cv_global_color_b = CreateConVar("ttt2_global_color_b", "160", {FCVAR_ARCHIVE})
+local cv_global_color_b = CreateConVar("ttt2_global_color_b", "160", { FCVAR_ARCHIVE })
 
 ---
 -- @realm client
--- stylua: ignore
-local cv_global_color_a = CreateConVar("ttt2_global_color_a", "160", {FCVAR_ARCHIVE})
+local cv_global_color_a = CreateConVar("ttt2_global_color_a", "160", { FCVAR_ARCHIVE })
 
 local function SetCachedColor()
     appearance.focusColor = Color(

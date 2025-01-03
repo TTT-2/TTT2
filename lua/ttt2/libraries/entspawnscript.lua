@@ -153,7 +153,6 @@ if SERVER then
 
     ---
     -- @realm server
-    -- stylua: ignore
     local cvUseWeaponSpawnScript = CreateConVar("ttt_use_weapon_spawn_scripts", "1")
     ---
     -- Called when the entities on the map are available and the spawn entities can be read..

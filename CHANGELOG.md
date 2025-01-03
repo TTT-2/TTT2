@@ -4,18 +4,48 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added Korean translation (by @Kojap)
+- Added diagnostic information to the addonchecker output.
+  - This also includes a Garry's Mod version check which triggers a warning if TTT2 is not compatible. First baseline version is '240313' (by @NickCloudAT)
+- Added `GM:TTT2PlayDeathScream` hook to cancel or overwrite/change the deathscream sound that plays, when you die (by @NickCloudAT)
+- Added support for "toggle_zoom" binds to trigger the radio commands menu (by @TW1STaL1CKY)
+
 ### Fixed
 
 - Fixed missing translation for None role error by removing it (by @mexikoedi)
 - Fixed sometimes entity use triggering the wrong or no entity (by @TimGoll)
 - Fixed translation of muting Terrorists and Spectators (by @mexikoedi)
 - Fixed continuous use being broken, meaing that holding E on a health station did nothing (by @TimGoll)
+- Fixed the loadingscreen disable causing an error (by @TimGoll)
+- Fixed the rounds left always displaying one less than actually left (by @TimGoll)
+- Fixed rendering glitches in the loading screen (by @TimGoll)
+- Fixed weapon pickup through walls (by @MrXonte)
+- Fixed spectating player still being visible through thermalvision after killing that player (by @MrXonte)
+- Fixed Magneto-stick not using C_Hands (by @SvveetMavis)
+- Fixed console error when dropping ammo for weapons with no AmmoEnt (by @MrXonte)
+- Fixed client error for a not fully initialized client (by @Histalek)
+- Fixed the targetID corpse hint not respecting `ttt_identify_body_woconfirm` (by @Histalek)
+- Fixed the beacon not being properly translated when placed (by @Histalek)
+- Fixed binoculars zooming not being predicted (by @Histalek)
+- Fixed an error when trying to pickup a placed equipment (e.g. beacon) (by @Histalek)
+- Fixed corpse searching sound playing when searched by a spectator, searched covertly, or searched long range (by @TW1STaL1CKY)
+- Fixed the mute button in the scoreboard not working (by @TW1STaL1CKY)
 
 ### Changed
 
 - Updated French translation (by @MisterClems)
 - Updated Turkish localization (by @NovaDiablox)
 - Changed it so that continous use doesn't require direct focus; healing at a health station also works when looking around as long as you stay close by (by @TimGoll)
+- Updated Russian localization (by @Satton2)
+- Updated targetID to use `Vehicle:GetDriver` instead of the `ttt_driver` NWEntity (by @Histalek)
+- Updated Russian and English localization files (by @Satton2)
+- Updated old TTT HUD to show name of spectated player (by @somefnfplayerlol)
+- Changes to the enabled map prefixes will not be announced to players anymore (by @Histalek)
+- By default only `ttt` and `ttt2` map prefixes are enabled (by @Histalek)
+- Updated `ttt_identify_body_woconfirm` to be replicated across the server and client (by @Wryyyong)
+- Changed how Ammo is dropped; if drop should be from reserve ammo, now tries to drop a full ammo box instead of a full clip. (by @MrXonte)
 
 ## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
 

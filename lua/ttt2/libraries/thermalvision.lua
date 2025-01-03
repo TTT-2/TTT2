@@ -139,7 +139,7 @@ local function RenderHook()
             local entry = thermalvisionList[i]
             local ent = entry.ent
 
-            if not IsValid(ent) then
+            if not IsValid(ent) or (ent:IsPlayer() and not ent:IsTerror()) then
                 continue
             end
 
