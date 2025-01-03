@@ -27,11 +27,6 @@ if CLIENT then
     SWEP.ShowDefaultViewModel = false
     SWEP.ShowDefaultWorldModel = false
 
-    SWEP.EquipMenuData = {
-        type = "item_weapon",
-        desc = "radio_desc",
-    }
-
     SWEP.Icon = "vgui/ttt/icon_radio"
 end
 
