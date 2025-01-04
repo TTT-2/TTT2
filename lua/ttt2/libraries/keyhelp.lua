@@ -349,7 +349,7 @@ function keyhelp.InitializeBasicKeys()
         KEYHELP_CORE,
         "label_keyhelper_possess_focus_entity",
         function(client)
-            if not client:IsSpec() or IsValid(client:GetObserverTarget()) then
+            if not client:IsSpec() or IsValid(client:GetObserverTarget()) or not GetGlobalBool("ttt_spec_prop_control", true) then
                 return
             end
 

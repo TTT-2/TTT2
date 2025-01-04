@@ -31,6 +31,14 @@ local cvPropspecMax = CreateConVar("ttt_spec_prop_maxbonus", "16", { FCVAR_NOTIF
 local cvPropspecDashMulitplier =
     CreateConVar("ttt_spec_prop_dash", "2", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
+hook.Add("TTT2SyncGlobals", "AddPropspecGlobals", function()
+    SetGlobalBool(cvPropspecToggle:GetName(), cvPropspecToggle:GetBool())
+end)
+
+cvars.AddChangeCallback(cvPropspecToggle:GetName(), function(cv, old, new)
+    SetGlobalBool(cvPropspecToggle:GetName(), tobool(tonumber(new)))
+end)
+
 ---
 -- Forces a @{Player} to spectate an @{Entity}
 -- @param Player ply
