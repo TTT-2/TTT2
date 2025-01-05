@@ -162,8 +162,10 @@ L.quick_corpse_id = "{player}의 시체"
 
 -- Scoreboard
 L.sb_playing = "당신이 플레이 중인 곳은..."
-L.sb_mapchange = "{num}라운드 또는 {time} 분 후에 맵이 변경됩니다."
-L.sb_mapchange_disabled = "세션 제한이 비활성화 되었습니다."
+L.sb_mapchange_mode_0 = "세션 제한이 비활성화 되었습니다."
+L.sb_mapchange_mode_1 = "{num}라운드 또는 {time} 분 후에 맵이 변경됩니다."
+--L.sb_mapchange_mode_2 = "Map changes in {time}"
+--L.sb_mapchange_mode_3 = "Map changes in {num} rounds"
 
 L.sb_mia = "실종"
 L.sb_confirmed = "사망 확인"
@@ -2365,3 +2367,20 @@ L.label_crosshair_size_gap = "크로스헤어 공간 배율"
 
 -- 2024-11-27
 --L.corpse_hint_without_confirm = "Press [{usekey}] to search."
+
+-- 2025-01-05
+--L.help_session_limits_mode = [[
+--There are three different session limit modes you can choose from:
+--
+--mode 0: No session limits. TTT2 will not end the session and will not trigger a mapvote.
+--
+--mode 1: Default TTT(2) mode. A mapvote will trigger if either the session time or session round count runs out.
+--
+--mode 2: Only time limit. A mapvote will only trigger if the session time runs out.
+--
+--mode 3: Only round limit. A mapvote will only trigger if the session round count runs out.]]
+--L.label_session_limits_mode = "Set session limit mode"
+--L.choice_session_limits_mode_0 = "mode 0: no session limits"
+--L.choice_session_limits_mode_1 = "mode 1: time and round limit"
+--L.choice_session_limits_mode_2 = "mode 2: only time limit"
+--L.choice_session_limits_mode_3 = "mode 3: only round limit"

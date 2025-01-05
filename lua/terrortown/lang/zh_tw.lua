@@ -167,8 +167,10 @@ L.quick_corpse_id = " {player} 的屍體"
 
 -- Scoreboard
 L.sb_playing = "你正在玩的伺服是.."
-L.sb_mapchange = "地圖將於 {num} 個回合或是 {time} 後更換"
-L.sb_mapchange_disabled = "地圖更換被禁用。"
+L.sb_mapchange_mode_0 = "地圖更換被禁用。"
+L.sb_mapchange_mode_1 = "地圖將於 {num} 個回合或是 {time} 後更換"
+--L.sb_mapchange_mode_2 = "Map changes in {time}"
+--L.sb_mapchange_mode_3 = "Map changes in {num} rounds"
 
 L.sb_mia = "下落不明"
 L.sb_confirmed = "確認死亡"
@@ -2368,3 +2370,20 @@ L.decoy_help_primary = "安放誘餌"
 
 -- 2024-11-27
 --L.corpse_hint_without_confirm = "Press [{usekey}] to search."
+
+-- 2025-01-05
+--L.help_session_limits_mode = [[
+--There are three different session limit modes you can choose from:
+--
+--mode 0: No session limits. TTT2 will not end the session and will not trigger a mapvote.
+--
+--mode 1: Default TTT(2) mode. A mapvote will trigger if either the session time or session round count runs out.
+--
+--mode 2: Only time limit. A mapvote will only trigger if the session time runs out.
+--
+--mode 3: Only round limit. A mapvote will only trigger if the session round count runs out.]]
+--L.label_session_limits_mode = "Set session limit mode"
+--L.choice_session_limits_mode_0 = "mode 0: no session limits"
+--L.choice_session_limits_mode_1 = "mode 1: time and round limit"
+--L.choice_session_limits_mode_2 = "mode 2: only time limit"
+--L.choice_session_limits_mode_3 = "mode 3: only round limit"
