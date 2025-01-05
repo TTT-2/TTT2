@@ -175,10 +175,18 @@ function PANEL:Init()
     self.mapchange.Think = function(sf)
         if gameloop.HasLevelLimits() then
             local r, t = gameloop.UntilMapChange()
+            local sessionMode = gameloop.GetLevelLimitsMode()
 
-            sf:SetText(GetPTranslation("sb_mapchange", { num = r + 1, time = t }))
+            sf:SetText(
+                GetPTranslation(
+                    (sessionMode == 1 and "sb_mapchange_mode_1")
+                        or (sessionMode == 2 and "sb_mapchange_mode_2")
+                        or (sessionMode == 3 and "sb_mapchange_mode_3"),
+                    { num = r + 1, time = t }
+                )
+            )
         else
-            sf:SetText(GetTranslation("sb_mapchange_disabled"))
+            sf:SetText(GetTranslation("sb_mapchange_mode_0"))
         end
 
         sf:SizeToContents()

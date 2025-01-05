@@ -236,13 +236,19 @@ if CLIENT then
 
         if gameloop.HasLevelLimits() then
             local roundsLeft, timeLeft = gameloop.UntilMapChange()
+            local sessionMode = gameloop.GetLevelLimitsMode()
 
             text = LANG.GetParamTranslation(
-                "loadingscreen_round_restart_subtitle_limits",
+                (sessionMode == 1 and "loadingscreen_round_restart_subtitle_limits_mode_1")
+                    or (sessionMode == 2 and "loadingscreen_round_restart_subtitle_limits_mode_2")
+                    or (sessionMode == 3 and "loadingscreen_round_restart_subtitle_limits_mode_3"),
                 { map = game.GetMap(), rounds = roundsLeft + 1, time = timeLeft }
             )
         else
-            text = LANG.TryTranslation("loadingscreen_round_restart_subtitle")
+            text = LANG.GetParamTranslation(
+                "loadingscreen_round_restart_subtitle_limits_mode_0",
+                { map = game.GetMap() }
+            )
         end
 
         draw.AdvancedText(

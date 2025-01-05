@@ -167,8 +167,10 @@ L.quick_corpse_id = "el cadáver de {player}"
 
 -- Scoreboard
 L.sb_playing = "Estás jugando en..."
-L.sb_mapchange = "El mapa cambia en {num} rondas o en {time}"
---L.sb_mapchange_disabled = "Session limits are disabled."
+--L.sb_mapchange_mode_0 = "Session limits are disabled."
+L.sb_mapchange_mode_1 = "El mapa cambia en {num} rondas o en {time}"
+--L.sb_mapchange_mode_2 = "Map changes in {time}"
+--L.sb_mapchange_mode_3 = "Map changes in {num} rounds"
 
 L.sb_mia = "Perdido en Acción"
 L.sb_confirmed = "Muerto confirmado"
@@ -1672,7 +1674,6 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.label_time_limit_minutes = "Upper limit of playtime in minutes"
 --L.label_nade_throw_during_prep = "Enable grenade throwing during preparing time"
 --L.label_postround_dm = "Enable deathmatch after round ended"
---L.label_session_limits_enabled = "Enable session limits"
 --L.label_spectator_chat = "Enable spectators chatting with everybody"
 --L.label_lastwords_chatprint = "Print last words to chat if killed while typing"
 --L.label_identify_body_woconfirm = "Identify corpse without pressing the 'confirm' button"
@@ -2369,3 +2370,20 @@ L.decoy_help_primary = "Colocar el señuelo"
 
 -- 2024-11-27
 --L.corpse_hint_without_confirm = "Press [{usekey}] to search."
+
+-- 2025-01-05
+--L.help_session_limits_mode = [[
+--There are three different session limit modes you can choose from:
+--
+--mode 0: No session limits. TTT2 will not end the session and will not trigger a mapvote.
+--
+--mode 1: Default TTT(2) mode. A mapvote will trigger if either the session time or session round count runs out.
+--
+--mode 2: Only time limit. A mapvote will only trigger if the session time runs out.
+--
+--mode 3: Only round limit. A mapvote will only trigger if the session round count runs out.]]
+--L.label_session_limits_mode = "Set session limit mode"
+--L.choice_session_limits_mode_0 = "mode 0: no session limits"
+--L.choice_session_limits_mode_1 = "mode 1: time and round limit"
+--L.choice_session_limits_mode_2 = "mode 2: only time limit"
+--L.choice_session_limits_mode_3 = "mode 3: only round limit"

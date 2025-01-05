@@ -167,8 +167,10 @@ L.quick_corpse_id = "{player}'s corpse"
 
 -- Scoreboard
 L.sb_playing = "You are playing on..."
-L.sb_mapchange = "Map changes in {num} rounds or in {time}"
-L.sb_mapchange_disabled = "Session limits are disabled."
+L.sb_mapchange_mode_0 = "Session limits are disabled."
+L.sb_mapchange_mode_1 = "Map changes in {num} rounds or in {time}"
+L.sb_mapchange_mode_2 = "Map changes in {time}"
+L.sb_mapchange_mode_3 = "Map changes in {num} rounds"
 
 L.sb_mia = "Missing In Action"
 L.sb_confirmed = "Confirmed Dead"
@@ -1672,7 +1674,6 @@ L.label_round_limit = "Upper limit of rounds"
 L.label_time_limit_minutes = "Upper limit of playtime in minutes"
 L.label_nade_throw_during_prep = "Enable grenade throwing during preparing time"
 L.label_postround_dm = "Enable deathmatch after round ended"
-L.label_session_limits_enabled = "Enable session limits"
 L.label_spectator_chat = "Enable spectators chatting with everybody"
 L.label_lastwords_chatprint = "Print last words to chat if killed while typing"
 L.label_identify_body_woconfirm = "Identify corpse without pressing the 'confirm' button"
@@ -2299,8 +2300,10 @@ Restarting a round only restarts the current round so you can start over. Resett
 L.label_button_level_reset = "reset level"
 
 L.loadingscreen_round_restart_title = "Starting new round"
-L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
-L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"
+L.loadingscreen_round_restart_subtitle_limits_mode_0 = "you're playing on {map}"
+L.loadingscreen_round_restart_subtitle_limits_mode_1 = "you're playing on {map} for another {rounds} round(s) or {time}"
+L.loadingscreen_round_restart_subtitle_limits_mode_2 = "you're playing on {map} for {time}"
+L.loadingscreen_round_restart_subtitle_limits_mode_3 = "you're playing on {map} for another {rounds} round(s)"
 
 -- 2024-06-23
 L.header_roles_derandomize = "Role Derandomization"
@@ -2369,3 +2372,20 @@ L.vehicle_enter = "Press [{usekey}] to enter vehicle"
 
 -- 2024-11-27
 L.corpse_hint_without_confirm = "Press [{usekey}] to search."
+
+-- 2025-01-05
+L.help_session_limits_mode = [[
+There are three different session limit modes you can choose from:
+
+mode 0: No session limits. TTT2 will not end the session and will not trigger a mapvote.
+
+mode 1: Default TTT(2) mode. A mapvote will trigger if either the session time or session round count runs out.
+
+mode 2: Only time limit. A mapvote will only trigger if the session time runs out.
+
+mode 3: Only round limit. A mapvote will only trigger if the session round count runs out.]]
+L.label_session_limits_mode = "Set session limit mode"
+L.choice_session_limits_mode_0 = "mode 0: no session limits"
+L.choice_session_limits_mode_1 = "mode 1: time and round limit"
+L.choice_session_limits_mode_2 = "mode 2: only time limit"
+L.choice_session_limits_mode_3 = "mode 3: only round limit"

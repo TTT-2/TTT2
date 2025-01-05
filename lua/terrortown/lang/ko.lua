@@ -1668,7 +1668,6 @@ L.help_max_slots = "한 슬롯당 최대 무기 수를 설정합니다. '-1'은 
 --L.label_time_limit_minutes = "Upper limit of playtime in minutes"
 --L.label_nade_throw_during_prep = "Enable grenade throwing during preparing time"
 --L.label_postround_dm = "Enable deathmatch after round ended"
---L.label_session_limits_enabled = "Enable session limits"
 --L.label_spectator_chat = "Enable spectators chatting with everybody"
 --L.label_lastwords_chatprint = "Print last words to chat if killed while typing"
 --L.label_identify_body_woconfirm = "Identify corpse without pressing the 'confirm' button"
