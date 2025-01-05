@@ -38,7 +38,9 @@ L.win_showreport = "さあ{num}秒の間ラウンドレポートを見てみよ�
 
 L.limit_round = "ラウンドリミットに達した。もうすぐロードされるだろう。"
 L.limit_time = "タイムリミットに達した。もうすぐロードされるだろう。"
-L.limit_left = "マップ変更するまで{num}ラウンドないし{time}分残っている。"
+L.limit_left_session_mode_1 = "マップ変更するまで{num}ラウンドないし{time}分残っている。"
+--L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
+--L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "任務遂行により、{num}個のクレジットを受け取った。"

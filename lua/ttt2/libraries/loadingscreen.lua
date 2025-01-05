@@ -236,12 +236,9 @@ if CLIENT then
 
         if gameloop.HasLevelLimits() then
             local roundsLeft, timeLeft = gameloop.UntilMapChange()
-            local sessionMode = gameloop.GetLevelLimitsMode()
 
             text = LANG.GetParamTranslation(
-                (sessionMode == 1 and "loadingscreen_round_restart_subtitle_limits_mode_1")
-                    or (sessionMode == 2 and "loadingscreen_round_restart_subtitle_limits_mode_2")
-                    or (sessionMode == 3 and "loadingscreen_round_restart_subtitle_limits_mode_3"),
+                "loadingscreen_round_restart_subtitle_limits_mode_" .. gameloop.GetLevelLimitsMode(),
                 { map = game.GetMap(), rounds = roundsLeft + 1, time = timeLeft }
             )
         else

@@ -634,7 +634,10 @@ if SERVER then
             -- @realm server
             hook.Run("TTT2LoadNextMap", nextMap, roundsLeft, timeLeft)
         else
-            LANG.Msg("limit_left", { num = roundsLeft, time = math.ceil(timeLeft / 60) })
+            LANG.Msg(
+                "limit_left_session_mode_" .. gameloop.GetLevelLimitsMode(),
+                { num = roundsLeft, time = math.ceil(timeLeft / 60) }
+            )
         end
     end
 
@@ -803,8 +806,6 @@ if CLIENT then
     -- @return string The amount of time left as hh:mm:ss
     -- @realm client
     function gameloop.UntilMapChange()
-        local sessionMode = gameloop.GetLevelLimitsMode()
-
         local roundsLeft = gameloop.GetRoundsLeft()
         local timeLeft = math.floor(gameloop.GetLevelTimeLeft())
 

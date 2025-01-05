@@ -40,7 +40,9 @@ L.win_showreport = "Давайте посмотрим на результаты 
 
 L.limit_round = "Достигнут лимит раундов. Следующая карта скоро загрузится."
 L.limit_time = "Достигнут лимит времени. Следующая карта скоро загрузится."
-L.limit_left = "До смены карты осталось {num} раунд (а/ов) или {time} мин."
+L.limit_left_session_mode_1 = "До смены карты осталось {num} раунд (а/ов) или {time} мин."
+--L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
+--L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "Ваша команда награждена кредитами ({num}) за ваши действия."

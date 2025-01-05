@@ -33,7 +33,9 @@ L.win_showreport = "{num}초 간 라운드 보고서를 살펴보겠습니다."
 
 L.limit_round = "라운드 제한 도달. 다음 맵으로 곧 변경됩니다."
 L.limit_time = "시간 제한 도달. 다음 맵으로 곧 변경됩니다."
-L.limit_left = "{num} 라운드나 {time} 분 후에 맵이 변경됩니다."
+L.limit_left_session_mode_1 = "{num} 라운드나 {time} 분 후에 맵이 변경됩니다."
+--L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
+--L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "당신의 활약으로 팀이 {num} 장비 크레딧을 얻었습니다."

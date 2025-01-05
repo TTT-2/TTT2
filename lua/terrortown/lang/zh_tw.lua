@@ -38,7 +38,9 @@ L.win_showreport = "一起觀看觀看 {num} 秒的回合總結吧！"
 
 L.limit_round = "達到回合限制。即將加載下一張地圖。"
 L.limit_time = "達到時間限制。即將加載下一張地圖。"
-L.limit_left = "新地圖將在 {num} 回合或 {time} 分鐘後切換。"
+L.limit_left_session_mode_1 = "新地圖將在 {num} 回合或 {time} 分鐘後切換。"
+--L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
+--L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "你的陣營因為表現獲得了 {num} 點信用點數。"

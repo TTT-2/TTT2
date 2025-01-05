@@ -38,7 +38,9 @@ L.win_showreport = "{num} saniye boyunca raunt raporuna bakalım."
 
 L.limit_round = "Raunt sınırına ulaşıldı. Bir sonraki harita yakında yüklenecek."
 L.limit_time = "Zaman sınırına ulaşıldı. Bir sonraki harita yakında yüklenecek."
-L.limit_left = "Harita değişmeden önce {num} raunt veya {time} dakika kaldı."
+L.limit_left_session_mode_1 = "Harita değişmeden önce {num} raunt veya {time} dakika kaldı."
+--L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
+--L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "Takımınıza performansınız için {num} ekipman kredisi verildi."

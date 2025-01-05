@@ -38,7 +38,9 @@ L.win_showreport = "Regardons le rapport de la partie {num} secondes."
 
 L.limit_round = "Limite de partie atteinte. La prochaine carte va bientôt chargée."
 L.limit_time = "Limite de temps atteinte. La prochaine carte va bientôt chargée."
-L.limit_left = "Il reste {num} partie(s) ou {time} minutes avant que la carte change."
+L.limit_left_session_mode_1 = "Il reste {num} partie(s) ou {time} minutes avant que la carte change."
+--L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
+--L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "Vous êtes récompensés de {num} crédit(s) pour vos performances."
