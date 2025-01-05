@@ -4,6 +4,9 @@
 -- @realm shared
 CreateConVar("ttt2_radar_charge_time", "30", { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED })
 
+-- @realm shared
+CreateConVar("ttt_spec_prop_control", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED })
+
 ---
 -- @realm shared
 CreateConVar(
