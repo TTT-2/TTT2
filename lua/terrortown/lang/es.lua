@@ -2377,13 +2377,13 @@ L.decoy_help_primary = "Colocar el señuelo"
 --L.help_session_limits_mode = [[
 --There are three different session limit modes you can choose from:
 --
---mode 0: No session limits. TTT2 will not end the session and will not trigger a mapvote.
+--mode 0: No session limits. TTT2 will not end the session and will not trigger a map change.
 --
---mode 1: Default TTT(2) mode. A mapvote will trigger if either the session time or session round count runs out.
+--mode 1: Default TTT2 mode. A map change will trigger if either the session time or session round count runs out.
 --
---mode 2: Only time limit. A mapvote will only trigger if the session time runs out.
+--mode 2: Only time limit. A map change will only trigger if the session time runs out.
 --
---mode 3: Only round limit. A mapvote will only trigger if the session round count runs out.]]
+--mode 3: Only round limit. A map change will only trigger if the session round count runs out.]]
 --L.label_session_limits_mode = "Set session limit mode"
 --L.choice_session_limits_mode_0 = "mode 0: no session limits"
 --L.choice_session_limits_mode_1 = "mode 1: time and round limit"
