@@ -32,6 +32,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed corpse searching sound playing when searched by a spectator, searched covertly, or searched long range (by @TW1STaL1CKY)
 - Fixed the mute button in the scoreboard not working (by @TW1STaL1CKY)
 - Fixed a few errors in shop error messages (by @Histalek)
+- Fixed `markerVision`'s registry table being able to contain duplicate obsolete entries, thus fixing potential syncing issues with markers (by @TW1STaL1CKY)
 
 ### Changed
 
