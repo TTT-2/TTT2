@@ -38,7 +38,9 @@ L.win_showreport = "さあ{num}秒の間ラウンドレポートを見てみよ�
 
 L.limit_round = "ラウンドリミットに達した。もうすぐロードされるだろう。"
 L.limit_time = "タイムリミットに達した。もうすぐロードされるだろう。"
-L.limit_left = "マップ変更するまで{num}ラウンドないし{time}分残っている。"
+L.limit_left_session_mode_1 = "マップ変更するまで{num}ラウンドないし{time}分残っている。"
+--L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
+--L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "任務遂行により、{num}個のクレジットを受け取った。"
@@ -167,8 +169,10 @@ L.quick_corpse_id = "{player}の死体"
 
 -- Scoreboard
 L.sb_playing = "サーバー名"
-L.sb_mapchange = "マップ変更まで{num}ラウンドか{time}秒"
-L.sb_mapchange_disabled = "セッションの制限を無くしました。"
+L.sb_mapchange_mode_0 = "セッションの制限を無くしました。"
+L.sb_mapchange_mode_1 = "マップ変更まで{num}ラウンドか{time}秒"
+--L.sb_mapchange_mode_2 = "Map changes in {time}"
+--L.sb_mapchange_mode_3 = "Map changes in {num} rounds"
 
 L.sb_mia = "行方不明"
 L.sb_confirmed = "死亡確認"
@@ -1673,7 +1677,6 @@ L.label_round_limit = "ラウンド最大数"
 L.label_time_limit_minutes = "ラウンド時間の上限(分)"
 L.label_nade_throw_during_prep = "準備時間中に手榴弾の投擲の有効"
 L.label_postround_dm = "ラウンド終了時間中のデスマッチを有効"
-L.label_session_limits_enabled = "セッションの制限を有効にする"
 L.label_spectator_chat = "観戦者同士でのチャットの有無"
 L.label_lastwords_chatprint = "タイピング中に殺されたら遺言を送信する"
 L.label_identify_body_woconfirm = "'確認'ボタン無しで死体を特定"
@@ -2372,3 +2375,20 @@ L.label_player_role = "役職選択"
 
 -- 2024-11-27
 --L.corpse_hint_without_confirm = "Press [{usekey}] to search."
+
+-- 2025-01-05
+--L.help_session_limits_mode = [[
+--There are three different session limit modes you can choose from:
+--
+--mode 0: No session limits. TTT2 will not end the session and will not trigger a map change.
+--
+--mode 1: Default TTT2 mode. A map change will trigger if either the session time or session round count runs out.
+--
+--mode 2: Only time limit. A map change will only trigger if the session time runs out.
+--
+--mode 3: Only round limit. A map change will only trigger if the session round count runs out.]]
+--L.label_session_limits_mode = "Set session limit mode"
+--L.choice_session_limits_mode_0 = "mode 0: no session limits"
+--L.choice_session_limits_mode_1 = "mode 1: time and round limit"
+--L.choice_session_limits_mode_2 = "mode 2: only time limit"
+--L.choice_session_limits_mode_3 = "mode 3: only round limit"

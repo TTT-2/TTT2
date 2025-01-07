@@ -48,7 +48,7 @@ local cvHasteMode = CreateConVar(
 ---
 -- @realm server
 local cvSessionLimits = CreateConVar(
-    "ttt_session_limits_enabled",
+    "ttt_session_limits_mode",
     "1",
     SERVER and { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED } or FCVAR_REPLICATED
 )
@@ -626,7 +626,7 @@ if SERVER then
         local timeLeft = gameloop.GetLevelTimeLeft()
         local nextMap = string.upper(game.GetMapNext())
 
-        if roundsLeft <= 0 or timeLeft <= 0 then
+        if roundsLeft == 0 or timeLeft == 0 then
             gameloop.StopTimers()
             gameloop.SetPhaseEnd(CurTime())
 
@@ -634,7 +634,10 @@ if SERVER then
             -- @realm server
             hook.Run("TTT2LoadNextMap", nextMap, roundsLeft, timeLeft)
         else
-            LANG.Msg("limit_left", { num = roundsLeft, time = math.ceil(timeLeft / 60) })
+            LANG.Msg(
+                "limit_left_session_mode_" .. gameloop.GetLevelLimitsMode(),
+                { num = roundsLeft, time = math.ceil(timeLeft / 60) }
+            )
         end
     end
 
@@ -876,7 +879,10 @@ end
 -- @return number The amound of rounds left
 -- @realm shared
 function gameloop.GetRoundsLeft()
-    return GetGlobalInt("ttt_rounds_left", 0)
+    local sessionMode = gameloop.GetLevelLimitsMode()
+    return (sessionMode == 1 or sessionMode == 3)
+            and math.max(0, GetGlobalInt("ttt_rounds_left", 0))
+        or -1
 end
 
 ---
@@ -884,7 +890,13 @@ end
 -- @return number The time left on this level
 -- @realm shared
 function gameloop.GetLevelTimeLeft()
-    return math.max(0, cvLevelTimeLimit:GetInt() * 60 - CurTime() + gameloop.GetLevelStartTime())
+    local sessionMode = gameloop.GetLevelLimitsMode()
+    return (sessionMode == 1 or sessionMode == 2)
+            and math.max(
+                0,
+                cvLevelTimeLimit:GetInt() * 60 - CurTime() + gameloop.GetLevelStartTime()
+            )
+        or -1
 end
 
 ---
@@ -908,7 +920,15 @@ end
 -- @return boolean
 -- @realm shared
 function gameloop.HasLevelLimits()
-    return cvSessionLimits:GetBool()
+    return cvSessionLimits:GetInt() > 0
+end
+
+---
+-- Returns the convar value of 'ttt_session_limits_mode'.
+-- @return number The session limit mode
+-- @realm shared
+function gameloop.GetLevelLimitsMode()
+    return cvSessionLimits:GetInt()
 end
 
 -- old function name aliases

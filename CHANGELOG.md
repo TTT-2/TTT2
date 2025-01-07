@@ -48,6 +48,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Changed how Ammo is dropped; if drop should be from reserve ammo, now tries to drop a full ammo box instead of a full clip. (by @MrXonte)
 - Updated `ttt_spec_prop_control` to be replicated across the server and client (by @NickCloudAT)
   - With this, the KeyHelp feature also hides the PropSpec bind if PropSpec is disabled on the server
+- Renamed `ttt_session_limits_enabled` to `ttt_session_limits_mode`, introducing a four-mode control (0-3) for managing how TTT2 ends a session. (by @NickCloudAT)
+  - Modes: 0 = No session limit, 1 = Default TTT, 2 = Only time limit, 3 = Only round limit
 
 ## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
 

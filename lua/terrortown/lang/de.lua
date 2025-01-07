@@ -38,7 +38,9 @@ L.win_showreport = "Schauen wir uns den Rundenbericht die nächste(n) {num} Seku
 
 L.limit_round = "Rundenlimit erreicht. Die nächste Map wird bald geladen."
 L.limit_time = "Zeitlimit erreicht. Die nächste Map wird bald geladen."
-L.limit_left = "{num} Runde(n) oder {time} Minute(n) verbleibend bis die Map gewechselt wird."
+L.limit_left_session_mode_1 = "{num} Runde(n) oder {time} Minute(n) verbleibend bis die Map gewechselt wird."
+L.limit_left_session_mode_2 = "{time} Minute(n) verbleibend bis die Map gewechselt wird."
+L.limit_left_session_mode_3 = "{num} Runde(n) verbleibend bis die Map gewechselt wird."
 
 -- Credit awards
 L.credit_all = "Deinem Team wurde(n) {num} Ausrüstungspunkt(e) für eure Leistung gegeben."
@@ -167,8 +169,10 @@ L.quick_corpse_id = "{player}'s Leiche"
 
 -- Scoreboard
 L.sb_playing = "Du spielst auf..."
-L.sb_mapchange = "Die Karte wechselt in {num} Runden oder in {time}"
-L.sb_mapchange_disabled = "Das Sitzungslimit ist deaktiviert."
+L.sb_mapchange_mode_0 = "Das Sitzungslimit ist deaktiviert."
+L.sb_mapchange_mode_1 = "Die Karte wechselt in {num} Runden oder in {time}"
+L.sb_mapchange_mode_2 = "Die Karte wechselt in {time}"
+L.sb_mapchange_mode_3 = "Die Karte wechselt in {num} Runden"
 
 L.sb_mia = "Vermisst"
 L.sb_confirmed = "Definitiv tot"
@@ -1672,7 +1676,6 @@ L.label_round_limit = "Rundenlimit"
 L.label_time_limit_minutes = "Spielzeitlimit"
 L.label_nade_throw_during_prep = "Erlaube das Werfen von Granaten während der Vorbereitungszeit"
 L.label_postround_dm = "Aktiviere Deathmatch nach Rundenende"
-L.label_session_limits_enabled = "Aktiviere Sitzungs Limitierungen"
 L.label_spectator_chat = "Aktiviere, dass Zuschauer mit jedem chatten können"
 L.label_lastwords_chatprint = "Gib die letzten Worte im Chat aus, wenn der Spieler getötet wird, während er tippt"
 L.label_identify_body_woconfirm = "Leichnam identifizieren, ohne die Schaltfläche 'Tod Bestätigen' drücken zu müssen"
@@ -2299,8 +2302,10 @@ L.label_voice_activation_mode_toggle_enabled = "Umschalten (Aktiviert zum Start)
 --L.label_button_level_reset = "reset level"
 
 --L.loadingscreen_round_restart_title = "Starting new round"
---L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
---L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_0 = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_1 = "you're playing on {map} for another {rounds} round(s) or {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_2 = "you're playing on {map} for {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_3 = "you're playing on {map} for another {rounds} round(s)"
 
 -- 2024-06-23
 --L.header_roles_derandomize = "Role Derandomization"
@@ -2369,3 +2374,20 @@ L.label_voice_activation_mode_toggle_enabled = "Umschalten (Aktiviert zum Start)
 
 -- 2024-11-27
 --L.corpse_hint_without_confirm = "Press [{usekey}] to search."
+
+-- 2025-01-05
+--L.help_session_limits_mode = [[
+--There are three different session limit modes you can choose from:
+--
+--mode 0: No session limits. TTT2 will not end the session and will not trigger a map change.
+--
+--mode 1: Default TTT2 mode. A map change will trigger if either the session time or session round count runs out.
+--
+--mode 2: Only time limit. A map change will only trigger if the session time runs out.
+--
+--mode 3: Only round limit. A map change will only trigger if the session round count runs out.]]
+--L.label_session_limits_mode = "Set session limit mode"
+--L.choice_session_limits_mode_0 = "mode 0: no session limits"
+--L.choice_session_limits_mode_1 = "mode 1: time and round limit"
+--L.choice_session_limits_mode_2 = "mode 2: only time limit"
+--L.choice_session_limits_mode_3 = "mode 3: only round limit"

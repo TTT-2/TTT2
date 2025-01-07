@@ -38,7 +38,9 @@ L.win_showreport = "来看一下 {num} 秒的回合总结吧！"
 
 L.limit_round = "达到回合限制。即将加载下一张地图。"
 L.limit_time = "达到时间限制。即将加载下一张地图。"
-L.limit_left = "新地图将在 {num} 回合或 {time} 分钟后切换。"
+L.limit_left_session_mode_1 = "新地图将在 {num} 回合或 {time} 分钟后切换。"
+--L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
+--L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "你的阵营因为表现获得了 {num} 点积分。"
@@ -167,8 +169,10 @@ L.quick_corpse_id = " {player} 的尸体"
 
 -- Scoreboard
 L.sb_playing = "你正在玩的服务器是..."
-L.sb_mapchange = "地图将于 {num} 个回合或是 {time} 后更换。"
-L.sb_mapchange_disabled = "地图更换被禁用。"
+L.sb_mapchange_mode_0 = "地图更换被禁用。"
+L.sb_mapchange_mode_1 = "地图将于 {num} 个回合或是 {time} 后更换。"
+--L.sb_mapchange_mode_2 = "Map changes in {time}"
+--L.sb_mapchange_mode_3 = "Map changes in {num} rounds"
 
 L.sb_mia = "下落不明"
 L.sb_confirmed = "确认死亡"
@@ -1672,7 +1676,6 @@ L.label_round_limit = "回合数上限"
 L.label_time_limit_minutes = "游戏时间上限，以分钟为单位"
 L.label_nade_throw_during_prep = "在准备时间内允许投掷手榴弹"
 L.label_postround_dm = "回合结束后启用死亡竞赛"
-L.label_session_limits_enabled = "启用地图更换"
 L.label_spectator_chat = "启用观察者与大家聊天的功能"
 L.label_lastwords_chatprint = "如果在打字时被杀，则发出最后一句话至聊天室"
 L.label_identify_body_woconfirm = "不按'确认'按钮识别尸体"
@@ -2369,3 +2372,20 @@ L.label_player_role = "选择角色"
 
 -- 2024-11-27
 --L.corpse_hint_without_confirm = "Press [{usekey}] to search."
+
+-- 2025-01-05
+--L.help_session_limits_mode = [[
+--There are three different session limit modes you can choose from:
+--
+--mode 0: No session limits. TTT2 will not end the session and will not trigger a map change.
+--
+--mode 1: Default TTT2 mode. A map change will trigger if either the session time or session round count runs out.
+--
+--mode 2: Only time limit. A map change will only trigger if the session time runs out.
+--
+--mode 3: Only round limit. A map change will only trigger if the session round count runs out.]]
+--L.label_session_limits_mode = "Set session limit mode"
+--L.choice_session_limits_mode_0 = "mode 0: no session limits"
+--L.choice_session_limits_mode_1 = "mode 1: time and round limit"
+--L.choice_session_limits_mode_2 = "mode 2: only time limit"
+--L.choice_session_limits_mode_3 = "mode 3: only round limit"

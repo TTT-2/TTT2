@@ -38,7 +38,9 @@ L.win_showreport = "Подивімось на звіт раунду протяг
 
 --L.limit_round = "Round limit reached. The next map will load soon."
 --L.limit_time = "Time limit reached. The next map will load soon."
---L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes."
+--L.limit_left_session_mode_1 = "{num} round(s) or {time} minutes remaining before the map changes."
+--L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
+--L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
 
 -- Credit awards
 --L.credit_all = "Your team have been awarded {num} equipment credit(s) for your performance."
@@ -167,8 +169,10 @@ L.quick_corpse_id = "Тіло {player}"
 
 -- Scoreboard
 L.sb_playing = "Ви граєте на..."
-L.sb_mapchange = "Мапа зміниться через {num} раундів або через {time}"
---L.sb_mapchange_disabled = "Session limits are disabled."
+--L.sb_mapchange_mode_0 = "Session limits are disabled."
+L.sb_mapchange_mode_1 = "Мапа зміниться через {num} раундів або через {time}"
+--L.sb_mapchange_mode_2 = "Map changes in {time}"
+--L.sb_mapchange_mode_3 = "Map changes in {num} rounds"
 
 L.sb_mia = "Зниклі безвісти"
 L.sb_confirmed = "Смерть підтверджено"
@@ -1672,7 +1676,6 @@ L.hilite_win_traitors = "ЗРАДНИКИ ПЕРЕМОГЛИ"
 --L.label_time_limit_minutes = "Upper limit of playtime in minutes"
 --L.label_nade_throw_during_prep = "Enable grenade throwing during preparing time"
 --L.label_postround_dm = "Enable deathmatch after round ended"
---L.label_session_limits_enabled = "Enable session limits"
 --L.label_spectator_chat = "Enable spectators chatting with everybody"
 --L.label_lastwords_chatprint = "Print last words to chat if killed while typing"
 --L.label_identify_body_woconfirm = "Identify corpse without pressing the 'confirm' button"
@@ -2369,3 +2372,20 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 
 -- 2024-11-27
 --L.corpse_hint_without_confirm = "Press [{usekey}] to search."
+
+-- 2025-01-05
+--L.help_session_limits_mode = [[
+--There are three different session limit modes you can choose from:
+--
+--mode 0: No session limits. TTT2 will not end the session and will not trigger a map change.
+--
+--mode 1: Default TTT2 mode. A map change will trigger if either the session time or session round count runs out.
+--
+--mode 2: Only time limit. A map change will only trigger if the session time runs out.
+--
+--mode 3: Only round limit. A map change will only trigger if the session round count runs out.]]
+--L.label_session_limits_mode = "Set session limit mode"
+--L.choice_session_limits_mode_0 = "mode 0: no session limits"
+--L.choice_session_limits_mode_1 = "mode 1: time and round limit"
+--L.choice_session_limits_mode_2 = "mode 2: only time limit"
+--L.choice_session_limits_mode_3 = "mode 3: only round limit"

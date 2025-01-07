@@ -143,14 +143,24 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
     local form5 = vgui.CreateTTT2Form(parent, "header_round_setup_map_duration")
 
-    local enbSessionLimitsEnabled = form5:MakeCheckBox({
-        serverConvar = "ttt_session_limits_enabled",
-        label = "label_session_limits_enabled",
+    form5:MakeHelp({
+        label = "help_session_limits_mode",
+    })
+
+    local enbSessionLimitsMode = form5:MakeComboBox({
+        label = "label_session_limits_mode",
+        serverConvar = "ttt_session_limits_mode",
+        choices = {
+            { title = TryT("choice_session_limits_mode_0"), value = 0 },
+            { title = TryT("choice_session_limits_mode_1"), value = 1 },
+            { title = TryT("choice_session_limits_mode_2"), value = 2 },
+            { title = TryT("choice_session_limits_mode_3"), value = 3 },
+        },
     })
 
     form5:MakeHelp({
         label = "help_round_limit",
-        master = enbSessionLimitsEnabled,
+        master = enbSessionLimitsMode,
     })
 
     form5:MakeSlider({
@@ -159,7 +169,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
         min = 0,
         max = 100,
         decimal = 0,
-        master = enbSessionLimitsEnabled,
+        master = enbSessionLimitsMode,
     })
 
     form5:MakeSlider({
@@ -168,7 +178,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
         min = 0,
         max = 175,
         decimal = 0,
-        master = enbSessionLimitsEnabled,
+        master = enbSessionLimitsMode,
     })
 
     local form6 = vgui.CreateTTT2Form(parent, "header_loadingscreen")
