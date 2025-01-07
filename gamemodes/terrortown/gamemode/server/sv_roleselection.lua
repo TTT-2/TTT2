@@ -369,7 +369,7 @@ function roleselection.GetAllSelectableRolesList(maxPlys)
             k,
             nil,
             ROLEINSPECT_DECISION_CONSIDER,
-            ROLEINSPECT_REASON_FORCED
+            reason
         )
     end
 
@@ -391,14 +391,14 @@ function roleselection.GetAllSelectableRolesList(maxPlys)
             continue
         end
 
-        local selectable, reason = roleData:IsSelectable()
+        local selectable, sreason = roleData:IsSelectable()
         if not selectable then
             roleinspect.ReportDecision(
                 ROLEINSPECT_STAGE_PRESELECT,
                 roleData.index,
                 nil,
                 ROLEINSPECT_DECISION_NO_CONSIDER,
-                reason or ROLEINSPECT_REASON_ROLE_DECISION
+                sreason or ROLEINSPECT_REASON_ROLE_DECISION
             )
             continue
         end
@@ -840,6 +840,13 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
         end
 
         selectableRoles[subrole] = rolesAmountList[subrole]
+
+
+        roleinspect.ReportStageExtraInfo(
+            ROLEINSPECT_STAGE_LAYERING,
+            "subroleSelectBaseroleOrder",
+            { baserole = baserole, subrole = subrole }
+        )
 
         roleinspect.ReportDecision(
             ROLEINSPECT_STAGE_LAYERING,
