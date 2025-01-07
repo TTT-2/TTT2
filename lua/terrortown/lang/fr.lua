@@ -2302,8 +2302,10 @@ Redémarrer une partie ne fait que redémarrer la partie en cours pour que vous 
 L.label_button_level_reset = "réinitialiser le niveau"
 
 L.loadingscreen_round_restart_title = "Démarrage d'une nouvelle partie"
-L.loadingscreen_round_restart_subtitle = "vous jouez sur {map}"
-L.loadingscreen_round_restart_subtitle_limits = "vous jouerez sur {map} pendant {rounds} partie(s) ou {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_0 = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_1 = "you're playing on {map} for another {rounds} round(s) or {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_2 = "you're playing on {map} for {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_3 = "you're playing on {map} for another {rounds} round(s)"
 
 -- 2024-06-23
 L.header_roles_derandomize = "Dérandomisation des rôles"

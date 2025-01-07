@@ -2302,8 +2302,10 @@ L.help_round_restart_reset = [[
 L.label_button_level_reset = "重置关卡"
 
 L.loadingscreen_round_restart_title = "开始新回合"
-L.loadingscreen_round_restart_subtitle = "你正在玩 {map}"
-L.loadingscreen_round_restart_subtitle_limits = "你正在玩 {map}，还有 {rounds} 回合或 {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_0 = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_1 = "you're playing on {map} for another {rounds} round(s) or {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_2 = "you're playing on {map} for {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_3 = "you're playing on {map} for another {rounds} round(s)"
 
 -- 2024-06-23
 L.header_roles_derandomize = "角色去随机化"
