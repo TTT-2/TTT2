@@ -3,15 +3,9 @@
 -- @module roleinspect
 roleinspect = {}
 
-local math = math
 local table = table
-local player = player
 local net = net
 local admin = admin
-local pairs = pairs
-local IsValid = IsValid
-local hook = hook
-local playerGetAll = player.GetAll
 
 -- enum ROLEINSPECT_STAGE
 -- indicates a stage of role selection
@@ -20,6 +14,7 @@ ROLEINSPECT_STAGE_LAYERING = 2 -- Layering. This stage refines the above based o
 ROLEINSPECT_STAGE_FORCED = 3 -- Assigning forced roles.
 ROLEINSPECT_STAGE_BASEROLES = 4 -- Assigning baseroles.
 ROLEINSPECT_STAGE_SUBROLES = 5 -- Assigning subroles.
+ROLEINSPECT_STAGE_FINAL = 6 -- Final roles.
 
 roleinspect.stageNames = {
     [ROLEINSPECT_STAGE_PRESELECT] = "roleinspect_stage_preselect",
@@ -71,6 +66,7 @@ ROLEINSPECT_REASON_FORCED = "roleinspect_reason_forced"
 -- Reasons for STAGE_BASEROLES and STAGE_SUBROLES
 ROLEINSPECT_REASON_CHANCE = "roleinspect_reason_chance" -- Player assigned role through random selection
 ROLEINSPECT_REASON_WEIGHTED_CHANCE = "roleinspect_reason_weighted_chance" -- Player assigned role through weighted random selection
+ROLEINSPECT_REASON_NOT_ASSIGNED = "roleinspect_reason_not_assigned" -- Player assigned a role because they were not otherwise assigned one
 
 if SERVER then
     roleinspect.decisions = {}
@@ -121,20 +117,24 @@ if SERVER then
     function roleinspect.ReportStageExtraInfo(stage, key, info)
         local dstage = GetStageTable(stage)
         local tbl = GetOrAddTable(dstage.extra, key, EmptyTable)
-        tbl[#tbl + 1] = MaybeClone(info)
+        tbl[#tbl + 1] = MaybeClone(isfunction(info) and info() or info)
     end
 
     function roleinspect.ReportRoleExtraInfo(stage, role, key, info)
         local drole = GetRoleTable(stage, role)
         local tbl = GetOrAddTable(drole.extra, key, EmptyTable)
-        tbl[#tbl + 1] = MaybeClone(info)
+        tbl[#tbl + 1] = MaybeClone(isfunction(info) and info() or info)
     end
 
     function roleinspect.ReportDecision(stage, role, ply, decision, reason, extra)
         local drole = GetRoleTable(stage, role)
         local decisionTbl = drole.decisions
-        decisionTbl[#decisionTbl + 1] =
-            { ply = ply, decision = decision, reason = reason, extra = extra }
+        decisionTbl[#decisionTbl + 1] = {
+            ply = ply,
+            decision = decision,
+            reason = reason,
+            extra = MaybeClone(isfunction(extra) and extra() or extra)
+        }
     end
 
     util.AddNetworkString("TTT2SyncRoleInspectInfo")

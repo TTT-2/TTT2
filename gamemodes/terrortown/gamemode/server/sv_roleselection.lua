@@ -937,6 +937,7 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
     local derand = modeDerandomize == ROLE_DERAND_SUBROLE or modeDerandomize == ROLE_DERAND_BOTH
 
     local minWeight = roleselection.cv.ttt_role_derandomize_min_weight:GetInt()
+    local subrolePlayerWeightTbls = {}
 
     while plysAmount > 0 and availableRolesAmount > 0 do
         local rolePick = math.random(availableRolesAmount)
@@ -944,16 +945,45 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
         local roleData = roles.GetByIndex(subrole)
         local roleCount = tmpSelectableRoles[subrole]
 
-        local pick
+        local plyWeights
+
+        if derand then
+            plyWeights = subrolePlayerWeightTbls[subrole]
+
+            if not plyWeights then
+                plyWeights = {}
+
+                -- precompute the weights table
+                for i = 1,#plys do
+                    local ply = plys[i]
+                    -- record the weight for this role for this player
+                    plyWeights[ply] = ply:GetRoleWeightTable()[subrole] or minWeight
+                end
+
+                -- record that table with roleinspect
+                roleinspect.ReportRoleExtraInfo(
+                    ROLEINSPECT_STAGE_SUBROLES,
+                    subrole,
+                    "playerWeights",
+                    plyWeights
+                )
+
+                subrolePlayerWeightTbls[subrole] = plyWeights
+            end
+        end
+
+
+        local pick, reason
         if not derand then
             -- select random index in plys table
             pick = math.random(plysAmount)
+            reason = ROLEINSPECT_REASON_CHANCE
         else
             -- use a weighted sum to select the player
             pick = math.WeightedRandom(plys, function(ply)
-                local weightTbl = ply:GetRoleWeightTable()
-                return weightTbl[subrole] or minWeight
+                return plyWeights[ply]
             end)
+            reason = ROLEINSPECT_REASON_WEIGHTED_CHANCE
         end
 
         local ply = plys[pick]
@@ -966,6 +996,13 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
             table.remove(plys, pick)
 
             roleselection.finalRoles[ply] = subrole
+            roleinspect.ReportDecision(
+                ROLEINSPECT_STAGE_SUBROLES,
+                subrole,
+                ply,
+                ROLEINSPECT_DECISION_ROLE_ASSIGNED,
+                reason
+            )
 
             plysAmount = plysAmount - 1
             roleCount = roleCount - 1
@@ -1078,6 +1115,14 @@ local function SelectForcedRoles(plys, selectableRoles)
             roleselection.finalRoles[ply] = subrole
             curCount = curCount + 1
 
+            roleselect.ReportDecision(
+                ROLEINSPECT_STAGE_FORCED,
+                subrole,
+                ply,
+                ROLEINSPECT_DECISION_ROLE_ASSIGNED,
+                ROLEINSPECT_REASON_FORCED
+            )
+
             ---
             -- @realm server
             hook.Run("TTT2ReceivedForcedRole", ply, subrole)
@@ -1127,6 +1172,12 @@ local function UpgradeRoles(plys, subrole, selectableRoles, selectedForcedRoles)
         end
     end
 
+    roleinspect.ReportStageExtraInfo(
+        ROLEINSPECT_STAGE_SUBROLES,
+        "upgradeOrder",
+        { baserole = subrole, subroles = availableRoles, players = plys }
+    )
+
     SetSubRoles(plys, availableRoles, selectableRoles, selectedForcedRoles)
 end
 
@@ -1166,17 +1217,43 @@ local function SelectBaseRolePlayers(plys, subrole, roleAmount)
 
     local minWeight = roleselection.cv.ttt_role_derandomize_min_weight:GetInt()
 
+    roleinspect.ReportStageExtraInfo(
+        ROLEINSPECT_STAGE_BASEROLES,
+        "assignOrder",
+        { role = subrole, amount = roleAmount, players = plys }
+    )
+
+    local plyWeights = {}
+
+    if derand then
+        -- precompute the weights table
+        for i = 1,#plys do
+            local ply = plys[i]
+            -- record the weight for this role for this player
+            plyWeights[ply] = ply:GetRoleWeightTable()[subrole] or minWeight
+        end
+
+        -- record that table with roleinspect
+        roleinspect.ReportRoleExtraInfo(
+            ROLEINSPECT_STAGE_BASEROLES,
+            subrole,
+            "playerWeights",
+            plyWeights
+        )
+    end
+
     while curRoles < roleAmount and #plys > 0 do
-        local pick
+        local pick, reason
         if not derand then
             -- select random index in plys table
             pick = math.random(#plys)
+            reason = ROLEINSPECT_REASON_CHANCE
         else
             -- use a weighted sum to select the player
             pick = math.WeightedRandom(plys, function(ply)
-                local weightTbl = ply:GetRoleWeightTable()
-                return weightTbl[subrole] or minWeight
+                return plyWeights[ply]
             end)
+            reason = ROLEINSPECT_REASON_WEIGHTED_CHANCE
         end
 
         -- the player we consider
@@ -1187,6 +1264,13 @@ local function SelectBaseRolePlayers(plys, subrole, roleAmount)
 
             curRoles = curRoles + 1
             plysList[curRoles] = ply
+
+            roleinspect.ReportDecision(
+                ROLEINSPECT_STAGE_BASEROLES,
+                subrole,
+                ply,
+                reason
+            )
 
             roleselection.finalRoles[ply] = subrole -- give the player the final baserole (maybe he will receive his subrole later)
         end
@@ -1290,7 +1374,16 @@ function roleselection.SelectRoles(plys, maxPlys)
         for i = 1, #plysSecondPass do
             local ply = plysSecondPass[i]
 
-            roleselection.finalRoles[ply] = roleselection.finalRoles[ply] or ROLE_INNOCENT
+            if not roleselection.finalRoles[ply] then
+                roleselection.finalRoles[ply] = ROLE_INNOCENT
+                roleinspect.ReportDecision(
+                    ROLEINSPECT_STAGE_BASEROLES,
+                    ROLE_INNOCENT,
+                    ply,
+                    ROLEINSPECT_DECISION_ROLE_ASSIGNED,
+                    ROLEINSPECT_REASON_NOT_ASSIGNED
+                )
+            end
 
             if roleselection.finalRoles[ply] ~= ROLE_INNOCENT then
                 continue
@@ -1304,9 +1397,21 @@ function roleselection.SelectRoles(plys, maxPlys)
 
     GAMEMODE.LastRole = {}
 
+    roleinspect.ReportStageExtraInfo(
+        ROLEINSPECT_STAGE_FINAL,
+        "beforeFinalRoles",
+        roleselection.finalRoles
+    )
+
     ---
     -- @realm server
     hook.Run("TTT2ModifyFinalRoles", roleselection.finalRoles)
+
+    roleinspect.ReportStageExtraInfo(
+        ROLEINSPECT_STAGE_FINAL,
+        "afterFinalRoles",
+        roleselection.finalRoles
+    )
 
     local minWeight = roleselection.cv.ttt_role_derandomize_min_weight:GetInt()
 
