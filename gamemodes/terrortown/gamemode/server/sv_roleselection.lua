@@ -1269,6 +1269,7 @@ local function SelectBaseRolePlayers(plys, subrole, roleAmount)
                 ROLEINSPECT_STAGE_BASEROLES,
                 subrole,
                 ply,
+                ROLEINSPECT_DECISION_ROLE_ASSIGNED,
                 reason
             )
 
