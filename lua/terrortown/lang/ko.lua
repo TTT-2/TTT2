@@ -2299,8 +2299,10 @@ L.label_crosshair_size_gap = "크로스헤어 공간 배율"
 --L.label_button_level_reset = "reset level"
 
 --L.loadingscreen_round_restart_title = "Starting new round"
---L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
---L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_0 = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_1 = "you're playing on {map} for another {rounds} round(s) or {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_2 = "you're playing on {map} for {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_3 = "you're playing on {map} for another {rounds} round(s)"
 
 -- 2024-06-23
 --L.header_roles_derandomize = "Role Derandomization"

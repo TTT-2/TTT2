@@ -2302,8 +2302,10 @@ Bir raundu yeniden başlatmak yalnızca mevcut raundu yeniden başlatır, böyle
 L.label_button_level_reset = "haritayı sıfırla"
 
 L.loadingscreen_round_restart_title = "Yeni raunt başlıyor"
-L.loadingscreen_round_restart_subtitle = "{map} haritasında oynuyorsunuz"
-L.loadingscreen_round_restart_subtitle_limits = "{map} haritasında {rounds} raunt veya {time} daha oynayacaksınız"
+--L.loadingscreen_round_restart_subtitle_limits_mode_0 = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_1 = "you're playing on {map} for another {rounds} round(s) or {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_2 = "you're playing on {map} for {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_3 = "you're playing on {map} for another {rounds} round(s)"
 
 -- 2024-06-23
 L.header_roles_derandomize = "Rastgele Rol Dağıtımı"

@@ -2304,8 +2304,10 @@ L.help_round_restart_reset = [[
 L.label_button_level_reset = "сбросить уровень"
 
 L.loadingscreen_round_restart_title = "Начинается новый раунд"
-L.loadingscreen_round_restart_subtitle = "вы играете на карте {map}"
-L.loadingscreen_round_restart_subtitle_limits = "вы играете на карте {map}, которая продлится ещё {rounds} раунд (а/ов) или {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_0 = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_1 = "you're playing on {map} for another {rounds} round(s) or {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_2 = "you're playing on {map} for {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_3 = "you're playing on {map} for another {rounds} round(s)"
 
 -- 2024-06-23
 L.header_roles_derandomize = "Дерандомизация ролей"
