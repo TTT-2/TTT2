@@ -52,6 +52,7 @@ local drawFilteredShadowedTexture = draw.FilteredShadowedTexture
 local drawOutlinedBox = draw.OutlinedBox
 local drawFilteredTexture = draw.FilteredTexture
 local drawSimpleText = draw.SimpleText
+local drawDrawText = draw.DrawText
 local drawLine = draw.Line
 local drawGetWrappedText = draw.GetWrappedText
 local drawGetTextSize = draw.GetTextSize
@@ -1345,15 +1346,30 @@ function SKIN:PaintTooltipTTT2(panel, w, h)
     )
 
     if panel:HasText() then
-        drawSimpleText(
-            TryT(panel:GetText()),
-            panel:GetFont(),
-            0.5 * w,
-            0.5 * (h + sizeArrow),
-            utilGetDefaultColor(colors.background),
-            TEXT_ALIGN_CENTER,
-            TEXT_ALIGN_CENTER
-        )
+        local text = TryT(panel:GetText())
+
+        if string.find(text, "\n") then
+            -- has newlines, use drawDrawText
+            drawDrawText(
+                text,
+                panel:GetFont(),
+                10,--0.5 * w,
+                4 + sizeArrow,
+                utilGetDefaultColor(colors.background),
+                TEXT_ALIGN_LEFT
+            )
+        else
+            -- no newlines, can use drawSimpleText
+            drawSimpleText(
+                text,
+                panel:GetFont(),
+                0.5 * w,
+                0.5 * (h + sizeArrow),
+                utilGetDefaultColor(colors.background),
+                TEXT_ALIGN_CENTER,
+                TEXT_ALIGN_CENTER
+            )
+        end
     end
 end
 

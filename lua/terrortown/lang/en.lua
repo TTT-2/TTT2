@@ -2665,3 +2665,76 @@ considered. (This is relevant in the presence of forced subroles.)</p>
 </ol>
 
 ]]
+
+-- 2025-01-07
+L.submenu_roles_roleinspect = "Role Distribution Inspection"
+L.header_roleinspect_info = "Role Distribution Inspection"
+L.help_roleinspect = [[When this is enabled, information about the decisions made during role distribution is collected. If any such information is available, it is displayed on this page.
+
+Must be enabled when role selection happens (when the round starts) to take effect.]]
+L.label_roleinspect_enable = "Enable capturing role selection inspection information"
+
+-- Decisions
+L.roleinspect_decision_none = "No decision was made."
+L.roleinspect_decision_consider = "The role will be considered."
+L.roleinspect_decision_no_consider = "The role will not be considered."
+L.roleinspect_decision_role_assigned = "The role is assigned."
+L.roleinspect_decision_role_not_assigned = "The role is not assigned."
+
+-- ROLEINSPECT_STAGE_PRESELECT
+L.header_roleinspect_stage_preselect = "Stage 1: Preselection"
+L.help_roleinspect_stage_preselect = [[
+This stage determines the number of players that can be assigned each role. Roles with 0 possible players are not considered further.
+
+Hover over each role icon for details about that role.
+
+Max players: {maxPlayers}]]
+L.tooltip_preselect_role_desc = [[
+Role: {name}
+Decision: {decision}
+Reason: {reason}
+# of Players: {finalCount}]]
+
+-- Reasons
+-- REASON_FORCED for a CONSIDER decision in PRESELECT == Role is a builtin
+L.roleinspect_reason_forced_d_consider_s_preselect = "This is a builtin role, and will always be considerd."
+L.roleinspect_reason_passed_d_consider_s_preselect = "All requirements are met and all checks passed."
+L.roleinspect_reason_not_selectable_d_no_consider_s_preselect = "The role is not selectable."
+L.roleinspect_reason_role_chance_d_no_consider_s_preselect = "The random check for whether the role should appear failed."
+L.roleinspect_reason_no_players_d_no_consider_s_preselect = "There are not enough players for this role to spawn."
+
+-- ROLEINSPECT_STAGE_LAYERING
+L.header_roleinspect_stage_layering = "Stage 2: Layering"
+L.help_roleinspect_stage_layering = [[
+This stage distributes candidate roles among player slots. This is also where Role Layering is applied.
+
+The layers shown here will be different than thoes configured:
+- Roles that did not pass the previous stage are not shown
+- Layers with no candidate roles are not shown (and layers are renumbered)
+
+Hover over each role for details about that role.
+
+Max roles: {maxRoles}
+Max baseroles: {maxBaseroles}]]
+L.header_inspect_layers_baseroles = "Base role layers"
+L.header_inspect_layers_subroles = "{baserole} sub-role layers"
+L.tooltip_layering_role_desc = [[
+Role: {name}
+Decision: {decision}
+Reason: {reason}
+# of Players: {finalCount}]]
+
+-- Reasons
+L.roleinspect_reason_forced_d_consider_s_layering = L.roleinspect_reason_forced_d_consider_s_preselect
+L.roleinspect_reason_layer_d_consider_s_layering = "This is the selected role for this layer."
+L.roleinspect_reason_layer_d_no_consider_s_layering = "Another role from this layer was selected."
+L.roleinspect_reason_not_layered_d_consider_s_layering = "This role was selected after all layers were."
+L.roleinspect_reason_no_players_d_no_consider_s_layering = "Other roles filled all player slots."
+L.roleinspect_reason_too_many_roles_d_no_consider_s_layering = "Other roles filled all role slots."
+
+
+-- ROLEINSPECT_STAGE_BASEROLES
+
+-- ROLEINSPECT_STAGE_SUBROLES
+
+-- ROLEINSPECT_STAGE_FINAL

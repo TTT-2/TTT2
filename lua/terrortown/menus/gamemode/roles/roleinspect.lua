@@ -43,7 +43,7 @@ local function MakeRoleIcon(stage, roleIcons, role, decision, paramFmt)
     }
 
     if paramFmt then
-        params = paramFmt(params)
+        params = paramFmt(params) or params
     end
 
     ic:SetTooltip(DynT(
@@ -87,8 +87,8 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
     form:MakeHelp({
         label = "help_" .. stageFullName,
         params = {
-            maxRoles = OptIndex(stageData.extra.maxRoles, 1),
-            maxBaseroles = OptIndex(stageData.extra.maxBaseroles, 1),
+            maxRoles = OptIndex(stageData.extra.maxRoles, 1) or "N/A",
+            maxBaseroles = OptIndex(stageData.extra.maxBaseroles, 1) or "N/A",
         }
     })
 
@@ -156,7 +156,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
                 }
             end
             MakeRoleIcon(stage, icons, role, decision, function(params)
-                params.finalCount = tostring(finalSelectableRoles[role])
+                params.finalCount = tostring(finalSelectableRoles[role] or 0)
             end)
         end
     end
