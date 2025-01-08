@@ -189,6 +189,58 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
 
 end
 
+local function PopulateBaserolesStage(stage, form, stageData)
+    local stageFullName = roleinspect.GetStageFullName(stage)
+
+    form:MakeHelp({
+        label = "help_" .. stageFullName,
+        params = {
+
+        }
+    })
+
+    -- go through the assignment order to display selection info
+    for i,assignment in pairs(stageData.extra.assignOrder) do
+        -- assignment has amount, players, role
+        -- TODO:
+    end
+
+end
+
+local function PopulateSubrolesStage(stage, form, stageData)
+    local stageFullName = roleinspect.GetStageFullName(stage)
+
+    form:MakeHelp({
+        label = "help_" .. stageFullName,
+        params = {
+
+        }
+    })
+
+    -- TODO:
+end
+
+local function PopulateFinalStage(stage, form, stageData)
+    local stageFullName = roleinspect.GetStageFullName(stage)
+
+    form:MakeHelp({
+        label = "help_" .. stageFullName,
+        params = {
+
+        }
+    })
+
+    -- TODO:
+end
+
+local populateStageTbl = {
+    [ROLEINSPECT_STAGE_PRESELECT] = PopulatePreselectRoleStage,
+    [ROLEINSPECT_STAGE_LAYERING] = PopulateLayeringRoleStage,
+    [ROLEINSPECT_STAGE_BASEROLES] = PopulateBaserolesStage,
+    [ROLEINSPECT_STAGE_SUBROLES] = PopulateSubrolesStage,
+    [ROLEINSPECT_STAGE_FINAL] = PopulateFinalStage
+}
+
 local function PopulateUnhandledRoleStage(stage, form, stageData)
     form:MakeHelp({
         label = "help_" .. roleinspect.GetStageFullName(stage),
@@ -197,11 +249,6 @@ local function PopulateUnhandledRoleStage(stage, form, stageData)
     -- TODO: read decisions to try to create a crude approximation of the data in
     -- the case of new stages
 end
-
-local populateStageTbl = {
-    [ROLEINSPECT_STAGE_PRESELECT] = PopulatePreselectRoleStage,
-    [ROLEINSPECT_STAGE_LAYERING] = PopulateLayeringRoleStage,
-}
 
 function CLGAMEMODESUBMENU:Populate(parent)
     -- first add a tutorial form

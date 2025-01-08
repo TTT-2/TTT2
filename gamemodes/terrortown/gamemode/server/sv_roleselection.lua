@@ -945,6 +945,14 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
         local roleData = roles.GetByIndex(subrole)
         local roleCount = tmpSelectableRoles[subrole]
 
+        -- record the subrole order in the baserole slot
+        roleinspect.ReportRoleExtraInfo(
+            ROLEINSPECT_STAGE_SUBROLES,
+            roleData.baserole,
+            "subroleOrder",
+            subrole
+        )
+
         local plyWeights
 
         if derand then
