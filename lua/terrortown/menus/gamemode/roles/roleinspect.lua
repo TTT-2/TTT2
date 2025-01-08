@@ -20,11 +20,13 @@ local function OptIndex(tbl, index)
     return nil
 end
 
+local roleIconSize = 32
+
 local function MakeRoleIcon(stage, roleIcons, role, decision, paramFmt)
     local roleData = roles.GetByIndex(role)
 
     local ic = roleIcons:Add("DRoleImageTTT2")
-    ic:SetSize(32, 32)
+    ic:SetSize(roleIconSize, roleIconSize)
     ic:SetMaterial(roleData.iconMaterial)
     ic:SetColor(roleData.color)
     ic:SetEnabled(decision.decision == ROLEINSPECT_DECISION_CONSIDER)
@@ -49,7 +51,9 @@ local function MakeRoleIcon(stage, roleIcons, role, decision, paramFmt)
         params,
         true
     ))
-    ic:SetTooltipFixedPosition(0, 32)
+    ic:SetTooltipFixedPosition(0, roleIconSize)
+
+    ic.subrole = role
 
     return ic
 end
@@ -93,23 +97,42 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
 
     local function ComputeActualUnlayered(rawAvailable, layers, unlayeredInitial)
         local unlayered = unlayeredInitial or {}
-        local unlayeredInv = {}
-        for i,role in pairs(unlayered) do
-            unlayeredInv[role] = i
-        end
-
         -- actually build the base unlayered list
         for _,role in pairs(rawAvailable) do
             unlayered[#unlayered + 1] = role
-            unlayeredInv[role] = #unlayered
         end
 
         if layers then
             -- then go through the layers to remove from the unlayered list ones which are layered
-            for _,layer in pairs(layers) do
-                for _,role in pairs(layer) do
-                    local idx = unlayeredInv[role]
-                    table.remove(unlayered, idx)
+            local k = 1
+            while k <= #layers do
+                local layer = layers[k]
+                local i = 1
+                while i <= #layer do
+                    local role = layer[i]
+                    local idx
+                    for j = 1,#unlayered do
+                        if role == unlayered[j] then
+                            idx = j
+                            break
+                        end
+                    end
+
+                    if idx then
+                        table.remove(unlayered, idx)
+                        i = i + 1
+                    else
+                        -- the role wasn't in the raw set of available roles, so
+                        -- isn't a candidate and shouldn't be shown in the layers ui
+                        table.remove(layer, i)
+                    end
+                end
+
+                -- make sure to remove newly-empty layers
+                if #layer == 0 then
+                    table.remove(layers, k)
+                else
+                    k = k + 1
                 end
             end
         end
@@ -117,8 +140,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
         return unlayered
     end
 
-    local function ProcessLayer(parent, layer)
-        local icons = parent:MakeIconLayout()
+    local function ProcessLayer(icons, layer)
         for _,role in pairs(layer) do
             local decision
             local roleData = stageData.roles[role]
@@ -139,6 +161,35 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
         end
     end
 
+    local function PresentLayers(parent, layers, unlayered)
+        local layout = parent:MakeIconLayout()
+
+        if layers then
+            -- first, layers
+            local layersIcons = layout:Add("DRoleLayeringReceiverTTT2")
+            layersIcons:SetLeftMargin(108)
+            layersIcons:Dock(TOP)
+            layersIcons:SetPadding(5)
+            layersIcons:SetLayers(layers)
+            layersIcons:SetChildSize(roleIconSize, roleIconSize)
+
+            for _,layer in pairs(layers) do
+                ProcessLayer(layersIcons, layer)
+            end
+        end
+
+        if #unlayered > 0 then
+            -- then unlayered
+            local unlayeredIcons = layout:Add("DRoleLayeringSenderTTT2")
+            unlayeredIcons:SetLeftMargin(108)
+            unlayeredIcons:Dock(TOP)
+            unlayeredIcons:SetPadding(5)
+            unlayeredIcons:SetChildSize(roleIconSize, roleIconSize)
+
+            ProcessLayer(unlayeredIcons, unlayered)
+        end
+    end
+
     -- to that end, we want to compute the layered/unlayered baseroles
     local baseroleLayers = stageData.extra.afterBaseRoleLayers[1]
     local unlayeredBaseroles = ComputeActualUnlayered(
@@ -147,17 +198,10 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
         { ROLE_INNOCENT, ROLE_TRAITOR }
     )
 
-    -- TODO: make these layers look right
-
     local baseroleLayersForm = vgui.CreateTTT2Form(form, "header_inspect_layers_baseroles")
 
     -- now create the icons for each of the layers
-    for _,layer in pairs(baseroleLayers) do
-        ProcessLayer(baseroleLayersForm, layer)
-    end
-
-    -- then for unlayered
-    ProcessLayer(baseroleLayersForm, unlayeredBaseroles)
+    PresentLayers(baseroleLayersForm, baseroleLayers, unlayeredBaseroles)
 
     local availableSubroles = stageData.extra.afterAvailableSubRoles[1]
     local subroleLayers = stageData.extra.afterSubRoleLayers[1]
@@ -174,15 +218,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
             true
         ))
 
-        -- first, the layers
-        if layers then
-            for _,layer in pairs(layers) do
-                ProcessLayer(layersForm, layer)
-            end
-        end
-
-        -- then the unlayered
-        ProcessLayer(layersForm, unlayeredSubroles)
+        PresentLayers(layersForm, layers, unlayeredSubroles)
     end
 
     -- TODO: display subroleSelectBaseroleOrder in a reasonable way
@@ -275,8 +311,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
             local labelNoContent = vgui.Create("DLabelTTT2", parent)
             labelNoContent:SetText("label_menu_not_populated")
             labelNoContent:SetFont("DermaTTT2Title")
-            labelNoContent:SetPos(20, 100)
-            labelNoContent:FitContents()
+            labelNoContent:SetPos(20, 200)
+            --labelNoContent:FitContents()
             return
         end
 
