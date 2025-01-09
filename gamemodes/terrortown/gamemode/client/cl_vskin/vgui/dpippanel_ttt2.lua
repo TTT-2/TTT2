@@ -10,10 +10,6 @@ AccessorFunc(PANEL, "pipOuterOffset", "OuterOffset", FORCE_NUMBER)
 
 --- @ignore
 function PANEL:Init()
-    self.data = {
-        color = COLOR_WHITE,
-        icon = nil,
-    }
     self:SetPadding(0)
     self:SetInnerPadding(2)
     self:SetOuterOffset(0)

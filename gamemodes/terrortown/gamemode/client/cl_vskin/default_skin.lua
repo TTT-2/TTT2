@@ -2223,5 +2223,84 @@ function SKIN:PaintWeaponPreviewTTT2(panel, w, h)
     end
 end
 
+function SKIN:PaintPlayerGraphTTT2(panel, w, h)
+    local renderData = panel.renderData
+    local padding = panel:GetPadding()
+
+    if panel.title ~= "" then
+        -- title text
+        drawSimpleText(
+            panel.title,
+            panel:GetFont(),
+            renderData.titleX,
+            renderData.titleY,
+            colors.helpText,
+            TEXT_ALIGN_LEFT,
+            TEXT_ALIGN_TOP
+        )
+    end
+
+    local barColor = utilGetChangedColor(colors.background, 30)
+    local valueInsideColor = utilGetDefaultColor(barColor)
+    local valueOutsideColor = utilGetDefaultColor(colors.background)
+
+    if renderData.sepY then
+        -- title separator
+        drawBox(0, renderData.sepY, w, 1, barColor)
+    end
+
+    local hBarColor = colors.accent
+    local hValueInsideColor = colors.accentText
+
+    -- then the items
+    for i = 1,#renderData.order do
+        local item = renderData.order[i]
+        PrintTable(item)
+        -- first, draw the bar
+        local thisBarColor
+        if item.data.highlight then
+            thisBarColor = hBarColor
+        else
+            thisBarColor = barColor
+        end
+        --print(item.x, item.y)
+        drawBox(item.x, item.y, item.w, item.h, thisBarColor)
+        -- then the value text
+        if item.valueWidth > w - item.x - item.w - padding then
+            -- the value would take up too much space outside, put it inside
+            local thisTextCol
+            if item.data.highlight then
+                thisTextCol = hValueInsideColor
+            else
+                thisTextCol = valueInsideColor
+            end
+            local x = item.x + item.w - item.valueWidth - padding
+            --print(x, item.y)
+            drawSimpleText(
+                tostring(item.data.value),
+                panel:GetFont(),
+                x,
+                item.y,
+                thisTextCol,
+                TEXT_ALIGN_LEFT,
+                TEXT_ALIGN_TOP
+            )
+        else
+            -- the value will fit outside the bar, draw it there
+            --print(item.x + item.w + padding, item.y)
+            drawSimpleText(
+                tostring(item.data.value),
+                panel:GetFont(),
+                item.x + item.w + padding,
+                item.y,
+                valueOutsideColor,
+                TEXT_ALIGN_LEFT,
+                TEXT_ALIGN_TOP
+            )
+        end
+    end
+
+end
+
 -- REGISTER DERMA SKIN
 derma.DefineSkin(SKIN.Name, "TTT2 default skin for all vgui elements", SKIN)

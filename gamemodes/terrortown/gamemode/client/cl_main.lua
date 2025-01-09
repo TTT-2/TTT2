@@ -87,6 +87,7 @@ ttt_include("cl_vskin__vgui__dinfoitem")
 ttt_include("cl_vskin__vgui__dsubmenulist")
 ttt_include("cl_vskin__vgui__dweaponpreview")
 ttt_include("cl_vskin__vgui__dpippanel")
+ttt_include("cl_vskin__vgui__dplayergraph")
 
 ttt_include("cl_changes")
 ttt_include("cl_network_sync")

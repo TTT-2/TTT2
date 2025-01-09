@@ -286,7 +286,37 @@ local function PopulateBaserolesStage(stage, form, stageData)
     -- go through the assignment order to display selection info
     for i,assignment in pairs(stageData.extra.assignOrder) do
         -- assignment has amount, players, role
-        -- TODO:
+        local role = assignment.role
+        local roleData = roles.GetByIndex(role)
+
+        local itemForm = vgui.CreateTTT2Form(form, DynT(
+            "header_inspect_baseroles_order",
+            { name = roleData.name },
+            true
+        ))
+
+        local playerGraph = vgui.Create("DPlayerGraphTTT2", itemForm)
+        playerGraph:Dock(TOP)
+
+        local recordedRoleData = stageData.roles[role]
+        local decisions = recordedRoleData.decisions
+        local playerWeights = recordedRoleData.extra.playerWeights[1]
+
+        for k = 1,#assignment.players do
+            local ply = assignment.players[k]
+
+            local isHighlight = false
+            for j = 1,#decisions do
+                local dec = decisions[j]
+                if dec.ply == ply then
+                    isHighlight = true
+                    break
+                end
+            end
+
+            playerGraph:AddPlayer(ply, playerWeights[ply], isHighlight)
+        end
+
     end
 
 end
