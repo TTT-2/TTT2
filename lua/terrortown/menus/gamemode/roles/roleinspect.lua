@@ -199,6 +199,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
     )
 
     local baseroleLayersForm = vgui.CreateTTT2Form(form, "header_inspect_layers_baseroles")
+    baseroleLayersForm:SetExpanded(false) -- default to being collapsed
 
     -- now create the icons for each of the layers
     PresentLayers(baseroleLayersForm, baseroleLayers, unlayeredBaseroles)
@@ -209,6 +210,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
     orderForm:MakeHelp({
         label = "help_inspect_layers_order",
     })
+    orderForm:SetExpanded(false) -- default to being collapsed
     orderForm = orderForm:MakeIconLayout()
     orderForm:SetBorder(5)
     orderForm:SetSpaceX(5)
@@ -265,6 +267,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
             { baserole = baseroleData.name },
             true
         ))
+        layersForm:SetExpanded(false) -- default to being collapsed
 
         PresentLayers(layersForm, layers, unlayeredSubroles)
     end
@@ -294,6 +297,10 @@ local function PopulateBaserolesStage(stage, form, stageData)
             { name = roleData.name },
             true
         ))
+        itemForm:SetExpanded(false) -- default to being collapsed
+
+        -- TODO: render differently (and correctly) when playerWeights isn't present
+        -- (this means that derandomization is not in play)
 
         local playerGraph = vgui.Create("DPlayerGraphTTT2", itemForm)
         playerGraph:Dock(TOP)
@@ -400,6 +407,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
         for stage, stageData in pairs(roleinspectTable) do
             local stageFullName = roleinspect.GetStageFullName(stage)
             local stageForm = vgui.CreateTTT2Form(parent, "header_" .. stageFullName)
+            stageForm:SetExpanded(false) -- default to being collapsed
 
             local populateFn = populateStageTbl[stage] or PopulateUnhandledRoleStage
             populateFn(stage, stageForm, stageData)
