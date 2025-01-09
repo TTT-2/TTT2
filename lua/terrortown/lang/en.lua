@@ -2723,6 +2723,13 @@ Role: {name}
 Decision: {decision}
 Reason: {reason}
 # of Players: {finalCount}]]
+L.header_inspect_layers_order = "Subrole selection order"
+L.help_inspect_layers_order = [[
+When selecting available subroles, first a baserole is selected (shown as the large icon). Then, a subrole is selected according to layering (shown as the small icon).
+
+This is important because there is a maximum number of roles (either explicitly, or because of playercount). Once player slots or role slots are filled, assignment stops and all remaining roles are not used.]]
+L.tooltip_inspect_layers_baserole = "Base role: {name}"
+L.tooltip_inspect_layers_subrole = "Selected sub role: {name}"
 
 -- Reasons
 L.roleinspect_reason_forced_d_consider_s_layering = L.roleinspect_reason_forced_d_consider_s_preselect

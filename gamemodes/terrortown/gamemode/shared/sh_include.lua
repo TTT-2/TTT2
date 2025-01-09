@@ -149,6 +149,7 @@ TTTFiles = {
         file = "cl_vskin/vgui/dweaponpreview_ttt2.lua",
         on = "client",
     },
+    cl_vskin__vgui__dpippanel = { file = "cl_vskin/vgui/dpippanel_ttt2.lua", on = "client" },
 }
 
 if SERVER then
