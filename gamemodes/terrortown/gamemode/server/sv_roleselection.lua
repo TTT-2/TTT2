@@ -950,7 +950,7 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
             ROLEINSPECT_STAGE_SUBROLES,
             roleData.baserole,
             "subroleOrder",
-            subrole
+            { subrole = subrole, players = plys }
         )
 
         local plyWeights

@@ -1,8 +1,8 @@
 --- @ignore
 
 local table = table
-local TryT = LANG.TryTranslation
-local ParT = LANG.GetParamTranslation
+--local TryT = LANG.TryTranslation
+--local ParT = LANG.GetParamTranslation
 local DynT = LANG.GetDynamicTranslation
 
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
@@ -346,9 +346,7 @@ local function PopulateBaserolesStage(stage, form, stageData)
                 plyIcon:SetSize(roleIconSize, roleIconSize)
             end
         end
-
     end
-
 end
 
 local function PopulateSubrolesStage(stage, form, stageData)
@@ -361,7 +359,94 @@ local function PopulateSubrolesStage(stage, form, stageData)
         }
     })
 
-    -- TODO:
+    -- go through the assignment order to display selection info
+    for i,assignment in pairs(stageData.extra.upgradeOrder) do
+        -- assignment has baserole, subroles, players
+        local baserole = assignment.baserole
+        local baseroleData = roles.GetByIndex(baserole)
+        --local subroles = assignment.subroles
+        --local players = assignment.players
+
+        local baseroleForm = vgui.CreateTTT2Form(form, DynT(
+            "header_inspect_upgrade_order",
+            { name = baseroleData.name },
+            true
+        ))
+        baseroleForm:SetExpanded(false) -- default to being collapsed
+
+        -- TODO: display available subroles
+
+        local recBaseroleData = stageData.roles[baserole]
+        if not recBaseroleData then
+            local lbl = vgui.Create("DLabelTTT2", baseroleForm)
+            lbl:Dock(TOP)
+            lbl:SetText("label_inspect_no_subroles")
+            continue
+        end
+        for j,brAssignment in pairs(recBaseroleData.extra.subroleOrder) do
+            local subrole = brAssignment.subrole
+            local subroleData = roles.GetByIndex(subrole)
+            local srPlys = brAssignment.players
+            local recSubroleData = stageData.roles[subrole]
+            local decisions = recSubroleData.decisions
+            local playerWeights = OptIndex(recSubroleData.extra.playerWeights, 1)
+
+            local subroleForm = vgui.CreateTTT2Form(baseroleForm, DynT(
+                "header_inspect_subroles_order",
+                { name = subroleData.name },
+                true
+            ))
+
+            if playerWeights then
+                -- derandomization is enabled, weights are in play
+                local playerGraph = vgui.Create("DPlayerGraphTTT2", subroleForm)
+                playerGraph:Dock(TOP)
+
+                for k = 1,#srPlys do
+                    local ply = srPlys[k]
+
+                    local isHighlight = false
+                    for l = 1,#decisions do
+                        local dec = decisions[l]
+                        if dec.ply == ply then
+                            isHighlight = true
+                            break
+                        end
+                    end
+
+                    playerGraph:AddPlayer(ply, playerWeights[ply], isHighlight)
+                end
+            else
+                -- derandomization is not enabled, weights are not in play
+                -- just show a list of players assigned the role
+                local layout = subroleForm:MakeIconLayout()
+
+                for k = 1,#srPlys do
+                    local ply = srPlys[k]
+
+                    local isHighlight = false
+                    for l = 1,#decisions do
+                        local dec = decisions[l]
+                        if dec.ply == ply then
+                            isHighlight = true
+                            break
+                        end
+                    end
+
+                    local plyIcon = vgui.Create("SimpleIconAvatar", layout)
+                    plyIcon:SetPlayer(ply)
+                    plyIcon:SetTooltip(ply:GetName())
+                    plyIcon:SetMouseInputEnabled(true)
+                    plyIcon:SetAlpha(isHighlight and 255 or 75)
+                    plyIcon:SetAvatarSize(roleIconSize)
+                    plyIcon:SetIconSize(roleIconSize, roleIconSize)
+                    plyIcon:SetSize(roleIconSize, roleIconSize)
+                end
+            end
+
+        end
+
+    end
 end
 
 local function PopulateFinalStage(stage, form, stageData)
@@ -374,7 +459,35 @@ local function PopulateFinalStage(stage, form, stageData)
         }
     })
 
-    -- TODO:
+    local finalOrderList = form:MakeIconLayout()
+
+    local finalRoles = stageData.extra.afterFinalRoles[1]
+
+    for ply,role in pairs(finalRoles) do
+        local roleData = roles.GetByIndex(role)
+
+        local entry = vgui.Create("DPiPPanelTTT2", finalOrderList)
+        entry:SetPadding(4)
+        entry:SetOuterOffset(4)
+
+        -- first added panel is the main one (player is the main icon)
+        local plyIcon = entry:Add("SimpleIconAvatar")
+        plyIcon:SetPlayer(ply)
+        plyIcon:SetTooltip(ply:GetName())
+        plyIcon:SetMouseInputEnabled(true)
+        plyIcon:SetAvatarSize(roleIconSize)
+        plyIcon:SetIconSize(roleIconSize, roleIconSize)
+        plyIcon:SetSize(roleIconSize, roleIconSize)
+
+        -- align bottom-right, preferred-axis X
+        ic = entry:Add("DRoleImageTTT2", RIGHT, BOTTOM)
+        ic:SetSize(roleIconSize * 2 / 3, roleIconSize * 2 / 3)
+        ic:SetMaterial(roleData.iconMaterial)
+        ic:SetColor(roleData.color)
+        ic:SetMouseInputEnabled(true)
+        ic:SetTooltip(roleData.name)
+        ic:SetTooltipFixedPosition(0, roleIconSize * 2 / 3)
+    end
 end
 
 local populateStageTbl = {

@@ -2745,7 +2745,7 @@ L.roleinspect_reason_no_players_d_no_consider_s_layering = "Other roles filled a
 L.roleinspect_reason_too_many_roles_d_no_consider_s_layering = "Other roles filled all role slots."
 
 -- ROLEINSPECT_STAGE_BASEROLES
-L.header_roleinspect_stage_baseroles = "Stage 3: Baserole Assignment"
+L.header_roleinspect_stage_baseroles = "Stage 4: Baserole Assignment"
 L.help_roleinspect_stage_baseroles = [[
 This stage assigns baseroles to players. If derandomization is enabled, players' role weights are considered, and displayed below.
 
@@ -2753,5 +2753,16 @@ Each section shows all players which were considered for that baserole, with the
 L.header_inspect_baseroles_order = "{name} assignment"
 
 -- ROLEINSPECT_STAGE_SUBROLES
+L.header_roleinspect_stage_subroles = "Stage 5: Subrole Upgrading"
+L.help_roleinspect_stage_subroles = [[
+This stage upgrades players to subroles, from previously assigned baseroles.
+
+Information is presented as in the baseroles stage above. Each baserole is upgraded separately.]]
+L.header_inspect_upgrade_order = "Upgrading from {name}"
+L.header_inspect_subroles_order = "Subrole {name}"
+L.label_inspect_no_subroles = "No subroles were selectable."
 
 -- ROLEINSPECT_STAGE_FINAL
+L.header_roleinspect_stage_final = "Final Roles"
+L.help_roleinspect_stage_final = [[
+This shows the final role assignments. These may have been modified by a hook after subroles were assigned.]]
