@@ -16,6 +16,7 @@ GRAPH_SORT_MODE_NONE = 0
 GRAPH_SORT_MODE_HIGHLIGHT_ORDER = 1
 GRAPH_SORT_MODE_VALUE_ASC = 2
 GRAPH_SORT_MODE_VALUE_DESC = 3
+local GRAPH_SORT_MODE_MAX = 3
 
 local graphSortModeNames = {
     [GRAPH_SORT_MODE_NONE] = "graph_sort_mode_none",
@@ -46,6 +47,15 @@ function PANEL:AllowUserSort(allow)
     if allow then
         if not self.button then
             self.button = vgui.Create("DButtonTTT2", self)
+            self.button.DoClick = function(slf)
+                -- cycle between the sort modes
+                local mode = self.sortMode + 1
+                if mode > GRAPH_SORT_MODE_MAX then
+                    mode = 0
+                end
+                self.sortMode = mode
+                self:InvalidateLayout()
+            end
         end
     else
         if self.button then
@@ -129,9 +139,14 @@ function PANEL:PerformLayout()
     local titleY = 0
     local sepY = nil
 
-    -- TODO: the button is currently sized completely wrong. Fix
-
     -- first the tile space
+    if self.button then
+        local txt = TryT(graphSortModeNames[self.sortMode])
+        self.button:SetText(txt)
+        local tw, th = draw.GetTextSize(string.upper(txt), self.button:GetFont())
+        self.button:SetSize(tw + 8, th + 4)
+    end
+
     if self.title ~= "" then
         local titleHeight = fontHeight
         local tw, th = draw.GetTextSize(TryT(self.title), self:GetFont())
@@ -140,8 +155,6 @@ function PANEL:PerformLayout()
         titleHeight = math.max(titleHeight, th)
         w = math.max(w, tw + padding)
         if self.button then
-            self.button:SetText(graphSortModeNames[self.sortMode])
-            self.button:SizeToContents()
             self.button:SetPos(padding + tw, y)
             local bw, bh = self.button:GetSize()
             w = math.max(w, tw + padding + bw + padding)
@@ -152,8 +165,6 @@ function PANEL:PerformLayout()
         --sepY = y
         --y = y + 1 + padding -- separator
     elseif self.button then
-        self.button:SetText(graphSortModeNames[self.sortMode])
-        self.button:SizeToContents()
         self.button:SetPos(padding, y)
         local bw, bh = self.button:GetSize()
         w = math.max(w, bw + padding)

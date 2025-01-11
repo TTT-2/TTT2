@@ -2667,6 +2667,11 @@ considered. (This is relevant in the presence of forced subroles.)</p>
 ]]
 
 -- 2025-01-07
+L.graph_sort_mode_none = "No Sorting"
+L.graph_sort_mode_highlight_order = "Highlighted First"
+L.graph_sort_mode_value_asc = "Ascending"
+L.graph_sort_mode_value_desc = "Descending"
+
 L.submenu_roles_roleinspect = "Role Distribution Inspection"
 L.header_roleinspect_info = "Role Distribution Inspection"
 L.help_roleinspect = [[When this is enabled, information about the decisions made during role distribution is collected. If any such information is available, it is displayed on this page.
@@ -2739,8 +2744,13 @@ L.roleinspect_reason_not_layered_d_consider_s_layering = "This role was selected
 L.roleinspect_reason_no_players_d_no_consider_s_layering = "Other roles filled all player slots."
 L.roleinspect_reason_too_many_roles_d_no_consider_s_layering = "Other roles filled all role slots."
 
-
 -- ROLEINSPECT_STAGE_BASEROLES
+L.header_roleinspect_stage_baseroles = "Stage 3: Baserole Assignment"
+L.help_roleinspect_stage_baseroles = [[
+This stage assigns baseroles to players. If derandomization is enabled, players' role weights are considered, and displayed below.
+
+Each section shows all players which were considered for that baserole, with the highlighted ones being the ones actually selected.]]
+L.header_inspect_baseroles_order = "{name} assignment"
 
 -- ROLEINSPECT_STAGE_SUBROLES
 

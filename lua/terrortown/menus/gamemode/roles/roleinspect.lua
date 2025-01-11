@@ -271,9 +271,6 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
 
         PresentLayers(layersForm, layers, unlayeredSubroles)
     end
-
-    -- TODO: display subroleSelectBaseroleOrder in a reasonable way
-
 end
 
 local function PopulateBaserolesStage(stage, form, stageData)
@@ -299,29 +296,55 @@ local function PopulateBaserolesStage(stage, form, stageData)
         ))
         itemForm:SetExpanded(false) -- default to being collapsed
 
-        -- TODO: render differently (and correctly) when playerWeights isn't present
-        -- (this means that derandomization is not in play)
-
-        local playerGraph = vgui.Create("DPlayerGraphTTT2", itemForm)
-        playerGraph:Dock(TOP)
-
         local recordedRoleData = stageData.roles[role]
         local decisions = recordedRoleData.decisions
-        local playerWeights = recordedRoleData.extra.playerWeights[1]
+        local playerWeights = OptIndex(recordedRoleData.extra.playerWeights, 1)
 
-        for k = 1,#assignment.players do
-            local ply = assignment.players[k]
+        if playerWeights then
+            -- derandomization is enabled, weights are in play
+            local playerGraph = vgui.Create("DPlayerGraphTTT2", itemForm)
+            playerGraph:Dock(TOP)
 
-            local isHighlight = false
-            for j = 1,#decisions do
-                local dec = decisions[j]
-                if dec.ply == ply then
-                    isHighlight = true
-                    break
+            for k = 1,#assignment.players do
+                local ply = assignment.players[k]
+
+                local isHighlight = false
+                for j = 1,#decisions do
+                    local dec = decisions[j]
+                    if dec.ply == ply then
+                        isHighlight = true
+                        break
+                    end
                 end
-            end
 
-            playerGraph:AddPlayer(ply, playerWeights[ply], isHighlight)
+                playerGraph:AddPlayer(ply, playerWeights[ply], isHighlight)
+            end
+        else
+            -- derandomization is not enabled, weights are not in play
+            -- just show a list of players assigned the role
+            local layout = itemForm:MakeIconLayout()
+
+            for k = 1,#assignment.players do
+                local ply = assignment.players[k]
+
+                local isHighlight = false
+                for j = 1,#decisions do
+                    local dec = decisions[j]
+                    if dec.ply == ply then
+                        isHighlight = true
+                        break
+                    end
+                end
+
+                local plyIcon = vgui.Create("SimpleIconAvatar", layout)
+                plyIcon:SetPlayer(ply)
+                plyIcon:SetTooltip(ply:GetName())
+                plyIcon:SetMouseInputEnabled(true)
+                plyIcon:SetAlpha(isHighlight and 255 or 75)
+                plyIcon:SetAvatarSize(roleIconSize)
+                plyIcon:SetIconSize(roleIconSize, roleIconSize)
+                plyIcon:SetSize(roleIconSize, roleIconSize)
+            end
         end
 
     end
