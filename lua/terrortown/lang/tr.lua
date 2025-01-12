@@ -38,7 +38,9 @@ L.win_showreport = "{num} saniye boyunca raunt raporuna bakalım."
 
 L.limit_round = "Raunt sınırına ulaşıldı. Bir sonraki harita yakında yüklenecek."
 L.limit_time = "Zaman sınırına ulaşıldı. Bir sonraki harita yakında yüklenecek."
-L.limit_left = "Harita değişmeden önce {num} raunt veya {time} dakika kaldı."
+L.limit_left_session_mode_1 = "Harita değişmeden önce {num} raunt veya {time} dakika kaldı."
+--L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
+--L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "Takımınıza performansınız için {num} ekipman kredisi verildi."
@@ -167,8 +169,10 @@ L.quick_corpse_id = "{player} adlı ceset"
 
 -- Scoreboard
 L.sb_playing = "Şu anda bu sunucuda oynuyorsunuz..."
-L.sb_mapchange = "{num} rauntta veya {time} içinde harita değişecektir."
-L.sb_mapchange_disabled = "Oturum sınırları devre dışı."
+L.sb_mapchange_mode_0 = "Oturum sınırları devre dışı."
+L.sb_mapchange_mode_1 = "{num} rauntta veya {time} içinde harita değişecektir."
+--L.sb_mapchange_mode_2 = "Map changes in {time}"
+--L.sb_mapchange_mode_3 = "Map changes in {num} rounds"
 
 L.sb_mia = "Çatışmada Kayıp"
 L.sb_confirmed = "Onaylanmış Ölü"
@@ -1672,7 +1676,6 @@ L.label_round_limit = "Rauntların üst sınırı"
 L.label_time_limit_minutes = "Oyun süresinin dakika cinsinden üst sınırı"
 L.label_nade_throw_during_prep = "Hazırlık süresi boyunca bomba atmayı etkinleştir"
 L.label_postround_dm = "Raunt bittikten sonra ölüm maçını etkinleştir"
-L.label_session_limits_enabled = "Oturum sınırlarını etkinleştir"
 L.label_spectator_chat = "İzleyicilerin herkesle sohbet etmesini sağla"
 L.label_lastwords_chatprint = "Yazarken öldürülürse sohbete son kelimelerini yazdır"
 L.label_identify_body_woconfirm = "'Onayla' düğmesine basmadan cesedi tanımla"
@@ -2299,8 +2302,10 @@ Bir raundu yeniden başlatmak yalnızca mevcut raundu yeniden başlatır, böyle
 L.label_button_level_reset = "haritayı sıfırla"
 
 L.loadingscreen_round_restart_title = "Yeni raunt başlıyor"
-L.loadingscreen_round_restart_subtitle = "{map} haritasında oynuyorsunuz"
-L.loadingscreen_round_restart_subtitle_limits = "{map} haritasında {rounds} raunt veya {time} daha oynayacaksınız"
+--L.loadingscreen_round_restart_subtitle_limits_mode_0 = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_1 = "you're playing on {map} for another {rounds} round(s) or {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_2 = "you're playing on {map} for {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_3 = "you're playing on {map} for another {rounds} round(s)"
 
 -- 2024-06-23
 L.header_roles_derandomize = "Rastgele Rol Dağıtımı"
@@ -2369,3 +2374,20 @@ L.vehicle_enter = "Araca girmek için [{usekey}] tuşuna bas"
 
 -- 2024-11-27
 L.corpse_hint_without_confirm = "Aramak için [{usekey}] tuşuna bas."
+
+-- 2025-01-05
+--L.help_session_limits_mode = [[
+--There are three different session limit modes you can choose from:
+--
+--mode 0: No session limits. TTT2 will not end the session and will not trigger a map change.
+--
+--mode 1: Default TTT2 mode. A map change will trigger if either the session time or session round count runs out.
+--
+--mode 2: Only time limit. A map change will only trigger if the session time runs out.
+--
+--mode 3: Only round limit. A map change will only trigger if the session round count runs out.]]
+--L.label_session_limits_mode = "Set session limit mode"
+--L.choice_session_limits_mode_0 = "mode 0: no session limits"
+--L.choice_session_limits_mode_1 = "mode 1: time and round limit"
+--L.choice_session_limits_mode_2 = "mode 2: only time limit"
+--L.choice_session_limits_mode_3 = "mode 3: only round limit"

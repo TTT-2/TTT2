@@ -808,9 +808,9 @@ function GM:TTT2ModifyWinningAlives(alives) end
 -- @hook
 -- @realm server
 function GM:TTT2LoadNextMap(nextmap, roundsLeft, timeLeft)
-    if roundsLeft <= 0 then
+    if roundsLeft == 0 then
         LANG.Msg("limit_round", { mapname = nextmap })
-    elseif timeLeft <= 0 then
+    elseif timeLeft == 0 then
         LANG.Msg("limit_time", { mapname = nextmap })
     end
 

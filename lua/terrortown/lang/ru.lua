@@ -40,7 +40,9 @@ L.win_showreport = "Давайте посмотрим на результаты 
 
 L.limit_round = "Достигнут лимит раундов. Следующая карта скоро загрузится."
 L.limit_time = "Достигнут лимит времени. Следующая карта скоро загрузится."
-L.limit_left = "До смены карты осталось {num} раунд (а/ов) или {time} мин."
+L.limit_left_session_mode_1 = "До смены карты осталось {num} раунд (а/ов) или {time} мин."
+--L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
+--L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "Ваша команда награждена кредитами ({num}) за ваши действия."
@@ -169,8 +171,10 @@ L.quick_corpse_id = "{player} (тело)"
 
 -- Scoreboard
 L.sb_playing = "Вы играете на..."
-L.sb_mapchange = "Карта сменится через {num} раунд (а/ов) или {time}"
-L.sb_mapchange_disabled = "Лимиты сеанса выключены."
+L.sb_mapchange_mode_0 = "Лимиты сеанса выключены."
+L.sb_mapchange_mode_1 = "Карта сменится через {num} раунд (а/ов) или {time}"
+--L.sb_mapchange_mode_2 = "Map changes in {time}"
+--L.sb_mapchange_mode_3 = "Map changes in {num} rounds"
 
 L.sb_mia = "Пропавшие без вести"
 L.sb_confirmed = "Мёртвые"
@@ -1674,7 +1678,6 @@ L.label_round_limit = "Верхний лимит раундов"
 L.label_time_limit_minutes = "Верхний лимит времени игры в минутах"
 L.label_nade_throw_during_prep = "Включить метание гранат во время подготовки."
 L.label_postround_dm = "Включать бой насмерть по окончанию раунда."
-L.label_session_limits_enabled = "Включить лимиты сеанса."
 L.label_spectator_chat = "Включить общение наблюдателей со всеми."
 L.label_lastwords_chatprint = "Включить вывод последних слов в чат при смерти во время написания."
 L.label_identify_body_woconfirm = "Опознавать тела без нажатия кнопки подтверждения."
@@ -2301,8 +2304,10 @@ L.help_round_restart_reset = [[
 L.label_button_level_reset = "сбросить уровень"
 
 L.loadingscreen_round_restart_title = "Начинается новый раунд"
-L.loadingscreen_round_restart_subtitle = "вы играете на карте {map}"
-L.loadingscreen_round_restart_subtitle_limits = "вы играете на карте {map}, которая продлится ещё {rounds} раунд (а/ов) или {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_0 = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_1 = "you're playing on {map} for another {rounds} round(s) or {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_2 = "you're playing on {map} for {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_3 = "you're playing on {map} for another {rounds} round(s)"
 
 -- 2024-06-23
 L.header_roles_derandomize = "Дерандомизация ролей"
@@ -2371,3 +2376,20 @@ L.vehicle_enter = "[{usekey}] Сесть в транспорт."
 
 -- 2024-11-27
 L.corpse_hint_without_confirm = "[{usekey}] Осмотреть тело."
+
+-- 2025-01-05
+--L.help_session_limits_mode = [[
+--There are three different session limit modes you can choose from:
+--
+--mode 0: No session limits. TTT2 will not end the session and will not trigger a map change.
+--
+--mode 1: Default TTT2 mode. A map change will trigger if either the session time or session round count runs out.
+--
+--mode 2: Only time limit. A map change will only trigger if the session time runs out.
+--
+--mode 3: Only round limit. A map change will only trigger if the session round count runs out.]]
+--L.label_session_limits_mode = "Set session limit mode"
+--L.choice_session_limits_mode_0 = "mode 0: no session limits"
+--L.choice_session_limits_mode_1 = "mode 1: time and round limit"
+--L.choice_session_limits_mode_2 = "mode 2: only time limit"
+--L.choice_session_limits_mode_3 = "mode 3: only round limit"

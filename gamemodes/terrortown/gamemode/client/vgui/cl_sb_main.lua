@@ -176,9 +176,14 @@ function PANEL:Init()
         if gameloop.HasLevelLimits() then
             local r, t = gameloop.UntilMapChange()
 
-            sf:SetText(GetPTranslation("sb_mapchange", { num = r + 1, time = t }))
+            sf:SetText(
+                GetPTranslation(
+                    "sb_mapchange_mode_" .. gameloop.GetLevelLimitsMode(),
+                    { num = r + 1, time = t }
+                )
+            )
         else
-            sf:SetText(GetTranslation("sb_mapchange_disabled"))
+            sf:SetText(GetTranslation("sb_mapchange_mode_0"))
         end
 
         sf:SizeToContents()

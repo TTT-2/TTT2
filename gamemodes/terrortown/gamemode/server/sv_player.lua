@@ -672,12 +672,23 @@ local deathsounds = {
 }
 local deathsounds_count = #deathsounds
 
-local function PlayDeathSound(victim)
+local function PlayDeathSound(victim, isSilent)
     if not IsValid(victim) then
         return
     end
 
-    sound.Play(deathsounds[math.random(deathsounds_count)], victim:GetShootPos(), 90, 100)
+    local tbl = {
+        victim = victim,
+        sound = deathsounds[math.random(deathsounds_count)],
+    }
+
+    ---
+    -- @realm server
+    if hook.Run("TTT2PlayDeathScream", tbl, isSilent) == false then
+        return
+    end
+
+    sound.Play(tbl["sound"], victim:GetShootPos(), 90, 100)
 end
 
 ---
@@ -786,16 +797,13 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
     local killwep = util.WeaponFromDamage(dmginfo)
 
-    -- headshots, knife damage, and weapons tagged as silent all prevent death
-    -- sound from occurring
     ---@cast killwep -nil
-    if
-        not ply.was_headshot
-        and not dmginfo:IsDamageType(DMG_SLASH)
-        and not (IsValid(killwep) and killwep.IsSilent)
-    then
-        PlayDeathSound(ply)
-    end
+    PlayDeathSound(
+        ply,
+        ply.was_headshot
+            or dmginfo:IsDamageType(DMG_SLASH)
+            or (IsValid(killwep) and killwep.IsSilent)
+    )
 
     credits.HandleKillCreditsAward(ply, attacker)
 end
@@ -1650,6 +1658,17 @@ function GM:TTT2ShouldSkipHaste(victim, attacker) end
 -- @hook
 -- @realm server
 function GM:TTT2PostPlayerDeath(victim, inflictor, attacker) end
+
+---
+-- Use this hook to change/cancel the deathscream sound.
+-- @param table Table containing all data for the deathscream (victim, sound, isSilent).
+-- @param boolean isSilent If this is true, the deathscream will be silenced.
+-- @return[default=true] nil|boolean Return false to suppress the deathscream.
+-- @hook
+-- @realm server
+function GM:TTT2PlayDeathScream(tbl, isSilent)
+    return not isSilent
+end
 
 ---
 -- Returns whether PVP is allowed

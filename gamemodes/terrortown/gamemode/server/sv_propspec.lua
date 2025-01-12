@@ -9,9 +9,7 @@ local timer = timer
 
 PROPSPEC = {}
 
----
--- @realm server
-local cvPropspecToggle = CreateConVar("ttt_spec_prop_control", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
+local cvPropspecToggle = GetConVar("ttt_spec_prop_control")
 
 ---
 -- @realm server

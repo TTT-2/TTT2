@@ -38,7 +38,9 @@ L.win_showreport = "一起觀看觀看 {num} 秒的回合總結吧！"
 
 L.limit_round = "達到回合限制。即將加載下一張地圖。"
 L.limit_time = "達到時間限制。即將加載下一張地圖。"
-L.limit_left = "新地圖將在 {num} 回合或 {time} 分鐘後切換。"
+L.limit_left_session_mode_1 = "新地圖將在 {num} 回合或 {time} 分鐘後切換。"
+--L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
+--L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "你的陣營因為表現獲得了 {num} 點信用點數。"
@@ -167,8 +169,10 @@ L.quick_corpse_id = " {player} 的屍體"
 
 -- Scoreboard
 L.sb_playing = "你正在玩的伺服是.."
-L.sb_mapchange = "地圖將於 {num} 個回合或是 {time} 後更換"
-L.sb_mapchange_disabled = "地圖更換被禁用。"
+L.sb_mapchange_mode_0 = "地圖更換被禁用。"
+L.sb_mapchange_mode_1 = "地圖將於 {num} 個回合或是 {time} 後更換"
+--L.sb_mapchange_mode_2 = "Map changes in {time}"
+--L.sb_mapchange_mode_3 = "Map changes in {num} rounds"
 
 L.sb_mia = "下落不明"
 L.sb_confirmed = "確認死亡"
@@ -1672,7 +1676,6 @@ L.label_round_limit = "回合數上限"
 L.label_time_limit_minutes = "遊戲時間上限，以分鐘為單位"
 L.label_nade_throw_during_prep = "在準備時間內允許投擲手榴彈"
 L.label_postround_dm = "回合結束後啟用死亡競賽"
-L.label_session_limits_enabled = "啟用地圖更換"
 L.label_spectator_chat = "啟用觀察者與大家聊天的功能"
 L.label_lastwords_chatprint = "如果在打字時被殺，則發出最後一句話至聊天室"
 L.label_identify_body_woconfirm = "不按'確認'按鈕識別屍體"
@@ -2299,8 +2302,10 @@ L.decoy_help_primary = "安放誘餌"
 --L.label_button_level_reset = "reset level"
 
 --L.loadingscreen_round_restart_title = "Starting new round"
---L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
---L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_0 = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_1 = "you're playing on {map} for another {rounds} round(s) or {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_2 = "you're playing on {map} for {time}"
+--L.loadingscreen_round_restart_subtitle_limits_mode_3 = "you're playing on {map} for another {rounds} round(s)"
 
 -- 2024-06-23
 --L.header_roles_derandomize = "Role Derandomization"
@@ -2369,3 +2374,20 @@ L.decoy_help_primary = "安放誘餌"
 
 -- 2024-11-27
 --L.corpse_hint_without_confirm = "Press [{usekey}] to search."
+
+-- 2025-01-05
+--L.help_session_limits_mode = [[
+--There are three different session limit modes you can choose from:
+--
+--mode 0: No session limits. TTT2 will not end the session and will not trigger a map change.
+--
+--mode 1: Default TTT2 mode. A map change will trigger if either the session time or session round count runs out.
+--
+--mode 2: Only time limit. A map change will only trigger if the session time runs out.
+--
+--mode 3: Only round limit. A map change will only trigger if the session round count runs out.]]
+--L.label_session_limits_mode = "Set session limit mode"
+--L.choice_session_limits_mode_0 = "mode 0: no session limits"
+--L.choice_session_limits_mode_1 = "mode 1: time and round limit"
+--L.choice_session_limits_mode_2 = "mode 2: only time limit"
+--L.choice_session_limits_mode_3 = "mode 3: only round limit"
