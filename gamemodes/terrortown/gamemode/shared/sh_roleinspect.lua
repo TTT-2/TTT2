@@ -22,7 +22,7 @@ roleinspect.stageNames = {
     [ROLEINSPECT_STAGE_FORCED] = "forced",
     [ROLEINSPECT_STAGE_BASEROLES] = "baseroles",
     [ROLEINSPECT_STAGE_SUBROLES] = "subroles",
-    [ROLEINSPECT_STAGE_FINAL] = "final"
+    [ROLEINSPECT_STAGE_FINAL] = "final",
 }
 
 function roleinspect.GetStageName(stage)
@@ -56,7 +56,6 @@ end
 function roleinspect.GetDecisionFullName(decision)
     return "roleinspect_decision_" .. roleinspect.decisionNames[decision]
 end
-
 
 -- enum ROLEINSPECT_REASON
 -- indicates the reason that a decision was made
@@ -137,28 +136,34 @@ if SERVER then
     end
 
     function roleinspect.ReportStageExtraInfo(stage, key, info)
-        if not riEnabled then return end
+        if not riEnabled then
+            return
+        end
         local dstage = GetStageTable(stage)
         local tbl = GetOrAddTable(dstage.extra, key, EmptyTable)
         tbl[#tbl + 1] = MaybeClone(isfunction(info) and info() or info)
     end
 
     function roleinspect.ReportRoleExtraInfo(stage, role, key, info)
-        if not riEnabled then return end
+        if not riEnabled then
+            return
+        end
         local drole = GetRoleTable(stage, role)
         local tbl = GetOrAddTable(drole.extra, key, EmptyTable)
         tbl[#tbl + 1] = MaybeClone(isfunction(info) and info() or info)
     end
 
     function roleinspect.ReportDecision(stage, role, ply, decision, reason, extra)
-        if not riEnabled then return end
+        if not riEnabled then
+            return
+        end
         local drole = GetRoleTable(stage, role)
         local decisionTbl = drole.decisions
         decisionTbl[#decisionTbl + 1] = {
             ply = ply,
             decision = decision,
             reason = reason,
-            extra = MaybeClone(isfunction(extra) and extra() or extra)
+            extra = MaybeClone(isfunction(extra) and extra() or extra),
         }
     end
 

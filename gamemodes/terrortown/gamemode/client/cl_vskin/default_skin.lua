@@ -1353,7 +1353,7 @@ function SKIN:PaintTooltipTTT2(panel, w, h)
             drawDrawText(
                 text,
                 panel:GetFont(),
-                10,--0.5 * w,
+                10, --0.5 * w,
                 4 + sizeArrow,
                 utilGetDefaultColor(colors.background),
                 TEXT_ALIGN_LEFT
@@ -2253,7 +2253,7 @@ function SKIN:PaintPlayerGraphTTT2(panel, w, h)
     local hValueInsideColor = colors.accentText
 
     -- then the items
-    for i = 1,#renderData.order do
+    for i = 1, #renderData.order do
         local item = renderData.order[i]
         PrintTable(item)
         -- first, draw the bar
@@ -2299,7 +2299,6 @@ function SKIN:PaintPlayerGraphTTT2(panel, w, h)
             )
         end
     end
-
 end
 
 -- REGISTER DERMA SKIN

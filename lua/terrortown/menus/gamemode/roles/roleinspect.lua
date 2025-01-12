@@ -38,19 +38,17 @@ local function MakeRoleIcon(stage, roleIcons, role, decision, paramFmt)
         name = roleData.name,
         decision = roleinspect.GetDecisionFullName(decision.decision),
         reason = decision.reason
-            .. "_d_" .. roleinspect.GetDecisionName(decision.decision)
-            ..  "_s_" .. stageShortName,
+            .. "_d_"
+            .. roleinspect.GetDecisionName(decision.decision)
+            .. "_s_"
+            .. stageShortName,
     }
 
     if paramFmt then
         params = paramFmt(params) or params
     end
 
-    ic:SetTooltip(DynT(
-        "tooltip_" .. stageShortName .. "_role_desc",
-        params,
-        true
-    ))
+    ic:SetTooltip(DynT("tooltip_" .. stageShortName .. "_role_desc", params, true))
     ic:SetTooltipFixedPosition(0, roleIconSize)
 
     ic.subrole = role
@@ -64,8 +62,8 @@ local function PopulatePreselectRoleStage(stage, form, stageData)
     form:MakeHelp({
         label = "help_" .. stageFullName,
         params = {
-            maxPlayers = stageData.extra.maxPlayers[1]
-        }
+            maxPlayers = stageData.extra.maxPlayers[1],
+        },
     })
 
     local finalRoleCounts = stageData.extra.finalRoleCounts[1]
@@ -89,7 +87,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
         params = {
             maxRoles = OptIndex(stageData.extra.maxRoles, 1) or "N/A",
             maxBaseroles = OptIndex(stageData.extra.maxBaseroles, 1) or "N/A",
-        }
+        },
     })
 
     -- we want to create a setup similar to the normal role layering UI to present this
@@ -98,7 +96,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
     local function ComputeActualUnlayered(rawAvailable, layers, unlayeredInitial)
         local unlayered = unlayeredInitial or {}
         -- actually build the base unlayered list
-        for _,role in pairs(rawAvailable) do
+        for _, role in pairs(rawAvailable) do
             unlayered[#unlayered + 1] = role
         end
 
@@ -111,7 +109,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
                 while i <= #layer do
                     local role = layer[i]
                     local idx
-                    for j = 1,#unlayered do
+                    for j = 1, #unlayered do
                         if role == unlayered[j] then
                             idx = j
                             break
@@ -141,7 +139,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
     end
 
     local function ProcessLayer(icons, layer)
-        for _,role in pairs(layer) do
+        for _, role in pairs(layer) do
             local decision
             local roleData = stageData.roles[role]
             if not roleData and (role == ROLE_INNOCENT or role == ROLE_TRAITOR) then
@@ -150,10 +148,11 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
                     reason = ROLEINSPECT_REASON_FORCED,
                 }
             else
-                decision = roleData and roleData.decisions[1] or {
-                    decision = ROLEINSPECT_DECISION_NO_CONSIDER,
-                    reason = ROLEINSPECT_REASON_NOT_LAYERED
-                }
+                decision = roleData and roleData.decisions[1]
+                    or {
+                        decision = ROLEINSPECT_DECISION_NO_CONSIDER,
+                        reason = ROLEINSPECT_REASON_NOT_LAYERED,
+                    }
             end
             MakeRoleIcon(stage, icons, role, decision, function(params)
                 params.finalCount = tostring(finalSelectableRoles[role] or 0)
@@ -173,7 +172,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
             layersIcons:SetLayers(layers)
             layersIcons:SetChildSize(roleIconSize, roleIconSize)
 
-            for _,layer in pairs(layers) do
+            for _, layer in pairs(layers) do
                 ProcessLayer(layersIcons, layer)
             end
         end
@@ -217,7 +216,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
     orderForm:SetSpaceY(5)
     orderForm:SetStretchHeight(true)
 
-    for i = 1,#subroleSelectBaseroleOrder do
+    for i = 1, #subroleSelectBaseroleOrder do
         local orderItem = subroleSelectBaseroleOrder[i]
         local baseroleData = roles.GetByIndex(orderItem.baserole)
         local subroleData = roles.GetByIndex(orderItem.subrole)
@@ -232,11 +231,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
         ic:SetMaterial(baseroleData.iconMaterial)
         ic:SetColor(baseroleData.color)
         ic:SetMouseInputEnabled(true)
-        ic:SetTooltip(DynT(
-            "tooltip_inspect_layers_baserole",
-            { name = baseroleData.name },
-            true
-        ))
+        ic:SetTooltip(DynT("tooltip_inspect_layers_baserole", { name = baseroleData.name }, true))
         ic:SetTooltipFixedPosition(0, roleIconSize)
 
         -- align bottom-right, preferred-axis X
@@ -245,11 +240,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
         ic:SetMaterial(subroleData.iconMaterial)
         ic:SetColor(subroleData.color)
         ic:SetMouseInputEnabled(true)
-        ic:SetTooltip(DynT(
-            "tooltip_inspect_layers_subrole",
-            { name = subroleData.name },
-            true
-        ))
+        ic:SetTooltip(DynT("tooltip_inspect_layers_subrole", { name = subroleData.name }, true))
         ic:SetTooltipFixedPosition(0, roleIconSize * 2 / 3)
     end
 
@@ -257,16 +248,15 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
     local subroleLayers = stageData.extra.afterSubRoleLayers[1]
 
     -- generate the same thing for the subroles of each baserole
-    for baserole,subroles in pairs(availableSubroles) do
+    for baserole, subroles in pairs(availableSubroles) do
         local layers = subroleLayers[baserole]
         local unlayeredSubroles = ComputeActualUnlayered(subroles, layers)
         local baseroleData = roles.GetByIndex(baserole)
 
-        local layersForm = vgui.CreateTTT2Form(form, DynT(
-            "header_inspect_layers_subroles",
-            { baserole = baseroleData.name },
-            true
-        ))
+        local layersForm = vgui.CreateTTT2Form(
+            form,
+            DynT("header_inspect_layers_subroles", { baserole = baseroleData.name }, true)
+        )
         layersForm:SetExpanded(false) -- default to being collapsed
 
         PresentLayers(layersForm, layers, unlayeredSubroles)
@@ -278,22 +268,19 @@ local function PopulateBaserolesStage(stage, form, stageData)
 
     form:MakeHelp({
         label = "help_" .. stageFullName,
-        params = {
-
-        }
+        params = {},
     })
 
     -- go through the assignment order to display selection info
-    for i,assignment in pairs(stageData.extra.assignOrder) do
+    for i, assignment in pairs(stageData.extra.assignOrder) do
         -- assignment has amount, players, role
         local role = assignment.role
         local roleData = roles.GetByIndex(role)
 
-        local itemForm = vgui.CreateTTT2Form(form, DynT(
-            "header_inspect_baseroles_order",
-            { name = roleData.name },
-            true
-        ))
+        local itemForm = vgui.CreateTTT2Form(
+            form,
+            DynT("header_inspect_baseroles_order", { name = roleData.name }, true)
+        )
         itemForm:SetExpanded(false) -- default to being collapsed
 
         local recordedRoleData = stageData.roles[role]
@@ -305,11 +292,11 @@ local function PopulateBaserolesStage(stage, form, stageData)
             local playerGraph = vgui.Create("DPlayerGraphTTT2", itemForm)
             playerGraph:Dock(TOP)
 
-            for k = 1,#assignment.players do
+            for k = 1, #assignment.players do
                 local ply = assignment.players[k]
 
                 local isHighlight = false
-                for j = 1,#decisions do
+                for j = 1, #decisions do
                     local dec = decisions[j]
                     if dec.ply == ply then
                         isHighlight = true
@@ -324,11 +311,11 @@ local function PopulateBaserolesStage(stage, form, stageData)
             -- just show a list of players assigned the role
             local layout = itemForm:MakeIconLayout()
 
-            for k = 1,#assignment.players do
+            for k = 1, #assignment.players do
                 local ply = assignment.players[k]
 
                 local isHighlight = false
-                for j = 1,#decisions do
+                for j = 1, #decisions do
                     local dec = decisions[j]
                     if dec.ply == ply then
                         isHighlight = true
@@ -354,24 +341,21 @@ local function PopulateSubrolesStage(stage, form, stageData)
 
     form:MakeHelp({
         label = "help_" .. stageFullName,
-        params = {
-
-        }
+        params = {},
     })
 
     -- go through the assignment order to display selection info
-    for i,assignment in pairs(stageData.extra.upgradeOrder) do
+    for i, assignment in pairs(stageData.extra.upgradeOrder) do
         -- assignment has baserole, subroles, players
         local baserole = assignment.baserole
         local baseroleData = roles.GetByIndex(baserole)
         --local subroles = assignment.subroles
         --local players = assignment.players
 
-        local baseroleForm = vgui.CreateTTT2Form(form, DynT(
-            "header_inspect_upgrade_order",
-            { name = baseroleData.name },
-            true
-        ))
+        local baseroleForm = vgui.CreateTTT2Form(
+            form,
+            DynT("header_inspect_upgrade_order", { name = baseroleData.name }, true)
+        )
         baseroleForm:SetExpanded(false) -- default to being collapsed
 
         -- TODO: display available subroles
@@ -383,7 +367,7 @@ local function PopulateSubrolesStage(stage, form, stageData)
             lbl:SetText("label_inspect_no_subroles")
             continue
         end
-        for j,brAssignment in pairs(recBaseroleData.extra.subroleOrder) do
+        for j, brAssignment in pairs(recBaseroleData.extra.subroleOrder) do
             local subrole = brAssignment.subrole
             local subroleData = roles.GetByIndex(subrole)
             local srPlys = brAssignment.players
@@ -391,22 +375,21 @@ local function PopulateSubrolesStage(stage, form, stageData)
             local decisions = recSubroleData.decisions
             local playerWeights = OptIndex(recSubroleData.extra.playerWeights, 1)
 
-            local subroleForm = vgui.CreateTTT2Form(baseroleForm, DynT(
-                "header_inspect_subroles_order",
-                { name = subroleData.name },
-                true
-            ))
+            local subroleForm = vgui.CreateTTT2Form(
+                baseroleForm,
+                DynT("header_inspect_subroles_order", { name = subroleData.name }, true)
+            )
 
             if playerWeights then
                 -- derandomization is enabled, weights are in play
                 local playerGraph = vgui.Create("DPlayerGraphTTT2", subroleForm)
                 playerGraph:Dock(TOP)
 
-                for k = 1,#srPlys do
+                for k = 1, #srPlys do
                     local ply = srPlys[k]
 
                     local isHighlight = false
-                    for l = 1,#decisions do
+                    for l = 1, #decisions do
                         local dec = decisions[l]
                         if dec.ply == ply then
                             isHighlight = true
@@ -421,11 +404,11 @@ local function PopulateSubrolesStage(stage, form, stageData)
                 -- just show a list of players assigned the role
                 local layout = subroleForm:MakeIconLayout()
 
-                for k = 1,#srPlys do
+                for k = 1, #srPlys do
                     local ply = srPlys[k]
 
                     local isHighlight = false
-                    for l = 1,#decisions do
+                    for l = 1, #decisions do
                         local dec = decisions[l]
                         if dec.ply == ply then
                             isHighlight = true
@@ -443,9 +426,7 @@ local function PopulateSubrolesStage(stage, form, stageData)
                     plyIcon:SetSize(roleIconSize, roleIconSize)
                 end
             end
-
         end
-
     end
 end
 
@@ -454,16 +435,14 @@ local function PopulateFinalStage(stage, form, stageData)
 
     form:MakeHelp({
         label = "help_" .. stageFullName,
-        params = {
-
-        }
+        params = {},
     })
 
     local finalOrderList = form:MakeIconLayout()
 
     local finalRoles = stageData.extra.afterFinalRoles[1]
 
-    for ply,role in pairs(finalRoles) do
+    for ply, role in pairs(finalRoles) do
         local roleData = roles.GetByIndex(role)
 
         local entry = vgui.Create("DPiPPanelTTT2", finalOrderList)
@@ -495,7 +474,7 @@ local populateStageTbl = {
     [ROLEINSPECT_STAGE_LAYERING] = PopulateLayeringRoleStage,
     [ROLEINSPECT_STAGE_BASEROLES] = PopulateBaserolesStage,
     [ROLEINSPECT_STAGE_SUBROLES] = PopulateSubrolesStage,
-    [ROLEINSPECT_STAGE_FINAL] = PopulateFinalStage
+    [ROLEINSPECT_STAGE_FINAL] = PopulateFinalStage,
 }
 
 local function PopulateUnhandledRoleStage(stage, form, stageData)
@@ -523,7 +502,9 @@ function CLGAMEMODESUBMENU:Populate(parent)
     self.hasData = false
 
     roleinspect.GetDecisions(function(roleinspectTable)
-        if self.hasData then return end
+        if self.hasData then
+            return
+        end
 
         -- the provided table is the decisions table, or an empty table if the data is not available
         if #roleinspectTable == 0 then
@@ -548,7 +529,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
             local populateFn = populateStageTbl[stage] or PopulateUnhandledRoleStage
             populateFn(stage, stageForm, stageData)
         end
-
     end)
 end
 

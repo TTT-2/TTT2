@@ -841,7 +841,6 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
         selectableRoles[subrole] = rolesAmountList[subrole]
 
-
         roleinspect.ReportStageExtraInfo(
             ROLEINSPECT_STAGE_LAYERING,
             "subroleSelectBaseroleOrder",
@@ -962,7 +961,7 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
                 plyWeights = {}
 
                 -- precompute the weights table
-                for i = 1,#plys do
+                for i = 1, #plys do
                     local ply = plys[i]
                     -- record the weight for this role for this player
                     plyWeights[ply] = ply:GetRoleWeightTable()[subrole] or minWeight
@@ -979,7 +978,6 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
                 subrolePlayerWeightTbls[subrole] = plyWeights
             end
         end
-
 
         local pick, reason
         if not derand then
@@ -1235,7 +1233,7 @@ local function SelectBaseRolePlayers(plys, subrole, roleAmount)
 
     if derand then
         -- precompute the weights table
-        for i = 1,#plys do
+        for i = 1, #plys do
             local ply = plys[i]
             -- record the weight for this role for this player
             plyWeights[ply] = ply:GetRoleWeightTable()[subrole] or minWeight

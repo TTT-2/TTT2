@@ -39,10 +39,10 @@ function PANEL:Add(pnl, ...)
         return realPnl
     end
 
-    -- layer panels become sub-panels
+    -- later panels become sub-panels
     self.subPanels[#self.subPanels + 1] = {
         pnl = realPnl,
-        align = { ... }
+        align = { ... },
     }
 
     self:InvalidateLayout()
@@ -56,7 +56,7 @@ function PANEL:Clear()
         self.mainPanel:Remove()
         self.mainPanel = nil
     end
-    for _,pnl in pairs(self.subPanels) do
+    for _, pnl in pairs(self.subPanels) do
         pnl.pnl:Remove()
     end
     self.subPanels = {}
@@ -86,7 +86,7 @@ local axisCoordTbl = {
 }
 local axisSizeTbl = {
     [axisX] = "w",
-    [axisY] = "h"
+    [axisY] = "h",
 }
 
 function PANEL:PerformLayout()
@@ -125,7 +125,7 @@ function PANEL:PerformLayout()
 
         if istable(pnl.align) then
             -- loop through the alignments to identify it
-            for _,align in ipairs(pnl.align) do
+            for _, align in ipairs(pnl.align) do
                 local axis = 0
                 if align == TOP then
                     axis = axisY
@@ -172,8 +172,12 @@ function PANEL:PerformLayout()
 
         -- now that we've used the alignment properly, make sure the axes are nonzero
         -- so that our preferred axis move actually moves it
-        if alignx == 0 then alignx = -1 end
-        if aligny == 0 then aligny = -1 end
+        if alignx == 0 then
+            alignx = -1
+        end
+        if aligny == 0 then
+            aligny = -1
+        end
 
         local paxisCoord = axisCoordTbl[preferAxis]
         local paxisSize = axisSizeTbl[preferAxis]
@@ -181,7 +185,7 @@ function PANEL:PerformLayout()
 
         -- now that we have our target rectangle, check for intersections against all
         -- existing rectangles and adjust along the preferred axis to not overlap
-        for j = 1,#subPnlHitboxes do
+        for j = 1, #subPnlHitboxes do
             local box = subPnlHitboxes[j]
 
             if RectsOverlap(rect, box) then
@@ -191,8 +195,8 @@ function PANEL:PerformLayout()
                 rect[paxisCoord] = box[paxisCoord]
 
                 -- then, we adjust position by the width accodring to the align value
-                rect[paxisCoord] = rect[paxisCoord] +
-                    -paxisAlign * ((paxisAlign < 0 and box or rect)[paxisSize] + innerPadding)
+                rect[paxisCoord] = rect[paxisCoord]
+                    + -paxisAlign * ((paxisAlign < 0 and box or rect)[paxisSize] + innerPadding)
             end
         end
 
@@ -212,7 +216,7 @@ function PANEL:PerformLayout()
     self:SetSize(rightBound - leftBound, bottomBound - topBound)
     mainPanel:SetPos(mainx, mainy)
 
-    for pnl,recti in pairs(subPnlRelPos) do
+    for pnl, recti in pairs(subPnlRelPos) do
         local rect = subPnlHitboxes[recti]
         pnl:SetPos(mainx + rect.x, mainy + rect.y)
     end

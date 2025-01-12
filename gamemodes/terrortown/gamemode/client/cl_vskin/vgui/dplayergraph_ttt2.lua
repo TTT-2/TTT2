@@ -22,11 +22,11 @@ local graphSortModeNames = {
     [GRAPH_SORT_MODE_NONE] = "graph_sort_mode_none",
     [GRAPH_SORT_MODE_HIGHLIGHT_ORDER] = "graph_sort_mode_highlight_order",
     [GRAPH_SORT_MODE_VALUE_ASC] = "graph_sort_mode_value_asc",
-    [GRAPH_SORT_MODE_VALUE_DESC] = "graph_sort_mode_value_desc"
+    [GRAPH_SORT_MODE_VALUE_DESC] = "graph_sort_mode_value_desc",
 }
 
 function PANEL:Init()
-    self.players = { }
+    self.players = {}
     self:SetTitle("")
     self:SetFont("DermaTTT2TitleSmall")
     self:SetSortMode(GRAPH_SORT_MODE_NONE)
@@ -97,7 +97,7 @@ function PANEL:PerformLayout()
     local order = {}
     local orderFn
 
-    for _,data in pairs(self.players) do
+    for _, data in pairs(self.players) do
         order[#order + 1] = { data = data, x = 0, y = 0, w = 0, h = 0, valueWidth = 0 }
     end
 
@@ -173,10 +173,9 @@ function PANEL:PerformLayout()
         --y = y + 1 + padding -- separator
     end
 
-
     -- next space out the graph rows
     local maxValue
-    for i = 1,#order do
+    for i = 1, #order do
         local data = order[i]
 
         data.x = padding + fontHeight + padding -- this is the position of the actual bar
@@ -187,8 +186,7 @@ function PANEL:PerformLayout()
         data.data.icon:SetSize(fontHeight, fontHeight)
         data.data.icon:SetPos(padding, y)
 
-        maxValue = isnumber(maxValue) and
-            math.max(maxValue, data.data.value) or data.data.value
+        maxValue = isnumber(maxValue) and math.max(maxValue, data.data.value) or data.data.value
 
         local vw, vh = draw.GetTextSize(tostring(data.data.value))
         data.h = math.max(data.h, vh)
@@ -202,7 +200,7 @@ function PANEL:PerformLayout()
 
     -- width includes padding on both sides already, so we can set our size
     self:SetSize(w, y)
-    for i = 1,#order do
+    for i = 1, #order do
         local data = order[i]
 
         local proportionOfMax = data.data.value / maxValue
@@ -220,7 +218,6 @@ function PANEL:PerformLayout()
         sepY = sepY,
         order = order,
     }
-
 end
 
 ---
