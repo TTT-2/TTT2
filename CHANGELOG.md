@@ -10,6 +10,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added diagnostic information to the addonchecker output.
   - This also includes a Garry's Mod version check which triggers a warning if TTT2 is not compatible. First baseline version is '240313' (by @NickCloudAT)
 - Added support for "toggle_zoom" binds to trigger the radio commands menu (by @TW1STaL1CKY)
+- Added a menu to allow admins to inspect, in detail, how and why roles are distributed as they are (by @nike4613)
 
 ### Fixed
 
