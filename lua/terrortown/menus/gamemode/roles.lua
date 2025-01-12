@@ -11,6 +11,7 @@ CLGAMEMODEMENU.icon = Material("vgui/ttt/vskin/helpscreen/roles")
 CLGAMEMODEMENU.title = "menu_roles_title"
 CLGAMEMODEMENU.description = "menu_roles_description"
 CLGAMEMODEMENU.priority = 46
+CLGAMEMODEMENU.searchBarPlaceholder = "searchbar_roles_placeholder"
 
 CLGAMEMODEMENU.isInitialized = false
 CLGAMEMODEMENU.roles = nil

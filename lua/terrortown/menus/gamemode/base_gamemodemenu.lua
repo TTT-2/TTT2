@@ -10,6 +10,7 @@ CLGAMEMODEMENU.priority = 0
 CLGAMEMODEMENU.icon = nil
 CLGAMEMODEMENU.title = ""
 CLGAMEMODEMENU.description = ""
+CLGAMEMODEMENU.searchBarPlaceholder = nil
 
 CLGAMEMODEMENU.submenus = {}
 
@@ -203,6 +204,9 @@ function CLGAMEMODEMENU:FillNavPanel(navPanel, contentPanel, padding)
     submenuList:Dock(FILL)
     submenuList:SetPadding(padding)
     submenuList:SetBasemenuClass(self, contentPanel)
+    if self.searchBarPlaceholder then
+        submenuList:SetSearchBarPlaceholder(self.searchBarPlaceholder)
+    end
 
     -- REFRESH SIZE OF SUBMENULIST FOR CORRECT SUBMENU DEPENDENT SIZE
     submenuList:InvalidateLayout(true)

@@ -60,6 +60,21 @@ function PANEL:SetSearchBarSize(widthBar, heightBar)
 end
 
 ---
+-- Sets the search bar's placeholder text.
+-- @param string placeholder The placeholder text.
+-- @realm client
+function PANEL:SetSearchBarPlaceholder(placeholder)
+    if not self.searchBar then
+        return
+    end
+
+    self.searchBar:SetPlaceholderText(placeholder)
+    if self.searchBar:GetValue() == "" then
+        self.searchBar:SetCurrentPlaceholderText(placeholder)
+    end
+end
+
+---
 -- This function enables or disables the searchBar.
 -- @param boolean active
 -- @realm client
