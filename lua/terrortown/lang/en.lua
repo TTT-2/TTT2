@@ -2671,6 +2671,7 @@ L.graph_sort_mode_none = "No Sorting"
 L.graph_sort_mode_highlight_order = "Highlighted First"
 L.graph_sort_mode_value_asc = "Ascending"
 L.graph_sort_mode_value_desc = "Descending"
+L.graph_sort_mode_player_name = "Player Name"
 
 L.submenu_roles_roleinspect = "Role Distribution Inspection"
 L.header_roleinspect_info = "Role Distribution Inspection"

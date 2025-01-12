@@ -16,13 +16,15 @@ GRAPH_SORT_MODE_NONE = 0
 GRAPH_SORT_MODE_HIGHLIGHT_ORDER = 1
 GRAPH_SORT_MODE_VALUE_ASC = 2
 GRAPH_SORT_MODE_VALUE_DESC = 3
-local GRAPH_SORT_MODE_MAX = 3
+GRAPH_SORT_MODE_PLAYER_NAME = 4
+local GRAPH_SORT_MODE_MAX = 4
 
 local graphSortModeNames = {
     [GRAPH_SORT_MODE_NONE] = "graph_sort_mode_none",
     [GRAPH_SORT_MODE_HIGHLIGHT_ORDER] = "graph_sort_mode_highlight_order",
     [GRAPH_SORT_MODE_VALUE_ASC] = "graph_sort_mode_value_asc",
     [GRAPH_SORT_MODE_VALUE_DESC] = "graph_sort_mode_value_desc",
+    [GRAPH_SORT_MODE_PLAYER_NAME] = "graph_sort_mode_player_name",
 }
 
 function PANEL:Init()
@@ -118,6 +120,11 @@ function PANEL:PerformLayout()
         -- but high-valued entries first
         orderFn = function(a, b)
             return a.data.value > b.data.value
+        end
+    elseif self.sortMode == GRAPH_SORT_MODE_PLAYER_NAME then
+        -- sort by player name
+        orderFn = function(a, b)
+            return string.upper(a.data.player:GetName()) < string.upper(b.data.player:GetName())
         end
     end
 

@@ -2255,7 +2255,6 @@ function SKIN:PaintPlayerGraphTTT2(panel, w, h)
     -- then the items
     for i = 1, #renderData.order do
         local item = renderData.order[i]
-        PrintTable(item)
         -- first, draw the bar
         local thisBarColor
         if item.data.highlight then
