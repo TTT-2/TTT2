@@ -93,6 +93,14 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
     -- we want to create a setup similar to the normal role layering UI to present this
     local finalSelectableRoles = stageData.extra.finalSelectableRoles[1]
 
+    local function FindIndex(tbl, value)
+        for i = 1, #tbl do
+            if value == tbl[i] then
+                return i
+            end
+        end
+    end
+
     local function ComputeActualUnlayered(rawAvailable, layers, unlayeredInitial)
         local unlayered = unlayeredInitial or {}
         -- actually build the base unlayered list
@@ -108,13 +116,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
                 local i = 1
                 while i <= #layer do
                     local role = layer[i]
-                    local idx
-                    for j = 1, #unlayered do
-                        if role == unlayered[j] then
-                            idx = j
-                            break
-                        end
-                    end
+                    local idx = FindIndex(unlayered, role)
 
                     if idx then
                         table.remove(unlayered, idx)
@@ -380,6 +382,18 @@ local function PopulateSubrolesStage(stage, form, stageData)
                 DynT("header_inspect_subroles_order", { name = subroleData.name }, true)
             )
 
+            local function PlyIsHighlighted(ply)
+                local isHighlight = false
+                for l = 1, #decisions do
+                    local dec = decisions[l]
+                    if dec.ply == ply then
+                        isHighlight = true
+                        break
+                    end
+                end
+                return isHighlight
+            end
+
             if playerWeights then
                 -- derandomization is enabled, weights are in play
                 local playerGraph = vgui.Create("DPlayerGraphTTT2", subroleForm)
@@ -387,15 +401,7 @@ local function PopulateSubrolesStage(stage, form, stageData)
 
                 for k = 1, #srPlys do
                     local ply = srPlys[k]
-
-                    local isHighlight = false
-                    for l = 1, #decisions do
-                        local dec = decisions[l]
-                        if dec.ply == ply then
-                            isHighlight = true
-                            break
-                        end
-                    end
+                    local isHighlight = PlyIsHighlighted(ply)
 
                     playerGraph:AddPlayer(ply, playerWeights[ply], isHighlight)
                 end
@@ -406,15 +412,7 @@ local function PopulateSubrolesStage(stage, form, stageData)
 
                 for k = 1, #srPlys do
                     local ply = srPlys[k]
-
-                    local isHighlight = false
-                    for l = 1, #decisions do
-                        local dec = decisions[l]
-                        if dec.ply == ply then
-                            isHighlight = true
-                            break
-                        end
-                    end
+                    local isHighlight = PlyIsHighlighted(ply)
 
                     local plyIcon = vgui.Create("SimpleIconAvatar", layout)
                     plyIcon:SetPlayer(ply)
