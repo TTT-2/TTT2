@@ -2703,7 +2703,7 @@ Reason: {reason}
 
 -- Reasons
 -- REASON_FORCED for a CONSIDER decision in PRESELECT == Role is a builtin
-L.roleinspect_reason_forced_d_consider_s_preselect = "This is a builtin role, and will always be considerd."
+L.roleinspect_reason_forced_d_consider_s_preselect = "This is a builtin role, and will always be considered."
 L.roleinspect_reason_passed_d_consider_s_preselect = "All requirements are met and all checks passed."
 L.roleinspect_reason_not_selectable_d_no_consider_s_preselect = "The role is not selectable."
 L.roleinspect_reason_role_chance_d_no_consider_s_preselect = "The random check for whether the role should appear failed."
