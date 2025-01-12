@@ -24,6 +24,7 @@ function ROLE:RemoveRoleLoadout(ply, isRoleChange) end
 -- Checks whether a role is able to get selected (and maybe assigned to a @{Player}) if the round starts
 -- @param boolean avoidHook should the @{hook.TTT2RoleNotSelectable} hook be ignored?
 -- @return boolean
+-- @return ROLEINSPECT_REASON
 -- @realm server
 function ROLE:IsSelectable(avoidHook)
     if self == roles.INNOCENT or self == roles.TRAITOR then
@@ -42,6 +43,8 @@ function ROLE:IsSelectable(avoidHook)
         return false, ROLEINSPECT_REASON_NOT_ENABLED
     end
 
+    ---
+    -- @realm server
     if not avoidHook and hook.Run("TTT2RoleNotSelectable", self) then
         return false, ROLEINSPECT_REASON_NOT_SELECTABLE
     end

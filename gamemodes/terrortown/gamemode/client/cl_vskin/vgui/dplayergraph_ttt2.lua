@@ -6,10 +6,25 @@ local PANEL = {}
 
 local TryT = LANG.TryTranslation
 
+---
+-- @accessor string
+-- @realm client
 AccessorFunc(PANEL, "font", "Font", FORCE_STRING)
+---
+-- @accessor string
+-- @realm client
 AccessorFunc(PANEL, "title", "Title", FORCE_STRING)
-AccessorFunc(PANEL, "sortMode", "SortMode")
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "sortMode", "SortMode", FORCE_NUMBER)
+---
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "padding", "Padding", FORCE_NUMBER)
+---
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "minWidth", "MinWidth", FORCE_NUMBER)
 
 GRAPH_SORT_MODE_NONE = 0
@@ -27,6 +42,8 @@ local graphSortModeNames = {
     [GRAPH_SORT_MODE_PLAYER_NAME] = "graph_sort_mode_player_name",
 }
 
+---
+-- @ignore
 function PANEL:Init()
     self.players = {}
     self:SetTitle("")
@@ -40,6 +57,11 @@ function PANEL:Init()
     self:SetMinWidth(100)
 end
 
+---
+-- Gets or sets whether this pannel allows user-controlled sort mode.
+-- @param nil|boolean allow Whether to allow user sorting. If nil, no change is made.
+-- @return boolean Whether user sorting is currently allowed.
+-- @realm client
 function PANEL:AllowUserSort(allow)
     if allow == nil then
         return self.allowUserSort
@@ -70,6 +92,12 @@ function PANEL:AllowUserSort(allow)
     return allow
 end
 
+---
+-- Adds a player to the graph.
+-- @param Player ply The player to add.
+-- @param number value The value associated with the player.
+-- @param nil|boolean highlight Whether the player should be highlighted. Defaults to false.
+-- @realm client
 function PANEL:AddPlayer(ply, value, highlight)
     local plyIcon = vgui.Create("SimpleIconAvatar", self)
     plyIcon:SetPlayer(ply)
@@ -86,15 +114,23 @@ function PANEL:AddPlayer(ply, value, highlight)
     self:InvalidateLayout()
 end
 
+---
+-- Clears the graph.
+-- @realm client
 function PANEL:Clear()
     self.players = {}
     local lastUserSort = self:AllowUserSort()
     self:AllowUserSort(false)
-    self:Clear()
+    local children = self:GetChildren()
+    for i = 1, #children do
+        children[i]:Remove()
+    end
     self:AllowUserSort(lastUserSort)
     self:InvalidateLayout()
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
     local order = {}
     local orderFn

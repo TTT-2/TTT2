@@ -2226,6 +2226,11 @@ function SKIN:PaintWeaponPreviewTTT2(panel, w, h)
     end
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintPlayerGraphTTT2(panel, w, h)
     local renderData = panel.renderData
     local padding = panel:GetPadding()

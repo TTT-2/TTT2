@@ -4,11 +4,21 @@
 
 local PANEL = {}
 
+---
+-- @accessor string
+-- @realm client
 AccessorFunc(PANEL, "Padding", "Padding", FORCE_NUMBER)
+---
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "innerPadding", "InnerPadding", FORCE_NUMBER)
+---
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "pipOuterOffset", "OuterOffset", FORCE_NUMBER)
 
---- @ignore
+---
+-- @ignore
 function PANEL:Init()
     self:SetPadding(0)
     self:SetInnerPadding(2)
@@ -19,8 +29,11 @@ function PANEL:Init()
 end
 
 ---
--- @param pnl Panel
--- other args are DOCK enum values
+-- Adds a child panel. The first such panel is the "main" panel, and appears larger than the others. All others are positioned over the main, according to their alignment.
+-- @param Panel|string|table pnl The panel to add. If it is an actual panel, added directly. Otherwise, the name/table of a panel to create.
+-- @param DOCK ... Alignment. Only LEFT, RIGHT, TOP, and BOTTOM are valid. The first specified direction specifies the preferred axis (the axis along which it will be moved to prevent overlap).
+-- @return The added panel.
+-- @realm client
 function PANEL:Add(pnl, ...)
     local realPnl
     if ispanel(pnl) then
@@ -51,6 +64,9 @@ function PANEL:Add(pnl, ...)
     return realPnl
 end
 
+---
+-- Clears this panel.
+-- @realm client
 function PANEL:Clear()
     if self.mainPanel then
         self.mainPanel:Remove()
@@ -89,6 +105,8 @@ local axisSizeTbl = {
     [axisY] = "h",
 }
 
+---
+-- @ignore
 function PANEL:PerformLayout()
     --self:InvalidateChildren() -- Make sure we invoke our childrens' layout functions
 
