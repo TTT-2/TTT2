@@ -574,8 +574,8 @@ end
 -- @realm client
 function VOICE.UpdatePlayerVoiceVolume(ply)
     local mute = VOICE.GetPreferredPlayerVoiceMuted(ply)
-    if ply.SetMute then
-        ply:SetMute(mute)
+    if ply.SetMuted then
+        ply:SetMuted(mute)
     end
 
     local vol = VOICE.GetPreferredPlayerVoiceVolume(ply)

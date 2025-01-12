@@ -270,7 +270,7 @@ if SERVER then
     -- @realm server
     function admin.ShowVersion(ply)
         local text = Format(
-            "This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by the TTT2 Dev Team (v%s)\n",
+            "This is [TTT2] Trouble in Terrorist Town 2 - by the TTT2 Dev Team (v%s)\n",
             GAMEMODE.Version
         )
 

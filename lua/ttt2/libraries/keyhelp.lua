@@ -77,6 +77,8 @@ local cvEnableBoxBlur = CreateConVar("ttt2_hud_enable_box_blur", "1", FCVAR_ARCH
 -- @realm client
 local cvEnableDescription = CreateConVar("ttt2_hud_enable_description", "1", FCVAR_ARCHIVE)
 
+local cvPropspecToggle -- Cached later in the key register function
+
 keyhelp = keyhelp or {}
 keyhelp.keyHelpers = {}
 
@@ -349,7 +351,13 @@ function keyhelp.InitializeBasicKeys()
         KEYHELP_CORE,
         "label_keyhelper_possess_focus_entity",
         function(client)
-            if not client:IsSpec() or IsValid(client:GetObserverTarget()) then
+            cvPropspecToggle = cvPropspecToggle or GetConVar("ttt_spec_prop_control")
+
+            if
+                not client:IsSpec()
+                or IsValid(client:GetObserverTarget())
+                or not cvPropspecToggle:GetBool()
+            then
                 return
             end
 

@@ -9,6 +9,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Korean translation (by @Kojap)
 - Added diagnostic information to the addonchecker output.
   - This also includes a Garry's Mod version check which triggers a warning if TTT2 is not compatible. First baseline version is '240313' (by @NickCloudAT)
+- Added `GM:TTT2PlayDeathScream` hook to cancel or overwrite/change the deathscream sound that plays, when you die (by @NickCloudAT)
 - Added support for "toggle_zoom" binds to trigger the radio commands menu (by @TW1STaL1CKY)
 
 ### Fixed
@@ -29,6 +30,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed binoculars zooming not being predicted (by @Histalek)
 - Fixed an error when trying to pickup a placed equipment (e.g. beacon) (by @Histalek)
 - Fixed corpse searching sound playing when searched by a spectator, searched covertly, or searched long range (by @TW1STaL1CKY)
+- Fixed the mute button in the scoreboard not working (by @TW1STaL1CKY)
+- Fixed a few errors in shop error messages (by @Histalek)
+- Fixed `markerVision`'s registry table being able to contain duplicate obsolete entries, thus fixing potential syncing issues with markers (by @TW1STaL1CKY)
 
 ### Changed
 
@@ -42,6 +46,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - By default only `ttt` and `ttt2` map prefixes are enabled (by @Histalek)
 - Updated `ttt_identify_body_woconfirm` to be replicated across the server and client (by @Wryyyong)
 - Changed how Ammo is dropped; if drop should be from reserve ammo, now tries to drop a full ammo box instead of a full clip. (by @MrXonte)
+- Updated `ttt_spec_prop_control` to be replicated across the server and client (by @NickCloudAT)
+  - With this, the KeyHelp feature also hides the PropSpec bind if PropSpec is disabled on the server
+- Renamed `ttt_session_limits_enabled` to `ttt_session_limits_mode`, introducing a four-mode control (0-3) for managing how TTT2 ends a session. (by @NickCloudAT)
+  - Modes: 0 = No session limit, 1 = Default TTT, 2 = Only time limit, 3 = Only round limit
 - Moved all role-related admin options into the "Roles" menu (by @nike4613)
 - Improved description of role layering (by @nike4613)
 

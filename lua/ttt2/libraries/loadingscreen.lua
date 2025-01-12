@@ -238,11 +238,14 @@ if CLIENT then
             local roundsLeft, timeLeft = gameloop.UntilMapChange()
 
             text = LANG.GetParamTranslation(
-                "loadingscreen_round_restart_subtitle_limits",
+                "loadingscreen_round_restart_subtitle_limits_mode_" .. gameloop.GetLevelLimitsMode(),
                 { map = game.GetMap(), rounds = roundsLeft + 1, time = timeLeft }
             )
         else
-            text = LANG.TryTranslation("loadingscreen_round_restart_subtitle")
+            text = LANG.GetParamTranslation(
+                "loadingscreen_round_restart_subtitle_limits_mode_0",
+                { map = game.GetMap() }
+            )
         end
 
         draw.AdvancedText(
