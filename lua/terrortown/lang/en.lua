@@ -2699,6 +2699,8 @@ L.submenu_roles_roleinspect = "Role Distribution Inspection"
 L.header_roleinspect_info = "Role Distribution Inspection"
 L.help_roleinspect = [[When this is enabled, information about the decisions made during role distribution is collected. If any such information is available, it is displayed on this page.
 
+This information is only ever available for the last round which was started on this map with the option enabled.
+
 Must be enabled when role selection happens (when the round starts) to take effect.]]
 L.label_roleinspect_enable = "Enable capturing role selection inspection information"
 
@@ -2770,7 +2772,7 @@ L.roleinspect_reason_too_many_roles_d_no_consider_s_layering = "Other roles fill
 -- ROLEINSPECT_STAGE_BASEROLES
 L.header_roleinspect_stage_baseroles = "Stage 4: Baserole Assignment"
 L.help_roleinspect_stage_baseroles = [[
-This stage assigns baseroles to players. If derandomization is enabled, players' role weights are considered, and displayed below.
+This stage assigns baseroles to players. If derandomization is enabled, players' role weights are considered, and displayed below in a chart.
 
 Each section shows all players which were considered for that baserole, with the highlighted ones being the ones actually selected.]]
 L.header_inspect_baseroles_order = "{name} assignment"
