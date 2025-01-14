@@ -513,10 +513,13 @@ function CLGAMEMODESUBMENU:Populate(parent)
         if #roleinspectTable == 0 then
             -- empty table, put in an appropriate message
 
-            local labelNoContent = vgui.Create("DLabelTTT2", parent)
-            labelNoContent:SetText("label_menu_not_populated")
+            local labelHolder = vgui.Create("DPanelTTT2", parent)
+            labelHolder:Dock(TOP)
+            labelHolder:DockMargin(20, 20, 20, 20)
+            local labelNoContent = vgui.Create("DLabelTTT2", labelHolder)
+            labelNoContent:SetText("label_roleinspect_no_data")
             labelNoContent:SetFont("DermaTTT2Title")
-            labelNoContent:SetPos(20, 200)
+            labelNoContent:Dock(FILL)
             --labelNoContent:FitContents()
             return
         end
@@ -535,24 +538,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
     end)
 end
 
-function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
-    --[[
-    local buttonReset = vgui.Create("DButtonTTT2", parent)
-
-    buttonReset:SetText("button_reset")
-    buttonReset:SetSize(100, 45)
-    buttonReset:SetPos(20, 20)
-    buttonReset.DoClick = function()
-        rolelayering.SendDataToServer(ROLE_NONE, {})
-
-        for subrole in pairs(self.subroleList) do
-            rolelayering.SendDataToServer(subrole, {})
-        end
-    end
-    ]]
-end
-
 function CLGAMEMODESUBMENU:HasButtonPanel()
-    --return true
     return false
 end
