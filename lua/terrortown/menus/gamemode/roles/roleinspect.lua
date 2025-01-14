@@ -207,61 +207,66 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
 
     -- present subroleSelectBaseroleOrder
     local subroleSelectBaseroleOrder = stageData.extra.subroleSelectBaseroleOrder
-    local orderForm = vgui.CreateTTT2Form(form, "header_inspect_layers_order")
-    orderForm:MakeHelp({
-        label = "help_inspect_layers_order",
-    })
-    orderForm:SetExpanded(false) -- default to being collapsed
-    orderForm = orderForm:MakeIconLayout()
-    orderForm:SetBorder(5)
-    orderForm:SetSpaceX(5)
-    orderForm:SetSpaceY(5)
-    orderForm:SetStretchHeight(true)
 
-    for i = 1, #subroleSelectBaseroleOrder do
-        local orderItem = subroleSelectBaseroleOrder[i]
-        local baseroleData = roles.GetByIndex(orderItem.baserole)
-        local subroleData = roles.GetByIndex(orderItem.subrole)
+    if subroleSelectBaseroleOrder then
+        local orderForm = vgui.CreateTTT2Form(form, "header_inspect_layers_order")
+        orderForm:MakeHelp({
+            label = "help_inspect_layers_order",
+        })
+        orderForm:SetExpanded(false) -- default to being collapsed
+        orderForm = orderForm:MakeIconLayout()
+        orderForm:SetBorder(5)
+        orderForm:SetSpaceX(5)
+        orderForm:SetSpaceY(5)
+        orderForm:SetStretchHeight(true)
 
-        local entry = vgui.Create("DPiPPanelTTT2", orderForm)
-        entry:SetPadding(4)
-        entry:SetOuterOffset(4)
+        for i = 1, #subroleSelectBaseroleOrder do
+            local orderItem = subroleSelectBaseroleOrder[i]
+            local baseroleData = roles.GetByIndex(orderItem.baserole)
+            local subroleData = roles.GetByIndex(orderItem.subrole)
 
-        -- first added panel is the main one
-        local ic = entry:Add("DRoleImageTTT2")
-        ic:SetSize(roleIconSize, roleIconSize)
-        ic:SetMaterial(baseroleData.iconMaterial)
-        ic:SetColor(baseroleData.color)
-        ic:SetMouseInputEnabled(true)
-        ic:SetTooltip(DynT("tooltip_inspect_layers_baserole", { name = baseroleData.name }, true))
-        ic:SetTooltipFixedPosition(0, roleIconSize)
+            local entry = vgui.Create("DPiPPanelTTT2", orderForm)
+            entry:SetPadding(4)
+            entry:SetOuterOffset(4)
 
-        -- align bottom-right, preferred-axis X
-        ic = entry:Add("DRoleImageTTT2", RIGHT, BOTTOM)
-        ic:SetSize(roleIconSize * 2 / 3, roleIconSize * 2 / 3)
-        ic:SetMaterial(subroleData.iconMaterial)
-        ic:SetColor(subroleData.color)
-        ic:SetMouseInputEnabled(true)
-        ic:SetTooltip(DynT("tooltip_inspect_layers_subrole", { name = subroleData.name }, true))
-        ic:SetTooltipFixedPosition(0, roleIconSize * 2 / 3)
+            -- first added panel is the main one
+            local ic = entry:Add("DRoleImageTTT2")
+            ic:SetSize(roleIconSize, roleIconSize)
+            ic:SetMaterial(baseroleData.iconMaterial)
+            ic:SetColor(baseroleData.color)
+            ic:SetMouseInputEnabled(true)
+            ic:SetTooltip(DynT("tooltip_inspect_layers_baserole", { name = baseroleData.name }, true))
+            ic:SetTooltipFixedPosition(0, roleIconSize)
+
+            -- align bottom-right, preferred-axis X
+            ic = entry:Add("DRoleImageTTT2", RIGHT, BOTTOM)
+            ic:SetSize(roleIconSize * 2 / 3, roleIconSize * 2 / 3)
+            ic:SetMaterial(subroleData.iconMaterial)
+            ic:SetColor(subroleData.color)
+            ic:SetMouseInputEnabled(true)
+            ic:SetTooltip(DynT("tooltip_inspect_layers_subrole", { name = subroleData.name }, true))
+            ic:SetTooltipFixedPosition(0, roleIconSize * 2 / 3)
+        end
     end
 
-    local availableSubroles = stageData.extra.afterAvailableSubRoles[1]
-    local subroleLayers = stageData.extra.afterSubRoleLayers[1]
+    local availableSubroles = OptIndex(stageData.extra.afterAvailableSubRoles, 1)
+    local subroleLayers = OptIndex(stageData.extra.afterSubRoleLayers, 1)
 
-    -- generate the same thing for the subroles of each baserole
-    for baserole, subroles in pairs(availableSubroles) do
-        local layers = subroleLayers[baserole]
-        local unlayeredSubroles = ComputeActualUnlayered(subroles, layers)
-        local baseroleData = roles.GetByIndex(baserole)
+    if availableSubroles and subroleLayers then
+        -- generate the same thing for the subroles of each baserole
+        for baserole, subroles in pairs(availableSubroles) do
+            local layers = subroleLayers[baserole]
+            local unlayeredSubroles = ComputeActualUnlayered(subroles, layers)
+            local baseroleData = roles.GetByIndex(baserole)
 
-        local layersForm = vgui.CreateTTT2Form(
-            form,
-            DynT("header_inspect_layers_subroles", { baserole = baseroleData.name }, true)
-        )
-        layersForm:SetExpanded(false) -- default to being collapsed
+            local layersForm = vgui.CreateTTT2Form(
+                form,
+                DynT("header_inspect_layers_subroles", { baserole = baseroleData.name }, true)
+            )
+            layersForm:SetExpanded(false) -- default to being collapsed
 
-        PresentLayers(layersForm, layers, unlayeredSubroles)
+            PresentLayers(layersForm, layers, unlayeredSubroles)
+        end
     end
 end
 
