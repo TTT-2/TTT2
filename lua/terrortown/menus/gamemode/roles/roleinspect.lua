@@ -235,7 +235,9 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
             ic:SetMaterial(baseroleData.iconMaterial)
             ic:SetColor(baseroleData.color)
             ic:SetMouseInputEnabled(true)
-            ic:SetTooltip(DynT("tooltip_inspect_layers_baserole", { name = baseroleData.name }, true))
+            ic:SetTooltip(
+                DynT("tooltip_inspect_layers_baserole", { name = baseroleData.name }, true)
+            )
             ic:SetTooltipFixedPosition(0, roleIconSize)
 
             -- align bottom-right, preferred-axis X
