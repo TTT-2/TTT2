@@ -6,7 +6,7 @@
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
 CLGAMEMODESUBMENU.priority = 97
-CLGAMEMODESUBMENU.title = "submenu_administration_rolelayering_title"
+CLGAMEMODESUBMENU.title = "submenu_roles_rolelayering_title"
 
 function CLGAMEMODESUBMENU:Populate(parent) end
 

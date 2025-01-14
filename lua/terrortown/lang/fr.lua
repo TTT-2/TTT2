@@ -1313,7 +1313,7 @@ L.layering_not_layered = "Sans couche"
 L.layering_layer = "Couche {layer}"
 L.header_rolelayering_role = "Couche des rôles des {role}"
 L.header_rolelayering_baserole = "Couche des rôles de base"
-L.submenu_administration_rolelayering_title = "Couche des Rôles"
+L.submenu_roles_rolelayering_title = "Couche des Rôles"
 L.header_rolelayering_info = "Informations sur la priorité de distribution des rôles"
 L.help_rolelayering_roleselection = "La distribution des rôles se fait en deux étapes. La première étape consiste à distribuer les rôles de base, à savoir les rôles d'innocent, de traître et les rôles énumérés dans la case 'couche des rôles de base' ci-dessous. La deuxième étape permet de transformer ces rôles de base en sous-rôles."
 L.help_rolelayering_layers = "Un seul rôle est sélectionné dans chaque couche. En premier les rôles des couches personnalisées sont distribués en commençant par la première couche jusqu'à la dernière ou jusqu'à ce qu'il n'y ait plus de rôles pouvant être assignés. Selon ce qui se passe en premier, s'il reste des places disponibles pour des rôles, les rôles sans couche personnalisées seront également distribués."
@@ -1461,7 +1461,7 @@ L'indicateur en haut à gauche indique si le modèle de joueur a une hitbox pour
 L.menu_roles_title = "Paramètres des Rôles"
 L.menu_roles_description = "Configurez la sélection de rôles, les crédits d'équipement et bien plus encore."
 
-L.submenu_administration_roles_general_title = "Paramètres Généraux des Rôles"
+L.submenu_roles_roles_general_title = "Paramètres Généraux des Rôles"
 
 L.header_roles_info = "Informations sur le Rôle"
 L.header_roles_selection = "Paramètres de Sélection des Rôles"

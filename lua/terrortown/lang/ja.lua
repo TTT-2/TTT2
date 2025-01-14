@@ -1313,7 +1313,7 @@ L.layering_not_layered = "ノンレイヤード"
 L.layering_layer = "レイヤー{layer}"
 L.header_rolelayering_role = "{role}のレイヤリング"
 L.header_rolelayering_baserole = "基本役職のレイヤリング"
-L.submenu_administration_rolelayering_title = "役職レイヤー"
+L.submenu_roles_rolelayering_title = "役職レイヤー"
 L.header_rolelayering_info = "役職レイヤー情報"
 L.help_rolelayering_roleselection = "役職の配布プロセスは、2つのステージに分かれています。最初の段階では、Innocent、Traitor、および下の「基本役職レイヤー」ボックスにリストされている基本の役職が配布されます。第2ステージは、これらの基本役職をサブ役職にアップグレードするために使用されます。"
 L.help_rolelayering_layers = "各レイヤーからは、1つの役職のみが選択されます。まず、カスタムレイヤーにおける役職は、最初のレイヤーから最後のレイヤーに到達するか、それ以上の役職をアップグレードできなくなるまで分散されます。どちらが先であっても、アップグレード可能なスロットがまだ利用可能な場合は、階層化されていない役職も分散されます。"
@@ -1462,7 +1462,7 @@ L.help_models_select = [[
 L.menu_roles_title = "役職設定"
 L.menu_roles_description = "出現の有無、初期クレジット数などを\n役職ごとに設定できます。"
 
-L.submenu_administration_roles_general_title = "役職基本設定"
+L.submenu_roles_roles_general_title = "役職基本設定"
 
 L.header_roles_info = "役職情報"
 L.header_roles_selection = "比率"

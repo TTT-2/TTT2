@@ -1313,7 +1313,7 @@ L.layering_not_layered = "Ohne Ebene"
 L.layering_layer = "Ebene {layer}"
 L.header_rolelayering_role = "{role}-Ebene"
 L.header_rolelayering_baserole = "Basisrollenebenen"
-L.submenu_administration_rolelayering_title = "Rollenebenen"
+L.submenu_roles_rolelayering_title = "Rollenebenen"
 L.header_rolelayering_info = "Rollenebeneninformationen"
 L.help_rolelayering_roleselection = "Der Rollenverteilungsprozess ist in zwei Phasen unterteilt. In der ersten Phase werden Basisrollen verteilt, zu denen Unschuldige, Verräter und diejenigen gehören, welche in der 'Basisrollenebene' unten aufgeführt sind. Die zweite Phase dient dazu, diese Basisrollen zu Unterrollen aufzuwerten."
 L.help_rolelayering_layers = "Aus jeder Ebene wird nur eine Rolle ausgewählt. Zuerst werden die Rollen aus den benutzerdefinierten Ebenen verteilt, beginnend mit der ersten Ebene, bis die letzte erreicht ist oder keine Rollen mehr aufgewertet werden können. Was auch immer zuerst passiert, wenn noch aufwertbare Slots verfügbar sind, werden auch die nicht geschichteten Rollen verteilt."
@@ -1461,7 +1461,7 @@ Der kleine Indikator oben links zeigt an, ob das Spielermodell eine Kopftrefferb
 L.menu_roles_title = "Rollen Einstellungen"
 L.menu_roles_description = "Richte Rollenspawning, Ausrüsungspunkte und mehr ein."
 
-L.submenu_administration_roles_general_title = "Allgemeine Rolleneinstellungen"
+L.submenu_roles_roles_general_title = "Allgemeine Rolleneinstellungen"
 
 L.header_roles_info = "Roleninformationen"
 L.header_roles_selection = "Rollenauswahlparameter"

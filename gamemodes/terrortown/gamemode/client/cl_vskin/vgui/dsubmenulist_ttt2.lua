@@ -5,7 +5,6 @@
 local PANEL = {}
 
 -- Define sizes
-local heightNavHeader = 0 --10
 local heightNavButton = 50
 
 ---
@@ -63,7 +62,7 @@ end
 -- Sets the search bar's placeholder text.
 -- @param string placeholder The placeholder text.
 -- @realm client
-function PANEL:SetSearchBarPlaceholder(placeholder)
+function PANEL:SetSearchBarPlaceholderText(placeholder)
     if not self.searchBar then
         return
     end

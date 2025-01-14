@@ -1315,7 +1315,7 @@ L.layering_not_layered = "Без слоёв"
 L.layering_layer = "Слой {layer}"
 L.header_rolelayering_role = "Расслоение: {role}"
 L.header_rolelayering_baserole = "Расслоение базовых ролей"
-L.submenu_administration_rolelayering_title = "Расслоение ролей"
+L.submenu_roles_rolelayering_title = "Расслоение ролей"
 L.header_rolelayering_info = "Информация о расслоении ролей"
 L.help_rolelayering_roleselection = "Процесс распределения ролей делится на два этапа. В первом этапе распределяются базовые роли: невиновный, предатель и перечисленные в поле «Расслоение базовых ролей» ниже. Второй этап используется для улучшения этих базовых ролей в подроли."
 L.help_rolelayering_layers = "С каждого слоя выбирается только одна роль. Сперва распределяются роли из пользовательских слоёв, начиная с первого и заканчивая последним, либо до момента невозможности дальнейших улучшений. Что бы не произошло первым, если ещё остались ячейки для улучшений, нерасслоенные роли также будут распределены."
@@ -1463,7 +1463,7 @@ L.help_models_select = [[
 L.menu_roles_title = "Настройки ролей"
 L.menu_roles_description = "Настройки появления, кредитов и многого другого."
 
-L.submenu_administration_roles_general_title = "Общие настройки ролей"
+L.submenu_roles_roles_general_title = "Общие настройки ролей"
 
 L.header_roles_info = "Информация о роли"
 L.header_roles_selection = "Параметры выбора роли"
