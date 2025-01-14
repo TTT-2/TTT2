@@ -1807,10 +1807,7 @@ function SKIN:PaintSearchbar(panel, w, h)
     )
 
     -- Draw small blue bar on the bottom
-    --drawBox(leftPad, h - sizes.border - bottomPad, w - widthPad, sizes.border, colorBar)
-
-    -- Draw small blue bar across the top
-    drawBox(leftPad, topPad, w - widthPad, sizes.border, colorBar)
+    drawBox(leftPad, h - sizes.border - bottomPad, w - widthPad, sizes.border, colorBar)
 
     -- If not focussed draw placeholder text
     if panel:GetIsOnFocus() then
