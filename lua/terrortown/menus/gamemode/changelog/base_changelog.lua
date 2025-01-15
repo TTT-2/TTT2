@@ -8,12 +8,13 @@ local htmlStart = [[
                 background-color: rgb(22, 42, 57);
                 color: white;
                 font-weight: 100;
+                --ui-scale: /*TTT2-UISCALE*/;
             }
             body * {
-                font-size: 13pt;
+                font-size: calc(13pt * var(--ui-scale));
             }
             h1 {
-                font-size: 16pt;
+                font-size: calc(16pt * var(--ui-scale));
                 text-decoration: underline;
             }
         </style>
@@ -38,7 +39,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
     header = header .. "</h1>"
 
     local html = vgui.Create("DHTML", parent)
-    html:SetSize(500, 640)
+    local scale = appearance.GetGlobalScale()
+    html:SetSize(500 * scale, 640 * scale)
     html:Dock(FILL)
-    html:SetHTML(htmlStart .. header .. self.change.text .. htmlEnd)
+    html:SetHTML(string.Replace(htmlStart, "/*TTT2-UISCALE*/", tostring(scale)) .. header .. self.change.text .. htmlEnd)
 end

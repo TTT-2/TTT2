@@ -12,7 +12,7 @@ function PANEL:Init()
     self.layerList = {}
     self.layerBoxes = {}
 
-    self.m_iPadding = 5
+    self.m_iPadding = 5 * appearance.GetGlobalScale()
 end
 
 ---
@@ -220,6 +220,7 @@ function PANEL:InitRoles(layeredRoles)
     self:SetLayers(layeredRoles)
 
     local layerCount = #layeredRoles
+    local scale = appearance.GetGlobalScale()
 
     for layer = 1, layerCount do
         local currentLayerTable = layeredRoles[layer]
@@ -230,11 +231,11 @@ function PANEL:InitRoles(layeredRoles)
 
             -- create the role icon
             local ic = vgui.Create("DRoleImageTTT2", self)
-            ic:SetSize(64, 64)
+            ic:SetSize(64 * scale, 64 * scale)
             ic:SetMaterial(roleData.iconMaterial)
             ic:SetColor(roleData.color)
             ic:SetTooltip(roleData.name)
-            ic:SetTooltipFixedPosition(0, 64)
+            ic:SetTooltipFixedPosition(0, 64 * scale)
 
             ic.subrole = subrole
 

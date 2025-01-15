@@ -7,10 +7,11 @@ local PANEL = {}
 ---
 -- @ignore
 function PANEL:Init()
+    local scale = appearance.GetGlobalScale()
     self.TextArea = self:Add("DTextEntry")
     self.TextArea:Dock(RIGHT)
     self.TextArea:SetPaintBackground(false)
-    self.TextArea:SetWide(45)
+    self.TextArea:SetWide(45 * scale)
     self.TextArea:SetNumeric(true)
     self.TextArea:SetFont("DermaTTT2Text")
     self.TextArea:SetDrawLanguageID(false)
@@ -52,7 +53,7 @@ function PANEL:Init()
 
     self.Slider:SetTrapInside(true)
     self.Slider:Dock(FILL)
-    self.Slider:SetHeight(16)
+    self.Slider:SetHeight(16 * scale)
 
     self.Slider.Knob.OnMousePressed = function(panel, mcode)
         if mcode == MOUSE_MIDDLE then
@@ -75,12 +76,13 @@ function PANEL:Init()
     self.Slider.Knob.PerformLayout = function(slf)
         local _, pH = self:GetSize()
 
-        slf:SetSize(8, pH - 10)
+        local scale2 = appearance.GetGlobalScale()
+        slf:SetSize(8 * scale2, pH - 10 * scale2)
     end
 
     Derma_Hook(self.Slider, "Paint", "Paint", "NumSliderTTT2")
 
-    self:SetTall(32)
+    self:SetTall(32 * scale)
     self:SetMin(0)
     self:SetMax(1)
     self:SetDecimals(2)

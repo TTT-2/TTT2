@@ -64,9 +64,11 @@ function PANEL:Init()
     self.directionalLight = {}
     self.farZ = 4096
 
-    self:SetContentAlignment(5)
+    local scale = appearance.GetGlobalScale()
 
-    self:SetTall(22)
+    self:SetContentAlignment(5 * scale)
+
+    self:SetTall(22 * scale)
 
     self:SetFont("DermaTTT2TextLarge")
 

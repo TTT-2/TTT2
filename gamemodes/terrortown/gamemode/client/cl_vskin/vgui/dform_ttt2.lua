@@ -32,8 +32,9 @@ local materialDisable = Material("vgui/ttt/vskin/icon_disable")
 function PANEL:Init()
     self.items = {}
 
-    self:SetSpacing(4)
-    self:SetPadding(10)
+    local scale = appearance.GetGlobalScale()
+    self:SetSpacing(4 * scale)
+    self:SetPadding(10 * scale)
 
     self:SetPaintBackground(true)
 
@@ -74,11 +75,12 @@ end
 function PANEL:AddItem(left, right, buttonReset, buttonToggle, buttonRun)
     self:InvalidateLayout()
 
+    local scale = appearance.GetGlobalScale()
     local panel = vgui.Create("DSizeToContents", self)
 
     panel:SetSizeX(false)
     panel:Dock(TOP)
-    panel:DockPadding(10, 10, 10, 0)
+    panel:DockPadding(10 * scale, 10 * scale, 10 * scale, 0)
     panel:InvalidateLayout()
 
     if IsValid(buttonReset) then
@@ -100,10 +102,10 @@ function PANEL:AddItem(left, right, buttonReset, buttonToggle, buttonRun)
         left:SetParent(panel)
         left:Dock(LEFT)
         left:InvalidateLayout(true)
-        left:SetSize(350, 20)
+        left:SetSize(350 * scale, 20 * scale)
 
         right:SetParent(panel)
-        right:SetPos(350, 0)
+        right:SetPos(350 * scale, 0)
         right:InvalidateLayout(true)
     elseif IsValid(left) then
         left:SetParent(panel)
@@ -121,10 +123,11 @@ function PANEL:Rebuild() end
 -- FUNCTIONS TO POPULATE THE FORM
 
 local function MakeButton(parent)
+    local scale = appearance.GetGlobalScale()
     local button = vgui.Create("DButtonTTT2", parent)
 
     button:SetText("button_default")
-    button:SetSize(32, 32)
+    button:SetSize(32 * scale, 32 * scale)
 
     button.Paint = function(slf, w, h)
         derma.SkinHook("Paint", "FormButtonIconTTT2", slf, w, h)
@@ -189,6 +192,7 @@ end
 -- @return Panel The created textentry
 -- @realm client
 function PANEL:MakeTextEntry(data)
+    local scale = appearance.GetGlobalScale()
     local left = vgui.Create("DLabelTTT2", self)
 
     left:SetText(data.label)
@@ -241,7 +245,7 @@ function PANEL:MakeTextEntry(data)
         end
     end
 
-    right:SetTall(32)
+    right:SetTall(32 * scale)
     right:Dock(TOP)
 
     self:AddItem(left, right, reset, toggle, run)
@@ -271,6 +275,7 @@ end
 -- @return Panel The created checkbox
 -- @realm client
 function PANEL:MakeCheckBox(data)
+    local scale = appearance.GetGlobalScale()
     local left = vgui.Create("DCheckBoxLabelTTT2", self)
 
     local reset = MakeResetButton(self)
@@ -297,7 +302,7 @@ function PANEL:MakeCheckBox(data)
     left:SetServerConVar(data.serverConvar)
     left:SetDatabase(data.database)
 
-    left:SetTall(32)
+    left:SetTall(32 * scale)
 
     if not data.convar and not data.serverConvar and not data.database and data.initial then
         left:SetValue(data.initial)
@@ -340,6 +345,7 @@ end
 -- @return Panel The created slider
 -- @realm client
 function PANEL:MakeSlider(data)
+    local scale = appearance.GetGlobalScale()
     local left = vgui.Create("DLabelTTT2", self)
 
     left:SetText(data.label)
@@ -390,7 +396,7 @@ function PANEL:MakeSlider(data)
         end
     end
 
-    right:SetTall(32)
+    right:SetTall(32 * scale)
     right:Dock(TOP)
 
     self:AddItem(left, right, reset, toggle, run)
@@ -426,6 +432,7 @@ end
 -- @return Panel The created slider
 -- @realm client
 function PANEL:MakeButton(data)
+    local scale = appearance.GetGlobalScale()
     local left = vgui.Create("DLabelTTT2", self)
 
     left:SetText(data.label)
@@ -444,7 +451,7 @@ function PANEL:MakeButton(data)
         right.DoClick = data.OnClick
     end
 
-    right:SetTall(32)
+    right:SetTall(32 * scale)
     right:Dock(TOP)
 
     right.Paint = function(slf, w, h)
@@ -547,7 +554,8 @@ function PANEL:MakeComboBox(data)
         end
     end
 
-    right:SetTall(32)
+    local scale = appearance.GetGlobalScale()
+    right:SetTall(32 * scale)
     right:Dock(TOP)
 
     self:AddItem(left, right, reset, toggle, run)
@@ -612,7 +620,8 @@ function PANEL:MakeBinder(data)
 
     right.disable.material = materialDisable
 
-    right:SetTall(32)
+    local scale = appearance.GetGlobalScale()
+    right:SetTall(32 * scale)
     right:Dock(TOP)
 
     local reset = MakeResetButton(self)
@@ -669,15 +678,16 @@ end
 -- @return Panel The created helpbox
 -- @realm client
 function PANEL:MakeHelp(data)
+    local scale = appearance.GetGlobalScale()
     local left = vgui.Create("DLabelTTT2", self)
 
     left:SetText(data.label)
     left:SetTextParams(data.params)
-    left:SetContentAlignment(7)
+    left:SetContentAlignment(7 * scale)
     left:SetAutoStretchVertical(true)
 
-    left.paddingX = 10
-    left.paddingY = 5
+    left.paddingX = 10 * scale
+    left.paddingY = 5 * scale
 
     left.Paint = function(slf, w, h)
         derma.SkinHook("Paint", "HelpLabelTTT2", slf, w, h)
@@ -689,11 +699,11 @@ function PANEL:MakeHelp(data)
     left.PerformLayout = function(slf, w, h)
         local textTranslated =
             LANG.GetParamTranslation(slf:GetText(), LANG.TryTranslation(slf:GetTextParams()))
+        local font, scale2, fcmod = fonts.ScaledFont(slf:GetFont(), appearance.GetGlobalScale())
+        local textWrapped = draw.GetWrappedText(textTranslated, (w - 2 * slf.paddingX) / fcmod, font)
+        local _, heightText = draw.GetTextSize("", font)
 
-        local textWrapped = draw.GetWrappedText(textTranslated, w - 2 * slf.paddingX, slf:GetFont())
-        local _, heightText = draw.GetTextSize("", slf:GetFont())
-
-        slf:SetSize(w, heightText * #textWrapped + 2 * slf.paddingY)
+        slf:SetSize(w, heightText * scale2 * #textWrapped + 2 * slf.paddingY)
     end
 
     self:AddItem(left, nil)
@@ -717,14 +727,15 @@ end
 -- @return Panel The created label
 -- @realm client
 function PANEL:MakeColorMixer(data)
+    local scale = appearance.GetGlobalScale()
     local left = vgui.Create("DLabelTTT2", self)
     local right = vgui.Create("DPanel", self)
 
-    left:SetTall(data.height or 240)
-    right:SetTall(data.height or 240)
+    left:SetTall(data.height or 240 * scale)
+    right:SetTall(data.height or 240 * scale)
 
     right:Dock(TOP)
-    right:DockPadding(10, 10, 10, 10)
+    right:DockPadding(10 * scale, 10 * scale, 10 * scale, 10 * scale)
 
     left:SetText(data.label)
 
@@ -794,9 +805,10 @@ end
 -- @return Panel The created card
 -- @realm client
 function PANEL:MakeShopCard(data, base)
+    local scale = appearance.GetGlobalScale()
     local card = base:Add("DShopCardTTT2")
 
-    card:SetSize(238, 78)
+    card:SetSize(238 * scale, 78 * scale)
     card:SetIcon(data.icon)
     card:SetText(data.label)
     card:SetMode(data.initial)
@@ -818,10 +830,11 @@ end
 -- @return Panel The created card
 -- @realm client
 function PANEL:MakeComboCard(data, base)
+    local scale = appearance.GetGlobalScale()
     local card = base:Add("DComboCardTTT2")
 
     -- todo smaller, higher - square?
-    card:SetSize(175, 205)
+    card:SetSize(175 * scale, 205 * scale)
     card:SetIcon(data.icon)
     card:SetText(data.label)
     card:SetTagText(data.tag)
@@ -844,9 +857,10 @@ end
 -- @return Panel The created image check box
 -- @realm client
 function PANEL:MakeImageCheckBox(data, base)
+    local scale = appearance.GetGlobalScale()
     local box = base:Add("DImageCheckBoxTTT2")
 
-    box:SetSize(238, 175)
+    box:SetSize(238 * scale, 175 * scale)
     box:SetModel(data.model)
     box:SetHeadBox(data.headbox or false)
     box:SetText(data.label)
@@ -879,10 +893,11 @@ end
 -- @return Panel The created panel
 -- @realm client
 function PANEL:MakeIconLayout(spacing)
+    local scale = appearance.GetGlobalScale()
     local panel = vgui.Create("DIconLayout", self)
 
-    panel:SetSpaceY(spacing or 10)
-    panel:SetSpaceX(spacing or 10)
+    panel:SetSpaceY(spacing or 10 * scale)
+    panel:SetSpaceX(spacing or 10 * scale)
 
     self:AddItem(panel)
 

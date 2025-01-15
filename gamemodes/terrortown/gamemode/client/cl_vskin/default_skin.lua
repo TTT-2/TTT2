@@ -52,10 +52,13 @@ local drawFilteredShadowedTexture = draw.FilteredShadowedTexture
 local drawOutlinedBox = draw.OutlinedBox
 local drawFilteredTexture = draw.FilteredTexture
 local drawSimpleText = draw.SimpleText
+local drawAdvancedText = draw.AdvancedText
 local drawLine = draw.Line
 local drawGetWrappedText = draw.GetWrappedText
 local drawGetTextSize = draw.GetTextSize
 local drawGetLimitedLengthText = draw.GetLimitedLengthText
+
+local GetGlobalScale = appearance.GetGlobalScale
 
 local alphaDisabled = 100
 
@@ -203,7 +206,7 @@ function SKIN:PaintFrameTTT2(panel, w, h)
         text = TryT(title)
     end
 
-    drawShadowedText(
+    drawAdvancedText(
         text,
         panel:GetTitleFont(),
         0.5 * w,
@@ -211,7 +214,8 @@ function SKIN:PaintFrameTTT2(panel, w, h)
         colors.titleText,
         TEXT_ALIGN_CENTER,
         TEXT_ALIGN_CENTER,
-        1
+        true,
+        GetGlobalScale()
     )
 end
 
@@ -239,7 +243,7 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintButtonPanelTTT2(panel, w, h)
-    drawBox(0, 0, w, 1, ColorAlpha(colors.default, 200))
+    drawBox(0, 0, w, 1 * GetGlobalScale(), ColorAlpha(colors.default, 200))
 end
 
 ---
@@ -260,14 +264,14 @@ function SKIN:PaintWindowCloseButton(panel, w, h)
     local colorBackground = colors.accent
     local colorText = ColorAlpha(colors.accentText, 150)
     local shift = 0
-    local padding = 15
+    local padding = 15 * GetGlobalScale()
 
     if not panel:IsEnabled() then
         colorText = ColorAlpha(colors.accentText, 70)
     elseif panel.Depressed or panel:IsSelected() then
         colorBackground = colors.accentActive
         colorText = ColorAlpha(colors.accentText, 200)
-        shift = 1
+        shift = 1 * GetGlobalScale()
     elseif panel.Hovered then
         colorBackground = colors.accentHover
         colorText = colors.accentText
@@ -294,15 +298,15 @@ function SKIN:PaintWindowBackButton(panel, w, h)
     local colorBackground = colors.accent
     local colorText = ColorAlpha(colors.accentText, 150)
     local shift = 0
-    local padding_w = 10
-    local padding_h = 15
+    local padding_w = 10 * GetGlobalScale()
+    local padding_h = 15 * GetGlobalScale()
 
     if not panel:IsEnabled() then
         colorText = ColorAlpha(colors.accentText, 70)
     elseif panel.Depressed or panel:IsSelected() then
         colorBackground = colors.accentActive
         colorText = ColorAlpha(colors.accentText, 200)
-        shift = 1
+        shift = 1 * GetGlobalScale()
     elseif panel.Hovered then
         colorBackground = colors.accentHover
         colorText = colors.accentText
@@ -337,8 +341,8 @@ end
 -- @realm client
 function SKIN:PaintScrollBarGrip(panel, w, h)
     local colorScrollbar = colors.scrollBar
-    local posX = 4
-    local sizeX = w - 8
+    local posX = 4 * GetGlobalScale()
+    local sizeX = w - 8 * GetGlobalScale()
 
     if panel.Depressed then
         colorScrollbar = colors.scrollBarActive
@@ -362,20 +366,22 @@ function SKIN:PaintMenuButtonTTT2(panel, w, h)
         return
     end
 
+    local scale = GetGlobalScale()
+
     local colorOutline = utilGetChangedColor(colors.default, 170)
     local colorDescription = utilGetChangedColor(colors.default, 145)
     local colorText = utilGetChangedColor(colors.default, 65)
     local colorIcon = utilGetChangedColor(colors.default, 170)
     local shift = 0
-    local paddingText = 10
-    local paddingIcon = 25
+    local paddingText = 10 * scale
+    local paddingIcon = 25 * scale
 
     if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
         colorOutline = utilGetChangedColor(colors.default, 135)
         colorDescription = utilGetChangedColor(colors.default, 135)
         colorIcon = utilGetChangedColor(colors.default, 160)
         colorText = utilGetChangedColor(colors.default, 50)
-        shift = 1
+        shift = 1 * scale
     elseif panel.Hovered then
         colorOutline = utilGetChangedColor(colors.default, 135)
         colorDescription = utilGetChangedColor(colors.default, 135)
@@ -383,7 +389,7 @@ function SKIN:PaintMenuButtonTTT2(panel, w, h)
         colorText = utilGetChangedColor(colors.default, 50)
     end
 
-    drawOutlinedBox(0, 0, w, h, 1, colorOutline)
+    drawOutlinedBox(0, 0, w, h, 1 * scale, colorOutline)
     drawFilteredTexture(
         paddingIcon,
         paddingIcon + shift,
@@ -393,35 +399,41 @@ function SKIN:PaintMenuButtonTTT2(panel, w, h)
         colorIcon.a,
         colorIcon
     )
-    drawSimpleText(
+    drawAdvancedText(
         TryT(panel:GetTitle()),
         panel:GetTitleFont(),
         h,
         paddingText + shift,
         colorText,
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_TOP
+        TEXT_ALIGN_TOP,
+        false,
+        scale
     )
 
+    local font, fscale, fcmod = fonts.ScaledFont(panel:GetDescriptionFont(), scale)
     local desc_wrapped = drawGetWrappedText(
         TryT(panel:GetDescription()),
-        w - h - 2 * paddingText,
-        panel:GetDescriptionFont()
+        (w - h - 2 * paddingText) / fcmod,
+        font
     )
-    local line_pos = 35
+    local _, lineHeight = draw.GetTextSize("", font, fscale)
+    local line_pos = 35 * scale
 
     for i = 1, #desc_wrapped do
-        drawSimpleText(
+        drawAdvancedText(
             desc_wrapped[i],
             panel:GetDescriptionFont(),
             h,
             line_pos + paddingText + shift,
             colorDescription,
             TEXT_ALIGN_LEFT,
-            TEXT_ALIGN_TOP
+            TEXT_ALIGN_TOP,
+            false,
+            scale
         )
 
-        line_pos = line_pos + 20
+        line_pos = line_pos + lineHeight
     end
 end
 
@@ -454,7 +466,7 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
         colorBar = colors.accentActive
         colorText = utilGetActiveColor(utilGetChangedColor(colors.default, 25))
         colorIcon = utilGetActiveColor(utilGetChangedColor(COLOR_WHITE, 32))
-        shift = 1
+        shift = 1 * GetGlobalScale()
     elseif panel.Hovered then
         colorBackground = utilGetHoverColor(ColorAlpha(colors.accent, 50))
         colorBar = colors.accentHover
@@ -493,14 +505,16 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
         end
     end
 
-    drawSimpleText(
+    drawAdvancedText(
         TryT(panel:GetTitle()),
         panel:GetTitleFont(),
         sizes.border + pad + (hasIcon and (sizeIcon + pad) or pad),
         0.5 * h + shift,
         colorText,
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        false,
+        GetGlobalScale()
     )
 end
 
@@ -542,8 +556,8 @@ function SKIN:PaintCheckBox(panel, w, h)
         end
     end
 
-    drawRoundedBox(4, 0, 0, w, h, colorBox)
-    drawRoundedBox(4, offset + 3, 3, h - 6, h - 6, colorCenter)
+    drawRoundedBox(4 * GetGlobalScale(), 0, 0, w, h, colorBox)
+    drawRoundedBox(4 * GetGlobalScale(), offset + 3 * GetGlobalScale(), 3 * GetGlobalScale(), h - 6 * GetGlobalScale(), h - 6 * GetGlobalScale(), colorCenter)
 end
 
 ---
@@ -564,14 +578,16 @@ function SKIN:PaintCheckBoxLabel(panel, w, h)
 
     local params = panel:GetTextParams()
 
-    drawSimpleText(
+    drawAdvancedText(
         params and ParT(panel:GetText(), params) or TryT(panel:GetText()),
         panel:GetFont(),
         panel:GetTextPosition(),
         0.5 * h,
         colorText,
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        false,
+        GetGlobalScale()
     )
 end
 
@@ -593,17 +609,18 @@ end
 function SKIN:PaintCategoryHeaderTTT2(panel, w, h)
     local colorLine = utilGetChangedColor(colors.background, 50)
     local colorText = utilGetChangedColor(colors.default, 50)
-    local paddingX = 10
-    local paddingY = 10
+    local scale = GetGlobalScale()
+    local paddingX = 10 * scale
+    local paddingY = 10 * scale
 
     drawBox(0, 0, w, h, colors.background)
 
     if panel:GetParent():GetExpanded() then
-        drawLine(0, h - 1, w, h - 1, colorLine)
+        drawLine(0, h - 1 * scale, w, h - 1 * scale, colorLine)
 
         drawFilteredShadowedTexture(
             paddingX,
-            paddingY + 1,
+            paddingY + 1 * scale,
             h - 2 * paddingY,
             h - 2 * paddingY,
             materialCollapseOpened,
@@ -622,14 +639,16 @@ function SKIN:PaintCategoryHeaderTTT2(panel, w, h)
         )
     end
 
-    drawSimpleText(
+    drawAdvancedText(
         string.upper(TryT(panel.text)),
         panel:GetFont(),
         h,
         0.5 * h,
         colorText,
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        false,
+        scale
     )
 end
 
@@ -643,6 +662,7 @@ function SKIN:PaintButtonTTT2(panel, w, h)
     local colorBox = colors.accent
     local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
     local shift = 0
+    local scale = GetGlobalScale()
 
     if not panel:IsEnabled() then
         local colorAccentDisabled = utilGetChangedColor(colors.default, 150)
@@ -654,7 +674,7 @@ function SKIN:PaintButtonTTT2(panel, w, h)
         colorLine = colors.accentDarkActive
         colorBox = colors.accentActive
         colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
-        shift = 1
+        shift = 1 * scale
     elseif panel.Hovered then
         colorLine = colors.accentDarkHover
         colorBox = colors.accentHover
@@ -671,12 +691,12 @@ function SKIN:PaintButtonTTT2(panel, w, h)
         translatedText = string.upper(TryT(panel:GetText()))
     end
 
-    local font = panel:GetFont()
+    local font, fscale = fonts.ScaledFont(panel:GetFont(), scale)
     local xText = 0.5 * w
 
     if panel:HasIcon() then
-        local widthText = drawGetTextSize(translatedText, font)
-        local padding = 5
+        local widthText = drawGetTextSize(translatedText, font, fscale)
+        local padding = 5 * scale
         local sizeIcon = panel:GetIconSize()
         local yIcon = 0.5 * (h - sizeIcon)
 
@@ -699,14 +719,16 @@ function SKIN:PaintButtonTTT2(panel, w, h)
         end
     end
 
-    drawShadowedText(
+    drawAdvancedText(
         translatedText,
-        font,
+        panel:GetFont(),
         xText,
         0.5 * (h - sizes.border) + shift,
         colorText,
         TEXT_ALIGN_CENTER,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        true,
+        scale
     )
 end
 
@@ -717,6 +739,7 @@ end
 -- @realm client
 function SKIN:PaintFormButtonIconTTT2(panel, w, h)
     local colorBox = colors.accent
+    local scale = GetGlobalScale()
 
     if panel.colorBackground then
         if IsColor(panel.colorBackground) then
@@ -729,7 +752,7 @@ function SKIN:PaintFormButtonIconTTT2(panel, w, h)
     local colorBoxBack = colors.settingsBox
     local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
     local shift = 0
-    local pad = 6
+    local pad = 6 * scale
 
     if not panel:IsEnabled() then
         colorBoxBack = ColorAlpha(colorBoxBack, alphaDisabled)
@@ -741,7 +764,7 @@ function SKIN:PaintFormButtonIconTTT2(panel, w, h)
     elseif panel.Depressed or panel:IsSelected() or panel:GetToggle() then
         colorBox = utilGetActiveColor(colorBox)
         colorText = ColorAlpha(utilGetDefaultColor(colorBox), 150)
-        shift = 1
+        shift = 1 * scale
     elseif panel.Hovered then
         colorBox = utilGetHoverColor(colorBox)
         colorText = ColorAlpha(utilGetDefaultColor(colorBox), 150)
@@ -753,7 +776,7 @@ function SKIN:PaintFormButtonIconTTT2(panel, w, h)
         drawBox(0, 0, w, h, colorBoxBack)
     end
 
-    drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorBox)
+    drawRoundedBox(sizes.cornerRadius, 1 * scale, 1 * scale, w - 2 * scale, h - 2 * scale, colorBox)
 
     local iconMaterial = panel.iconMaterial or panel.material
 
@@ -801,7 +824,7 @@ function SKIN:PaintFormButtonTTT2(panel, w, h)
     end
 
     drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
-    drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorBox)
+    drawRoundedBox(sizes.cornerRadius, 1 * GetGlobalScale(), 1 * GetGlobalScale(), w - 2 * GetGlobalScale(), h - 2 * GetGlobalScale(), colorBox)
 
     drawShadowedText(
         TryT(panel:GetText()),
@@ -824,6 +847,7 @@ function SKIN:PaintBinderButtonTTT2(panel, w, h)
     local colorBox = colors.accent
     local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
     local shift = 0
+    local scale = GetGlobalScale()
 
     if not panel:IsEnabled() then
         colorBoxBack = ColorAlpha(colors.settingsBox, alphaDisabled)
@@ -835,7 +859,7 @@ function SKIN:PaintBinderButtonTTT2(panel, w, h)
         colorBoxBack = colors.settingsBox
         colorBox = colors.accentActive
         colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
-        shift = 1
+        shift = 1 * scale
     end
 
     if panel.Hovered then
@@ -845,16 +869,18 @@ function SKIN:PaintBinderButtonTTT2(panel, w, h)
     end
 
     drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
-    drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorBox)
+    drawRoundedBox(sizes.cornerRadius, 1 * scale, 1 * scale, w - 2 * scale, h - 2 * scale, colorBox)
 
-    drawShadowedText(
+    drawAdvancedText(
         string.upper(TryT(panel:GetText())),
         panel:GetFont(),
         0.5 * w,
         0.5 * h + shift,
         colorText,
         TEXT_ALIGN_CENTER,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        true,
+        scale
     )
 end
 
@@ -867,11 +893,11 @@ function SKIN:PaintLabelSpacerTTT2(panel, w, h)
     local text = TryT(panel:GetText())
     local font = panel:GetFont()
 
-    local padding = 10
-    local heightBar = 5
+    local padding = 10 * GetGlobalScale()
+    local heightBar = 5 * GetGlobalScale()
     local barX1 = 0
     local barY1 = 0.5 * (h - heightBar) + 1
-    local widthBar1 = 20
+    local widthBar1 = 20 * GetGlobalScale()
     local textX = barX1 + widthBar1 + padding
     local widthText = drawGetTextSize(text, font)
     local barX2 = textX + widthText + padding
@@ -899,14 +925,16 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintLabelTTT2(panel, w, h)
-    drawSimpleText(
+    drawAdvancedText(
         TryT(panel:GetText()),
         panel:GetFont(),
         0,
         0.5 * h,
         utilGetChangedColor(colors.default, 40),
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        false,
+        GetGlobalScale()
     )
 end
 
@@ -941,15 +969,18 @@ function SKIN:PaintFormLabelTTT2(panel, w, h)
         colorBox = ColorAlpha(colors.settingsBox, alphaDisabled)
     end
 
+    local scale = GetGlobalScale()
     drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBox, true, false, true, false)
-    drawSimpleText(
+    drawAdvancedText(
         TryT(panel:GetText()),
         panel:GetFont(),
-        10,
+        10 * scale,
         0.5 * h,
         colorText,
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        false,
+        scale
     )
 end
 
@@ -967,8 +998,9 @@ function SKIN:PaintFormBoxTTT2(panel, w, h)
         colorHandle = ColorAlpha(colors.handle, alphaDisabled)
     end
 
+    local scale = GetGlobalScale()
     drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBox, false, true, false, true)
-    drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorHandle)
+    drawRoundedBox(sizes.cornerRadius, 1 * scale, 1 * scale, w - 2 * scale, h - 2 * scale, colorHandle)
 end
 
 ---
@@ -977,14 +1009,16 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintMenuLabelTTT2(panel, w, h)
-    drawSimpleText(
+    drawAdvancedText(
         TryT(panel:GetText()),
         panel:GetFont(),
         0,
         0.5 * h,
         colors.settingsText,
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        false,
+        GetGlobalScale()
     )
 end
 
@@ -1004,24 +1038,28 @@ function SKIN:PaintHelpLabelTTT2(panel, w, h)
         colorText = ColorAlpha(colorText, 0.5 * alphaDisabled)
     end
 
+    local scale = GetGlobalScale()
     drawBox(0, 0, w, h, colorBox)
-    drawBox(0, 0, 4, h, colorBar)
+    drawBox(0, 0, 4 * scale, h, colorBar)
 
     local textTranslated = ParT(panel:GetText(), TryT(panel:GetTextParams()))
-    local textWrapped = drawGetWrappedText(textTranslated, w - 2 * panel.paddingX, panel:GetFont())
+    local font, fscale, fcmod = fonts.ScaledFont(panel:GetFont(), scale)
+    local textWrapped = drawGetWrappedText(textTranslated, (w - 2 * panel.paddingX) / fcmod, font)
 
-    local _, heightText = drawGetTextSize("", panel:GetFont())
+    local _, heightText = drawGetTextSize("", font, fscale)
     local posY = panel.paddingY
 
     for i = 1, #textWrapped do
-        drawSimpleText(
+        drawAdvancedText(
             textWrapped[i],
             panel:GetFont(),
             panel.paddingX,
             posY,
             colorText,
             TEXT_ALIGN_LEFT,
-            TEXT_ALIGN_TOP
+            TEXT_ALIGN_TOP,
+            false,
+            scale
         )
 
         posY = posY + heightText
@@ -1071,11 +1109,11 @@ function SKIN:PaintNumSliderTTT2(panel, w, h)
     end
 
     drawBox(0, 0, w, h, colorBox)
-    drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorHandle)
+    drawRoundedBox(sizes.cornerRadius, 1 * GetGlobalScale(), 1 * GetGlobalScale(), w - 2 * GetGlobalScale(), h - 2 * GetGlobalScale(), colorHandle)
 
     -- draw selection line
-    drawBox(5, 0.5 * h - 1, w - 2 * pad, 2, colorLinePassive)
-    drawBox(5, 0.5 * h - 1, (w - pad) * panel:GetFraction() - pad, 2, colorLineActive)
+    drawBox(5 * GetGlobalScale(), 0.5 * h - 1 * GetGlobalScale(), w - 2 * pad, 2 * GetGlobalScale(), colorLinePassive)
+    drawBox(5 * GetGlobalScale(), 0.5 * h - 1 * GetGlobalScale(), (w - pad) * panel:GetFraction() - pad, 2 * GetGlobalScale(), colorLineActive)
 end
 
 ---
@@ -1152,16 +1190,19 @@ function SKIN:PaintComboBoxTTT2(panel, w, h)
         colorHandle = utilGetActiveColor(colors.handle)
     end
 
+    local scale = GetGlobalScale()
     drawBox(0, 0, w, h, colorBox)
-    drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorHandle)
-    drawSimpleText(
+    drawRoundedBox(sizes.cornerRadius, 1 * scale, 1 * scale, w - 2 * scale, h - 2 * scale, colorHandle)
+    drawAdvancedText(
         TryT(panel:GetText()),
         panel:GetFont(),
-        10,
+        10 * scale,
         0.5 * h,
         colorText,
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        false,
+        scale
     )
 end
 
@@ -1202,7 +1243,7 @@ function SKIN:PaintColoredTextBoxTTT2(panel, w, h)
         drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorFlash)
     end
 
-    drawShadowedText(
+    drawAppearanceText(
         TryT(panel:GetTitle()),
         panel:GetTitleFont(),
         (align == TEXT_ALIGN_CENTER) and (0.5 * w)
@@ -1211,7 +1252,8 @@ function SKIN:PaintColoredTextBoxTTT2(panel, w, h)
         ColorAlpha(colorText, alpha),
         align,
         TEXT_ALIGN_CENTER,
-        1
+        true,
+        GetGlobalScale()
     )
 
     if hasIcon then
@@ -1242,7 +1284,7 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintVerticalBorderedBoxTTT2(panel, w, h)
-    drawBox(w - 1, 0, 1, h, ColorAlpha(colors.default, 200))
+    drawBox(w - 1 * GetGlobalScale(), 0, 1 * GetGlobalScale(), h, ColorAlpha(colors.default, 200))
 end
 
 ---
@@ -1255,7 +1297,7 @@ function SKIN:PaintButtonRoundEndLeftTTT2(panel, w, h)
     local shift = 0
 
     if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-        shift = 1
+        shift = 1 * GetGlobalScale()
     elseif panel.Hovered then
         colorForeground = colors.accentHover
     elseif not panel.isActive then
@@ -1265,7 +1307,7 @@ function SKIN:PaintButtonRoundEndLeftTTT2(panel, w, h)
     local colorText = ColorAlpha(utilGetDefaultColor(colorForeground), 220)
 
     drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colors.content, true, false, true, false)
-    drawRoundedBox(sizes.cornerRadius, 2, 2, w - 3, h - 4, colorForeground)
+    drawRoundedBox(sizes.cornerRadius, 2 * GetGlobalScale(), 2 * GetGlobalScale(), w - 3 * GetGlobalScale(), h - 4 * GetGlobalScale(), colorForeground)
 
     drawSimpleText(
         TryT(panel:GetText()),
@@ -1288,7 +1330,7 @@ function SKIN:PaintButtonRoundEndRightTTT2(panel, w, h)
     local shift = 0
 
     if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-        shift = 1
+        shift = 1 * GetGlobalScale()
     elseif panel.Hovered then
         colorForeground = colors.accentHover
     elseif not panel.isActive then
@@ -1298,7 +1340,7 @@ function SKIN:PaintButtonRoundEndRightTTT2(panel, w, h)
     local colorText = ColorAlpha(utilGetDefaultColor(colorForeground), 220)
 
     drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colors.content, false, true, false, true)
-    drawRoundedBox(sizes.cornerRadius, 1, 2, w - 3, h - 4, colorForeground)
+    drawRoundedBox(sizes.cornerRadius, 1 * GetGlobalScale(), 2 * GetGlobalScale(), w - 3 * GetGlobalScale(), h - 4 * GetGlobalScale(), colorForeground)
 
     drawSimpleText(
         TryT(panel:GetText()),
@@ -1333,10 +1375,11 @@ function SKIN:PaintTooltipTTT2(panel, w, h)
         colorLine
     )
 
-    drawBox(1, sizeArrow + 1, w - 2, h - sizeArrow - 2, colors.background)
+    local scale = GetGlobalScale()
+    drawBox(1, sizeArrow + 1 * scale, w - 2 * scale, h - sizeArrow - 2 * scale, colors.background)
     drawFilteredTexture(
         sizeArrow,
-        1,
+        1 * scale,
         sizeRhombus,
         sizeRhombus,
         materialRhombus,
@@ -1352,7 +1395,9 @@ function SKIN:PaintTooltipTTT2(panel, w, h)
             0.5 * (h + sizeArrow),
             utilGetDefaultColor(colors.background),
             TEXT_ALIGN_CENTER,
-            TEXT_ALIGN_CENTER
+            TEXT_ALIGN_CENTER,
+            false, -- shadow
+            scale
         )
     end
 end
@@ -1363,17 +1408,18 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintEventBoxTTT2(panel, w, h)
+    local scale = GetGlobalScale()
     local event = panel:GetEvent()
 
     local colorLine = ColorAlpha(colors.default, 25)
     local colorText = ColorAlpha(colors.default, 200)
 
-    local sizeIcon = 30
-    local padding = 8
-    local widthLine = 4
+    local sizeIcon = 30 * scale
+    local padding = 8 * scale
+    local widthLine = 4 * scale
     local offsetXLine = 0.5 * sizeIcon + padding
     local offsetXIcon = offsetXLine - 0.5 * (sizeIcon - widthLine)
-    local offsetYIcon = 20 + padding
+    local offsetYIcon = 20 * scale + padding
     local offsetYLine = offsetYIcon + padding + sizeIcon
     local offsetXText = offsetXIcon + sizeIcon + padding
     local offsetYTitle = offsetYIcon + 0.5 * sizeIcon
@@ -1392,7 +1438,7 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
         colorText
     )
 
-    drawShadowedText(
+    drawAdvancedText(
         TryT(panel:GetTitle()),
         panel:GetTitleFont(),
         offsetXText,
@@ -1400,26 +1446,30 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
         colorText,
         TEXT_ALIGN_LEFT,
         TEXT_ALIGN_CENTER,
-        1
+        true,
+        scale
     )
 
     local time = event:GetTime()
     local minutes = math.floor(time / 60)
     local seconds = math.floor(time % 60)
 
-    drawSimpleText(
+    drawAdvancedText(
         string.format("[%02d:%02d]", minutes, seconds),
         panel:GetFont(),
-        w - 20,
+        w - 20 * scale,
         offsetYTitle,
         colorLine,
         TEXT_ALIGN_RIGHT,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        false,
+        scale
     )
 
     local posY = offsetYIcon + sizeIcon + padding
     local textTable = panel:GetText()
-    local _, heightText = drawGetTextSize("", panel:GetFont())
+    local font, fscale, fcmod = fonts.ScaledFont(panel:GetFont(), scale)
+    local _, heightText = drawGetTextSize("", font, fscale)
 
     for i = 1, #textTable do
         local text = textTable[i]
@@ -1435,23 +1485,25 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 
         local textTranslated = ParT(text.string, params or {})
 
-        local textWrapped = drawGetWrappedText(textTranslated, w - offsetXText, panel:GetFont())
+        local textWrapped = drawGetWrappedText(textTranslated, (w - offsetXText) / fcmod, font)
 
         for k = 1, #textWrapped do
-            drawSimpleText(
+            drawAdvancedText(
                 textWrapped[k],
                 panel:GetFont(),
                 offsetXText,
                 posY,
                 colorText,
                 TEXT_ALIGN_LEFT,
-                TEXT_ALIGN_TOP
+                TEXT_ALIGN_TOP,
+                false,
+                scale
             )
 
             posY = posY + heightText
         end
 
-        posY = posY + 15
+        posY = posY + 15 * scale
     end
 
     if not event:HasScore() then
@@ -1480,41 +1532,47 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 
         drawRoundedBox(sizes.cornerRadius, offsetXText, posY, widthScoreBox, height, colorBox)
 
-        drawSimpleText(
+        drawAdvancedext(
             ParT("title_player_score", { player = event:GetNameFrom64(ply64) }),
             panel:GetFont(),
             offsetXText + padding,
             posY + padding,
             colorText,
             TEXT_ALIGN_LEFT,
-            TEXT_ALIGN_TOP
+            TEXT_ALIGN_TOP,
+            false,
+            scale
         )
 
         for k = 1, scoreRows do
             local rawScoreText = rawScoreTexts[k]
 
-            drawSimpleText(
+            drawAdvancedText(
                 TryT(rawScoreText.name),
                 panel:GetFont(),
                 offsetXText + 2 * padding,
                 posY + padding + k * heightText,
                 colorText,
                 TEXT_ALIGN_LEFT,
-                TEXT_ALIGN_TOP
+                TEXT_ALIGN_TOP,
+                false,
+                scale
             )
 
-            drawSimpleText(
+            drawAdvancedText(
                 rawScoreText.score,
                 panel:GetFont(),
-                offsetXText + 2 * padding + 175,
+                offsetXText + 2 * padding + 175 * scale,
                 posY + padding + k * heightText,
                 colorText,
                 TEXT_ALIGN_LEFT,
-                TEXT_ALIGN_TOP
+                TEXT_ALIGN_TOP,
+                false,
+                scale
             )
         end
 
-        posY = posY + height + 15
+        posY = posY + height + 15 * scale
     end
 end
 
@@ -1528,13 +1586,14 @@ local MODE_INHERIT_REMOVED = ShopEditor.MODE_INHERIT_REMOVED
 -- @param number h
 -- @realm client
 function SKIN:PaintShopCardTTT2(panel, w, h)
-    local widthBorder = 2
+    local scale = GetGlobalScale()
+    local widthBorder = 2 * scale
     local widthBorder2 = widthBorder * 2
-    local sizeIcon = 64
-    local padding = 5
+    local sizeIcon = 64 * scale
+    local padding = 5 * scale
     local posIcon = widthBorder + padding
     local posText = posIcon + sizeIcon + 2 * padding
-    local heightMode = 35
+    local heightMode = 35 * scale
     local widthMode = w - sizeIcon - 3 * padding
     local posIconModeX = w - widthMode + 2 * padding
     local posIconModeY = h - heightMode + 2 * padding
@@ -1580,14 +1639,16 @@ function SKIN:PaintShopCardTTT2(panel, w, h)
 
     drawFilteredTexture(posIcon, posIcon, sizeIcon, sizeIcon, panel:GetIcon())
 
-    drawSimpleText(
+    drawAdvancedText(
         TryT(panel:GetText()),
         panel:GetFont(),
         posText,
         posIcon + padding,
         colorText,
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_TOP
+        TEXT_ALIGN_TOP,
+        false,
+        scale
     )
 
     drawRoundedBoxEx(
@@ -1620,7 +1681,9 @@ function SKIN:PaintShopCardTTT2(panel, w, h)
         posTextModeY,
         colorTextMode,
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        false,
+        scale
     )
 end
 
@@ -1630,7 +1693,7 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintComboCardTTT2(panel, w, h)
-    local widthBorder = 2
+    local widthBorder = 2 * GetGlobalScale()
     local widthBorder2 = widthBorder * 2
     local widthBorder4 = widthBorder2 * 2
     local shift = 0
@@ -1650,7 +1713,7 @@ function SKIN:PaintComboCardTTT2(panel, w, h)
 
     if panel.Depressed then
         opacity = 240
-        shift = 1
+        shift = 1 * GetGlobalScale()
     end
 
     local colorText = utilGetDefaultColor(colorBox)
@@ -1684,15 +1747,15 @@ function SKIN:PaintComboCardTTT2(panel, w, h)
         local width = drawGetTextSize(tagText, panel:GetFont())
         local colorTag = panel:GetTagColor() or COLOR_WARMGRAY
 
-        width = width + 20
+        width = width + 20 * GetGlobalScale()
 
-        drawRoundedBox(sizes.cornerRadius, widthBorder4, widthBorder4, width, 20, colorTag)
+        drawRoundedBox(sizes.cornerRadius, widthBorder4, widthBorder4, width, 20 * GetGlobalScale(), colorTag)
 
         drawSimpleText(
             TryT(tagText),
             panel:GetFont(),
             widthBorder4 + 0.5 * width,
-            widthBorder4 + 10,
+            widthBorder4 + 10 * GetGlobalScale(),
             utilGetDefaultColor(colorTag),
             TEXT_ALIGN_CENTER,
             TEXT_ALIGN_CENTER
@@ -1739,14 +1802,17 @@ function SKIN:PaintRoleLayeringSenderTTT2(panel, w, h)
 
     drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBox)
 
-    drawSimpleText(
+    local scale = GetGlobalScale()
+    drawAdvancedText(
         TryT("layering_not_layered"),
         "DermaTTT2Text",
-        10,
+        10 * scale,
         0.5 * h,
         colorText,
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        false,
+        scale
     )
 end
 
@@ -1759,19 +1825,23 @@ function SKIN:PaintRoleLayeringReceiverTTT2(panel, w, h)
     local colorBox = utilGetChangedColor(colors.background, 20)
     local colorText = utilGetDefaultColor(colorBox)
 
+    local scale = GetGlobalScale()
+
     for i = 1, #panel.layerBoxes do
         local layerBox = panel.layerBoxes[i]
 
         drawRoundedBox(sizes.cornerRadius, 0, layerBox.y, w, layerBox.h, colorBox)
 
-        drawSimpleText(
+        drawAdvancedText(
             ParT("layering_layer", { layer = i }),
             "DermaTTT2Text",
-            10,
+            10 * scale,
             layerBox.label,
             colorText,
             TEXT_ALIGN_LEFT,
-            TEXT_ALIGN_CENTER
+            TEXT_ALIGN_CENTER,
+            false,
+            scale
         )
     end
 end
@@ -1814,14 +1884,16 @@ function SKIN:PaintSearchbar(panel, w, h)
         return
     end
 
-    drawSimpleText(
+    drawAdvancedText(
         TryT(panel:GetCurrentPlaceholderText()),
         panel:GetFont(),
         leftPad + w * 0.02,
         0.5 * h,
         colorText,
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        false,
+        GetGlobalScale()
     )
 end
 
@@ -1840,7 +1912,7 @@ function SKIN:PaintTextEntryTTT2(panel, w, h)
     end
 
     drawBox(0, 0, w, h, colorBox)
-    drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorHandle)
+    drawRoundedBox(sizes.cornerRadius, 1 * GetGlobalScale(), 1 * GetGlobalScale(), w - 2 * GetGlobalScale(), h - 2 * GetGlobalScale(), colorHandle)
 end
 
 ---
@@ -1849,22 +1921,23 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
-    local widthBorder = 2
+    local scale = GetGlobalScale()
+    local widthBorder = 2 * scale
     local widthBorder2 = widthBorder * 2
-    local padding = 5
-    local heightMode = 35
-    local widthMode = 175
+    local padding = 5 * scale
+    local heightMode = 35 * scale
+    local widthMode = 175 * scale
     local posIconModeX = w - widthMode + 2 * padding
     local posIconModeY = h - heightMode + 2 * padding
     local sizeIconMode = heightMode - 4 * padding
     local posTextModeX = posIconModeX + sizeIconMode + 2 * padding
     local posTextModeY = posIconModeY + 0.5 * sizeIconMode - 1
-    local posStatusIconBoxX = 8
-    local sizeStatusIconBox = 32
+    local posStatusIconBoxX = 8 * scale
+    local sizeStatusIconBox = 32 * scale
     local sizeStatusIcon = sizeStatusIconBox - 2 * padding
     local posStatusIconX = posStatusIconBoxX + padding
 
-    local posHeadIconBoxY = 8
+    local posHeadIconBoxY = 8 * scale
     local posHeadIconY = posHeadIconBoxY + padding
     local posHattableIconBoxY = posHeadIconBoxY + sizeStatusIconBox + padding
     local posHattableIconY = posHattableIconBoxY + padding
@@ -1934,14 +2007,16 @@ function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
         colorTextMode
     )
 
-    drawSimpleText(
+    drawAdvancedText(
         TryT(panel:GetText()),
         "DermaTTT2Text",
         posTextModeX,
         posTextModeY,
         colorTextMode,
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        false,
+        scale
     )
 
     drawRoundedBox(
@@ -1987,14 +2062,15 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintProfilePanelTTT2(panel, w, h)
-    local padding = 5
+    local scale = GetGlobalScale()
+    local padding = 5 * scale
 
-    local heightBottom = 100
+    local heightBottom = 100 * scale
 
     local widthRender = w - 2 * padding
     local heightRender = h - padding - heightBottom
 
-    local sizePlayerIcon = 64
+    local sizePlayerIcon = 64 * scale
     local xRoleIcon = 0.5 * (widthRender - sizePlayerIcon) + padding
     local yRoleIcon = heightRender + padding - 0.5 * sizePlayerIcon
 
@@ -2002,11 +2078,11 @@ function SKIN:PaintProfilePanelTTT2(panel, w, h)
     local xPlayerIconBox = xRoleIcon - padding
     local yPlayerIconBox = yRoleIcon - padding
 
-    local sizeRoleIcon = 32
+    local sizeRoleIcon = 32 * scale
     local posRoleIcon = 2 * padding
 
-    local yTextTeam = h - 26
-    local yTextRole = yTextTeam - 22
+    local yTextTeam = h - 26 * scale
+    local yTextRole = yTextTeam - 22 * scale
     local xText = 0.5 * w
 
     -- cache colors
@@ -2047,24 +2123,28 @@ function SKIN:PaintProfilePanelTTT2(panel, w, h)
         colorRoleIcon
     )
 
-    drawShadowedText(
+    drawAdvancedText(
         TryT(panel:GetPlayerRoleString()),
         "DermaTTT2TextLargest",
         xText,
         yTextRole,
         colorRoleText,
         TEXT_ALIGN_CENTER,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        true,
+        scale
     )
 
-    drawShadowedText(
+    drawAdvancedText(
         TryT(panel:GetPlayerTeamString()),
         "DermaTTT2TextLarger",
         xText,
         yTextTeam,
         colorRoleText,
         TEXT_ALIGN_CENTER,
-        TEXT_ALIGN_CENTER
+        TEXT_ALIGN_CENTER,
+        true,
+        scale
     )
 end
 
@@ -2076,16 +2156,16 @@ end
 function SKIN:PaintInfoItemTTT2(panel, w, h)
     local hasIcon = panel:HasIcon()
 
-    local padding = 5
+    local scale = GetGlobalScale()
+    local padding = 5 * scale
 
-    local widthBorder = 2
+    local widthBorder = 2 * scale
     local widthBorder2 = 2 * widthBorder
 
-    local sizeIcon = 64
+    local sizeIcon = 64 * scale
     local posIcon = widthBorder + padding
 
     local posText = hasIcon and (posIcon + sizeIcon + 2 * padding) or (posIcon + padding)
-    local heightText = 15
 
     local colorBackground = panel:GetColor() or colors.settingsBox
     local colorBorderDefault = utilGetChangedColor(colors.background, 75)
@@ -2111,28 +2191,30 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
         local widthIconText = drawGetTextSize(textString, "DermaTTT2SmallBold")
         local xIconText = posIcon + 0.5 * sizeIcon
         local yIconText = posIcon + 0.75 * sizeIcon
-        local widthIconTextBox = widthIconText + 8
-        local heightIconTextBox = 16
+        local widthIconTextBox = widthIconText + 8 * scale
+        local heightIconTextBox = 16 * scale
 
         local colorLiveTimeBackground = colors.settingsBox
 
         drawRoundedBox(
             sizes.cornerRadius,
             xIconText - 0.5 * widthIconTextBox,
-            yIconText - 7,
+            yIconText - 7 * scale,
             widthIconTextBox,
             heightIconTextBox,
             colorLiveTimeBackground
         )
 
-        drawShadowedText(
+        drawAdvancedText(
             textString,
             "DermaTTT2SmallBold",
             xIconText,
             yIconText,
             COLOR_ORANGE,
             TEXT_ALIGN_CENTER,
-            TEXT_ALIGN_CENTER
+            TEXT_ALIGN_CENTER,
+            true,
+            scale
         )
     end
 
@@ -2147,14 +2229,16 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
         end
     end
 
-    drawSimpleText(
+    drawAdvancedText(
         text_title,
         "DermaTTT2TitleSmall",
         posText,
         posIcon,
         colorText,
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_TOP
+        TEXT_ALIGN_TOP,
+        false,
+        scale
     )
 
     local text = panel:GetText()
@@ -2177,19 +2261,23 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
         end
     end
 
-    local text_wrapped = drawGetWrappedText(text_translated, w - posText - padding, "DermaDefault")
+    local font, fscale, fcmod = fonts.ScaledFont("DermaDefault", scale)
+    local text_wrapped = drawGetWrappedText(text_translated, (w - posText - padding) / fcmod, font)
+    local _, heightText = drawGetTextSize("", font, fscale)
 
-    local posY = posIcon + heightText + 4
+    local posY = posIcon + heightText + 4 * scale
 
     for k = 1, #text_wrapped do
-        drawSimpleText(
+        drawAdvancedText(
             text_wrapped[k],
             "DermaDefault",
             posText,
             posY,
             colorText,
             TEXT_ALIGN_LEFT,
-            TEXT_ALIGN_TOP
+            TEXT_ALIGN_TOP,
+            false,
+            scale
         )
 
         posY = posY + heightText

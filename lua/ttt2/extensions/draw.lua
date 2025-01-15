@@ -49,7 +49,7 @@ end
 -- @2D
 -- @realm client
 function draw.OutlinedBox(x, y, w, h, t, color)
-    t = t or 1
+    t = t or 1 * appearance.GetGlobalScale()
 
     surface.SetDrawColor(color or COLOR_WHITE)
 
@@ -420,11 +420,10 @@ local drawShadowedText = draw.ShadowedText
 function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale, angle)
     local scaleModifier = 1.0
     local t_font = fonts.GetFont(font)
+    scale = scale or 1.0
 
     if t_font then
-        scaleModifier = fonts.GetScaleModifier(scale)
-        font = t_font[scaleModifier]
-        scale = scale / scaleModifier
+        font, scale, scaleModifier = fonts.ScaledFont(font, scale, t_font)
     end
 
     local scaled = isvector(scale) or scale ~= 1.0

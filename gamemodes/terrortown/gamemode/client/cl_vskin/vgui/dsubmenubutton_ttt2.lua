@@ -12,7 +12,9 @@ AccessorFunc(PANEL, "m_bBorder", "DrawBorder", FORCE_BOOL)
 ---
 -- @ignore
 function PANEL:Init()
-    self:SetContentAlignment(5)
+    local scale = appearance.GetGlobalScale()
+
+    self:SetContentAlignment(5 * scale)
 
     self:SetDrawBorder(true)
     self:SetPaintBackground(true)
@@ -171,7 +173,8 @@ end
 function PANEL:SizeToContents()
     local w, h = self:GetContentSize()
 
-    self:SetSize(w + 8, h + 4)
+    local scale = appearance.GetGlobalScale()
+    self:SetSize(w + 8 * scale, h + 4 * scale)
 end
 
 derma.DefineControl("DSubmenuButtonTTT2", "A standard Button", PANEL, "DButtonTTT2")

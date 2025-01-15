@@ -43,19 +43,22 @@ function PANEL:PerformLayout()
         return
     end
 
+    local scale = appearance.GetGlobalScale()
+
     if self.targetPanel:HasTooltipFixedSize() then
         self:SetSize(self.targetPanel:GetTooltipFixedSize())
     elseif IsValid(self.contents) then
-        self:SetWide(self.contents:GetWide() + 8)
-        self:SetTall(self.contents:GetTall() + 8)
+        self:SetWide(self.contents:GetWide() + 8 * scale)
+        self:SetTall(self.contents:GetTall() + 8 * scale)
     else
-        local w, h = draw.GetTextSize(LANG.TryTranslation(self:GetText()), self:GetFont())
+        local font, fontScale = fonts.ScaledFont(self:GetFont(), scale)
+        local w, h = draw.GetTextSize(LANG.TryTranslation(self:GetText()), font)
 
-        self:SetSize(w + 20, h + 8 + self.targetPanel.tooltip.sizeArrow)
+        self:SetSize(w * fontScale + 20 * scale, h * fontScale + 8 * scale + self.targetPanel.tooltip.sizeArrow)
     end
 
     if IsValid(self.contents) then
-        self.contents:SetPos(1, self.targetPanel.tooltip.sizeArrow + 1)
+        self.contents:SetPos(1 * scale, self.targetPanel.tooltip.sizeArrow + 1 * scale)
         self.contents:SetVisible(true)
     end
 end
@@ -82,6 +85,7 @@ function PANEL:PositionTooltip()
 
     self:InvalidateLayout(true)
 
+    local scale = appearance.GetGlobalScale()
     local x, y
 
     if self.targetPanel:HasTooltipFixedPosition() then
@@ -93,8 +97,8 @@ function PANEL:PositionTooltip()
     else
         x, y = input.GetCursorPos()
 
-        x = x + 10
-        y = y + 20
+        x = x + 10 * scale
+        y = y + 20 * scale
     end
 
     self:SetPos(x, y)

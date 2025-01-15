@@ -74,8 +74,10 @@ function PANEL:Init()
     self:SetKeyboardInputEnabled(false)
     self:SetDoubleClickingEnabled(true)
 
+    local scale = appearance.GetGlobalScale()
+
     -- Nicer default height
-    self:SetTall(20)
+    self:SetTall(20 * scale)
 
     -- This turns off the engine drawing
     self:SetPaintBackgroundEnabled(false)
@@ -111,7 +113,8 @@ function PANEL:GetIndentationMargin()
         return 0
     end
 
-    return 10 + self.master:GetIndentationMargin()
+    local scale = appearance.GetGlobalScale()
+    return 10 * scale + self.master:GetIndentationMargin()
 end
 
 ---

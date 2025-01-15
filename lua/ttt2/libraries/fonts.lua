@@ -85,3 +85,22 @@ end
 function fonts.GetScales()
     return fonts.scales
 end
+
+---
+-- Gets the scaled variant of a font.
+-- @param string name The font name
+-- @param number[default=appearance.GetGlobalScale()] scale The target scale
+-- @return string The name of the scaled font
+-- @return number The scale that the font needs to be rendered at to exactly match the target scale
+-- @return number The font scale modifier
+-- @realm client
+function fonts.ScaledFont(font, scale, t_font)
+    if not scale then
+        scale = appearance.GetGlobalScale()
+    end
+    t_font = t_font or fonts.GetFont(font)
+    local scaleModifier = fonts.GetScaleModifier(scale)
+    font = t_font[scaleModifier]
+    scale = scale / scaleModifier
+    return font, scale, scaleModifier
+end

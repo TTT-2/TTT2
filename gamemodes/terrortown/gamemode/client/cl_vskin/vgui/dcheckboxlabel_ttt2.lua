@@ -273,10 +273,11 @@ end
 ---
 -- @ignore
 function PANEL:PerformLayout()
+    local scale = appearance.GetGlobalScale()
     local x = self.m_iIndent or 0
 
     local height = self:GetTall()
-    local paddingButton = 4
+    local paddingButton = 4 * scale
     local heightButton = height - 2 * paddingButton
     local widthButton = 1.5 * heightButton
 

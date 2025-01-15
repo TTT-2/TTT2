@@ -53,13 +53,15 @@ function PANEL:Init()
     self:SetPaintBackgroundEnabled(false)
     self:SetPaintBorderEnabled(false)
 
+    local scale = appearance.GetGlobalScale()
+
     self.tooltip = {
         fixedPosition = nil,
         fixedSize = nil,
         delay = 0,
         text = "",
         font = "DermaTTT2Text",
-        sizeArrow = 8,
+        sizeArrow = 8 * scale,
     }
 
     local oldSetTooltipPanel = self.SetTooltipPanel
@@ -166,9 +168,10 @@ end
 -- @realm client
 function PANEL:SetTooltipFixedSize(w, h)
     -- +2 are the outline pixels
+    local scale = appearance.GetGlobalScale()
     self.tooltip.fixedSize = {
-        w = w + 2,
-        h = h + self.tooltip.sizeArrow + 2,
+        w = w + 2 * scale,
+        h = h + self.tooltip.sizeArrow + 2 * scale,
     }
 end
 
@@ -255,7 +258,8 @@ function PANEL:GetIndentationMargin()
         return 0
     end
 
-    return 10 + self.master:GetIndentationMargin()
+    local scale = appearance.GetGlobalScale()
+    return 10 * scale + self.master:GetIndentationMargin()
 end
 
 derma.DefineControl("DPanelTTT2", "", PANEL, "Panel")

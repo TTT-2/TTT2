@@ -37,7 +37,7 @@ end
 -- @return number The child height
 -- @realm client
 function PANEL:GetChildSize()
-    return self.childW or 64, self.childH or 64
+    return self.childW or 64 * appearance.GetGlobalScale(), self.childH or 64 * appearance.GetGlobalScale()
 end
 
 ---

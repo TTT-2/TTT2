@@ -12,9 +12,11 @@ local MODE_INHERIT_REMOVED = ShopEditor.MODE_INHERIT_REMOVED
 ---
 -- @ignore
 function PANEL:Init()
-    self:SetContentAlignment(5)
+    local scale = appearance.GetGlobalScale()
 
-    self:SetTall(22)
+    self:SetContentAlignment(5 * scale)
+
+    self:SetTall(22 * scale)
     self:SetMouseInputEnabled(true)
     self:SetKeyboardInputEnabled(true)
 

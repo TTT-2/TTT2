@@ -62,10 +62,12 @@ function PANEL:EnableSearchBar(active)
         return
     end
 
+    local scale = appearance.GetGlobalScale()
+
     -- Add searchbar on top
     local searchBar = vgui.Create("DSearchBarTTT2", self)
     searchBar:SetUpdateOnType(true)
-    searchBar:SetPos(0, heightNavHeader)
+    searchBar:SetPos(0, heightNavHeader * scale)
     searchBar:SetHeightMult(1)
 
     searchBar.OnValueChange = function(slf, searchText)
@@ -98,7 +100,7 @@ function PANEL:AddSubmenuButton(submenuClass)
     settingsButton:SetTooltip(submenuClass.tooltip)
 
     settingsButton.PerformLayout = function(panel)
-        panel:SetSize(panel:GetParent():GetWide(), heightNavButton)
+        panel:SetSize(panel:GetParent():GetWide(), heightNavButton * appearance.GetGlobalScale())
     end
 
     settingsButton.DoClick = function(slf)
@@ -125,14 +127,16 @@ function PANEL:GenerateSubmenuList(submenuClasses)
     self.navAreaScrollGrid:Clear()
     self.contentArea:Clear()
 
+    local scale = appearance.GetGlobalScale()
+
     if #submenuClasses == 0 then
         local labelNoContent = vgui.Create("DLabelTTT2", self.contentArea)
         local widthContent = self.contentArea:GetSize()
 
         labelNoContent:SetText("label_menu_not_populated")
-        labelNoContent:SetSize(widthContent - 40, 50)
+        labelNoContent:SetSize(widthContent - 40 * scale, 50 * scale)
         labelNoContent:SetFont("DermaTTT2Title")
-        labelNoContent:SetPos(20, 0)
+        labelNoContent:SetPos(20 * scale, 0)
     else
         for i = 1, #submenuClasses do
             local submenuClass = submenuClasses[i]
@@ -186,11 +190,12 @@ end
 function PANEL:PerformLayout()
     -- First invalidate Parent to get current correct docking size
     self:InvalidateParent(true)
+    local scale = appearance.GetGlobalScale()
 
     local widthNavContent, heightNavContent = self:GetSize()
-    local heightShift = heightNavHeader + (self.searchBar and heightNavButton + self.padding or 0)
+    local heightShift = heightNavHeader * scale + (self.searchBar and heightNavButton * scale + self.padding or 0)
 
-    self:SetSearchBarSize(widthNavContent, heightNavButton)
+    self:SetSearchBarSize(widthNavContent, heightNavButton * scale)
     self.navAreaScroll:SetSize(widthNavContent, heightNavContent - heightShift)
 
     -- Last invalidate all buttons and then the scrolllist for correct size to contents
