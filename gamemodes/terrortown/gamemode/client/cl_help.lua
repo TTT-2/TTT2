@@ -224,13 +224,21 @@ function HELPSCRN:ShowMainMenu()
     local maxHeight = rows * heightMainMenuButton * scale
         + (rows - 1) * padding
         + ((#menusAdmin == 0) and 0 or heightAdminSeperator * scale)
-    local heightScroll = height * scale - vskin.GetHeaderHeight() - vskin.GetBorderSize() - 2 * padding
+    local heightScroll = height * scale
+        - vskin.GetHeaderHeight()
+        - vskin.GetBorderSize()
+        - 2 * padding
 
     local scrollSize = (heightScroll < maxHeight and 20 or 0) * scale
 
     local widthMainMenuButton = (width - 4 * padding - scrollSize) / 3
 
-    AddMenuButtons(menusNormal, dsettings, widthMainMenuButton * scale, heightMainMenuButton * scale)
+    AddMenuButtons(
+        menusNormal,
+        dsettings,
+        widthMainMenuButton * scale,
+        heightMainMenuButton * scale
+    )
 
     -- only show admin section if player is admin and
     -- there are menues to be shown
@@ -351,7 +359,11 @@ function HELPSCRN:ShowSubmenu(menuClass)
     if IsValid(frame) then
         frame:ClearFrame(nil, nil, menuClass.title or menuClass.type)
     else
-        frame = vguihandler.GenerateFrame(width * scale, height * scale, menuClass.title or menuClass.type)
+        frame = vguihandler.GenerateFrame(
+            width * scale,
+            height * scale,
+            menuClass.title or menuClass.type
+        )
     end
 
     -- INIT SUB MENU SPECIFIC STUFF

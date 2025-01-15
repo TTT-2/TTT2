@@ -42,5 +42,10 @@ function CLGAMEMODESUBMENU:Populate(parent)
     local scale = appearance.GetGlobalScale()
     html:SetSize(500 * scale, 640 * scale)
     html:Dock(FILL)
-    html:SetHTML(string.Replace(htmlStart, "/*TTT2-UISCALE*/", tostring(scale)) .. header .. self.change.text .. htmlEnd)
+    html:SetHTML(
+        string.Replace(htmlStart, "/*TTT2-UISCALE*/", tostring(scale))
+            .. header
+            .. self.change.text
+            .. htmlEnd
+    )
 end

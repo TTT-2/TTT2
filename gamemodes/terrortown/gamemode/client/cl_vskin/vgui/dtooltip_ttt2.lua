@@ -54,7 +54,10 @@ function PANEL:PerformLayout()
         local font, fontScale = fonts.ScaledFont(self:GetFont(), scale)
         local w, h = draw.GetTextSize(LANG.TryTranslation(self:GetText()), font)
 
-        self:SetSize(w * fontScale + 20 * scale, h * fontScale + 8 * scale + self.targetPanel.tooltip.sizeArrow)
+        self:SetSize(
+            w * fontScale + 20 * scale,
+            h * fontScale + 8 * scale + self.targetPanel.tooltip.sizeArrow
+        )
     end
 
     if IsValid(self.contents) then

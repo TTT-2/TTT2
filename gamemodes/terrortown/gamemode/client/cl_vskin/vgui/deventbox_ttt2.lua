@@ -95,7 +95,7 @@ function PANEL:GetContentHeight(width)
     local size = 50 * scale -- title height
 
     local textTable = self:GetText()
-    local font, fscale, fcmod = fonts.ScaledFont(self:GetFont(), scale)
+    local font, fscale = fonts.ScaledFont(self:GetFont(), scale)
     local _, heightText = drawGetTextSize("", font, fscale)
 
     for i = 1, #textTable do
@@ -112,7 +112,7 @@ function PANEL:GetContentHeight(width)
 
         local textTranslated = ParT(text.string, params or {})
 
-        local textWrapped = drawGetWrappedText(textTranslated, (width - 50) / fcmod, font)
+        local textWrapped = drawGetWrappedText(textTranslated, (width - 50) / fscale, font)
 
         size = size + #textWrapped * heightText + 15 * scale -- 15: paragraph end
     end

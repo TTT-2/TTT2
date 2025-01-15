@@ -699,8 +699,9 @@ function PANEL:MakeHelp(data)
     left.PerformLayout = function(slf, w, h)
         local textTranslated =
             LANG.GetParamTranslation(slf:GetText(), LANG.TryTranslation(slf:GetTextParams()))
-        local font, scale2, fcmod = fonts.ScaledFont(slf:GetFont(), appearance.GetGlobalScale())
-        local textWrapped = draw.GetWrappedText(textTranslated, (w - 2 * slf.paddingX) / fcmod, font)
+        local font, scale2 = fonts.ScaledFont(slf:GetFont(), appearance.GetGlobalScale())
+        local textWrapped =
+            draw.GetWrappedText(textTranslated, (w - 2 * slf.paddingX) / scale2, font)
         local _, heightText = draw.GetTextSize("", font)
 
         slf:SetSize(w, heightText * scale2 * #textWrapped + 2 * slf.paddingY)

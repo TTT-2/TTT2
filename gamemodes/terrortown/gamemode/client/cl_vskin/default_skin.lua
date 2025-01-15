@@ -295,18 +295,19 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintWindowBackButton(panel, w, h)
+    local scale = GetGlobalScale()
     local colorBackground = colors.accent
     local colorText = ColorAlpha(colors.accentText, 150)
     local shift = 0
-    local padding_w = 10 * GetGlobalScale()
-    local padding_h = 15 * GetGlobalScale()
+    local padding_w = 10 * scale
+    local padding_h = 15 * scale
 
     if not panel:IsEnabled() then
         colorText = ColorAlpha(colors.accentText, 70)
     elseif panel.Depressed or panel:IsSelected() then
         colorBackground = colors.accentActive
         colorText = ColorAlpha(colors.accentText, 200)
-        shift = 1 * GetGlobalScale()
+        shift = 1 * scale
     elseif panel.Hovered then
         colorBackground = colors.accentHover
         colorText = colors.accentText
@@ -322,7 +323,7 @@ function SKIN:PaintWindowBackButton(panel, w, h)
         colorText.a,
         colorText
     )
-    drawShadowedText(
+    drawAdvancedText(
         TryT("button_menu_back"),
         "DermaTTT2TitleSmall",
         h - padding_w,
@@ -330,7 +331,8 @@ function SKIN:PaintWindowBackButton(panel, w, h)
         colorText,
         TEXT_ALIGN_LEFT,
         TEXT_ALIGN_CENTER,
-        1
+        true,
+        scale
     )
 end
 
@@ -411,12 +413,9 @@ function SKIN:PaintMenuButtonTTT2(panel, w, h)
         scale
     )
 
-    local font, fscale, fcmod = fonts.ScaledFont(panel:GetDescriptionFont(), scale)
-    local desc_wrapped = drawGetWrappedText(
-        TryT(panel:GetDescription()),
-        (w - h - 2 * paddingText) / fcmod,
-        font
-    )
+    local font, fscale = fonts.ScaledFont(panel:GetDescriptionFont(), scale)
+    local desc_wrapped =
+        drawGetWrappedText(TryT(panel:GetDescription()), (w - h - 2 * paddingText) / fscale, font)
     local _, lineHeight = draw.GetTextSize("", font, fscale)
     local line_pos = 35 * scale
 
@@ -557,7 +556,14 @@ function SKIN:PaintCheckBox(panel, w, h)
     end
 
     drawRoundedBox(4 * GetGlobalScale(), 0, 0, w, h, colorBox)
-    drawRoundedBox(4 * GetGlobalScale(), offset + 3 * GetGlobalScale(), 3 * GetGlobalScale(), h - 6 * GetGlobalScale(), h - 6 * GetGlobalScale(), colorCenter)
+    drawRoundedBox(
+        4 * GetGlobalScale(),
+        offset + 3 * GetGlobalScale(),
+        3 * GetGlobalScale(),
+        h - 6 * GetGlobalScale(),
+        h - 6 * GetGlobalScale(),
+        colorCenter
+    )
 end
 
 ---
@@ -824,7 +830,14 @@ function SKIN:PaintFormButtonTTT2(panel, w, h)
     end
 
     drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
-    drawRoundedBox(sizes.cornerRadius, 1 * GetGlobalScale(), 1 * GetGlobalScale(), w - 2 * GetGlobalScale(), h - 2 * GetGlobalScale(), colorBox)
+    drawRoundedBox(
+        sizes.cornerRadius,
+        1 * GetGlobalScale(),
+        1 * GetGlobalScale(),
+        w - 2 * GetGlobalScale(),
+        h - 2 * GetGlobalScale(),
+        colorBox
+    )
 
     drawShadowedText(
         TryT(panel:GetText()),
@@ -1000,7 +1013,14 @@ function SKIN:PaintFormBoxTTT2(panel, w, h)
 
     local scale = GetGlobalScale()
     drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBox, false, true, false, true)
-    drawRoundedBox(sizes.cornerRadius, 1 * scale, 1 * scale, w - 2 * scale, h - 2 * scale, colorHandle)
+    drawRoundedBox(
+        sizes.cornerRadius,
+        1 * scale,
+        1 * scale,
+        w - 2 * scale,
+        h - 2 * scale,
+        colorHandle
+    )
 end
 
 ---
@@ -1043,8 +1063,8 @@ function SKIN:PaintHelpLabelTTT2(panel, w, h)
     drawBox(0, 0, 4 * scale, h, colorBar)
 
     local textTranslated = ParT(panel:GetText(), TryT(panel:GetTextParams()))
-    local font, fscale, fcmod = fonts.ScaledFont(panel:GetFont(), scale)
-    local textWrapped = drawGetWrappedText(textTranslated, (w - 2 * panel.paddingX) / fcmod, font)
+    local font, fscale = fonts.ScaledFont(panel:GetFont(), scale)
+    local textWrapped = drawGetWrappedText(textTranslated, (w - 2 * panel.paddingX) / fscale, font)
 
     local _, heightText = drawGetTextSize("", font, fscale)
     local posY = panel.paddingY
@@ -1109,11 +1129,30 @@ function SKIN:PaintNumSliderTTT2(panel, w, h)
     end
 
     drawBox(0, 0, w, h, colorBox)
-    drawRoundedBox(sizes.cornerRadius, 1 * GetGlobalScale(), 1 * GetGlobalScale(), w - 2 * GetGlobalScale(), h - 2 * GetGlobalScale(), colorHandle)
+    drawRoundedBox(
+        sizes.cornerRadius,
+        1 * GetGlobalScale(),
+        1 * GetGlobalScale(),
+        w - 2 * GetGlobalScale(),
+        h - 2 * GetGlobalScale(),
+        colorHandle
+    )
 
     -- draw selection line
-    drawBox(5 * GetGlobalScale(), 0.5 * h - 1 * GetGlobalScale(), w - 2 * pad, 2 * GetGlobalScale(), colorLinePassive)
-    drawBox(5 * GetGlobalScale(), 0.5 * h - 1 * GetGlobalScale(), (w - pad) * panel:GetFraction() - pad, 2 * GetGlobalScale(), colorLineActive)
+    drawBox(
+        5 * GetGlobalScale(),
+        0.5 * h - 1 * GetGlobalScale(),
+        w - 2 * pad,
+        2 * GetGlobalScale(),
+        colorLinePassive
+    )
+    drawBox(
+        5 * GetGlobalScale(),
+        0.5 * h - 1 * GetGlobalScale(),
+        (w - pad) * panel:GetFraction() - pad,
+        2 * GetGlobalScale(),
+        colorLineActive
+    )
 end
 
 ---
@@ -1130,24 +1169,53 @@ function SKIN:PaintSliderTextAreaTTT2(panel, w, h)
         colorText = ColorAlpha(colors.settingsText, alphaDisabled)
     end
 
+    local scale = GetGlobalScale()
+
     -- Draw normal text if currently not in input mode, otherwise draw the TTT2 Text Entry
     if not panel:GetParent():GetTextBoxEnabled() then
         drawBox(0, 0, w, h, colorBox)
-        drawSimpleText(
+        drawAdvancedText(
             panel:GetText(),
             panel:GetFont(),
             0.5 * w,
             0.5 * h,
             colorText,
             TEXT_ALIGN_CENTER,
-            TEXT_ALIGN_CENTER
+            TEXT_ALIGN_CENTER,
+            false,
+            scale
         )
     else
         self:PaintTextEntryTTT2(panel, w, h)
         local vguiColor = utilGetActiveColor(
             utilGetChangedColor(utilGetDefaultColor(vskinGetBackgroundColor()), 25)
         )
+        -- panel:DrawTextEntryText isn't well-behaved wrt scaling, do some hacks to make it work
+
+        local origFont = panel:GetFont()
+        local font, fscale = fonts.ScaledFont(origFont, scale)
+        if fscale ~= 1.0 then
+            mat = Matrix()
+            mat:Translate(Vector(0, 0))
+            mat:Scale(isvector(fscale) and fscale or Vector(fscale, fscale, fscale))
+            mat:Translate(-Vector(ScrW() * 0.5, ScrH() * 0.5))
+
+            render.PushFilterMag(TEXFILTER.LINEAR)
+            render.PushFilterMin(TEXFILTER.LINEAR)
+
+            cam.PushModelMatrix(mat)
+        end
+
+        panel:SetFont(font)
         panel:DrawTextEntryText(vguiColor, vguiColor, vguiColor)
+        panel:SetFont(origFont)
+
+        if fscale ~= 1.0 then
+            cam.PopModelMatrix()
+
+            render.PopFilterMag()
+            render.PopFilterMin()
+        end
     end
 end
 
@@ -1192,7 +1260,14 @@ function SKIN:PaintComboBoxTTT2(panel, w, h)
 
     local scale = GetGlobalScale()
     drawBox(0, 0, w, h, colorBox)
-    drawRoundedBox(sizes.cornerRadius, 1 * scale, 1 * scale, w - 2 * scale, h - 2 * scale, colorHandle)
+    drawRoundedBox(
+        sizes.cornerRadius,
+        1 * scale,
+        1 * scale,
+        w - 2 * scale,
+        h - 2 * scale,
+        colorHandle
+    )
     drawAdvancedText(
         TryT(panel:GetText()),
         panel:GetFont(),
@@ -1307,7 +1382,14 @@ function SKIN:PaintButtonRoundEndLeftTTT2(panel, w, h)
     local colorText = ColorAlpha(utilGetDefaultColor(colorForeground), 220)
 
     drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colors.content, true, false, true, false)
-    drawRoundedBox(sizes.cornerRadius, 2 * GetGlobalScale(), 2 * GetGlobalScale(), w - 3 * GetGlobalScale(), h - 4 * GetGlobalScale(), colorForeground)
+    drawRoundedBox(
+        sizes.cornerRadius,
+        2 * GetGlobalScale(),
+        2 * GetGlobalScale(),
+        w - 3 * GetGlobalScale(),
+        h - 4 * GetGlobalScale(),
+        colorForeground
+    )
 
     drawSimpleText(
         TryT(panel:GetText()),
@@ -1340,7 +1422,14 @@ function SKIN:PaintButtonRoundEndRightTTT2(panel, w, h)
     local colorText = ColorAlpha(utilGetDefaultColor(colorForeground), 220)
 
     drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colors.content, false, true, false, true)
-    drawRoundedBox(sizes.cornerRadius, 1 * GetGlobalScale(), 2 * GetGlobalScale(), w - 3 * GetGlobalScale(), h - 4 * GetGlobalScale(), colorForeground)
+    drawRoundedBox(
+        sizes.cornerRadius,
+        1 * GetGlobalScale(),
+        2 * GetGlobalScale(),
+        w - 3 * GetGlobalScale(),
+        h - 4 * GetGlobalScale(),
+        colorForeground
+    )
 
     drawSimpleText(
         TryT(panel:GetText()),
@@ -1468,7 +1557,7 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 
     local posY = offsetYIcon + sizeIcon + padding
     local textTable = panel:GetText()
-    local font, fscale, fcmod = fonts.ScaledFont(panel:GetFont(), scale)
+    local font, fscale = fonts.ScaledFont(panel:GetFont(), scale)
     local _, heightText = drawGetTextSize("", font, fscale)
 
     for i = 1, #textTable do
@@ -1485,7 +1574,7 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 
         local textTranslated = ParT(text.string, params or {})
 
-        local textWrapped = drawGetWrappedText(textTranslated, (w - offsetXText) / fcmod, font)
+        local textWrapped = drawGetWrappedText(textTranslated, (w - offsetXText) / fscale, font)
 
         for k = 1, #textWrapped do
             drawAdvancedText(
@@ -1749,7 +1838,14 @@ function SKIN:PaintComboCardTTT2(panel, w, h)
 
         width = width + 20 * GetGlobalScale()
 
-        drawRoundedBox(sizes.cornerRadius, widthBorder4, widthBorder4, width, 20 * GetGlobalScale(), colorTag)
+        drawRoundedBox(
+            sizes.cornerRadius,
+            widthBorder4,
+            widthBorder4,
+            width,
+            20 * GetGlobalScale(),
+            colorTag
+        )
 
         drawSimpleText(
             TryT(tagText),
@@ -1912,7 +2008,14 @@ function SKIN:PaintTextEntryTTT2(panel, w, h)
     end
 
     drawBox(0, 0, w, h, colorBox)
-    drawRoundedBox(sizes.cornerRadius, 1 * GetGlobalScale(), 1 * GetGlobalScale(), w - 2 * GetGlobalScale(), h - 2 * GetGlobalScale(), colorHandle)
+    drawRoundedBox(
+        sizes.cornerRadius,
+        1 * GetGlobalScale(),
+        1 * GetGlobalScale(),
+        w - 2 * GetGlobalScale(),
+        h - 2 * GetGlobalScale(),
+        colorHandle
+    )
 end
 
 ---
@@ -2261,8 +2364,8 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
         end
     end
 
-    local font, fscale, fcmod = fonts.ScaledFont("DermaDefault", scale)
-    local text_wrapped = drawGetWrappedText(text_translated, (w - posText - padding) / fcmod, font)
+    local font, fscale = fonts.ScaledFont("DermaDefault", scale)
+    local text_wrapped = drawGetWrappedText(text_translated, (w - posText - padding) / fscale, font)
     local _, heightText = drawGetTextSize("", font, fscale)
 
     local posY = posIcon + heightText + 4 * scale

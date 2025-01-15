@@ -193,7 +193,8 @@ function PANEL:PerformLayout()
     local scale = appearance.GetGlobalScale()
 
     local widthNavContent, heightNavContent = self:GetSize()
-    local heightShift = heightNavHeader * scale + (self.searchBar and heightNavButton * scale + self.padding or 0)
+    local heightShift = heightNavHeader * scale
+        + (self.searchBar and heightNavButton * scale + self.padding or 0)
 
     self:SetSearchBarSize(widthNavContent, heightNavButton * scale)
     self.navAreaScroll:SetSize(widthNavContent, heightNavContent - heightShift)
