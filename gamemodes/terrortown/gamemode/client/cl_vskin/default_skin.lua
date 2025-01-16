@@ -833,14 +833,7 @@ function SKIN:PaintFormButtonTTT2(panel, w, h)
     end
 
     drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
-    drawRoundedBox(
-        sizes.cornerRadius,
-        1 * scale,
-        1 * scale,
-        w - 2 * scale,
-        h - 2 * scale,
-        colorBox
-    )
+    drawRoundedBox(sizes.cornerRadius, 1 * scale, 1 * scale, w - 2 * scale, h - 2 * scale, colorBox)
 
     drawAdvancedText(
         TryT(panel:GetText()),
@@ -1150,13 +1143,7 @@ function SKIN:PaintNumSliderTTT2(panel, w, h)
     )
 
     -- draw selection line
-    drawBox(
-        5 * scale,
-        0.5 * h - 1 * scale,
-        w - 2 * pad,
-        2 * scale,
-        colorLinePassive
-    )
+    drawBox(5 * scale, 0.5 * h - 1 * scale, w - 2 * pad, 2 * scale, colorLinePassive)
     drawBox(
         5 * scale,
         0.5 * h - 1 * scale,
@@ -1859,14 +1846,7 @@ function SKIN:PaintComboCardTTT2(panel, w, h)
 
         width = width + 20 * scale
 
-        drawRoundedBox(
-            sizes.cornerRadius,
-            widthBorder4,
-            widthBorder4,
-            width,
-            20 * scale,
-            colorTag
-        )
+        drawRoundedBox(sizes.cornerRadius, widthBorder4, widthBorder4, width, 20 * scale, colorTag)
 
         drawAdvancedText(
             TryT(tagText),
@@ -1883,12 +1863,7 @@ function SKIN:PaintComboCardTTT2(panel, w, h)
 
     local fnt, fscale = fonts.ScaledFont(panel:GetFont(), scale)
     drawAdvancedText(
-        drawGetLimitedLengthText(
-            TryT(panel:GetText()),
-            (w - 2 * widthBorder4) / fscale,
-            fnt,
-            "..."
-        ),
+        drawGetLimitedLengthText(TryT(panel:GetText()), (w - 2 * widthBorder4) / fscale, fnt, "..."),
         panel:GetFont(),
         widthBorder4,
         w + shift,
@@ -2391,7 +2366,8 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
         end
     end
 
-    local sfnt = "DermaTTT2Text"
+    --local sfnt = "DermaTTT2Text"
+    local sfnt = "DermaDefault"
     local font, fscale = fonts.ScaledFont(sfnt, scale)
     local text_wrapped = drawGetWrappedText(text_translated, (w - posText - padding) / fscale, font)
     local _, heightText = drawGetTextSize("", font, fscale)

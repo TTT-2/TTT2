@@ -400,6 +400,26 @@ end
 
 local drawShadowedText = draw.ShadowedText
 
+local function VecInv(scale)
+    if isvector(scale) then
+        return Vector(1.0 / scale.x, 1.0 / scale.y, 1.0 / scale.z)
+    else
+        return 1.0 / scale
+    end
+end
+
+local function MakeRealScaleMatrix(scale)
+    local x, y, z, w
+    if isvector(scale) then
+        x, y, z = scale:Unpack()
+        w = mathMax(x, mathMax(y, z))
+    else
+        x, y, z, w = scale, scale, scale, scale
+    end
+
+    return Matrix({ { x, 0, 0, 0 }, { 0, y, 0, 0 }, { 0, 0, z, 0 }, { 0, 0, 0, 1.0 --[[/ w]] } })
+end
+
 ---
 -- Draws an advanced text (scalable)
 -- @note You should use @{surface.CreateAdvancedFont} before trying to access the font
@@ -445,13 +465,21 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
         print("mat:")
         mat = Matrix()
         mat:Translate(Vector(x, y))
-        print(mat)
-        mat:Scale(isvector(scale) and scale or Vector(scale, scale, scale))
-        print(mat)
+        print("tns", mat)
+        mat:Mul(MakeRealScaleMatrix(scale))
+        print("scl", mat)
         mat:Rotate(Angle(0, angle, 0))
-        print(mat)
+        print("rot", mat)
         mat:Translate(-Vector(hw, hh))
-        print(mat)
+        --local xscale = isvector(scale) and scale[1] or scale
+        --local yscale = isvector(scale) and scale[2] or scale
+        --local xscale, yscale = 1, 1
+        --mat:Translate(-Vector((x + ppState.translate_x) / xscale, (y + ppState.translate_y) / yscale))
+        --print(mat)
+        --mat:Translate(Vector((ppState.translate_x + x) / xscale, (ppState.translate_y + y) / yscale))
+        print("tns", mat)
+        --mat:Invert()
+        --print("inv", mat)
 
         render.PushFilterMag(TEXFILTER.LINEAR)
         render.PushFilterMin(TEXFILTER.LINEAR)
@@ -461,15 +489,32 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
         x = hw
         y = hh
         if ppState then
-            --x = x - ppState.translate_x
-            --y = y - ppState.translate_y
+            x = x - ppState.translate_x
+            y = y - ppState.translate_y
         end
         --x = 0
         --y = 0
     end
 
-    print("draw.AdvancedText",text,font,x,y)
-    if mat then print("transformedPos", mat * Vector(x,y)) end
+    print("draw.AdvancedText", text, font, x, y)
+    if mat then
+        print("transformedPos", mat * Vector(x, y))
+    end
+
+    local pp = surface.GetPanelPaintState()
+    if pp then
+        draw.RoundedBox(
+            1,
+            0,
+            0,
+            pp.scissor_right - pp.scissor_left,
+            pp.scissor_bottom - pp.scissor_top,
+            Color(255 * (pp.scissor_left / ScrW()), 255, 255 * (pp.scissor_top / ScrH()), 3)
+        )
+    end
+
+    draw.RoundedBox(1, x, y, 10, 10, Color(255, 0, 0, 255))
+
     if shadow then
         drawShadowedText(text, font, x, y, color, xalign, yalign, scaleModifier)
     else
