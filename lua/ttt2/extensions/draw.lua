@@ -419,36 +419,57 @@ local drawShadowedText = draw.ShadowedText
 -- @realm client
 function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale, angle)
     local scaleModifier = 1.0
-    local t_font = fonts.GetFont(font)
     scale = scale or 1.0
-
-    if t_font then
-        font, scale, scaleModifier = fonts.ScaledFont(font, scale, t_font)
-    end
+    font, scale, scaleModifier = fonts.ScaledFont(font, scale)
 
     local scaled = isvector(scale) or scale ~= 1.0
     local rotated = angle and angle ~= 0 and angle ~= 360
     local mat
 
+    local clipping = DisableClipping(true)
+
     if scaled or rotated then
         local hw = ScrW() * 0.5
         local hh = ScrH() * 0.5
 
+        local ppState = surface.GetPanelPaintState()
+        PrintTable(ppState)
+
+        if ppState then
+            x = x + ppState.translate_x
+            y = y + ppState.translate_y
+            hw = ppState.scissor_left + (ppState.scissor_right - ppState.scissor_left) * 0.5
+            hh = ppState.scissor_top + (ppState.scissor_bottom - ppState.scissor_top) * 0.5
+        end
+
+        print("mat:")
         mat = Matrix()
         mat:Translate(Vector(x, y))
+        print(mat)
         mat:Scale(isvector(scale) and scale or Vector(scale, scale, scale))
+        print(mat)
         mat:Rotate(Angle(0, angle, 0))
+        print(mat)
         mat:Translate(-Vector(hw, hh))
+        print(mat)
 
         render.PushFilterMag(TEXFILTER.LINEAR)
         render.PushFilterMin(TEXFILTER.LINEAR)
 
-        cam.PushModelMatrix(mat)
+        cam.PushModelMatrix(mat, true)
 
         x = hw
         y = hh
+        if ppState then
+            --x = x - ppState.translate_x
+            --y = y - ppState.translate_y
+        end
+        --x = 0
+        --y = 0
     end
 
+    print("draw.AdvancedText",text,font,x,y)
+    if mat then print("transformedPos", mat * Vector(x,y)) end
     if shadow then
         drawShadowedText(text, font, x, y, color, xalign, yalign, scaleModifier)
     else
@@ -461,6 +482,8 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
         render.PopFilterMag()
         render.PopFilterMin()
     end
+
+    DisableClipping(clipping)
 end
 
 -- If there are no spaces, we have to cut the string at some point.

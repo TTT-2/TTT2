@@ -99,8 +99,10 @@ function fonts.ScaledFont(font, scale, t_font)
         scale = appearance.GetGlobalScale()
     end
     t_font = t_font or fonts.GetFont(font)
-    local scaleModifier = fonts.GetScaleModifier(scale)
-    font = t_font[scaleModifier]
-    scale = scale / scaleModifier
+    if t_font then
+        local scaleModifier = fonts.GetScaleModifier(scale)
+        font = t_font[scaleModifier]
+        scale = scale / scaleModifier
+    end
     return font, scale, scaleModifier
 end

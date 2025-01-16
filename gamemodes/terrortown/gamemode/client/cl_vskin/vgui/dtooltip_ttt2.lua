@@ -52,7 +52,7 @@ function PANEL:PerformLayout()
         self:SetTall(self.contents:GetTall() + 8 * scale)
     else
         local font, fontScale = fonts.ScaledFont(self:GetFont(), scale)
-        local w, h = draw.GetTextSize(LANG.TryTranslation(self:GetText()), font)
+        local w, h = draw.GetTextSize(LANG.TryTranslation(self:GetText()), font, fontScale)
 
         self:SetSize(
             w * fontScale + 20 * scale,

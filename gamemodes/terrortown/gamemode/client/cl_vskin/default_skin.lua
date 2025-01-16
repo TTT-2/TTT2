@@ -1641,7 +1641,7 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 
         drawRoundedBox(sizes.cornerRadius, offsetXText, posY, widthScoreBox, height, colorBox)
 
-        drawAdvancedext(
+        drawAdvancedText(
             ParT("title_player_score", { player = event:GetNameFrom64(ply64) }),
             panel:GetFont(),
             offsetXText + padding,
@@ -2397,6 +2397,8 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
 
     local posY = posIcon + heightText + 4 * scale
 
+    print(font, fscale, heightText, posIcon, posY)
+    PrintTable(text_wrapped)
     for k = 1, #text_wrapped do
         drawAdvancedText(
             text_wrapped[k],
