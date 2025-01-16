@@ -2391,7 +2391,8 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
         end
     end
 
-    local font, fscale = fonts.ScaledFont("DermaDefault", scale)
+    local sfnt = "DermaTTT2Text"
+    local font, fscale = fonts.ScaledFont(sfnt, scale)
     local text_wrapped = drawGetWrappedText(text_translated, (w - posText - padding) / fscale, font)
     local _, heightText = drawGetTextSize("", font, fscale)
 
@@ -2402,7 +2403,7 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
     for k = 1, #text_wrapped do
         drawAdvancedText(
             text_wrapped[k],
-            "DermaDefault",
+            sfnt,
             posText,
             posY,
             colorText,
