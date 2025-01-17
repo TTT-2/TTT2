@@ -376,7 +376,17 @@ function HELPSCRN:ShowSubmenu(menuClass)
     contentArea:DockPadding(self.padding, self.padding, self.padding, self.padding)
     contentArea:Dock(TOP)
 
-    menuClass:FillNavPanel(navArea, contentArea, self.padding)
+    -- MAKE SEPARATE SUBMENULIST ON THE NAVAREA WITH A CONTENT AREA
+    local submenuList = vgui.Create("DSubmenuListTTT2", navArea)
+    submenuList:Dock(FILL)
+    submenuList:SetPadding(self.padding)
+    submenuList:SetBasemenuClass(menuClass, contentArea)
+    if menuClass.searchBarPlaceholderText then
+        submenuList:SetSearchBarPlaceholderText(menuClass.searchBarPlaceholderText)
+    end
+
+    -- REFRESH SIZE OF SUBMENULIST FOR CORRECT SUBMENU DEPENDENT SIZE
+    submenuList:InvalidateLayout(true)
 
     -- REGISTER REBUILD CALLBACK
     frame.OnRebuild = function(slf)
