@@ -71,6 +71,7 @@ end
 -- override this so that we have non-searched submenus above the search bar
 function CLGAMEMODEMENU:GetVisibleNonSearchedSubmenus()
     local visibleSubmenus = {}
+    -- all of the non-searchable submenus are in self.submenus
     local allSubmenus = self.submenus
 
     for i = 1, #allSubmenus do

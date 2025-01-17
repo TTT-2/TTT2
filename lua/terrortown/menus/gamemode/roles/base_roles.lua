@@ -2,6 +2,7 @@
 
 CLGAMEMODESUBMENU.priority = 0
 CLGAMEMODESUBMENU.title = ""
+CLGAMEMODESUBMENU.searchable = true
 
 local function PopulateInfo(parent, roleData)
     if roleData.builtin then

@@ -4,6 +4,7 @@
 CLGAMEMODESUBMENU.type = "base_gamemodesubmenu"
 CLGAMEMODESUBMENU.priority = 0
 CLGAMEMODESUBMENU.title = ""
+CLGAMEMODESUBMENU.searchable = true
 
 ---
 -- This function is used to populate the submenu on open/refresh.

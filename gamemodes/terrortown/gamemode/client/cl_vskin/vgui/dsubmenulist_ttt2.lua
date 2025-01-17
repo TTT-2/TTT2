@@ -297,7 +297,7 @@ function PANEL:PerformLayout()
 
     local widthNavContent, heightNavContent = self:GetSize()
 
-    self.navAreaScroll:SetSize(widthNavContent, heightNavContent - heightNavHeader)
+    self.navAreaScroll:SetSize(widthNavContent, heightNavContent)
     self:SetSearchBarSize(self.navAreaScroll:InnerWidth(), heightNavButton)
 
     -- Last invalidate all buttons and then the scrolllist for correct size to contents
