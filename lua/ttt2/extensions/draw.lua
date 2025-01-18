@@ -400,26 +400,6 @@ end
 
 local drawShadowedText = draw.ShadowedText
 
-local function VecInv(scale)
-    if isvector(scale) then
-        return Vector(1.0 / scale.x, 1.0 / scale.y, 1.0 / scale.z)
-    else
-        return 1.0 / scale
-    end
-end
-
-local function MakeRealScaleMatrix(scale)
-    local x, y, z, w
-    if isvector(scale) then
-        x, y, z = scale:Unpack()
-        w = mathMax(x, mathMax(y, z))
-    else
-        x, y, z, w = scale, scale, scale, scale
-    end
-
-    return Matrix({ { x, 0, 0, 0 }, { 0, y, 0, 0 }, { 0, 0, z, 0 }, { 0, 0, 0, 1.0 --[[/ w]] } })
-end
-
 ---
 -- Draws an advanced text (scalable)
 -- @note You should use @{surface.CreateAdvancedFont} before trying to access the font
@@ -440,80 +420,111 @@ end
 function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale, angle)
     local scaleModifier = 1.0
     scale = scale or 1.0
+    angle = angle or 0
     font, scale, scaleModifier = fonts.ScaledFont(font, scale)
 
     local scaled = isvector(scale) or scale ~= 1.0
     local rotated = angle and angle ~= 0 and angle ~= 360
     local mat
 
-    local clipping = DisableClipping(true)
+    --local clipping = DisableClipping(true)
 
     if scaled or rotated then
-        local hw = ScrW() * 0.5
-        local hh = ScrH() * 0.5
-
         local ppState = surface.GetPanelPaintState()
-        PrintTable(ppState)
-
         if ppState then
             x = x + ppState.translate_x
             y = y + ppState.translate_y
-            hw = ppState.scissor_left + (ppState.scissor_right - ppState.scissor_left) * 0.5
-            hh = ppState.scissor_top + (ppState.scissor_bottom - ppState.scissor_top) * 0.5
         end
 
-        print("mat:")
+        -- The full transformation we want is "T(x̅) = (R·S)x̅ - (R·S)x̅₀ + x̅₀"
+        -- where R is the rotation matrix, S is the scale matrix, x̅₀ is the position
+        -- that we've been given in (x, y), x̅ is the input fragment
+        -- "- (R·S)x̅₀ + x̅₀" is a constant term, so will be the translation field of the matrix.
         mat = Matrix()
-        mat:Translate(Vector(x, y))
-        print("tns", mat)
-        mat:Mul(MakeRealScaleMatrix(scale))
-        print("scl", mat)
+
+        local xvec = Vector(x, y, 0)
+        local scaleVec -- note: it is ABSOLUTELY VITAL that the Z scale be 1. If it isn't, then the Z coord after
+        -- the vertex shader will (possibly) be outside [0, 1], which means the tris will get culled
+        -- and the text won't show up.
+        if isvector(scale) then
+            scaleVec = Vector(scale.x, scale.y, 1)
+        else
+            scaleVec = Vector(scale, scale, 1)
+        end
+
+        -- First, we build up the core transformation matrix
         mat:Rotate(Angle(0, angle, 0))
-        print("rot", mat)
-        mat:Translate(-Vector(hw, hh))
-        --local xscale = isvector(scale) and scale[1] or scale
-        --local yscale = isvector(scale) and scale[2] or scale
-        --local xscale, yscale = 1, 1
-        --mat:Translate(-Vector((x + ppState.translate_x) / xscale, (y + ppState.translate_y) / yscale))
-        --print(mat)
-        --mat:Translate(Vector((ppState.translate_x + x) / xscale, (ppState.translate_y + y) / yscale))
-        print("tns", mat)
-        --mat:Invert()
-        --print("inv", mat)
+        mat:Scale(scaleVec)
+
+        -- Next, run a vector position throuhg that transform to get the translation portion
+        local translate = -(mat * xvec) + xvec
+        mat:SetTranslation(translate)
+
+        -- We don't need to change x,y, but we need to make sure we're not using global coordinates when we draw it
+
+        --[[ -- Uncomment this (and others) to assist in debugging model matrix issues
+        local transformedOrigin = mat * Vector(x, y)
+        local transformedTen = mat * Vector(x + 20, y + 10)
+
+        -- before pushing the transform matrix, draw out some more little debug boxes
+        draw.RoundedBox(
+            1,
+            transformedOrigin.x - ppState.translate_x,
+            transformedOrigin.y - ppState.translate_y,
+            10,
+            10,
+            Color(0, 255, 255, 255)
+        )
+        draw.RoundedBox(
+            1,
+            transformedTen.x - ppState.translate_x,
+            transformedTen.y - ppState.translate_y,
+            10,
+            10,
+            Color(0, 127, 255, 255)
+        )
+        ]]
+
+        if ppState then
+            x = x - ppState.translate_x
+            y = y - ppState.translate_y
+        end
 
         render.PushFilterMag(TEXFILTER.LINEAR)
         render.PushFilterMin(TEXFILTER.LINEAR)
 
         cam.PushModelMatrix(mat, true)
-
-        x = hw
-        y = hh
-        if ppState then
-            x = x - ppState.translate_x
-            y = y - ppState.translate_y
-        end
-        --x = 0
-        --y = 0
     end
 
-    print("draw.AdvancedText", text, font, x, y)
+    --[[ -- Uncomment this to paint some big green boxes and lines to visualize the above transformation
     if mat then
-        print("transformedPos", mat * Vector(x, y))
-    end
+        local pp = surface.GetPanelPaintState()
+        if pp then
+            --transform debug
+            local w = pp.scissor_right - pp.scissor_left
+            local h = pp.scissor_bottom - pp.scissor_top
+            draw.RoundedBox(
+                1,
+                0,
+                0,
+                w,
+                h,
+                Color(255 * (pp.scissor_left / ScrW()), 255, 255 * (pp.scissor_top / ScrH()), 3)
+            )
 
-    local pp = surface.GetPanelPaintState()
-    if pp then
-        draw.RoundedBox(
-            1,
-            0,
-            0,
-            pp.scissor_right - pp.scissor_left,
-            pp.scissor_bottom - pp.scissor_top,
-            Color(255 * (pp.scissor_left / ScrW()), 255, 255 * (pp.scissor_top / ScrH()), 3)
-        )
+            -- draw along the top edge
+            for i = 0, w, w / 16 do
+                draw.RoundedBox(1, i, -h / 2, w / 256, h, Color(0, 0, 0, 127))
+            end
+            -- then along the left edge
+            for i = 0, h, h / 16 do
+                draw.RoundedBox(1, -w / 2, i, w, h / 256, Color(0, 0, 0, 127))
+            end
+        end
     end
 
     draw.RoundedBox(1, x, y, 10, 10, Color(255, 0, 0, 255))
+    ]]
 
     if shadow then
         drawShadowedText(text, font, x, y, color, xalign, yalign, scaleModifier)
@@ -528,7 +539,7 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
         render.PopFilterMin()
     end
 
-    DisableClipping(clipping)
+    --DisableClipping(clipping)
 end
 
 -- If there are no spaces, we have to cut the string at some point.
