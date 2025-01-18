@@ -95,12 +95,13 @@ CLSCORE.sizes = {}
 -- @internal
 -- @realm client
 function CLSCORE:CalculateSizes()
-    self.sizes.width = 1200
-    self.sizes.height = 700
-    self.sizes.padding = 10
+    local scale = appearance.GetGlobalScale()
+    self.sizes.width = 1200 * scale
+    self.sizes.height = 700 * scale
+    self.sizes.padding = 10 * scale
     self.sizes.paddingSmall = 0.5 * self.sizes.padding
 
-    self.sizes.widthMenu = 50 + vskin.GetBorderSize()
+    self.sizes.widthMenu = 50 * scale + vskin.GetBorderSize()
 
     local doublePadding = 2 * self.sizes.padding
 
@@ -110,28 +111,29 @@ function CLSCORE:CalculateSizes()
         - vskin.GetBorderSize()
     self.sizes.widthMainArea = self.sizes.width - self.sizes.widthMenu - doublePadding
 
-    self.sizes.heightHeaderPanel = 120
-    self.sizes.widthTopButton = 140
-    self.sizes.heightTopButton = 30
+    self.sizes.heightHeaderPanel = 120 * scale
+    self.sizes.widthTopButton = 140 * scale
+    self.sizes.heightTopButton = 30 * scale
     self.sizes.widthTopLabel = 0.5 * self.sizes.widthMainArea
         - self.sizes.widthTopButton
         - self.sizes.padding
     self.sizes.heightTopButtonPanel = self.sizes.heightTopButton + doublePadding
-    self.sizes.heightRow = 25
-    self.sizes.heightTitleRow = 30
+    self.sizes.heightRow = 25 * scale
+    self.sizes.heightTitleRow = 30 * scale
 
-    self.sizes.heightButton = 45
-    self.sizes.widthButton = 175
-    self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
+    self.sizes.heightButton = 45 * scale
+    self.sizes.widthButton = 175 * scale
+    self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1 * scale
     self.sizes.heightContentLarge = self.sizes.heightMainArea
         - self.sizes.heightBottomButtonPanel
         - self.sizes.heightTopButtonPanel
         - 3 * self.sizes.padding
     self.sizes.heightContent = self.sizes.heightContentLarge - self.sizes.heightHeaderPanel
-    self.sizes.heightMenuButton = 50
+    self.sizes.heightMenuButton = 50 * scale
 
-    self.sizes.widthKarma = 50
-    self.sizes.widthScore = 35
+    self.sizes.widthKarma = 50 * scale
+    self.sizes.widthScore = 35 * scale
+    self.sizes.scale = scale
 end
 
 ---
@@ -197,7 +199,10 @@ function CLSCORE:CreatePanel()
     local buttonClose = vgui.Create("DButtonTTT2", buttonArea)
     buttonClose:SetText("close")
     buttonClose:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-    buttonClose:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
+    buttonClose:SetPos(
+        self.sizes.widthMainArea - self.sizes.widthButton,
+        self.sizes.padding + 1 * self.sizes.scale
+    )
     buttonClose.DoClick = function(btn)
         self:HidePanel()
     end
@@ -209,7 +214,7 @@ function CLSCORE:CreatePanel()
         local data = subMenusIndexed[i]
 
         local menuButton = menuBoxGrid:Add("DSubmenuButtonTTT2")
-        menuButton:SetSize(self.sizes.widthMenu - 1, self.sizes.heightMenuButton)
+        menuButton:SetSize(self.sizes.widthMenu - 1 * self.sizes.scale, self.sizes.heightMenuButton)
         menuButton:SetIcon(data.icon)
         menuButton:SetTooltip(data.title)
         menuButton.DoClick = function(slf)

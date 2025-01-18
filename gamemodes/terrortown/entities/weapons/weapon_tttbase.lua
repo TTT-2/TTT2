@@ -19,13 +19,15 @@ end
 
 if CLIENT then
     -- hud help font
-    surface.CreateAdvancedFont(
+    fonts.AddFont(
         "weapon_hud_help",
-        { font = "Tahoma", size = 16, weight = 600, extended = true }
+        16,
+        { font = "Tahoma", weight = 600, extended = true }
     )
-    surface.CreateAdvancedFont(
+    fonts.AddFont(
         "weapon_hud_help_key",
-        { font = "Tahoma", size = 13, weight = 1200, extended = true }
+        13,
+        { font = "Tahoma", weight = 1200, extended = true }
     )
 end
 
@@ -563,7 +565,8 @@ if CLIENT then
                 -- attempt to translate binding in case it can be translated
                 bindig = TryT(binding)
 
-                local wKey, hKey = draw.GetTextSize(binding, "weapon_hud_help_key", scale)
+                local kfont, kfscale = fonts.ScaledFont("weapon_hud_help_key", scale)
+                local wKey, hKey = draw.GetTextSize(binding, kfont, kfscale)
 
                 wBinding = wKey + 2 * padXKey * scale
                 hBinding = hKey + 2 * padYKey * scale
@@ -578,7 +581,8 @@ if CLIENT then
             end
 
             local translatedDescription = TryT(description)
-            local wDescription = draw.GetTextSize(translatedDescription, "weapon_hud_help", scale)
+            local font, fscale = fonts.ScaledFont("weapon_hud_help", scale)
+            local wDescription = draw.GetTextSize(translatedDescription, font, fscale)
 
             processedData[i] = {
                 w = wBinding,
@@ -774,7 +778,8 @@ if CLIENT then
             end
         end
 
-        local width = draw.GetTextSize(text, "weapon_hud_help")
+        local font, fscale = fonts.ScaledFont("weapon_hud_help")
+        local width = draw.GetTextSize(text, font, fscale)
 
         self.HUDHelp.bindingLines[#self.HUDHelp.bindingLines + 1] =
             { text = text, binding = materialOrBinding }

@@ -7,8 +7,9 @@ local PANEL = {}
 ---
 -- @ignore
 function PANEL:Init()
-    self:SetContentAlignment(4)
-    self:SetTextInset(5, 0)
+    local scale = appearance.GetGlobalScale()
+    self:SetContentAlignment(4 * scale)
+    self:SetTextInset(5 * scale, 0)
     self:SetFont("DermaTTT2CatHeader")
 
     self.text = ""

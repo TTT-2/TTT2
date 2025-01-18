@@ -62,8 +62,10 @@ function PANEL:Init()
     self:SetScreenLock(false)
     self:SetDeleteOnClose(true)
 
-    self:SetMinWidth(50)
-    self:SetMinHeight(50)
+    local scale = appearance.GetGlobalScale()
+
+    self:SetMinWidth(50 * scale)
+    self:SetMinHeight(50 * scale)
 
     -- This turns off the engine drawing
     self:SetPaintBackgroundEnabled(false)
@@ -87,7 +89,7 @@ function PANEL:Init()
         font = "DermaTTT2Title",
     }
 
-    self:SetPadding(5, 5, 5, 5)
+    self:SetPadding(5 * scale, 5 * scale, 5 * scale, 5 * scale)
 
     self.panelData = {
         hidden = false,
@@ -378,6 +380,8 @@ function PANEL:Think()
     local mousex = math.Clamp(gui.MouseX(), 1, scrW - 1)
     local mousey = math.Clamp(gui.MouseY(), 1, scrH - 1)
 
+    local scale = appearance.GetGlobalScale()
+
     if self.dragging then
         local x = mousex - self.dragging[1]
         local y = mousey - self.dragging[2]
@@ -419,7 +423,7 @@ function PANEL:Think()
     if
         self.Hovered
         and self.m_bSizable
-        and mousex > (screenX + self:GetWide() - 20)
+        and mousex > (screenX + self:GetWide() - 20 * scale)
         and mousey > (screenY + self:GetTall() - vskin.GetHeaderHeight())
     then
         self:SetCursor("sizenwse")
@@ -457,10 +461,11 @@ end
 -- @realm client
 function PANEL:OnMousePressed()
     local screenX, screenY = self:LocalToScreen(0, 0)
+    local scale = appearance.GetGlobalScale()
 
     if
         self.m_bSizable
-        and gui.MouseX() > (screenX + self:GetWide() - 20)
+        and gui.MouseX() > (screenX + self:GetWide() - 20 * scale)
         and gui.MouseY() > (screenY + self:GetTall() - vskin.GetHeaderHeight())
     then
         self.sizing = {
@@ -496,12 +501,13 @@ end
 -- @ignore
 function PANEL:PerformLayout()
     local size = vskin.GetHeaderHeight()
+    local scale = appearance.GetGlobalScale()
 
     self.btnClose:SetPos(self:GetWide() - size, 0)
     self.btnClose:SetSize(size, size)
 
     self.btnBack:SetPos(0, 0)
-    self.btnBack:SetSize(100, size)
+    self.btnBack:SetSize(100 * scale, size)
 
     self:UpdatePadding()
 end

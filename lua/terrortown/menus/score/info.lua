@@ -4,14 +4,15 @@ local TryT = LANG.TryTranslation
 local ParT = LANG.GetParamTranslation
 local IsKarmaEnabled = KARMA.IsEnabled
 
-local function GetPanelTextSize(pnl)
-    surface.SetFont(pnl:GetTitleFont())
-    return surface.GetTextSize(TryT(pnl:GetTitle()))
+local function GetPanelTextSize(pnl, scale)
+    scale = scale or 1.0
+    local font, fscale = fonts.ScaledFont(pnl:GetTitleFont(), scale)
+    return draw.GetTextSize(TryT(pnl:GetTitle()), font, fscale)
 end
 
-local function MakePlayerGenericTooltip(parent, ply, items, title)
-    local initTitleHeight = 25
-    local lineHeight = 20
+local function MakePlayerGenericTooltip(parent, ply, items, title, sizes)
+    local initTitleHeight = 25 * sizes.scale
+    local lineHeight = 20 * sizes.scale
     local iconOffset = (
         (lineHeight - 2 * math.Round(0.1 * lineHeight)) + 4 * math.Round(0.1 * lineHeight)
     )
@@ -24,7 +25,7 @@ local function MakePlayerGenericTooltip(parent, ply, items, title)
     titleBox:SetTitle(title)
     titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
-    local lengthLongestLine, titleHeight = GetPanelTextSize(titleBox)
+    local lengthLongestLine, titleHeight = GetPanelTextSize(titleBox, sizes.scale)
     local height = math.max(initTitleHeight, titleHeight)
     titleBox:SetHeight(height)
 
@@ -37,7 +38,7 @@ local function MakePlayerGenericTooltip(parent, ply, items, title)
             plyRow:SetTitle(thing.title)
         end
 
-        local rowWidth, rowHeight = GetPanelTextSize(plyRow)
+        local rowWidth, rowHeight = GetPanelTextSize(plyRow, sizes.scale)
 
         if thing.iconMaterial then
             plyRow:SetIcon(thing.iconMaterial)
@@ -200,11 +201,12 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                     plyRolesTooltipPanel,
                     ply,
                     roleBucket,
-                    "tooltip_roles_time"
+                    "tooltip_roles_time",
+                    sizes
                 )
 
                 plyNameBox:SetTooltipPanel(plyRolesTooltipPanel)
-                plyNameBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
+                plyNameBox:SetTooltipFixedPosition(0, sizes.heightRow + 1 * sizes.scale)
                 plyNameBox:SetTooltipFixedSize(widthRolesTooltip, heightRolesTooltip)
                 plyRolesTooltipPanel:SetSize(widthRolesTooltip, heightRolesTooltip)
 
@@ -229,11 +231,12 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                         plyKarmaTooltipPanel,
                         ply,
                         karmaBucket,
-                        "tooltip_karma_gained"
+                        "tooltip_karma_gained",
+                        sizes
                     )
 
                     plyKarmaBox:SetTooltipPanel(plyKarmaTooltipPanel)
-                    plyKarmaBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
+                    plyKarmaBox:SetTooltipFixedPosition(0, sizes.heightRow + 1 * sizes.scale)
                     plyKarmaBox:SetTooltipFixedSize(widthKarmaTooltip, heightKarmaTooltip)
                     plyKarmaTooltipPanel:SetSize(widthKarmaTooltip, heightKarmaTooltip)
                 end
@@ -289,11 +292,12 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                     plyScoreTooltipPanel,
                     ply,
                     scoreBucket,
-                    "tooltip_score_gained"
+                    "tooltip_score_gained",
+                    sizes
                 )
 
                 plyPointsBox:SetTooltipPanel(plyScoreTooltipPanel)
-                plyPointsBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
+                plyPointsBox:SetTooltipFixedPosition(0, sizes.heightRow + 1 * sizes.scale)
                 plyPointsBox:SetTooltipFixedSize(widthScoreTooltip, heightScoreTooltip)
                 plyScoreTooltipPanel:SetSize(widthScoreTooltip, heightScoreTooltip)
             end

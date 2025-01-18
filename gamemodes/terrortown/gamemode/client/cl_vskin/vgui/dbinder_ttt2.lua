@@ -14,8 +14,9 @@ Derma_Install_Convar_Functions(PANEL)
 ---
 -- @ignore
 function PANEL:Init()
+    local scale = appearance.GetGlobalScale()
     self:SetSelectedNumber(0)
-    self:SetSize(60, 30)
+    self:SetSize(60 * scale, 30 * scale)
 end
 
 ---

@@ -75,16 +75,17 @@ SEARCHSCREEN.infoBoxes = {}
 -- Calculates and caches the dimensions of the bodysearch UI.
 -- @realm client
 function SEARCHSCREEN:CalculateSizes()
-    self.sizes.width = 600
-    self.sizes.height = 500
-    self.sizes.padding = 10
+    local scale = appearance.GetGlobalScale()
+    self.sizes.width = 600 * scale
+    self.sizes.height = 500 * scale
+    self.sizes.padding = 10 * scale
 
-    self.sizes.heightButton = 45
-    self.sizes.widthButton = 160
-    self.sizes.widthButtonCredits = 220
-    self.sizes.widthButtonTakeCredits = 180
-    self.sizes.widthButtonClose = 100
-    self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
+    self.sizes.heightButton = 45 * scale
+    self.sizes.widthButton = 160 * scale
+    self.sizes.widthButtonCredits = 220 * scale
+    self.sizes.widthButtonTakeCredits = 180 * scale
+    self.sizes.widthButtonClose = 100 * scale
+    self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1 * scale
 
     self.sizes.widthMainArea = self.sizes.width - 2 * self.sizes.padding
     self.sizes.heightMainArea = self.sizes.height
@@ -93,14 +94,15 @@ function SEARCHSCREEN:CalculateSizes()
         - vskin.GetHeaderHeight()
         - vskin.GetBorderSize()
 
-    self.sizes.widthProfileArea = 200
+    self.sizes.widthProfileArea = 200 * scale
 
     self.sizes.widthContentArea = self.sizes.width
         - self.sizes.widthProfileArea
         - 3 * self.sizes.padding
-    self.sizes.widthContentBox = self.sizes.widthContentArea - 2 * self.sizes.padding - 100
+    self.sizes.widthContentBox = self.sizes.widthContentArea - 2 * self.sizes.padding - 100 * scale
 
-    self.sizes.heightInfoItem = 78
+    self.sizes.heightInfoItem = 78 * scale
+    self.sizes.scale = scale
 end
 
 ---
@@ -330,11 +332,11 @@ function SEARCHSCREEN:Show(data)
     local buttonReport = vgui.Create("DButtonTTT2", buttonArea)
     buttonReport:SetText("search_call")
     buttonReport:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-    buttonReport:SetPos(0, self.sizes.padding + 1)
+    buttonReport:SetPos(0, self.sizes.padding + 1 * self.sizes.scale)
     buttonReport.DoClick = function(btn)
         bodysearch.ClientReportsCorpse(data.rag)
     end
-    buttonReport:SetIcon(roles.DETECTIVE.iconMaterial, true, 16)
+    buttonReport:SetIcon(roles.DETECTIVE.iconMaterial, true, 16 * self.sizes.scale)
 
     if not bodysearch.CanReportBody(data.ragOwner) then
         buttonReport:SetEnabled(false)
@@ -355,7 +357,7 @@ function SEARCHSCREEN:Show(data)
         buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
         buttonConfirm:SetPos(
             self.sizes.widthMainArea - self.sizes.widthButton,
-            self.sizes.padding + 1
+            self.sizes.padding + 1 * self.sizes.scale
         )
     elseif bodysearch.IsConfirmed(data.ragOwner) then
         buttonConfirm:SetText("search_confirmed")
@@ -363,7 +365,7 @@ function SEARCHSCREEN:Show(data)
         buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
         buttonConfirm:SetPos(
             self.sizes.widthMainArea - self.sizes.widthButton,
-            self.sizes.padding + 1
+            self.sizes.padding + 1 * self.sizes.scale
         )
     elseif not bodysearch.CanConfirmBody() then
         if playerCanTakeCredits then
@@ -373,7 +375,7 @@ function SEARCHSCREEN:Show(data)
             buttonConfirm:SetSize(self.sizes.widthButtonTakeCredits, self.sizes.heightButton)
             buttonConfirm:SetPos(
                 self.sizes.widthMainArea - self.sizes.widthButtonTakeCredits,
-                self.sizes.padding + 1
+                self.sizes.padding + 1 * self.sizes.scale
             )
         else
             buttonConfirm:SetText("search_confirm_forbidden")
@@ -381,7 +383,7 @@ function SEARCHSCREEN:Show(data)
             buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
             buttonConfirm:SetPos(
                 self.sizes.widthMainArea - self.sizes.widthButton,
-                self.sizes.padding + 1
+                self.sizes.padding + 1 * self.sizes.scale
             )
         end
     elseif playerCanTakeCredits then
@@ -390,7 +392,7 @@ function SEARCHSCREEN:Show(data)
         buttonConfirm:SetSize(self.sizes.widthButtonCredits, self.sizes.heightButton)
         buttonConfirm:SetPos(
             self.sizes.widthMainArea - self.sizes.widthButtonCredits,
-            self.sizes.padding + 1
+            self.sizes.padding + 1 * self.sizes.scale
         )
         buttonConfirm:SetIcon(materialCredits)
     else
@@ -398,7 +400,7 @@ function SEARCHSCREEN:Show(data)
         buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
         buttonConfirm:SetPos(
             self.sizes.widthMainArea - self.sizes.widthButton,
-            self.sizes.padding + 1
+            self.sizes.padding + 1 * self.sizes.scale
         )
     end
     buttonConfirm.DoClick = function(btn)

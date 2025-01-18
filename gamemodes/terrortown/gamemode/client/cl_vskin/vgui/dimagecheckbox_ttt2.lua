@@ -64,9 +64,10 @@ function PANEL:Init()
     self.directionalLight = {}
     self.farZ = 4096
 
-    self:SetContentAlignment(5)
+    local scale = appearance.GetGlobalScale()
+    self:SetContentAlignment(5 * scale)
 
-    self:SetTall(22)
+    self:SetTall(22 * scale)
     self:SetMouseInputEnabled(true)
     self:SetKeyboardInputEnabled(true)
 

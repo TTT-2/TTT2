@@ -37,16 +37,17 @@ AccessorFunc(PANEL, "m_pList", "List", "Panel")
 ---
 -- @ignore
 function PANEL:Init()
+    local scale = appearance.GetGlobalScale()
     self.Header = vgui.Create("DCategoryHeaderTTT2", self)
     self.Header:Dock(TOP)
-    self.Header:SetSize(20, vskin.GetCollapsableHeight())
+    self.Header:SetSize(20 * scale, vskin.GetCollapsableHeight())
 
-    self:SetSize(16, 16)
+    self:SetSize(16 * scale, 16 * scale)
     self:SetExpanded(true)
     self:SetMouseInputEnabled(true)
 
     self:SetPaintBackground(true)
-    self:DockMargin(10, 10, 10, 5)
+    self:DockMargin(10 * scale, 10 * scale, 10 * scale, 5 * scale)
     self:DockPadding(0, 0, 0, 0)
 end
 
@@ -60,11 +61,13 @@ function PANEL:Add(strName)
         derma.SkinHook("Paint", "CategoryButtonTTT2", panel, w, h)
     end
 
-    button:SetHeight(17)
-    button:SetTextInset(4, 0)
+    local scale = appearance.GetGlobalScale()
 
-    button:SetContentAlignment(4)
-    button:DockMargin(1, 0, 1, 0)
+    button:SetHeight(17 * scale)
+    button:SetTextInset(4 * scale, 0)
+
+    button:SetContentAlignment(4 * scale)
+    button:DockMargin(1 * scale, 0, 1 * scale, 0)
     button.DoClickInternal = function()
         if self:GetList() then
             self:GetList():UnselectAll()
@@ -198,6 +201,7 @@ function PANEL:PerformLayout()
         end
     end
 
+    local scale = appearance.GetGlobalScale()
     if self:GetExpanded() then
         if IsValid(self.Contents) and #self.Contents:GetChildren() > 0 then
             self.Contents:SizeToChildren(false, true)
@@ -208,18 +212,18 @@ function PANEL:PerformLayout()
         -- hacky solution to make sure box is always big enough
         -- I don't know why I have to do this though
         local w, h = self:GetSize()
-        self:SetSize(w, h + 15)
+        self:SetSize(w, h + 15 * scale)
     else
         if IsValid(self.Contents) and not self.OldHeight then
             self.OldHeight = self.Contents:GetTall()
         end
 
-        self:SetTall(self.Header:GetTall() + vskin:GetBorderSize() + 2)
+        self:SetTall(self.Header:GetTall() + vskin:GetBorderSize() + 2 * scale)
     end
 
     -- Make sure the color of header text is set
     self.Header:ApplySchemeSettings()
-    self.Header:SetSize(20, vskin.GetCollapsableHeight())
+    self.Header:SetSize(20 * scale, vskin.GetCollapsableHeight())
 
     self:UpdateAltLines()
 end
@@ -238,11 +242,12 @@ end
 ---
 -- @ignore
 function PANEL:GenerateExample(ClassName, PropertySheet, Width, Height)
+    local scale = appearance.GetGlobalScale()
     local ctrl = vgui.Create(ClassName)
 
     ctrl:SetLabel("Category List Test Category")
-    ctrl:SetSize(300, 300)
-    ctrl:SetPadding(10)
+    ctrl:SetSize(300 * scale, 300 * scale)
+    ctrl:SetPadding(10 * scale)
 
     -- The contents can be any panel, even a DPanelList
     local Contents = vgui.Create("DButton")

@@ -118,17 +118,18 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 
     local basePanel = menuReference.forms[role]:MakeIconLayout()
 
+    local scale = appearance.GetGlobalScale()
     local dragSender = basePanel:Add("DRoleLayeringSenderTTT2")
-    dragSender:SetLeftMargin(108)
+    dragSender:SetLeftMargin(108 * scale)
     dragSender:Dock(TOP)
-    dragSender:SetPadding(5)
+    dragSender:SetPadding(5 * scale)
     dragSender:MakeDroppable("drop_group_" .. role)
 
     -- modify the dragReceiver
     local dragReceiver = basePanel:Add("DRoleLayeringReceiverTTT2")
-    dragReceiver:SetLeftMargin(108)
+    dragReceiver:SetLeftMargin(108 * scale)
     dragReceiver:Dock(TOP)
-    dragReceiver:SetPadding(5)
+    dragReceiver:SetPadding(5 * scale)
     dragReceiver:MakeDroppable("drop_group_" .. role)
     dragReceiver:InitRoles(layerTable)
     dragReceiver.OnLayerUpdated = function(slf)
@@ -142,11 +143,11 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
         local roleData = roles.GetByIndex(subrole)
 
         local ic = vgui.Create("DRoleImageTTT2", dragSender)
-        ic:SetSize(64, 64)
+        ic:SetSize(64 * scale, 64 * scale)
         ic:SetMaterial(roleData.iconMaterial)
         ic:SetColor(roleData.color)
         ic:SetTooltip(roleData.name)
-        ic:SetTooltipFixedPosition(0, 64)
+        ic:SetTooltipFixedPosition(0, 64 * scale)
 
         ic.subrole = subrole
 

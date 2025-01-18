@@ -26,7 +26,8 @@ end
 ---
 -- @ignore
 function PANEL:PerformLayout(w, h)
-    self.binder:SetSize(150, h)
+    local scale = appearance.GetGlobalScale()
+    self.binder:SetSize(150 * scale, h)
     self.binder:SetPos(0, 0)
 
     self.disable:SetSize(h, h)

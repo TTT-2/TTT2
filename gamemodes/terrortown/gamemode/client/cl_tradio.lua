@@ -24,10 +24,11 @@ local sounds = {
 -- Calculates and caches the dimensions of the Radio UI.
 -- @realm client
 function TRADIO:CalculateSizes()
-    self.sizes.padding = 10
+    local scale = appearance.GetGlobalScale()
+    self.sizes.padding = 10 * scale
 
-    self.sizes.heightButton = 45
-    self.sizes.widthButton = 160
+    self.sizes.heightButton = 45 * scale
+    self.sizes.widthButton = 160 * scale
 
     self.sizes.numWidthButtons = 3
     self.sizes.numHeightButtons = math.ceil(table.Count(sounds) / 3)
@@ -42,6 +43,7 @@ function TRADIO:CalculateSizes()
         + vskin.GetHeaderHeight()
         + vskin.GetBorderSize()
         + 2 * self.sizes.padding
+    self.sizes.scale = scale
 end
 
 ---

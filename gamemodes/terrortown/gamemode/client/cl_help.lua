@@ -175,18 +175,20 @@ local MAIN_MENU = "main"
 -- @realm client
 function HELPSCRN:ShowMainMenu()
     local frame = self.menuFrame
+    local scale = appearance.GetGlobalScale()
 
     -- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
     if IsValid(frame) then
         frame:ClearFrame(nil, nil, "help_title")
     else
-        frame = vguihandler.GenerateFrame(width, height, "help_title")
+        frame = vguihandler.GenerateFrame(width * scale, height * scale, "help_title")
     end
 
     self.menuFrame = frame
 
     -- INIT MAIN MENU SPECIFIC STUFF
-    frame:SetPadding(self.padding, self.padding, self.padding, self.padding)
+    local padding = self.padding * scale
+    frame:SetPadding(padding, padding, padding, padding)
 
     -- MARK AS MAIN MENU
     self.currentMenuId = MAIN_MENU
@@ -198,8 +200,8 @@ function HELPSCRN:ShowMainMenu()
     -- SPLIT FRAME INTO A GRID LAYOUT
     local dsettings = vgui.Create("DIconLayout", scrollPanel)
     dsettings:Dock(FILL)
-    dsettings:SetSpaceX(self.padding)
-    dsettings:SetSpaceY(self.padding)
+    dsettings:SetSpaceX(padding)
+    dsettings:SetSpaceY(padding)
 
     -- SPLIT INTO NORMAL AND ADMIN MENUS
     local menusNormal, menusAdmin = {}, {}
@@ -219,16 +221,24 @@ function HELPSCRN:ShowMainMenu()
     end
 
     local rows = math.ceil(#menusNormal / 3) + math.ceil(#menusAdmin / 3)
-    local maxHeight = rows * heightMainMenuButton
-        + (rows - 1) * self.padding
-        + ((#menusAdmin == 0) and 0 or heightAdminSeperator)
-    local heightScroll = height - vskin.GetHeaderHeight() - vskin.GetBorderSize() - 2 * self.padding
+    local maxHeight = rows * heightMainMenuButton * scale
+        + (rows - 1) * padding
+        + ((#menusAdmin == 0) and 0 or heightAdminSeperator * scale)
+    local heightScroll = height * scale
+        - vskin.GetHeaderHeight()
+        - vskin.GetBorderSize()
+        - 2 * padding
 
-    local scrollSize = (heightScroll < maxHeight and 20 or 0)
+    local scrollSize = (heightScroll < maxHeight and 20 or 0) * scale
 
-    local widthMainMenuButton = (width - 4 * self.padding - scrollSize) / 3
+    local widthMainMenuButton = (width - 4 * padding - scrollSize) / 3
 
-    AddMenuButtons(menusNormal, dsettings, widthMainMenuButton, heightMainMenuButton)
+    AddMenuButtons(
+        menusNormal,
+        dsettings,
+        widthMainMenuButton * scale,
+        heightMainMenuButton * scale
+    )
 
     -- only show admin section if player is admin and
     -- there are menues to be shown
@@ -239,7 +249,7 @@ function HELPSCRN:ShowMainMenu()
     local labelSpacer = dsettings:Add("DLabelTTT2")
     labelSpacer.OwnLine = true
     labelSpacer:SetText("label_menu_admin_spacer")
-    labelSpacer:SetSize(width - 2 * self.padding - scrollSize, heightAdminSeperator)
+    labelSpacer:SetSize(width * scale - 2 * padding - scrollSize, heightAdminSeperator * scale)
     labelSpacer:SetFont("DermaTTT2TextLarge")
     labelSpacer.Paint = function(slf, w, h)
         derma.SkinHook("Paint", "LabelSpacerTTT2", slf, w, h)
@@ -247,7 +257,7 @@ function HELPSCRN:ShowMainMenu()
         return true
     end
 
-    AddMenuButtons(menusAdmin, dsettings, widthMainMenuButton, heightMainMenuButton)
+    AddMenuButtons(menusAdmin, dsettings, widthMainMenuButton * scale, heightMainMenuButton * scale)
 end
 
 ---
@@ -293,6 +303,8 @@ function HELPSCRN:BuildContentArea()
         return
     end
 
+    local scale = appearance.GetGlobalScale()
+
     ---
     -- @realm client
     if
@@ -314,7 +326,7 @@ function HELPSCRN:BuildContentArea()
 
     -- CALCULATE SIZE BASED ON EXISTENCE OF BUTTON PANEL
     if self.submenuClass:HasButtonPanel() then
-        height2 = height2 - heightButtonPanel
+        height2 = height2 - heightButtonPanel * scale
     end
 
     -- ADD CONTENT BOX AND CONTENT
@@ -328,7 +340,7 @@ function HELPSCRN:BuildContentArea()
     -- ADD BUTTON BOX AND BUTTONS
     if self.submenuClass:HasButtonPanel() then
         local buttonArea = vgui.Create("DButtonPanelTTT2", parent)
-        buttonArea:SetSize(width2, heightButtonPanel)
+        buttonArea:SetSize(width2, heightButtonPanel * scale)
         buttonArea:Dock(BOTTOM)
 
         self.submenuClass:PopulateButtonPanel(buttonArea)
@@ -341,12 +353,17 @@ end
 -- @realm client
 function HELPSCRN:ShowSubmenu(menuClass)
     local frame = self.menuFrame
+    local scale = appearance.GetGlobalScale()
 
     -- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
     if IsValid(frame) then
         frame:ClearFrame(nil, nil, menuClass.title or menuClass.type)
     else
-        frame = vguihandler.GenerateFrame(width, height, menuClass.title or menuClass.type)
+        frame = vguihandler.GenerateFrame(
+            width * scale,
+            height * scale,
+            menuClass.title or menuClass.type
+        )
     end
 
     -- INIT SUB MENU SPECIFIC STUFF
@@ -360,26 +377,28 @@ function HELPSCRN:ShowSubmenu(menuClass)
     -- MARK AS SUBMENU
     self.currentMenuId = menuClass.type
 
+    local padding = self.padding * scale
+
     -- BUILD GENERAL BOX STRUCTURE
     local navArea = vgui.Create("DNavPanelTTT2", frame)
-    navArea:SetWide(widthNav)
+    navArea:SetWide(widthNav * scale)
     navArea:SetPos(0, 0)
-    navArea:DockPadding(0, self.padding, 1, self.padding)
+    navArea:DockPadding(0, padding, 1, padding)
     navArea:Dock(LEFT)
 
     local contentArea = vgui.Create("DContentPanelTTT2", frame)
     contentArea:SetSize(
-        widthContent,
-        heightContent - vskin.GetHeaderHeight() - vskin.GetBorderSize()
+        widthContent * scale,
+        heightContent * scale - vskin.GetHeaderHeight() - vskin.GetBorderSize()
     )
-    contentArea:SetPos(widthNav, 0)
-    contentArea:DockPadding(self.padding, self.padding, self.padding, self.padding)
+    contentArea:SetPos(widthNav * scale, 0)
+    contentArea:DockPadding(padding, padding, padding, padding)
     contentArea:Dock(TOP)
 
     -- MAKE SEPARATE SUBMENULIST ON THE NAVAREA WITH A CONTENT AREA
     local submenuList = vgui.Create("DSubmenuListTTT2", navArea)
     submenuList:Dock(FILL)
-    submenuList:SetPadding(self.padding)
+    submenuList:SetPadding(padding)
     submenuList:SetBasemenuClass(menuClass, contentArea)
     submenuList:EnableSearchBar(menuClass:HasSearchbar())
 

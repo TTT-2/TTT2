@@ -14,7 +14,8 @@ function PANEL:Init()
 
     self.btnGrip = vgui.Create("DScrollBarGrip", self)
 
-    self:SetSize(15, 15)
+    local scale = appearance.GetGlobalScale()
+    self:SetSize(15 * scale, 15 * scale)
 end
 
 ---
@@ -91,7 +92,8 @@ end
 function PANEL:AddScroll(dlta)
     local oldScroll = self:GetScroll()
 
-    dlta = dlta * 25
+    local scale = appearance.GetGlobalScale()
+    dlta = dlta * 25 * scale
 
     self:SetScroll(self:GetScroll() + dlta)
 
@@ -229,8 +231,9 @@ end
 function PANEL:PerformLayout()
     local wide = self:GetWide()
 
-    local barSize = math.max(self:BarScale() * self:GetTall(), 10)
-    local track = self:GetTall() - barSize + 1
+    local scale = appearance.GetGlobalScale()
+    local barSize = math.max(self:BarScale() * self:GetTall(), 10 * scale)
+    local track = self:GetTall() - barSize + 1 * scale
     local scroll = self:GetScroll() / self.canvasSize * track
 
     self.btnGrip:SetPos(0, scroll)

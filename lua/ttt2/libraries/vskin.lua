@@ -248,10 +248,10 @@ function vskin.GetShadowSize()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
 
     if not vskinObject then
-        return 5
+        return 5 * appearance.GetGlobalScale()
     end
 
-    return vskinObject.params.shadow_size
+    return vskinObject.params.shadow_size * appearance.GetGlobalScale()
 end
 
 ---
@@ -262,10 +262,10 @@ function vskin.GetHeaderHeight()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
 
     if not vskinObject then
-        return 45
+        return 45 * appearance.GetGlobalScale()
     end
 
-    return vskinObject.params.header_height
+    return vskinObject.params.header_height * appearance.GetGlobalScale()
 end
 
 ---
@@ -276,10 +276,10 @@ function vskin.GetCollapsableHeight()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
 
     if not vskinObject then
-        return 30
+        return 30 * appearance.GetGlobalScale()
     end
 
-    return vskinObject.params.collapsable_height
+    return vskinObject.params.collapsable_height * appearance.GetGlobalScale()
 end
 
 ---
@@ -290,10 +290,10 @@ function vskin.GetBorderSize()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
 
     if not vskinObject then
-        return 3
+        return 3 * appearance.GetGlobalScale()
     end
 
-    return vskinObject.params.border_size
+    return vskinObject.params.border_size * appearance.GetGlobalScale()
 end
 
 ---
@@ -304,10 +304,10 @@ function vskin.GetCornerRadius()
     local vskinObject = vskin.skins[vskin.GetVSkinName()]
 
     if not vskinObject then
-        return 6
+        return 6 * appearance.GetGlobalScale()
     end
 
-    return vskinObject.params.corner_radius
+    return vskinObject.params.corner_radius * appearance.GetGlobalScale()
 end
 
 ---

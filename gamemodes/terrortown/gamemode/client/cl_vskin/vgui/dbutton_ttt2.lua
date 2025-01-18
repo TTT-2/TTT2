@@ -14,9 +14,10 @@ AccessorFunc(PANEL, "m_bBorder", "DrawBorder", FORCE_BOOL)
 ---
 -- @ignore
 function PANEL:Init()
-    self:SetContentAlignment(5)
+    local scale = appearance.GetGlobalScale()
+    self:SetContentAlignment(5 * scale)
 
-    self:SetTall(22)
+    self:SetTall(22 * scale)
     self:SetMouseInputEnabled(true)
     self:SetKeyboardInputEnabled(true)
 
@@ -128,7 +129,7 @@ end
 function PANEL:SetIcon(icon, is_shadowed, size)
     self.data.icon = icon
     self.data.icon_shadow = is_shadowed or false
-    self.data.icon_size = size or 32
+    self.data.icon_size = size or 32 * appearance.GetGlobalScale()
 end
 
 ---
@@ -163,8 +164,9 @@ end
 -- @ignore
 function PANEL:SizeToContents()
     local w, h = self:GetContentSize()
+    local scale = appearance.GetGlobalScale()
 
-    self:SetSize(w + 8, h + 4)
+    self:SetSize(w + 8 * scale, h + 4 * scale)
 end
 
 derma.DefineControl("DButtonTTT2", "A standard Button", PANEL, "DLabelTTT2")

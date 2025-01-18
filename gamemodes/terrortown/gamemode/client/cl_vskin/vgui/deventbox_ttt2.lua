@@ -91,10 +91,12 @@ end
 -- @return number The calculated height
 -- @realm client
 function PANEL:GetContentHeight(width)
-    local size = 50 -- title height
+    local scale = appearance.GetGlobalScale()
+    local size = 50 * scale -- title height
 
     local textTable = self:GetText()
-    local _, heightText = drawGetTextSize("", self:GetFont())
+    local font, fscale = fonts.ScaledFont(self:GetFont(), scale)
+    local _, heightText = drawGetTextSize("", font, fscale)
 
     for i = 1, #textTable do
         local text = textTable[i]
@@ -110,9 +112,9 @@ function PANEL:GetContentHeight(width)
 
         local textTranslated = ParT(text.string, params or {})
 
-        local textWrapped = drawGetWrappedText(textTranslated, width - 50, self:GetFont())
+        local textWrapped = drawGetWrappedText(textTranslated, (width - 50) / fscale, font)
 
-        size = size + #textWrapped * heightText + 15 -- 15: paragraph end
+        size = size + #textWrapped * heightText + 15 * scale -- 15: paragraph end
     end
 
     local event = self:GetEvent()
@@ -134,11 +136,11 @@ function PANEL:GetContentHeight(width)
                 continue
             end
 
-            size = size + (scoreRows + 1) * heightText + 35 -- 35 spacing + padding
+            size = size + (scoreRows + 1) * heightText + 35 * scale -- 35 spacing + padding
         end
     end
 
-    return mathmax(size, 75)
+    return mathmax(size, 75 * scale)
 end
 
 ---
