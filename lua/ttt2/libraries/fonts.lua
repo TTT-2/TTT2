@@ -20,6 +20,24 @@ fonts = {}
 fonts.fonts = {}
 fonts.scales = { 1, 1.5, 2, 2.5 }
 
+-- If we already have the global scale cvar, make sure that it is in the fonst scales list
+local function AddScale(scale)
+    for i = 1, #fonts.scales do
+        if scale == fonts.scales[i] then
+            -- the scale already exists in the list, nothing to do
+            return
+        end
+        if scale < fonts.scales[i] then
+            table.insert(fonts.scales, i, scale)
+            return
+        end
+    end
+end
+local cv_scale = GetConVar("ttt2_resolution_scale")
+if cv_scale then
+    AddScale(cv_scale:GetFloat() or 1.0)
+end
+
 ---
 -- Gets the scale modifer based on a given scale. This function tries to find one of
 -- the given steps defined in `fonts.scales` that fits best to the given scale. If it
