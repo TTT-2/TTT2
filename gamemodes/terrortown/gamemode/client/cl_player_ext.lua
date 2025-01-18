@@ -236,9 +236,10 @@ local function UpdateEquipment()
 end
 net.Receive("TTT_Equipment", UpdateEquipment)
 
--- Deletes old avatars and caches new ones
--- TODO: I don't like that this is called "Cache" but really it refreshes ...
-local function CacheAllPlayerAvatars(ply)
+---
+-- Refreshes all playeravatars of the given player or all players.
+-- @param Player ply? A player whose avatars should be refreshed, if unset refresh for all players
+local function RefreshPlayerAvatars(ply)
     local plys = IsPlayer(ply) and { ply } or player.GetAll()
 
     for i = 1, #plys do
@@ -246,6 +247,18 @@ local function CacheAllPlayerAvatars(ply)
         playeravatar.Refresh(plyid64)
     end
 end
+
+-- we want to clean up after us to prevent unchecked growth of unused playeravatars
+hook.Add( "client_disconnect", "ttt2_drop_playeravatars_on_disconnect", function()
+    -- NOTE: Using our cache table `playeravatar_cache` instead would have the potential to leave
+    -- files behind on non-proper disconnects (crashes)
+    local avatar_files = file.Find("ttt2_player_avatars/*", "DATA")
+
+    for avatar_file in avatar_files do
+        print(avatar_file)
+        -- file.Delete(avatar_file, "DATA")
+    end
+end)
 
 ---
 -- SetupMove is called before the engine process movements. This allows us
@@ -288,8 +301,8 @@ function GM:SetupMove(ply, mv, cmd)
         hook.Run("OnScreenSizeChanged", oldScrW, oldScrH)
     end
 
-    -- Cache avatars for all players currently on the server
-    CacheAllPlayerAvatars(ply)
+    -- Refresh avatars for all players currently on the server
+    RefreshPlayerAvatars()
 end
 
 net.Receive("TTT2NotifyPlayerReadyOnClients", function()
@@ -305,8 +318,8 @@ net.Receive("TTT2NotifyPlayerReadyOnClients", function()
     -- @realm shared
     hook.Run("TTT2PlayerReady", ply)
 
-    -- Cache avatar of the new player
-    CacheAllPlayerAvatars(ply)
+    -- Refresh avatars of the new player
+    RefreshPlayerAvatars(ply)
 end)
 
 ---

@@ -1,7 +1,7 @@
 ---
+-- This library is intended to handle everthing related to playeravatars.
 --
---
--- @author
+-- @author Histalek
 --
 -- @module playeravatar
 
@@ -11,7 +11,7 @@ if SERVER then
     return
 end
 
-file.CreateDir("player_avatars")
+file.CreateDir("ttt2_player_avatars")
 
 local fileExists = file.Exists
 local fileWrite = file.Write
@@ -28,10 +28,14 @@ playeravatar = {}
 PLAYERAVATAR_SIZE = {
     small = 32,
     medium = 64,
-    large = 128,
-    -- `large` was 184, but we use this for the `width/height` parameter of `GetRenderTargetEx`
+    large = 184,
+    -- we use this for the `width/height` parameter of `GetRenderTargetEx`
     -- which according to the wiki must be a power of 2
+    -- so this might get clamped to `128`?
     -- ref.: https://wiki.facepunch.com/gmod/Global.GetRenderTargetEx#arguments
+    -- but `Panel:SetSteamID` says these can only be 32, 64, 184 ...
+    -- ref.: https://wiki.facepunch.com/gmod/Panel:SetSteamID#arguments
+    -- so `large` might have funky problems ¯\_(ツ)_/¯
 }
 
 ---
@@ -68,7 +72,7 @@ end
 local function GetAvatarUri(id64, avatarSize)
     local key = GetAvatarCacheKey(id64, avatarSize)
     local crcUrl = crc(key)
-    return "player_avatars/" .. crcUrl .. ".png"
+    return "ttt2_player_avatars/" .. crcUrl .. ".png"
 end
 
 ---
@@ -150,27 +154,12 @@ local function CreateAvatarMaterial(id64, avatarSize)
 end
 
 ---
--- Refreshes the avatar images by deleting old cached images and generating new ones
--- @param string id64 The steamid64 of the player
--- @realm client
-function playeravatar.Refresh(id64)
-    playeravatar.DropCache(id64, PLAYERAVATAR_SIZE.small)
-    playeravatar.DropCache(id64, PLAYERAVATAR_SIZE.medium)
-    playeravatar.DropCache(id64, PLAYERAVATAR_SIZE.large)
-    playeravatar.Cache(id64, PLAYERAVATAR_SIZE.small)
-    playeravatar.Cache(id64, PLAYERAVATAR_SIZE.medium)
-    playeravatar.Cache(id64, PLAYERAVATAR_SIZE.large)
-end
-
----
 -- Creates the avatar material for a steamid64
 -- When an avatar is found it will be cached
 -- @param string id64 The steamid64
 -- @param PLAYERAVATAR_SIZE size The avatar's size
 -- @realm client
--- TODO: Make this local? Or actually use this somewhere? Or merge/replace with
--- `playeravatar.GetMaterial()`
-function playeravatar.Cache(id64, size)
+local function CreateAvatarCache(id64, size)
     CreateAvatarMaterial(id64, size)
 end
 
@@ -178,20 +167,27 @@ end
 -- Deletes the avatar material for a steamid64
 -- When a cached avatar is found it will be destroyed
 -- @param string id64 The player's steamid64
--- @param PLAYERAVATAR_SIZE avatarSize The avatar's size
 -- @realm client
--- TODO: Make this local? Or actually use this somewhere?
--- TODO: Also it does not really make much sense to only drop a single avatarSize by default. We
--- probably should by default just iterate over small,medium,large
-function playeravatar.DropCache(id64, avatarSize)
-    local key = GetAvatarCacheKey(id64, avatarSize)
-    local uri = GetAvatarUri(id64, avatarSize)
-
-    if fileExists(uri, "DATA") then
-        fileDelete(uri, "DATA")
+function playeravatar.DropCache(id64)
+    for size in PLAYERAVATAR_SIZE do
+        local key = GetAvatarCacheKey(id64, size)
+        local uri = GetAvatarUri(id64, size)
+        if fileExists(uri, "DATA") then
+            fileDelete(uri, "DATA")
+        end
+        playeravatar_cache[key] = nil
     end
+end
 
-    playeravatar_cache[key] = nil
+---
+-- Refreshes avatars of all sizes by deleting old cached images and generating new ones
+-- @param string id64 The steamid64 of the player
+-- @realm client
+function playeravatar.Refresh(id64)
+    playeravatar.DropCache(id64)
+    playeravatar.GetMaterial(id64, PLAYERAVATAR_SIZE.small)
+    playeravatar.GetMaterial(id64, PLAYERAVATAR_SIZE.medium)
+    playeravatar.GetMaterial(id64, PLAYERAVATAR_SIZE.large)
 end
 
 ---
