@@ -83,7 +83,8 @@ keyhelp = keyhelp or {}
 keyhelp.keyHelpers = {}
 
 local function DrawKeyContent(x, y, keyString, iconMaterial, bindingName, scoreboardShown, scale)
-    local wKeyString = draw.GetTextSize(keyString, "weapon_hud_help_key", scale)
+    local kfont, kfscale = fonts.ScaledFont("weapon_hud_help_key", scale)
+    local wKeyString = draw.GetTextSize(keyString, kfont, kfscale)
     local wBox = math.max(widthScaled, wKeyString) + 2 * paddingScaled
     local xIcon = x + 0.5 * (wBox - widthScaled)
     local yIcon = y + paddingScaled + thicknessLineScaled
