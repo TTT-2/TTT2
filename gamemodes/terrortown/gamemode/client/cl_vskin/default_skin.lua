@@ -1760,16 +1760,20 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
 
     local colorBorderIcon = utilGetDefaultColor(colorBorder)
 
-    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBorder)
+    if panel:IndicatorEnabled() then
+        drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBorder)
 
-    drawRoundedBox(
-        sizes.cornerRadius,
-        widthBorder,
-        widthBorder,
-        w - widthBorder2,
-        h - widthBorder2,
-        colorBackground
-    )
+        drawRoundedBox(
+            sizes.cornerRadius,
+            widthBorder,
+            widthBorder,
+            w - widthBorder2,
+            h - widthBorder2,
+            colorBackground
+        )
+    else
+        drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
+    end
 
     if panel:GetValue() then
         drawFilteredShadowedTexture(
