@@ -1735,7 +1735,7 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
     local colorBorder = colorCardAdded
     local iconBorder = materialCardAdded
 
-    if not panel:GetEnabled() then
+    if not panel:GetValue() then
         colorBorder = colorCardInheritRemoved
         iconBorder = materialCardRemoved
     end
