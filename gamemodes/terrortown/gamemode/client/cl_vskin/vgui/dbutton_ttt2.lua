@@ -178,6 +178,10 @@ function PANEL:SetValue(val, ignoreCallbackEnabledVar)
     self:OnChange(self.value)
 end
 
+---
+-- @return boolean Returns the value of the button if there is one
+-- assigned. It can be assigned by attaching convars or database values.
+-- @realm client
 function PANEL:GetValue()
     return self.value or false
 end

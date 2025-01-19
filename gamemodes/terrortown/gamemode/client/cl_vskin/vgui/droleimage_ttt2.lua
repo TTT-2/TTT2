@@ -40,6 +40,8 @@ function PANEL:GetMaterial()
     return self.data.material
 end
 
+---
+-- @realm client
 function PANEL:DoRightClick()
     local newValue = not self:GetValue()
 
