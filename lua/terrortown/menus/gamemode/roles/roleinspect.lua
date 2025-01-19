@@ -29,7 +29,15 @@ local function MakeRoleIcon(stage, roleIcons, role, decision, paramFmt)
     ic:SetSize(roleIconSize, roleIconSize)
     ic:SetMaterial(roleData.iconMaterial)
     ic:SetColor(roleData.color)
-    ic:SetEnabled(decision.decision == ROLEINSPECT_DECISION_CONSIDER)
+    ic:SetValue(decision.decision == ROLEINSPECT_DECISION_CONSIDER)
+    ic:SetAlpha(ic:GetValue() and 255 or 200)
+    if
+        decision.decision == ROLEINSPECT_DECISION_NO_CONSIDER
+        and decision.reason == ROLEINSPECT_REASON_NOT_ENABLED
+    then
+        -- if this is not considered because it's not enabled, reduce it's alpha significantly as well
+        ic:SetAlpha(100)
+    end
     ic:SetMouseInputEnabled(true)
 
     local stageShortName = roleinspect.GetStageName(stage)
@@ -234,6 +242,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
             ic:SetSize(roleIconSize, roleIconSize)
             ic:SetMaterial(baseroleData.iconMaterial)
             ic:SetColor(baseroleData.color)
+            ic:SetValue(true)
             ic:SetMouseInputEnabled(true)
             ic:SetTooltip(
                 DynT("tooltip_inspect_layers_baserole", { name = baseroleData.name }, true)
@@ -245,6 +254,7 @@ local function PopulateLayeringRoleStage(stage, form, stageData)
             ic:SetSize(roleIconSize * 2 / 3, roleIconSize * 2 / 3)
             ic:SetMaterial(subroleData.iconMaterial)
             ic:SetColor(subroleData.color)
+            ic:SetValue(true)
             ic:SetMouseInputEnabled(true)
             ic:SetTooltip(DynT("tooltip_inspect_layers_subrole", { name = subroleData.name }, true))
             ic:SetTooltipFixedPosition(0, roleIconSize * 2 / 3)
@@ -468,6 +478,7 @@ local function PopulateFinalStage(stage, form, stageData)
         ic:SetSize(roleIconSize * 2 / 3, roleIconSize * 2 / 3)
         ic:SetMaterial(roleData.iconMaterial)
         ic:SetColor(roleData.color)
+        ic:SetValue(true)
         ic:SetMouseInputEnabled(true)
         ic:SetTooltip(roleData.name)
         ic:SetTooltipFixedPosition(0, roleIconSize * 2 / 3)
