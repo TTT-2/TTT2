@@ -2685,3 +2685,6 @@ L.label_crosshair_size_gap = "크로스헤어 공간 배율"
 --</ol>
 --
 --]]
+
+-- 2025-01-19
+--L.help_rolelayering_enable = "The red and green border around the icon shows if the role is currently enabled. Right click on an icon to quickly enable/disable that role."
