@@ -10,6 +10,7 @@ CLGAMEMODEMENU.priority = 0
 CLGAMEMODEMENU.icon = nil
 CLGAMEMODEMENU.title = ""
 CLGAMEMODEMENU.description = ""
+CLGAMEMODEMENU.searchBarPlaceholderText = nil
 
 CLGAMEMODEMENU.submenus = {}
 
@@ -43,6 +44,8 @@ end
 -- Returns a table with references to all registered and visible submenu classes
 -- of this menu. They are visible if they are registered and
 -- @{CLGAMEMODEMENU:ShouldShow()} returns true.
+-- @note This only returns the searchable submenus. Any submenu returned here will be searched
+-- by the search bar, if present.
 -- @return table Returns a table of all registered and visible submenus
 -- @realm client
 function CLGAMEMODEMENU:GetVisibleSubmenus()
@@ -53,6 +56,38 @@ function CLGAMEMODEMENU:GetVisibleSubmenus()
         local submenu = allSubmenus[i]
 
         if not submenu:ShouldShow() then
+            continue
+        end
+
+        if not submenu.searchable then
+            continue
+        end
+
+        visibleSubmenus[#visibleSubmenus + 1] = submenu
+    end
+
+    return visibleSubmenus
+end
+
+---
+-- Returns a table with references to the submenu classes which should not be searchable
+-- (and which should appear above the search bar, if any).
+-- @note This is very similar to @{CLGAMEMODEMENU:GetVisibleSubmenus()}, excelt it only returns non-searcable
+-- submenus.
+-- @return table Returns a table containing all non-searchable submenus which should be visible.
+-- @realm client
+function CLGAMEMODEMENU:GetVisibleNonSearchedSubmenus()
+    local visibleSubmenus = {}
+    local allSubmenus = self:GetSubmenus()
+
+    for i = 1, #allSubmenus do
+        local submenu = allSubmenus[i]
+
+        if not submenu:ShouldShow() then
+            continue
+        end
+
+        if submenu.searchable then
             continue
         end
 

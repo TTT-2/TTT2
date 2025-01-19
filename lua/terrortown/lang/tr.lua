@@ -39,8 +39,8 @@ L.win_showreport = "{num} saniye boyunca raunt raporuna bakalım."
 L.limit_round = "Raunt sınırına ulaşıldı. Bir sonraki harita yakında yüklenecek."
 L.limit_time = "Zaman sınırına ulaşıldı. Bir sonraki harita yakında yüklenecek."
 L.limit_left_session_mode_1 = "Harita değişmeden önce {num} raunt veya {time} dakika kaldı."
---L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
---L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
+L.limit_left_session_mode_2 = "Harita değişmeden önce {time} dakika kaldı."
+L.limit_left_session_mode_3 = "Harita değişmeden önce {num} raunt kaldı."
 
 -- Credit awards
 L.credit_all = "Takımınıza performansınız için {num} ekipman kredisi verildi."
@@ -171,8 +171,8 @@ L.quick_corpse_id = "{player} adlı ceset"
 L.sb_playing = "Şu anda bu sunucuda oynuyorsunuz..."
 L.sb_mapchange_mode_0 = "Oturum sınırları devre dışı."
 L.sb_mapchange_mode_1 = "{num} rauntta veya {time} içinde harita değişecektir."
---L.sb_mapchange_mode_2 = "Map changes in {time}"
---L.sb_mapchange_mode_3 = "Map changes in {num} rounds"
+L.sb_mapchange_mode_2 = "{time} içinde harita değişecektir."
+L.sb_mapchange_mode_3 = "{num} raunt sonra harita değişecektir."
 
 L.sb_mia = "Çatışmada Kayıp"
 L.sb_confirmed = "Onaylanmış Ölü"
@@ -344,9 +344,9 @@ Sınırsız kullanım, ancak teşhis birkaç saniye sürer.]]
 
 -- UMP
 L.ump_desc = [[
-Hedeflerin yönünü şaşırtan deneysel bir SMG.
+Hedeflerin yönünü şaşırtan deneysel bir HMS.
 
-Standart SMG cephanesi kullanır.]]
+Standart HMS cephanesi kullanır.]]
 
 -- DNA scanner
 L.dna_name = "DNA tarayıcı"
@@ -372,7 +372,7 @@ L.magnet_name = "Manyeto çubuğu"
 L.grenade_smoke = "Duman bombası"
 L.grenade_fire = "Yanıcı bomba"
 
-L.unarmed_name = "Gizlendi"
+L.unarmed_name = "Gizle"
 L.crowbar_name = "Levye"
 L.pistol_name = "Tabanca"
 L.rifle_name = "Tüfek"
@@ -401,7 +401,7 @@ Işınlanma gürültü yapar ve kullanım sayısı sınırlıdır.]]
 -- Ammo names, shown when picked up
 L.ammo_pistol = "9mm cephanesi"
 
-L.ammo_smg1 = "SMG cephanesi"
+L.ammo_smg1 = "HMS cephanesi"
 L.ammo_buckshot = "Pompalı Tüfek cephanesi"
 L.ammo_357 = "Tüfek cephanesi"
 L.ammo_alyxgun = "Deagle cephanesi"
@@ -422,7 +422,7 @@ L.hastemode = "HIZLI MOD"
 L.hp_healthy = "Sağlıklı"
 L.hp_hurt = "Hasar Görmüş"
 L.hp_wounded = "Yaralı"
-L.hp_badwnd = "Kötü Yaralanmış"
+L.hp_badwnd = "Ağır Yaralı"
 L.hp_death = "Ölüme Yakın"
 
 -- TargetID Karma status
@@ -1313,7 +1313,7 @@ L.layering_not_layered = "Katmanlı değil"
 L.layering_layer = "Katman {layer}"
 L.header_rolelayering_role = "{role} dağıtımı"
 L.header_rolelayering_baserole = "Temel rol dağıtma"
-L.submenu_administration_rolelayering_title = "Rol Dağıtma"
+L.submenu_roles_rolelayering_title = "Rol Dağıtma"
 L.header_rolelayering_info = "Rol dağıtma bilgileri"
 L.help_rolelayering_roleselection = "Rol dağılım süreci iki aşamaya ayrılmıştır. İlk aşamada masum, hain ve aşağıdaki 'temel rol dağıtımı' kutusunda listelenen temel roller dağıtılır. İkinci aşama, bu temel rolleri bir alt role yükseltmek için kullanılır."
 L.help_rolelayering_layers = "Her dağıtımdan yalnızca bir rol seçilir. İlk olarak, özel katmanlardan gelen roller, ilk katmandan başlayarak son katmana ulaşılana kadar dağıtılır veya daha fazla rol yükseltilemez. Hangisi önce olursa olsun, yükseltilebilir slotlar hala mevcutsa, katmanlanmamış roller de dağıtılacaktır."
@@ -1427,7 +1427,7 @@ L.label_enforce_playermodel = "Rol oyuncu modelini uygula"
 L.label_use_custom_models = "Rastgele seçilen bir oyuncu modeli kullan"
 L.label_prefer_map_models = "Varsayılan modeller yerine haritaya özgü modelleri tercih edin"
 L.label_select_model_per_round = "Her rauntta yeni bir rastgele model seçin (devre dışı bırakılmışsa yalnızca harita değişikliğinde)"
---L.label_select_unique_model_per_round = "Select a random unique model for each player"
+L.label_select_unique_model_per_round = "Her oyuncu için rastgele bir özel model seç"
 
 L.help_prefer_map_models = [[
 Bazı haritalar kendi oyuncu modellerini tanımlar. Varsayılan olarak, bu modeller otomatik olarak atananlardan daha yüksek bir önceliğe sahiptir. Bu ayar devre dışı bırakıldığında, haritaya özgü modeller devre dışı bırakılır.
@@ -1461,7 +1461,7 @@ Sol üstteki küçük gösterge, oyuncu modelinin bir kafa vuruş kutusuna sahip
 L.menu_roles_title = "Rol Ayarları"
 L.menu_roles_description = "Oluşum noktalarını, ekipman kredilerini ve daha fazlasını ayarla."
 
-L.submenu_administration_roles_general_title = "Genel Rol Ayarları"
+L.submenu_roles_roles_general_title = "Genel Rol Ayarları"
 
 L.header_roles_info = "Rol Bilgileri"
 L.header_roles_selection = "Rol Seçim Parametreleri"
@@ -1736,9 +1736,9 @@ L.label_max_special_slots = "Maksimum özel yuva"
 L.label_max_extra_slots = "Maksimum ekstra yuva"
 L.label_weapon_autopickup = "Otomatik silah alımını etkinleştir"
 L.label_sprint_enabled = "Koşmayı etkinleştir"
---L.label_sprint_max = "Speed boost factor"
-L.label_sprint_stamina_consumption = "Dayanıklılık tüketim faktörü"
-L.label_sprint_stamina_regeneration = "Dayanıklılık yenileme faktörü"
+L.label_sprint_max = "Hız artırma faktörü"
+L.label_sprint_stamina_consumption = "Enerji tüketim faktörü"
+L.label_sprint_stamina_regeneration = "Enerji yenileme faktörü"
 L.label_crowbar_unlocks = "Birincil saldırı etkileşim (yani kilit açma) olarak kullanılabilir"
 L.label_crowbar_pushforce = "Levye itme kuvveti"
 
@@ -2302,10 +2302,10 @@ Bir raundu yeniden başlatmak yalnızca mevcut raundu yeniden başlatır, böyle
 L.label_button_level_reset = "haritayı sıfırla"
 
 L.loadingscreen_round_restart_title = "Yeni raunt başlıyor"
---L.loadingscreen_round_restart_subtitle_limits_mode_0 = "you're playing on {map}"
---L.loadingscreen_round_restart_subtitle_limits_mode_1 = "you're playing on {map} for another {rounds} round(s) or {time}"
---L.loadingscreen_round_restart_subtitle_limits_mode_2 = "you're playing on {map} for {time}"
---L.loadingscreen_round_restart_subtitle_limits_mode_3 = "you're playing on {map} for another {rounds} round(s)"
+L.loadingscreen_round_restart_subtitle_limits_mode_0 = "{map} adlı haritada oynuyorsunuz"
+L.loadingscreen_round_restart_subtitle_limits_mode_1 = "{map} haritasında {rounds} raunt veya {time} daha oynayacaksınız"
+L.loadingscreen_round_restart_subtitle_limits_mode_2 = "{map} haritasında {time} boyunca oynayacaksınız"
+L.loadingscreen_round_restart_subtitle_limits_mode_3 = "{map} haritasında {rounds} raunt daha oynayacaksınız"
 
 -- 2024-06-23
 L.header_roles_derandomize = "Rastgele Rol Dağıtımı"
@@ -2376,18 +2376,18 @@ L.vehicle_enter = "Araca girmek için [{usekey}] tuşuna bas"
 L.corpse_hint_without_confirm = "Aramak için [{usekey}] tuşuna bas."
 
 -- 2025-01-05
---L.help_session_limits_mode = [[
---There are three different session limit modes you can choose from:
---
---mode 0: No session limits. TTT2 will not end the session and will not trigger a map change.
---
---mode 1: Default TTT2 mode. A map change will trigger if either the session time or session round count runs out.
---
---mode 2: Only time limit. A map change will only trigger if the session time runs out.
---
---mode 3: Only round limit. A map change will only trigger if the session round count runs out.]]
---L.label_session_limits_mode = "Set session limit mode"
---L.choice_session_limits_mode_0 = "mode 0: no session limits"
---L.choice_session_limits_mode_1 = "mode 1: time and round limit"
---L.choice_session_limits_mode_2 = "mode 2: only time limit"
---L.choice_session_limits_mode_3 = "mode 3: only round limit"
+L.help_session_limits_mode = [[
+Aralarından seçim yapabileceğiniz üç farklı oturum sınırı modu vardır:
+
+mod 0: Oturum sınırı yok. TTT2 oturumu sonlandırmayacak ve harita değişikliğini tetiklemeyecektir.
+
+mod 1: Varsayılan TTT2 modu. Oturum süresi veya oturum raunt sayısı biterse bir harita değişikliği tetiklenir.
+
+mod 2: Sadece zaman sınırı. Bir harita değişikliği yalnızca oturum süresi dolduğunda tetiklenir.
+
+mod 3: Sadece raunt sınırı. Bir harita değişikliği yalnızca oturum raunt sayısı biterse tetiklenir.]]
+L.label_session_limits_mode = "Oturum sınırı modunu ayarla"
+L.choice_session_limits_mode_0 = "mod 0: oturum sınırı yok"
+L.choice_session_limits_mode_1 = "mod 1: zaman ve raunt sınırı"
+L.choice_session_limits_mode_2 = "mod 2: sadece zaman sınırı"
+L.choice_session_limits_mode_3 = "mod 3: sadece raunt sınırı"

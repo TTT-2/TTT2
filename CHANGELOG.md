@@ -33,6 +33,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the mute button in the scoreboard not working (by @TW1STaL1CKY)
 - Fixed a few errors in shop error messages (by @Histalek)
 - Fixed `markerVision`'s registry table being able to contain duplicate obsolete entries, thus fixing potential syncing issues with markers (by @TW1STaL1CKY)
+- Fixed issue in new Ammo dropping that could cause an error when dropping for modified weapon bases. (by @MrXonte)
 
 ### Changed
 
@@ -50,6 +51,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - With this, the KeyHelp feature also hides the PropSpec bind if PropSpec is disabled on the server
 - Renamed `ttt_session_limits_enabled` to `ttt_session_limits_mode`, introducing a four-mode control (0-3) for managing how TTT2 ends a session. (by @NickCloudAT)
   - Modes: 0 = No session limit, 1 = Default TTT, 2 = Only time limit, 3 = Only round limit
+- Moved all role-related admin options into the "Roles" menu (by @nike4613)
+- Improved description of role layering (by @nike4613)
 
 ## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
 

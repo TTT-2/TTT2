@@ -499,7 +499,9 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
     local curRoles = 2 -- amount of roles, start with 2 because INNOCENT and TRAITOR are all the time available
     local curBaseroles = 2 -- amount of base roles, ...
 
-    local layeredBaseRolesTbl = table.Copy(roleselection.baseroleLayers) -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
+    -- layered roles list, the order defines the pick order. Just one role per layer is picked.
+    -- Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
+    local layeredBaseRolesTbl = table.Copy(roleselection.baseroleLayers)
 
     ---
     -- @realm server
@@ -531,8 +533,11 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
         -- if there are still defined layer
         if #layeredBaseRolesTbl >= i then
             for j = i, #layeredBaseRolesTbl do
+                -- clean the currently indexed layer (so that it just includes selectable roles),
+                -- because we working with predefined layers that probably includes roles that aren't
+                -- selectable with the current amount of players, etc.
                 local cleanedLayerTbl =
-                    CleanupAvailableRolesLayerTbl(availableBaseRolesTbl, layeredBaseRolesTbl[i]) -- clean the currently indexed layer (so that it just includes selectable roles), because we working with predefined layers that probably includes roles that aren't selectable with the current amount of players, etc.
+                    CleanupAvailableRolesLayerTbl(availableBaseRolesTbl, layeredBaseRolesTbl[i])
 
                 -- if there is no selectable role left in the current layer
                 if #cleanedLayerTbl < 1 then
