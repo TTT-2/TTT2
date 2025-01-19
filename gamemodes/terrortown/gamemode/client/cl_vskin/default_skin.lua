@@ -1725,7 +1725,7 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
     local widthBorder2 = widthBorder * 2
     local sizeIconRole = w - widthBorder2
     local padding = 3
-    local sizeMode = 18
+    local sizeMode = 18 * w / 64
     local sizeIconMode = sizeMode - 2 * padding
     local posIconModeX = w - sizeMode + padding
     local posIconModeY = h - sizeMode + padding
