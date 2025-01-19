@@ -41,6 +41,15 @@ function PANEL:GetMaterial()
 end
 
 ---
+-- @realm client
+function PANEL:DoRightClick()
+    local newValue = not self:GetValue()
+
+    self:SetValue(newValue)
+    self:ValueChanged(newValue)
+end
+
+---
 -- @ignore
 function PANEL:Paint(w, h)
     derma.SkinHook("Paint", "RoleImageTTT2", self, w, h)

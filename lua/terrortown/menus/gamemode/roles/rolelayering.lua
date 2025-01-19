@@ -24,6 +24,10 @@ function CLGAMEMODESUBMENU:Populate(parent)
         label = "help_rolelayering_layers",
     })
 
+    form:MakeHelp({
+        label = "help_rolelayering_enable",
+    })
+
     self.baseroleList, self.subroleList = rolelayering.GetLayerableBaserolesWithSubroles()
 
     -- clear the form table because there might be old data
@@ -148,6 +152,7 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
         ic:SetColor(roleData.color)
         ic:SetTooltip(roleData.name)
         ic:SetTooltipFixedPosition(0, 64)
+        ic:SetServerConVar("ttt_" .. roleData.name .. "_enabled")
 
         ic.subrole = subrole
 
