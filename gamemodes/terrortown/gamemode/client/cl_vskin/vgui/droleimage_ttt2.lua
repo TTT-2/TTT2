@@ -40,6 +40,13 @@ function PANEL:GetMaterial()
     return self.data.material
 end
 
+function PANEL:DoRightClick()
+    local newValue = not self:GetValue()
+
+    self:SetValue(newValue)
+    self:ValueChanged(newValue)
+end
+
 ---
 -- @ignore
 function PANEL:Paint(w, h)
@@ -48,4 +55,4 @@ function PANEL:Paint(w, h)
     return true
 end
 
-derma.DefineControl("DRoleImageTTT2", "A simple role image", PANEL, "DPanelTTT2")
+derma.DefineControl("DRoleImageTTT2", "A simple role image", PANEL, "DButtonTTT2")
