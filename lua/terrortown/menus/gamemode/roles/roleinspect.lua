@@ -33,9 +33,12 @@ local function MakeRoleIcon(stage, roleIcons, role, decision, paramFmt)
     ic:SetAlpha(ic:GetValue() and 255 or 200)
     if
         decision.decision == ROLEINSPECT_DECISION_NO_CONSIDER
-        and decision.reason == ROLEINSPECT_REASON_NOT_ENABLED
+        and (
+            decision.reason == ROLEINSPECT_REASON_NOT_ENABLED
+            or decision.reason == ROLEINSPECT_REASON_NOT_SELECTABLE
+        )
     then
-        -- if this is not considered because it's not enabled, reduce it's alpha significantly as well
+        -- if this is not considered because it's not enabled (or not selectable), reduce it's alpha significantly as well
         ic:SetAlpha(100)
     end
     ic:SetMouseInputEnabled(true)
