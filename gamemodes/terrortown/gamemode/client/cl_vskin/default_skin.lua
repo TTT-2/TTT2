@@ -1735,7 +1735,9 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
     local colorBorder = colorCardAdded
     local iconBorder = materialCardAdded
 
-    if not panel:GetValue() then
+    if not panel:GetValue() then -- convar value
+        colorBackground = colors.settingsBox
+        colorIcon = colors.settingsText
         colorBorder = colorCardInheritRemoved
         iconBorder = materialCardRemoved
     end
@@ -1753,15 +1755,27 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
         colorBackground
     )
 
-    drawFilteredShadowedTexture(
-        widthBorder,
-        widthBorder,
-        w - widthBorder2,
-        h - widthBorder2,
-        panel:GetMaterial(),
-        colorIcon.a,
-        colorIcon
-    )
+    if panel:GetValue() then
+        drawFilteredShadowedTexture(
+            widthBorder,
+            widthBorder,
+            w - widthBorder2,
+            h - widthBorder2,
+            panel:GetMaterial(),
+            colorIcon.a,
+            colorIcon
+        )
+    else
+        drawFilteredTexture(
+            widthBorder,
+            widthBorder,
+            w - widthBorder2,
+            h - widthBorder2,
+            panel:GetMaterial(),
+            colorIcon.a * 0.5,
+            colorIcon
+        )
+    end
 
     drawRoundedBoxEx(
         sizes.cornerRadius,
