@@ -78,4 +78,4 @@ function PANEL:Paint(w, h)
     return true
 end
 
-derma.DefineControl("DRoleImageTTT2", "A simple role image", PANEL, "DPanelTTT2")
+derma.DefineControl("DRoleImageTTT2", "A simple role image", PANEL, "DButtonTTT2")
