@@ -41,33 +41,12 @@ function PANEL:GetMaterial()
 end
 
 ---
--- @param string cvar
 -- @realm client
-function PANEL:SetConVar(cvar)
-    print(cvar)
-    print(GetConVar(cvar):GetBool())
-    print("-------")
-    self.data.cvar = GetConVar(cvar)
-end
+function PANEL:DoRightClick()
+    local newValue = not self:GetValue()
 
----
--- @return ConVar
--- @realm client
-function PANEL:GetConVar()
-    return self.data.cvar
-end
-
----
--- @return string
--- @realm client
-function PANEL:GetEnabled()
-    if not self.data.cvar then
-        return
-    end
-
-    print(self.data.cvar)
-
-    return self.data.cvar:GetBool()
+    self:SetValue(newValue)
+    self:ValueChanged(newValue)
 end
 
 ---
