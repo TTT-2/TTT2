@@ -98,16 +98,6 @@ function CLGAMEMODEMENU:GetVisibleNonSearchedSubmenus()
 end
 
 ---
--- Returns a table with references to the submenu classes which should not be searchable
--- (and which should appear above the search bar, if any).
--- @note This should be overridden to take advantage of this behavior. By default, it returns an empty table.
--- @return table Returns a table containing all non-searchable submenus which should be visible.
--- @realm client
-function CLGAMEMODEMENU:GetVisibleNonSearchedSubmenus()
-    return {}
-end
-
----
 -- Used to define whether this menu is available for all or only for admins.
 -- @note This function should be overwritten but not called.
 -- @hook
