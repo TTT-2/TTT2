@@ -1313,7 +1313,7 @@ L.layering_not_layered = "Not layered"
 L.layering_layer = "Layer {layer}"
 L.header_rolelayering_role = "{role} layering"
 L.header_rolelayering_baserole = "Base role layering"
-L.submenu_administration_rolelayering_title = "Role Layering"
+L.submenu_roles_rolelayering_title = "Role Layering"
 L.header_rolelayering_info = "Role layering information"
 L.help_rolelayering_roleselection = [[
 The role distribution process is split into two stages. In the first stage base roles are distributed, which are Innocent, Traitor and those listed in the 'base role layer' box below. The second stage is used to upgrade those base roles to a subrole.
@@ -1467,7 +1467,7 @@ The small indicator in the top left shows if the player model has a head hitbox.
 L.menu_roles_title = "Role Settings"
 L.menu_roles_description = "Set up the spawning, equipment credits and more."
 
-L.submenu_administration_roles_general_title = "General Role Settings"
+L.submenu_roles_roles_general_title = "General Role Settings"
 
 L.header_roles_info = "Role Information"
 L.header_roles_selection = "Role Selection Parameters"
@@ -2399,6 +2399,7 @@ L.choice_session_limits_mode_2 = "mode 2: only time limit"
 L.choice_session_limits_mode_3 = "mode 3: only round limit"
 
 -- 2024-12-30
+L.searchbar_roles_placeholder = "Search roles..."
 L.label_menu_search_no_items = "No items matched your search."
 
 L.submenu_roles_overview_title = "Roles Overview (READ ME)"

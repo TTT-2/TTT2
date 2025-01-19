@@ -6,7 +6,8 @@ local ParT = LANG.GetParamTranslation
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
 CLGAMEMODESUBMENU.priority = 96
-CLGAMEMODESUBMENU.title = "submenu_administration_rolelayering_title"
+CLGAMEMODESUBMENU.title = "submenu_roles_rolelayering_title"
+CLGAMEMODESUBMENU.searchable = false
 
 -- save the forms indexed by role index here to access from hook
 CLGAMEMODESUBMENU.forms = {}

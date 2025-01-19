@@ -4,6 +4,7 @@ CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
 CLGAMEMODESUBMENU.priority = 97
 CLGAMEMODESUBMENU.title = "submenu_roles_overview_title"
+CLGAMEMODESUBMENU.searchable = false
 
 local htmlStart = [[
     <head>

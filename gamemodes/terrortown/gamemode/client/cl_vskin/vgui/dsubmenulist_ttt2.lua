@@ -5,7 +5,6 @@
 local PANEL = {}
 
 -- Define sizes
-local heightNavHeader = 0 --10
 local heightNavButton = 50
 
 ---
@@ -56,6 +55,21 @@ function PANEL:SetSearchBarSize(widthBar, heightBar)
     self.searchBar:SetSize(widthBar, heightBar)
     if self.scrollTracker then
         self.scrollTracker:SetSize(widthBar, heightBar)
+    end
+end
+
+---
+-- Sets the search bar's placeholder text.
+-- @param string placeholder The placeholder text.
+-- @realm client
+function PANEL:SetSearchBarPlaceholderText(placeholder)
+    if not self.searchBar then
+        return
+    end
+
+    self.searchBar:SetPlaceholderText(placeholder)
+    if self.searchBar:GetValue() == "" then
+        self.searchBar:SetCurrentPlaceholderText(placeholder)
     end
 end
 
@@ -283,7 +297,7 @@ function PANEL:PerformLayout()
 
     local widthNavContent, heightNavContent = self:GetSize()
 
-    self.navAreaScroll:SetSize(widthNavContent, heightNavContent - heightNavHeader)
+    self.navAreaScroll:SetSize(widthNavContent, heightNavContent)
     self:SetSearchBarSize(self.navAreaScroll:InnerWidth(), heightNavButton)
 
     -- Last invalidate all buttons and then the scrolllist for correct size to contents

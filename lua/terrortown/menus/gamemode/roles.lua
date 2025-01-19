@@ -11,6 +11,7 @@ CLGAMEMODEMENU.icon = Material("vgui/ttt/vskin/helpscreen/roles")
 CLGAMEMODEMENU.title = "menu_roles_title"
 CLGAMEMODEMENU.description = "menu_roles_description"
 CLGAMEMODEMENU.priority = 46
+CLGAMEMODEMENU.searchBarPlaceholderText = "searchbar_roles_placeholder"
 
 CLGAMEMODEMENU.isInitialized = false
 CLGAMEMODEMENU.roles = nil
@@ -70,6 +71,7 @@ end
 -- override this so that we have non-searched submenus above the search bar
 function CLGAMEMODEMENU:GetVisibleNonSearchedSubmenus()
     local visibleSubmenus = {}
+    -- all of the non-searchable submenus are in self.submenus
     local allSubmenus = self.submenus
 
     for i = 1, #allSubmenus do
