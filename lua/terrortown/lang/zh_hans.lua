@@ -1313,7 +1313,7 @@ L.layering_not_layered = "未分层"
 L.layering_layer = "{layer} 层"
 L.header_rolelayering_role = "{role} 层"
 L.header_rolelayering_baserole = "基础层"
-L.submenu_administration_rolelayering_title = "角色分层"
+L.submenu_roles_rolelayering_title = "角色分层"
 L.header_rolelayering_info = "角色分层信息"
 L.help_rolelayering_roleselection = "角色选择过程被分成两个阶段。在第一轮中，基础角色被分配。基本角色是无辜者、叛徒和那些列在“基本角色层”框中的角色。第二遍是用来将这些基础角色升级为子角色。"
 L.help_rolelayering_layers = "每个层中只有一个角色被选中。首先，来自自定义层的角色从第一层开始分配，直到到达最后一层或没有更多的角色可以被升级。无论哪种情况先发生。如果可升级的槽位仍然可用，未分层的角色也将被分配。"
@@ -1461,7 +1461,7 @@ L.help_models_select = [[
 L.menu_roles_title = "角色设置"
 L.menu_roles_description = "设置生成概率、装备积分及更多。"
 
-L.submenu_administration_roles_general_title = "通用角色设置"
+L.submenu_roles_roles_general_title = "通用角色设置"
 
 L.header_roles_info = "角色信息"
 L.header_roles_selection = "角色选择概率"

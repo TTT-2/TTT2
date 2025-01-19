@@ -1313,7 +1313,7 @@ L.layering_not_layered = "Katmanlı değil"
 L.layering_layer = "Katman {layer}"
 L.header_rolelayering_role = "{role} dağıtımı"
 L.header_rolelayering_baserole = "Temel rol dağıtma"
-L.submenu_administration_rolelayering_title = "Rol Dağıtma"
+L.submenu_roles_rolelayering_title = "Rol Dağıtma"
 L.header_rolelayering_info = "Rol dağıtma bilgileri"
 L.help_rolelayering_roleselection = "Rol dağılım süreci iki aşamaya ayrılmıştır. İlk aşamada masum, hain ve aşağıdaki 'temel rol dağıtımı' kutusunda listelenen temel roller dağıtılır. İkinci aşama, bu temel rolleri bir alt role yükseltmek için kullanılır."
 L.help_rolelayering_layers = "Her dağıtımdan yalnızca bir rol seçilir. İlk olarak, özel katmanlardan gelen roller, ilk katmandan başlayarak son katmana ulaşılana kadar dağıtılır veya daha fazla rol yükseltilemez. Hangisi önce olursa olsun, yükseltilebilir slotlar hala mevcutsa, katmanlanmamış roller de dağıtılacaktır."
@@ -1461,7 +1461,7 @@ Sol üstteki küçük gösterge, oyuncu modelinin bir kafa vuruş kutusuna sahip
 L.menu_roles_title = "Rol Ayarları"
 L.menu_roles_description = "Oluşum noktalarını, ekipman kredilerini ve daha fazlasını ayarla."
 
-L.submenu_administration_roles_general_title = "Genel Rol Ayarları"
+L.submenu_roles_roles_general_title = "Genel Rol Ayarları"
 
 L.header_roles_info = "Rol Bilgileri"
 L.header_roles_selection = "Rol Seçim Parametreleri"
