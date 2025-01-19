@@ -1723,6 +1723,7 @@ end
 function SKIN:PaintRoleImageTTT2(panel, w, h)
     local widthBorder = 2
     local widthBorder2 = widthBorder * 2
+    local sizeIconRole = w - widthBorder2
     local padding = 3
     local sizeMode = 18
     local sizeIconMode = sizeMode - 2 * padding
@@ -1757,14 +1758,18 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
         )
     else
         drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
+
+        widthBorder = 0
+        widthBorder2 = 0
+        sizeIconRole = w
     end
 
     if panel:GetValue() then
         drawFilteredShadowedTexture(
             widthBorder,
             widthBorder,
-            w - widthBorder2,
-            h - widthBorder2,
+            sizeIconRole - widthBorder2,
+            sizeIconRole - widthBorder2,
             panel:GetMaterial(),
             colorIcon.a,
             colorIcon
@@ -1773,8 +1778,8 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
         drawFilteredTexture(
             widthBorder,
             widthBorder,
-            w - widthBorder2,
-            h - widthBorder2,
+            sizeIconRole - widthBorder2,
+            sizeIconRole - widthBorder2,
             panel:GetMaterial(),
             colorIcon.a * 0.5,
             colorIcon
