@@ -1793,6 +1793,10 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
         )
     end
 
+    if not panel:IndicatorEnabled() then
+        return
+    end
+
     drawRoundedBoxEx(
         sizes.cornerRadius,
         w - sizeMode,
