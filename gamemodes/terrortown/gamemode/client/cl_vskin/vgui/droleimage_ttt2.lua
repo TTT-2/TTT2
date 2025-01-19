@@ -51,7 +51,7 @@ function PANEL:DoRightClick()
 end
 
 ---
--- param boolean state
+-- @param boolean state
 -- @realm client
 function PANEL:EnableIndicator(state)
     self.data.indicatorState = state
