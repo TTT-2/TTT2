@@ -17,6 +17,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed missing translation for None role error by removing it (by @mexikoedi)
 - Fixed sometimes entity use triggering the wrong or no entity (by @TimGoll)
 - Fixed translation of muting Terrorists and Spectators (by @mexikoedi)
+- Fixed continuous use being broken, meaing that holding E on a health station did nothing (by @TimGoll)
 - Fixed the loadingscreen disable causing an error (by @TimGoll)
 - Fixed the rounds left always displaying one less than actually left (by @TimGoll)
 - Fixed rendering glitches in the loading screen (by @TimGoll)
@@ -39,6 +40,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Updated French translation (by @MisterClems)
 - Updated Turkish localization (by @NovaDiablox)
+- Changed it so that continous use doesn't require direct focus; healing at a health station also works when looking around as long as you stay close by (by @TimGoll)
 - Updated Russian localization (by @Satton2)
 - Updated targetID to use `Vehicle:GetDriver` instead of the `ttt_driver` NWEntity (by @Histalek)
 - Updated Russian and English localization files (by @Satton2)
