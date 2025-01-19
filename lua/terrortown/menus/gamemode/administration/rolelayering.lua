@@ -147,7 +147,7 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
         ic:SetColor(roleData.color)
         ic:SetTooltip(roleData.name)
         ic:SetTooltipFixedPosition(0, 64)
-        ic:SetConVar("ttt_" .. roleData.name .. "_enabled")
+        ic:SetServerConVar("ttt_" .. roleData.name .. "_enabled")
 
         ic.subrole = subrole
 
