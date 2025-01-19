@@ -24,6 +24,10 @@ function CLGAMEMODESUBMENU:Populate(parent)
         label = "help_rolelayering_layers",
     })
 
+    form:MakeHelp({
+        label = "help_rolelayering_enable",
+    })
+
     self.baseroleList, self.subroleList = rolelayering.GetLayerableBaserolesWithSubroles()
 
     -- clear the form table because there might be old data
