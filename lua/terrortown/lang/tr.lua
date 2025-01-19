@@ -2682,3 +2682,6 @@ L.choice_session_limits_mode_3 = "mod 3: sadece raunt sınırı"
 --</ol>
 --
 --]]
+
+-- 2025-01-19
+--L.help_rolelayering_enable = "The red and green border around the icon shows if the role is currently enabled. Right click on an icon to quickly enable/disable that role."

@@ -2682,3 +2682,6 @@ L.label_player_role = "选择角色"
 --</ol>
 --
 --]]
+
+-- 2025-01-19
+--L.help_rolelayering_enable = "The red and green border around the icon shows if the role is currently enabled. Right click on an icon to quickly enable/disable that role."
