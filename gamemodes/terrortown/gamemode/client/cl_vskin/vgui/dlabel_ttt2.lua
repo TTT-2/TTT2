@@ -77,6 +77,23 @@ function PANEL:Init()
     -- Nicer default height
     self:SetTall(20)
 
+    self.tooltip = {
+        fixedPosition = nil,
+        fixedSize = nil,
+        delay = 0,
+        text = "",
+        font = "DermaTTT2Text",
+        sizeArrow = 8,
+    }
+
+    local oldSetTooltipPanel = self.SetTooltipPanel
+
+    self.SetTooltipPanel = function(slf, panel)
+        slf:SetTooltipPanelOverride("DTooltipTTT2")
+
+        oldSetTooltipPanel(slf, panel)
+    end
+
     -- This turns off the engine drawing
     self:SetPaintBackgroundEnabled(false)
     self:SetPaintBorderEnabled(false)
@@ -343,5 +360,106 @@ function PANEL:DoDoubleClick() end
 -- overwrites the base function with an empty function
 -- @realm client
 function PANEL:DoDoubleClickInternal() end
+
+---
+-- @param number x
+-- @param number y
+-- @realm client
+function PANEL:SetTooltipFixedPosition(x, y)
+    self.tooltip.fixedPosition = {
+        x = x,
+        y = y,
+    }
+end
+
+---
+-- @return number, number
+-- @realm client
+function PANEL:GetTooltipFixedPosition()
+    return self.tooltip.fixedPosition.x, self.tooltip.fixedPosition.y
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:HasTooltipFixedPosition()
+    return self.tooltip.fixedPosition ~= nil
+end
+
+---
+-- @param number w
+-- @param number h
+-- @realm client
+function PANEL:SetTooltipFixedSize(w, h)
+    -- +2 are the outline pixels
+    self.tooltip.fixedSize = {
+        w = w + 2,
+        h = h + self.tooltip.sizeArrow + 2,
+    }
+end
+
+---
+-- @return number, number
+-- @realm client
+function PANEL:GetTooltipFixedSize()
+    return self.tooltip.fixedSize.w, self.tooltip.fixedSize.h
+end
+
+---
+-- @realm client
+function PANEL:HasTooltipFixedSize()
+    return self.tooltip.fixedSize ~= nil
+end
+
+---
+-- @param number delay
+-- @realm client
+function PANEL:SetTooltipOpeningDelay(delay)
+    self.tooltip.delay = delay
+end
+
+---
+-- @return number
+-- @realm client
+function PANEL:GetTooltipOpeningDelay()
+    return self.tooltip.delay
+end
+
+---
+-- @param string text
+-- @realm client
+function PANEL:SetTooltip(text)
+    self:SetTooltipPanelOverride("DTooltipTTT2")
+
+    self.tooltip.text = text
+end
+
+---
+-- @return string
+-- @realm client
+function PANEL:GetTooltipText()
+    return self.tooltip.text
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:HasTooltipText()
+    return self.tooltip.text ~= nil and self.tooltip.text ~= ""
+end
+
+---
+-- @param string font
+-- @realm client
+function PANEL:SetTooltipFont(font)
+    self.tooltip.font = font
+end
+
+---
+-- @return string
+-- @realm client
+function PANEL:GetTooltipFont()
+    return self.tooltip.font
+end
 
 derma.DefineControl("DLabelTTT2", "A Label", PANEL, "DLabel")

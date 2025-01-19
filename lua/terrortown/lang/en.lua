@@ -2689,6 +2689,9 @@ considered. (This is relevant in the presence of forced subroles.)</p>
 
 ]]
 
+-- 2025-01-19
+L.help_rolelayering_enable = "The red and green border around the icon shows if the role is currently enabled. Right click on an icon to quickly enable/disable that role."
+
 -- 2025-01-07
 L.graph_sort_mode_none = "No Sorting"
 L.graph_sort_mode_highlight_order = "Highlighted First"
