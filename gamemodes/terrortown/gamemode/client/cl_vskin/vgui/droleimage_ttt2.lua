@@ -53,14 +53,14 @@ end
 ---
 -- @param boolean state
 -- @realm client
-function PANEL:EnableIndicator(state)
+function PANEL:SetIsActiveIndicator(state)
     self.data.indicatorState = state
 end
 
 ---
 -- @return boolean
 -- @realm client
-function PANEL:IndicatorEnabled()
+function PANEL:GetIsActiveIndicator()
     return self.data.indicatorState or false
 end
 

@@ -153,7 +153,7 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
         ic:SetTooltip(roleData.name)
         ic:SetTooltipFixedPosition(0, 64)
         ic:SetServerConVar("ttt_" .. roleData.name .. "_enabled")
-        ic:EnableIndicator(true)
+        ic:SetIsActiveIndicator(true)
 
         ic.subrole = subrole
 

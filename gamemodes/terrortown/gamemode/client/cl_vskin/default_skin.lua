@@ -1761,7 +1761,7 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
 
     local colorBorderIcon = utilGetDefaultColor(colorBorder)
 
-    if panel:IndicatorEnabled() then
+    if panel:GetIsActiveIndicator() then
         drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBorder)
 
         drawRoundedBox(
@@ -1802,7 +1802,7 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
         )
     end
 
-    if not panel:IndicatorEnabled() then
+    if not panel:GetIsActiveIndicator() then
         return
     end
 
