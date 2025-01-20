@@ -2403,6 +2403,10 @@ L.searchbar_roles_placeholder = "Search roles..."
 L.label_menu_search_no_items = "No items matched your search."
 
 L.submenu_roles_overview_title = "Roles Overview (READ ME)"
+
+-- 2025-01-20
+L.label_hud_show_team_name = "Should you see your team name next to your role name?"
+
 -- Is there a way to ahve some sort of external file that's possibly-localized?
 L.roles_overview_html = [[
 <h1>Overview</h1>
