@@ -9,6 +9,7 @@ function PANEL:Init()
     self.data = {
         color = COLOR_WHITE,
         icon = nil,
+        indicatorState = false,
     }
 end
 
@@ -47,6 +48,20 @@ function PANEL:DoRightClick()
 
     self:SetValue(newValue)
     self:ValueChanged(newValue)
+end
+
+---
+-- @param boolean state
+-- @realm client
+function PANEL:SetIsActiveIndicator(state)
+    self.data.indicatorState = state
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:GetIsActiveIndicator()
+    return self.data.indicatorState or false
 end
 
 ---
