@@ -52,6 +52,7 @@ local drawFilteredShadowedTexture = draw.FilteredShadowedTexture
 local drawOutlinedBox = draw.OutlinedBox
 local drawFilteredTexture = draw.FilteredTexture
 local drawSimpleText = draw.SimpleText
+local drawDrawText = draw.DrawText
 local drawLine = draw.Line
 local drawGetWrappedText = draw.GetWrappedText
 local drawGetTextSize = draw.GetTextSize
@@ -1345,15 +1346,30 @@ function SKIN:PaintTooltipTTT2(panel, w, h)
     )
 
     if panel:HasText() then
-        drawSimpleText(
-            TryT(panel:GetText()),
-            panel:GetFont(),
-            0.5 * w,
-            0.5 * (h + sizeArrow),
-            utilGetDefaultColor(colors.background),
-            TEXT_ALIGN_CENTER,
-            TEXT_ALIGN_CENTER
-        )
+        local text = TryT(panel:GetText())
+
+        if string.find(text, "\n") then
+            -- has newlines, use drawDrawText
+            drawDrawText(
+                text,
+                panel:GetFont(),
+                10, --0.5 * w,
+                4 + sizeArrow,
+                utilGetDefaultColor(colors.background),
+                TEXT_ALIGN_LEFT
+            )
+        else
+            -- no newlines, can use drawSimpleText
+            drawSimpleText(
+                text,
+                panel:GetFont(),
+                0.5 * w,
+                0.5 * (h + sizeArrow),
+                utilGetDefaultColor(colors.background),
+                TEXT_ALIGN_CENTER,
+                TEXT_ALIGN_CENTER
+            )
+        end
     end
 end
 
@@ -1723,8 +1739,9 @@ end
 function SKIN:PaintRoleImageTTT2(panel, w, h)
     local widthBorder = 2
     local widthBorder2 = widthBorder * 2
+    local sizeIconRole = w - widthBorder2
     local padding = 3
-    local sizeMode = 18
+    local sizeMode = 18 * w / 64
     local sizeIconMode = sizeMode - 2 * padding
     local posIconModeX = w - sizeMode + padding
     local posIconModeY = h - sizeMode + padding
@@ -1744,23 +1761,31 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
 
     local colorBorderIcon = utilGetDefaultColor(colorBorder)
 
-    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBorder)
+    if panel:IndicatorEnabled() then
+        drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBorder)
 
-    drawRoundedBox(
-        sizes.cornerRadius,
-        widthBorder,
-        widthBorder,
-        w - widthBorder2,
-        h - widthBorder2,
-        colorBackground
-    )
+        drawRoundedBox(
+            sizes.cornerRadius,
+            widthBorder,
+            widthBorder,
+            w - widthBorder2,
+            h - widthBorder2,
+            colorBackground
+        )
+    else
+        drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
+
+        widthBorder = 0
+        widthBorder2 = 0
+        sizeIconRole = w
+    end
 
     if panel:GetValue() then
         drawFilteredShadowedTexture(
             widthBorder,
             widthBorder,
-            w - widthBorder2,
-            h - widthBorder2,
+            sizeIconRole - widthBorder2,
+            sizeIconRole - widthBorder2,
             panel:GetMaterial(),
             colorIcon.a,
             colorIcon
@@ -1769,12 +1794,16 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
         drawFilteredTexture(
             widthBorder,
             widthBorder,
-            w - widthBorder2,
-            h - widthBorder2,
+            sizeIconRole - widthBorder2,
+            sizeIconRole - widthBorder2,
             panel:GetMaterial(),
             colorIcon.a * 0.5,
             colorIcon
         )
+    end
+
+    if not panel:IndicatorEnabled() then
+        return
     end
 
     drawRoundedBoxEx(
@@ -1880,7 +1909,10 @@ function SKIN:PaintSearchbar(panel, w, h)
     )
 
     -- Draw small blue bar on the bottom
-    drawBox(leftPad, h - sizes.border - bottomPad, w - widthPad, sizes.border, colorBar)
+    --drawBox(leftPad, h - sizes.border - bottomPad, w - widthPad, sizes.border, colorBar)
+
+    -- Draw small blue bar across the top
+    drawBox(leftPad, topPad, w - widthPad, sizes.border, colorBar)
 
     -- If not focussed draw placeholder text
     if panel:GetIsOnFocus() then
@@ -2277,6 +2309,88 @@ end
 function SKIN:PaintWeaponPreviewTTT2(panel, w, h)
     if panel:HasModel() then
         panel:DrawModel()
+    end
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintPlayerGraphTTT2(panel, w, h)
+    local renderData = panel.renderData
+    local padding = panel:GetPadding()
+
+    if panel.title ~= "" then
+        -- title text
+        drawSimpleText(
+            panel.title,
+            panel:GetFont(),
+            renderData.titleX,
+            renderData.titleY,
+            colors.helpText,
+            TEXT_ALIGN_LEFT,
+            TEXT_ALIGN_TOP
+        )
+    end
+
+    local barColor = utilGetChangedColor(colors.background, 30)
+    local valueInsideColor = utilGetDefaultColor(barColor)
+    local valueOutsideColor = utilGetDefaultColor(colors.background)
+
+    if renderData.sepY then
+        -- title separator
+        drawBox(0, renderData.sepY, w, 1, barColor)
+    end
+
+    local hBarColor = colors.accent
+    local hValueInsideColor = colors.accentText
+
+    -- then the items
+    for i = 1, #renderData.order do
+        local item = renderData.order[i]
+        -- first, draw the bar
+        local thisBarColor
+        if item.data.highlight then
+            thisBarColor = hBarColor
+        else
+            thisBarColor = barColor
+        end
+        --print(item.x, item.y)
+        drawBox(item.x, item.y, item.w, item.h, thisBarColor)
+        -- then the value text
+        if item.valueWidth > w - item.x - item.w - padding then
+            -- the value would take up too much space outside, put it inside
+            local thisTextCol
+            if item.data.highlight then
+                thisTextCol = hValueInsideColor
+            else
+                thisTextCol = valueInsideColor
+            end
+            local x = item.x + item.w - item.valueWidth - padding
+            --print(x, item.y)
+            drawSimpleText(
+                tostring(item.data.value),
+                panel:GetFont(),
+                x,
+                item.y,
+                thisTextCol,
+                TEXT_ALIGN_LEFT,
+                TEXT_ALIGN_TOP
+            )
+        else
+            -- the value will fit outside the bar, draw it there
+            --print(item.x + item.w + padding, item.y)
+            drawSimpleText(
+                tostring(item.data.value),
+                panel:GetFont(),
+                item.x + item.w + padding,
+                item.y,
+                valueOutsideColor,
+                TEXT_ALIGN_LEFT,
+                TEXT_ALIGN_TOP
+            )
+        end
     end
 end
 

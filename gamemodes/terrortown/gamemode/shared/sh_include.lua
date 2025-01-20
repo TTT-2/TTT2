@@ -60,6 +60,7 @@ TTTFiles = {
     sh_cvar_handler = { file = "sh_cvar_handler.lua", on = "shared" },
     sh_role_module = { file = "sh_role_module.lua", on = "shared" },
     sh_rolelayering = { file = "sh_rolelayering.lua", on = "shared" },
+    sh_roleinspect = { file = "sh_roleinspect.lua", on = "shared" },
     sh_scoring = { file = "sh_scoring.lua", on = "shared" },
     sh_shop = { file = "sh_shop.lua", on = "shared" },
     sh_shopeditor = { file = "sh_shopeditor.lua", on = "shared" },
@@ -148,6 +149,8 @@ TTTFiles = {
         file = "cl_vskin/vgui/dweaponpreview_ttt2.lua",
         on = "client",
     },
+    cl_vskin__vgui__dpippanel = { file = "cl_vskin/vgui/dpippanel_ttt2.lua", on = "client" },
+    cl_vskin__vgui__dplayergraph = { file = "cl_vskin/vgui/dplayergraph_ttt2.lua", on = "client" },
 }
 
 if SERVER then

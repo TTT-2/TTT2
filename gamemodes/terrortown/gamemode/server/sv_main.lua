@@ -48,6 +48,7 @@ ttt_include("sv_player_ext")
 ttt_include("sv_player")
 
 ttt_include("sv_addonchecker")
+ttt_include("sh_roleinspect")
 ttt_include("sv_roleselection")
 ttt_include("sh_rolelayering")
 
