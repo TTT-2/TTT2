@@ -66,7 +66,7 @@ if CLIENT then
 		savingKeys.showTeamName = {
             typ = "bool",
             desc = "label_hud_show_team_name",
-            default = true,
+            default = false,
             OnChange = function(slf, bool)
                 slf:PerformLayout()
                 slf:SaveData()
