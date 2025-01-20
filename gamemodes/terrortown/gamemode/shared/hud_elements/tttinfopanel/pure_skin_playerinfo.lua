@@ -206,7 +206,7 @@ if CLIENT then
 
             if cactive then
 				if self.showTeamName then
-					text = L[rd.name] .. " (" .. L[rd.defaultTeam] .. ")"
+					text = L[rd.name] .. " (" .. L[client:GetTeam()] .. ")"
 				else
 					text = L[rd.name]
 				end
