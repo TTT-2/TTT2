@@ -206,9 +206,9 @@ if CLIENT then
 
             if cactive then
                 if self.showTeamName then
-					text = L[rd.name] .. " (" .. L[client:GetTeam()] .. ")"
-				else
-					text = L[rd.name]
+                    text = L[rd.name] .. " (" .. L[client:GetTeam()] .. ")"
+                else
+                    text = L[rd.name]
                 end
             else
                 if IsValid(tgt) and tgt:IsPlayer() then
