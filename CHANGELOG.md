@@ -12,6 +12,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `GM:TTT2PlayDeathScream` hook to cancel or overwrite/change the deathscream sound that plays, when you die (by @NickCloudAT)
 - Added support for "toggle_zoom" binds to trigger the radio commands menu (by @TW1STaL1CKY)
 - Added option to use right click to enable/disable roles in the role layering menu (by @TimGoll)
+- Added option to enable team name next to role name on the HUD (by @milkwxter)
 
 ### Fixed
 
