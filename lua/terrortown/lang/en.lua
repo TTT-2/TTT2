@@ -2738,6 +2738,7 @@ L.roleinspect_reason_not_selectable_d_no_consider_s_preselect = "The role is not
 L.roleinspect_reason_not_enabled_d_no_consider_s_preselect = "The role is not enabled."
 L.roleinspect_reason_role_chance_d_no_consider_s_preselect = "The random check for whether the role should appear failed."
 L.roleinspect_reason_no_players_d_no_consider_s_preselect = "There are not enough players for this role to spawn."
+L.roleinspect_reason_role_decision_d_no_consider_s_preselect = "The role implementation decided it was not selectable, and provided no more detailed information."
 
 -- ROLEINSPECT_STAGE_LAYERING
 L.header_roleinspect_stage_layering = "Stage 2: Layering"
