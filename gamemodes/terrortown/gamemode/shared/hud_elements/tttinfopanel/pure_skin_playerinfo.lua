@@ -62,8 +62,8 @@ if CLIENT then
                 slf:SaveData()
             end,
         }
-		
-		savingKeys.showTeamName = {
+
+        savingKeys.showTeamName = {
             typ = "bool",
             desc = "label_hud_show_team_name",
             default = false,
@@ -205,11 +205,11 @@ if CLIENT then
             local round_state = gameloop.GetRoundState()
 
             if cactive then
-				if self.showTeamName then
+                if self.showTeamName then
 					text = L[rd.name] .. " (" .. L[client:GetTeam()] .. ")"
 				else
 					text = L[rd.name]
-				end
+                end
             else
                 if IsValid(tgt) and tgt:IsPlayer() then
                     text = tgt:Nick()
