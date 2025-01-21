@@ -7,6 +7,74 @@ local starttime = C4_MINIMUM_TIME
 local T = LANG.GetTranslation
 local PT = LANG.GetParamTranslation
 
+---
+-- Calculates and caches the dimensions of the bodysearch UI.
+-- @realm client
+function ENT:CalculateMenuSizes()
+    self.sizes = {}
+
+    self.sizes.width = 600
+    self.sizes.height = 500
+    self.sizes.padding = 10
+
+    self.sizes.heightButton = 45
+    self.sizes.widthButton = 160
+    self.sizes.widthButtonClose = 100
+    self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
+
+    self.sizes.widthMainArea = self.sizes.width - 2 * self.sizes.padding
+    self.sizes.heightMainArea = self.sizes.height
+        - self.sizes.heightBottomButtonPanel
+        - 3 * self.sizes.padding
+        - vskin.GetHeaderHeight()
+        - vskin.GetBorderSize()
+end
+
+function ENT:ShowMenu()
+    self:CalculateMenuSizes()
+
+    local frame = self.menuFrame
+
+    -- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
+    if IsValid(frame) then
+        frame:ClearFrame(nil, nil, "c4_arm")
+    else
+        frame = vguihandler.GenerateFrame(self.sizes.width, self.sizes.height, "c4_arm")
+    end
+
+    frame:SetPadding(self.sizes.padding, self.sizes.padding, self.sizes.padding, self.sizes.padding)
+
+    -- BUTTONS
+    local buttonArea = vgui.Create("DButtonPanelTTT2", frame)
+    buttonArea:SetSize(self.sizes.width, self.sizes.heightBottomButtonPanel)
+    buttonArea:Dock(BOTTOM)
+
+    local buttonPickUp = vgui.Create("DButtonTTT2", buttonArea)
+    buttonPickUp:SetText("c4_remove_pickup")
+    buttonPickUp:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+    buttonPickUp:SetPos(0, self.sizes.padding + 1)
+    buttonPickUp.DoClick = function(btn)
+        print("bla")
+    end
+
+    local buttonDestroy = vgui.Create("DButtonTTT2", buttonArea)
+    buttonDestroy:SetText("c4_remove_destroy1")
+    buttonDestroy:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+    buttonDestroy:SetPos(self.sizes.widthButton + self.sizes.padding, self.sizes.padding + 1)
+    buttonDestroy:SetHoldTime(2)
+    buttonDestroy.DoClick = function(btn)
+        print("blubb")
+    end
+
+    local buttonArm = vgui.Create("DButtonTTT2", buttonArea)
+    buttonArm:SetText("c4_arm")
+    buttonArm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+    buttonArm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
+    buttonArm.DoClick = function(btn)
+        print("blubbidubb")
+    end
+end
+
 ---- ARMING
 
 ---

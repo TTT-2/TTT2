@@ -56,6 +56,30 @@ function PANEL:Init()
             oldRightClick(slf)
         end
     end)
+
+    local oldMousePressed = self.OnMousePressed
+    local oldMouseReleased = self.OnMouseReleased
+
+    self.OnMousePressed = function(slf, keyCode)
+        if not self:HasHoldTime() or keyCode ~= MOUSE_LEFT then
+            return oldMousePressed(slf, keyCode)
+        end
+
+        self.data.holdStart = CurTime()
+    end
+
+    self.OnMouseReleased = function(slf, keyCode)
+        if not self:HasHoldTime() or keyCode ~= MOUSE_LEFT then
+            return oldMouseReleased(slf, keyCode)
+        end
+
+        if self:GetHoldProgress() >= 1 then
+            self:DoClickInternal()
+            self:DoClick()
+        end
+
+        self.data.holdStart = nil
+    end
 end
 
 ---
@@ -361,6 +385,24 @@ function PANEL:SizeToContents()
     local w, h = self:GetContentSize()
 
     self:SetSize(w + 8, h + 4)
+end
+
+function PANEL:SetHoldTime(time)
+    self.data.holdtime = time
+end
+
+function PANEL:HasHoldTime()
+    return self.data.holdtime ~= nil
+end
+
+function PANEL:GetHoldProgress()
+    if not self:HasHoldTime() then
+        return 0
+    end
+
+    local time = CurTime()
+
+    return math.min((time - (self.data.holdStart or time)) / self.data.holdtime, 1)
 end
 
 derma.DefineControl("DButtonTTT2", "A standard Button", PANEL, "DLabelTTT2")
