@@ -11,12 +11,15 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - This also includes a Garry's Mod version check which triggers a warning if TTT2 is not compatible. First baseline version is '240313' (by @NickCloudAT)
 - Added `GM:TTT2PlayDeathScream` hook to cancel or overwrite/change the deathscream sound that plays, when you die (by @NickCloudAT)
 - Added support for "toggle_zoom" binds to trigger the radio commands menu (by @TW1STaL1CKY)
+- Added option to use right click to enable/disable roles in the role layering menu (by @TimGoll)
+- Added option to enable team name next to role name on the HUD (by @milkwxter)
 
 ### Fixed
 
 - Fixed missing translation for None role error by removing it (by @mexikoedi)
 - Fixed sometimes entity use triggering the wrong or no entity (by @TimGoll)
 - Fixed translation of muting Terrorists and Spectators (by @mexikoedi)
+- Fixed continuous use being broken, meaing that holding E on a health station did nothing (by @TimGoll)
 - Fixed the loadingscreen disable causing an error (by @TimGoll)
 - Fixed the rounds left always displaying one less than actually left (by @TimGoll)
 - Fixed rendering glitches in the loading screen (by @TimGoll)
@@ -39,6 +42,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Updated French translation (by @MisterClems)
 - Updated Turkish localization (by @NovaDiablox)
+- Changed it so that continous use doesn't require direct focus; healing at a health station also works when looking around as long as you stay close by (by @TimGoll)
 - Updated Russian localization (by @Satton2)
 - Updated targetID to use `Vehicle:GetDriver` instead of the `ttt_driver` NWEntity (by @Histalek)
 - Updated Russian and English localization files (by @Satton2)
@@ -51,6 +55,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - With this, the KeyHelp feature also hides the PropSpec bind if PropSpec is disabled on the server
 - Renamed `ttt_session_limits_enabled` to `ttt_session_limits_mode`, introducing a four-mode control (0-3) for managing how TTT2 ends a session. (by @NickCloudAT)
   - Modes: 0 = No session limit, 1 = Default TTT, 2 = Only time limit, 3 = Only round limit
+- Moved all role-related admin options into the "Roles" menu (by @nike4613)
+- Improved description of role layering (by @nike4613)
+- Improved the role layering menu by showing which role is enabled and which is disabled (by @TimGoll)
 
 ## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
 

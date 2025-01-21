@@ -2,6 +2,7 @@
 
 CLGAMEMODESUBMENU.priority = 0
 CLGAMEMODESUBMENU.title = ""
+CLGAMEMODESUBMENU.searchable = true
 
 local function PopulateInfo(parent, roleData)
     if roleData.builtin then
@@ -166,4 +167,9 @@ function CLGAMEMODESUBMENU:Populate(parent)
     self.roleData:AddToSettingsMenu(parent)
 
     hook.Run("TTT2OnRoleAddToSettingsMenu", self.roleData, parent)
+end
+
+-- Override this here, because we don't want auto-discovery to show this menu
+function CLGAMEMODESUBMENU:ShouldShow()
+    return false
 end

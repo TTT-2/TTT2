@@ -39,8 +39,8 @@ L.win_showreport = "{num} saniye boyunca raunt raporuna bakalım."
 L.limit_round = "Raunt sınırına ulaşıldı. Bir sonraki harita yakında yüklenecek."
 L.limit_time = "Zaman sınırına ulaşıldı. Bir sonraki harita yakında yüklenecek."
 L.limit_left_session_mode_1 = "Harita değişmeden önce {num} raunt veya {time} dakika kaldı."
---L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
---L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
+L.limit_left_session_mode_2 = "Harita değişmeden önce {time} dakika kaldı."
+L.limit_left_session_mode_3 = "Harita değişmeden önce {num} raunt kaldı."
 
 -- Credit awards
 L.credit_all = "Takımınıza performansınız için {num} ekipman kredisi verildi."
@@ -171,8 +171,8 @@ L.quick_corpse_id = "{player} adlı ceset"
 L.sb_playing = "Şu anda bu sunucuda oynuyorsunuz..."
 L.sb_mapchange_mode_0 = "Oturum sınırları devre dışı."
 L.sb_mapchange_mode_1 = "{num} rauntta veya {time} içinde harita değişecektir."
---L.sb_mapchange_mode_2 = "Map changes in {time}"
---L.sb_mapchange_mode_3 = "Map changes in {num} rounds"
+L.sb_mapchange_mode_2 = "{time} içinde harita değişecektir."
+L.sb_mapchange_mode_3 = "{num} raunt sonra harita değişecektir."
 
 L.sb_mia = "Çatışmada Kayıp"
 L.sb_confirmed = "Onaylanmış Ölü"
@@ -344,9 +344,9 @@ Sınırsız kullanım, ancak teşhis birkaç saniye sürer.]]
 
 -- UMP
 L.ump_desc = [[
-Hedeflerin yönünü şaşırtan deneysel bir SMG.
+Hedeflerin yönünü şaşırtan deneysel bir HMS.
 
-Standart SMG cephanesi kullanır.]]
+Standart HMS cephanesi kullanır.]]
 
 -- DNA scanner
 L.dna_name = "DNA tarayıcı"
@@ -372,7 +372,7 @@ L.magnet_name = "Manyeto çubuğu"
 L.grenade_smoke = "Duman bombası"
 L.grenade_fire = "Yanıcı bomba"
 
-L.unarmed_name = "Gizlendi"
+L.unarmed_name = "Gizle"
 L.crowbar_name = "Levye"
 L.pistol_name = "Tabanca"
 L.rifle_name = "Tüfek"
@@ -401,7 +401,7 @@ Işınlanma gürültü yapar ve kullanım sayısı sınırlıdır.]]
 -- Ammo names, shown when picked up
 L.ammo_pistol = "9mm cephanesi"
 
-L.ammo_smg1 = "SMG cephanesi"
+L.ammo_smg1 = "HMS cephanesi"
 L.ammo_buckshot = "Pompalı Tüfek cephanesi"
 L.ammo_357 = "Tüfek cephanesi"
 L.ammo_alyxgun = "Deagle cephanesi"
@@ -422,7 +422,7 @@ L.hastemode = "HIZLI MOD"
 L.hp_healthy = "Sağlıklı"
 L.hp_hurt = "Hasar Görmüş"
 L.hp_wounded = "Yaralı"
-L.hp_badwnd = "Kötü Yaralanmış"
+L.hp_badwnd = "Ağır Yaralı"
 L.hp_death = "Ölüme Yakın"
 
 -- TargetID Karma status
@@ -1313,10 +1313,10 @@ L.layering_not_layered = "Katmanlı değil"
 L.layering_layer = "Katman {layer}"
 L.header_rolelayering_role = "{role} dağıtımı"
 L.header_rolelayering_baserole = "Temel rol dağıtma"
-L.submenu_administration_rolelayering_title = "Rol Dağıtma"
+L.submenu_roles_rolelayering_title = "Rol Dağıtma"
 L.header_rolelayering_info = "Rol dağıtma bilgileri"
-L.help_rolelayering_roleselection = "Rol dağılım süreci iki aşamaya ayrılmıştır. İlk aşamada masum, hain ve aşağıdaki 'temel rol dağıtımı' kutusunda listelenen temel roller dağıtılır. İkinci aşama, bu temel rolleri bir alt role yükseltmek için kullanılır."
-L.help_rolelayering_layers = "Her dağıtımdan yalnızca bir rol seçilir. İlk olarak, özel katmanlardan gelen roller, ilk katmandan başlayarak son katmana ulaşılana kadar dağıtılır veya daha fazla rol yükseltilemez. Hangisi önce olursa olsun, yükseltilebilir slotlar hala mevcutsa, katmanlanmamış roller de dağıtılacaktır."
+L.help_rolelayering_roleselection = [[Rol dağılım süreci iki aşamaya ayrılmıştır. İlk aşamada masum, hain ve aşağıdaki 'temel rol dağıtımı' kutusunda listelenen temel roller dağıtılır. İkinci aşama, bu temel rolleri bir alt role yükseltmek için kullanılır.]]
+L.help_rolelayering_layers = [[Her dağıtımdan yalnızca bir rol seçilir. İlk olarak, özel katmanlardan gelen roller, ilk katmandan başlayarak son katmana ulaşılana kadar dağıtılır veya daha fazla rol yükseltilemez. Hangisi önce olursa olsun, yükseltilebilir slotlar hala mevcutsa, katmanlanmamış roller de dağıtılacaktır.]]
 L.scoreboard_voice_tooltip = "Ses seviyesini değiştirmek için kaydırın"
 
 -- 2021-06-15
@@ -1427,7 +1427,7 @@ L.label_enforce_playermodel = "Rol oyuncu modelini uygula"
 L.label_use_custom_models = "Rastgele seçilen bir oyuncu modeli kullan"
 L.label_prefer_map_models = "Varsayılan modeller yerine haritaya özgü modelleri tercih edin"
 L.label_select_model_per_round = "Her rauntta yeni bir rastgele model seçin (devre dışı bırakılmışsa yalnızca harita değişikliğinde)"
---L.label_select_unique_model_per_round = "Select a random unique model for each player"
+L.label_select_unique_model_per_round = "Her oyuncu için rastgele bir özel model seç"
 
 L.help_prefer_map_models = [[
 Bazı haritalar kendi oyuncu modellerini tanımlar. Varsayılan olarak, bu modeller otomatik olarak atananlardan daha yüksek bir önceliğe sahiptir. Bu ayar devre dışı bırakıldığında, haritaya özgü modeller devre dışı bırakılır.
@@ -1461,7 +1461,7 @@ Sol üstteki küçük gösterge, oyuncu modelinin bir kafa vuruş kutusuna sahip
 L.menu_roles_title = "Rol Ayarları"
 L.menu_roles_description = "Oluşum noktalarını, ekipman kredilerini ve daha fazlasını ayarla."
 
-L.submenu_administration_roles_general_title = "Genel Rol Ayarları"
+L.submenu_roles_roles_general_title = "Genel Rol Ayarları"
 
 L.header_roles_info = "Rol Bilgileri"
 L.header_roles_selection = "Rol Seçim Parametreleri"
@@ -1736,9 +1736,9 @@ L.label_max_special_slots = "Maksimum özel yuva"
 L.label_max_extra_slots = "Maksimum ekstra yuva"
 L.label_weapon_autopickup = "Otomatik silah alımını etkinleştir"
 L.label_sprint_enabled = "Koşmayı etkinleştir"
---L.label_sprint_max = "Speed boost factor"
-L.label_sprint_stamina_consumption = "Dayanıklılık tüketim faktörü"
-L.label_sprint_stamina_regeneration = "Dayanıklılık yenileme faktörü"
+L.label_sprint_max = "Hız artırma faktörü"
+L.label_sprint_stamina_consumption = "Enerji tüketim faktörü"
+L.label_sprint_stamina_regeneration = "Enerji yenileme faktörü"
 L.label_crowbar_unlocks = "Birincil saldırı etkileşim (yani kilit açma) olarak kullanılabilir"
 L.label_crowbar_pushforce = "Levye itme kuvveti"
 
@@ -2302,10 +2302,10 @@ Bir raundu yeniden başlatmak yalnızca mevcut raundu yeniden başlatır, böyle
 L.label_button_level_reset = "haritayı sıfırla"
 
 L.loadingscreen_round_restart_title = "Yeni raunt başlıyor"
---L.loadingscreen_round_restart_subtitle_limits_mode_0 = "you're playing on {map}"
---L.loadingscreen_round_restart_subtitle_limits_mode_1 = "you're playing on {map} for another {rounds} round(s) or {time}"
---L.loadingscreen_round_restart_subtitle_limits_mode_2 = "you're playing on {map} for {time}"
---L.loadingscreen_round_restart_subtitle_limits_mode_3 = "you're playing on {map} for another {rounds} round(s)"
+L.loadingscreen_round_restart_subtitle_limits_mode_0 = "{map} adlı haritada oynuyorsunuz"
+L.loadingscreen_round_restart_subtitle_limits_mode_1 = "{map} haritasında {rounds} raunt veya {time} daha oynayacaksınız"
+L.loadingscreen_round_restart_subtitle_limits_mode_2 = "{map} haritasında {time} boyunca oynayacaksınız"
+L.loadingscreen_round_restart_subtitle_limits_mode_3 = "{map} haritasında {rounds} raunt daha oynayacaksınız"
 
 -- 2024-06-23
 L.header_roles_derandomize = "Rastgele Rol Dağıtımı"
@@ -2376,18 +2376,316 @@ L.vehicle_enter = "Araca girmek için [{usekey}] tuşuna bas"
 L.corpse_hint_without_confirm = "Aramak için [{usekey}] tuşuna bas."
 
 -- 2025-01-05
---L.help_session_limits_mode = [[
---There are three different session limit modes you can choose from:
+L.help_session_limits_mode = [[
+Aralarından seçim yapabileceğiniz üç farklı oturum sınırı modu vardır:
+
+mod 0: Oturum sınırı yok. TTT2 oturumu sonlandırmayacak ve harita değişikliğini tetiklemeyecektir.
+
+mod 1: Varsayılan TTT2 modu. Oturum süresi veya oturum raunt sayısı biterse bir harita değişikliği tetiklenir.
+
+mod 2: Sadece zaman sınırı. Bir harita değişikliği yalnızca oturum süresi dolduğunda tetiklenir.
+
+mod 3: Sadece raunt sınırı. Bir harita değişikliği yalnızca oturum raunt sayısı biterse tetiklenir.]]
+L.label_session_limits_mode = "Oturum sınırı modunu ayarla"
+L.choice_session_limits_mode_0 = "mod 0: oturum sınırı yok"
+L.choice_session_limits_mode_1 = "mod 1: zaman ve raunt sınırı"
+L.choice_session_limits_mode_2 = "mod 2: sadece zaman sınırı"
+L.choice_session_limits_mode_3 = "mod 3: sadece raunt sınırı"
+
+-- 2024-12-30
+--L.searchbar_roles_placeholder = "Search roles..."
+--L.label_menu_search_no_items = "No items matched your search."
+
+--L.submenu_roles_overview_title = "Roles Overview (READ ME)"
+
+-- Is there a way to ahve some sort of external file that's possibly-localized?
+--L.roles_overview_html = [[
+--<h1>Overview</h1>
 --
---mode 0: No session limits. TTT2 will not end the session and will not trigger a map change.
+--One of TTT2's core mechanics is the <em>role</em>. They control what your
+--goals are, who your teammates are, and what you can do. The way that they
+--are distributed to players is thus very important. The role distribution
+--system is very complicated, and the menus in this tab control almost every
+--aspect of that system. For many of the options available, understanding how
+--the system as a whole works can be crucial to being able to make the changes
+--you want for your server.
 --
---mode 1: Default TTT2 mode. A map change will trigger if either the session time or session round count runs out.
+--<h2>Terminology</h2>
 --
---mode 2: Only time limit. A map change will only trigger if the session time runs out.
+--<ul>
+--<li><em>Role</em> &mdash; The role assigned to a player at round start,
+--e.g. <em>Traitor</em>, <em>Innocent</em>, <em>Necromancer</em>, etc.</li>
+--<li><em>Base role</em> (or <em>baserole</em>) &mdash; A <em>role</em>
+--selected first, that acts as a kind of high-level template for the final
+--role a player will recieve. <em>Base roles</em> can be final roles. Ex.
+--<em>Innocent</em>, <em>Traitor</em>, <em>Pirate</em></li>
+--<li><em>Sub role</em> (or <em>subrole</em>) &mdash; A role assigned as a
+--refinement of a <em>base role</em>. Each possible <em>sub role</em> is
+--associated with a <em>base role</em>, such that a player must have been
+--assigned the appropriate <em>base role</em> for them to end up with a
+--<em>sub role</em>. Ex. <em>Detective</em> (I-subrole), <em>Hitman</em>
+--(T-subrole), <em>Survivalist</em> (I-subrole), etc.</li>
+--</ul>
 --
---mode 3: Only round limit. A map change will only trigger if the session round count runs out.]]
---L.label_session_limits_mode = "Set session limit mode"
---L.choice_session_limits_mode_0 = "mode 0: no session limits"
---L.choice_session_limits_mode_1 = "mode 1: time and round limit"
---L.choice_session_limits_mode_2 = "mode 2: only time limit"
---L.choice_session_limits_mode_3 = "mode 3: only round limit"
+--<h2>The Algorithm</h2>
+--
+--<em>Implementation is</em> <code>roleselection.SelectRoles</code>
+--
+--<ol>
+--
+--<li>
+--<p>
+--Determine the number of players that can be given each role.
+--<em>Innocent</em> and <em>Traitor</em> always have available slots.
+--</p>
+--<p>
+--All roles (both base- and sub-roles) get the computed here. Subroles
+--only have selectable slots if their corresponding baseroles do.
+--</p>
+--<p>
+--Each role is assigned a chance that it's distributed. If that chance
+--fails, this step sets the possible number of players to zero.
+--</p>
+--<p>
+--<em>Implemented in</em>
+--<code>roleselection.GetAllSelectableRolesList</code>
+--</p>
+--</li>
+--
+--<li>
+--<p>
+--Select the roles that will actually be distributed, limited by the
+--layer configuration and configured maximum number of roles. This process
+--is sufficiently complicated to be worthy of its own section; details
+--are in the next section.
+--</p>
+--<p>
+--<em>Implemented in</em>
+--<code>roleselection.GetSelectableRolesList</code>
+--</p>
+--</li>
+--
+--<li>
+--<p>
+--Assign forced roles. This is mostly simple; there is some extra logic to
+--sanely deal with the case where a player was assigned multiple forced
+--roles. This is not commonly used, but is included for completeness.
+--</p>
+--</li>
+--
+--<li>
+--<p>
+--Randomly shuffle the list of players. Though this likely doesn't
+--meaningfully impact the role distribution, it guarantees that there is no
+--dependence on player join order.
+--</p>
+--</li>
+--
+--<li>
+--<p>
+--For each selectable baserole (in order <em>Traitor</em>,
+--<em>Innocent</em>, remaining baseroles):
+--</p>
+--<ol type="a">
+--<li>
+--<p>
+--Assign up to the allowed number of players to the baserole. (This
+--will be detailed later.)
+--</p>
+--<p><em>Implemented in</em> <code>SelectBaseRolePlayers</code></p>
+--</li>
+--<li>
+--<p>
+--If the baserole is not <em>Innocent</em>, try to "upgrade" players
+--with that baserole to possible subroles. (This will also be detailed
+--later.)
+--</p>
+--<p><em>Implemented in</em> <code>UpgradeRoles</code></p>
+--</li>
+--</ol>
+--</li>
+--
+--<li>
+--<p>
+--All players not yet assigned a role are assigned <em>Innocent</em>.
+--</p>
+--</li>
+--
+--<li>
+--<p>
+--All players with the <em>Innocent</em> baserole have their role
+--"upgraded" exactly as in step 5b.
+--</p>
+--</li>
+--
+--<li>
+--<p>
+--The hook <code>TTT2ModifyFinalRoles</code> is called to allow other
+--addons to affect final roles.
+--</p>
+--</li>
+--
+--<li>
+--<p>
+--Role weights for each player are updated according to their final role.
+--(If the player's final role is a subrole, their corresponding baserole
+--is also updated.)
+--</p>
+--</li>
+--
+--</ol>
+--
+--<h3>
+--Role Layering (a.k.a. <code>roleselection.GetSelectableRolesList</code>)
+--</h3>
+--
+--<p>Role layering is the most controllable part of role selection, and historically the worst explained. In short, <em>role layering</em>
+--determines <em>what</em> roles can be distributed, but NOT <em>how</em>.</p>
+--
+--<p>The algorithm is as follows:</p>
+--<ol>
+--<li>
+--<p>For each baserole layer configured (as long as there are enough
+--players that more roles are needed):</p>
+--<ol type="a">
+--<li>
+--<p>
+--Remove all roles in the layer with no available player slots.
+--(This will remove roles which were previously randomly decided
+--to not be distributed.)
+--</p>
+--</li>
+--<li>
+--<p>
+--Select one role from what's left of the layer at random.
+--</p>
+--</li>
+--<li>
+--<p>
+--Add the role to the final list of candidate baseroles.
+--</p>
+--</li>
+--</ol>
+--</li>
+--<li>
+--<p>Randomly iterate non-layered baseroles. For each such baserole,
+--add the role to the final candidate list.</p>
+--</li>
+--<li>
+--<p>Modify each candidate baserole's available slots so that the sum is the
+--total number of players, preferring candidates added first.</p>
+--</li>
+--<li>
+--<p>Now, subroles. Evaluate once per selectable subrole (including all
+--layered and unlayered subroles for all baseroles in the baserole
+--candidate list):</p>
+--<ol type="a">
+--<li>
+--<p>Randomly select a baserole candidate.</p>
+--</li>
+--<li>
+--<p>
+--If there are any layers defined for that baserole: Select a random
+--subrole from the first available layer. Remove the layer.
+--</p>
+--<p>
+--If there are no layers defined for that baserole: Select a random
+--subrole from the unlayered subroles. Remove that subrole from the
+--unlayered list.
+--</p>
+--</li>
+--<li>
+--<p>Add the selected subrole to the final candidate list.</p>
+--</li>
+--<li>
+--<p>
+--If the baserole has no more subrole layers or subroles: Remove the
+--baserole from further consideration (for this loop ONLY. It stays
+--in the candidate list.)
+--</p>
+--</li>
+--</ol>
+--</li>
+--<li>
+--<p>The baserole and subrole candidate lists now contain the roles which
+--will be assigned.</p>
+--</li>
+--</ol>
+--
+--<h3>Baserole Selection (a.k.a. <code>SelectBaseRolePlayers</code>)</h3>
+--
+--<p>Recall that we assign ALL players to ONE baserole.</p>
+--<p>As long as there are players to assign, and more available slots to
+--assign:</p>
+--<ol>
+--<li>
+--<p>Select a player to assign the role to.</p>
+--<p>
+--If <em>role derandomization</em> (see <em>Role Derandomization</em>
+--section in <em>General Role Settings</em> tab) is set to "baseroles
+--only" or "both": Select a random player from the available players
+--weighted by the weight associated with this baserole. (Think of it
+--as if each player occurs multiple times in the list, according to
+--the weight.)
+--</p>
+--<p>
+--If <em>role derandomization</em> is set to "disabled" or "subroles
+--only": Select a random player from the available players, with equal
+--probability.
+--</p>
+--</li>
+--
+--<li>
+--<p>
+--If the selected player has enough karma for the role, there are not
+--enough players to fill all slots, a 1/3 chance passes, or the target
+--baserole is <em>Innocent</em>: Remove the player from the list of
+--available players and assign the player the baserole.
+--</p>
+--</li>
+--</ol>
+--
+--<h3>Subrole Selection (a.k.a. <code>UpgradeRoles</code>)</h3>
+--
+--<p>This is <em>very</em> similar to baserole selection.</p>
+--<p>When upgrading roles, ALL subroles associated with a baserole are
+--processed together. All players with that baserole are handled together.</p>
+--<p>Only subroles that have assignable slots that are not filled are
+--considered. (This is relevant in the presence of forced subroles.)</p>
+--
+--<p>As long as there are players to assign, and more subroles which
+--are assignable:</p>
+--<ol>
+--<li>
+--<p>Select a player to assign the role to.</p>
+--<p>
+--If <em>role derandomization</em> is set to "subroles only" or
+--"both": Select a random player from the available players weighted
+--by the weight associated with this baserole.
+--</p>
+--<p>
+--If <em>role derandomization</em> is set to "disabled" or "baseroles
+--only": Select a random player from the available players, with equal
+--probability.
+--</p>
+--</li>
+--
+--<li>
+--<p>
+--If the selected player has enough karma for the role, there are not
+--enough players to fill all slots, or a 1/3 chance passes (this is the
+--same condition as above, and in the code, is a shared function): Remove
+--the player from the list of available players and assign the player the
+--subrole. If the subrole has had all available slots filled, remote it
+--from consideration.
+--</p>
+--</li>
+--</ol>
+--
+--]]
+
+-- 2025-01-19
+--L.help_rolelayering_enable = "The red and green border around the icon shows if the role is currently enabled. Right click on an icon to quickly enable/disable that role."
+
+-- 2025-01-20
+--L.label_hud_show_team_name = "Enable showing team name next to role name"

@@ -9,6 +9,7 @@ function PANEL:Init()
     self.data = {
         color = COLOR_WHITE,
         icon = nil,
+        indicatorState = false,
     }
 end
 
@@ -41,6 +42,29 @@ function PANEL:GetMaterial()
 end
 
 ---
+-- @realm client
+function PANEL:DoRightClick()
+    local newValue = not self:GetValue()
+
+    self:SetValue(newValue)
+    self:ValueChanged(newValue)
+end
+
+---
+-- @param boolean state
+-- @realm client
+function PANEL:SetIsActiveIndicator(state)
+    self.data.indicatorState = state
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:GetIsActiveIndicator()
+    return self.data.indicatorState or false
+end
+
+---
 -- @ignore
 function PANEL:Paint(w, h)
     derma.SkinHook("Paint", "RoleImageTTT2", self, w, h)
@@ -48,4 +72,4 @@ function PANEL:Paint(w, h)
     return true
 end
 
-derma.DefineControl("DRoleImageTTT2", "A simple role image", PANEL, "DPanelTTT2")
+derma.DefineControl("DRoleImageTTT2", "A simple role image", PANEL, "DButtonTTT2")

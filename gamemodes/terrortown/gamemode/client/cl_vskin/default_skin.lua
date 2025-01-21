@@ -1721,11 +1721,97 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintRoleImageTTT2(panel, w, h)
+    local widthBorder = 2
+    local widthBorder2 = widthBorder * 2
+    local sizeIconRole = w - widthBorder2
+    local padding = 3
+    local sizeMode = 18 * w / 64
+    local sizeIconMode = sizeMode - 2 * padding
+    local posIconModeX = w - sizeMode + padding
+    local posIconModeY = h - sizeMode + padding
+
     local colorBackground = panel:GetColor()
     local colorIcon = utilGetDefaultColor(colorBackground)
 
-    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
-    drawFilteredShadowedTexture(0, 0, w, h, panel:GetMaterial(), colorIcon.a, colorIcon)
+    local colorBorder = colorCardAdded
+    local iconBorder = materialCardAdded
+
+    if not panel:GetValue() then -- convar value
+        colorBackground = colors.settingsBox
+        colorIcon = colors.settingsText
+        colorBorder = colorCardInheritRemoved
+        iconBorder = materialCardRemoved
+    end
+
+    local colorBorderIcon = utilGetDefaultColor(colorBorder)
+
+    if panel:GetIsActiveIndicator() then
+        drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBorder)
+
+        drawRoundedBox(
+            sizes.cornerRadius,
+            widthBorder,
+            widthBorder,
+            w - widthBorder2,
+            h - widthBorder2,
+            colorBackground
+        )
+    else
+        drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
+
+        widthBorder = 0
+        widthBorder2 = 0
+        sizeIconRole = w
+    end
+
+    if panel:GetValue() then
+        drawFilteredShadowedTexture(
+            widthBorder,
+            widthBorder,
+            sizeIconRole - widthBorder2,
+            sizeIconRole - widthBorder2,
+            panel:GetMaterial(),
+            colorIcon.a,
+            colorIcon
+        )
+    else
+        drawFilteredTexture(
+            widthBorder,
+            widthBorder,
+            sizeIconRole - widthBorder2,
+            sizeIconRole - widthBorder2,
+            panel:GetMaterial(),
+            colorIcon.a * 0.5,
+            colorIcon
+        )
+    end
+
+    if not panel:GetIsActiveIndicator() then
+        return
+    end
+
+    drawRoundedBoxEx(
+        sizes.cornerRadius,
+        w - sizeMode,
+        h - sizeMode,
+        sizeMode,
+        sizeMode,
+        colorBorder,
+        true,
+        false,
+        false,
+        true
+    )
+
+    drawFilteredTexture(
+        posIconModeX,
+        posIconModeY,
+        sizeIconMode,
+        sizeIconMode,
+        iconBorder,
+        175,
+        utilGetDefaultColor(colorBorderIcon)
+    )
 end
 
 ---

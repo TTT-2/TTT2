@@ -10,11 +10,6 @@ local PANEL = {}
 AccessorFunc(PANEL, "m_iIndent", "Indent")
 
 ---
--- @accessor bool
--- @realm client
-AccessorFunc(PANEL, "ignoreCallbackEnabledVar", "IgnoreCallbackEnabledVar", FORCE_BOOL)
-
----
 -- @ignore
 function PANEL:Init()
     self.Button = vgui.Create("DCheckBox", self)
@@ -23,6 +18,10 @@ function PANEL:Init()
 
         -- enable / disable slaves on change
         self:UpdateSlaves(val)
+    end
+
+    self.OnChange = function(_, val)
+        self.Button:SetValue(val)
     end
 
     local oldSetEnabled = self.SetEnabled
@@ -64,125 +63,7 @@ function PANEL:Paint(w, h)
 end
 
 ---
--- This is only used temporarily to keep old variables without breaking the style of "no enable to disable" checkboxes
--- @param bool invert
--- @realm client
-function PANEL:SetInverted(invert)
-    self.inverted = invert
-end
-
----
--- @param string cvar
--- @realm client
-function PANEL:SetConVar(cvar)
-    if not ConVarExists(cvar or "") then
-        return
-    end
-
-    self.Button:SetConVar(cvar)
-    self:SetDefaultValue(tobool(GetConVar(cvar):GetDefault()))
-end
-
-local callbackEnabledVarTracker = 0
----
--- @param string cvar
--- @realm client
-function PANEL:SetServerConVar(cvar)
-    if not cvar or cvar == "" then
-        return
-    end
-
-    self.serverConVar = cvar
-
-    -- Check if self is valid before calling SetValue.
-    cvars.ServerConVarGetValue(cvar, function(wasSuccess, value, default)
-        if wasSuccess and IsValid(self) then
-            self:SetValue(tobool(value), true)
-            self:SetDefaultValue(tobool(default))
-        end
-    end)
-
-    callbackEnabledVarTracker = callbackEnabledVarTracker + 1
-    local myIdentifierString = "TTT2CheckBoxConVarChangeCallback"
-        .. tostring(callbackEnabledVarTracker)
-
-    local callback = function(conVarName, oldValue, newValue)
-        if not IsValid(self) then
-            -- We need to remove the callback in a timer, because otherwise the ConVar change callback code
-            -- will throw an error while looping over the callbacks.
-            -- This happens, because the callback is removed from the same table that is iterated over.
-            -- Thus, the table size changes while iterating over it and leads to a nil callback as the last entry.
-            timer.Simple(0, function()
-                cvars.RemoveChangeCallback(conVarName, myIdentifierString)
-            end)
-
-            return
-        end
-
-        self:SetValue(tobool(newValue), true)
-    end
-
-    cvars.AddChangeCallback(cvar, callback, myIdentifierString)
-end
-
----
--- @param table databaseInfo containing {name, itemName, key}
--- @realm client
-function PANEL:SetDatabase(databaseInfo)
-    if not istable(databaseInfo) then
-        return
-    end
-
-    local name = databaseInfo.name
-    local itemName = databaseInfo.itemName
-    local key = databaseInfo.key
-
-    if not name or not itemName or not key then
-        return
-    end
-
-    self.databaseInfo = databaseInfo
-
-    database.GetValue(name, itemName, key, function(databaseExists, value)
-        if databaseExists then
-            self:SetValue(value, true)
-        end
-    end)
-
-    self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
-
-    callbackEnabledVarTracker = callbackEnabledVarTracker + 1
-    local myIdentifierString = "TTT2CheckBoxDatabaseChangeCallback"
-        .. tostring(callbackEnabledVarTracker)
-
-    local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
-        if not IsValid(self) then
-            database.RemoveChangeCallback(name, itemName, key, myIdentifierString)
-
-            return
-        end
-
-        self:SetValue(newValue, true)
-    end
-
-    database.AddChangeCallback(name, itemName, key, OnDatabaseChangeCallback, myIdentifierString)
-end
-
----
--- @param any val
--- @param boolean ignoreCallbackEnabledVar To avoid endless loops, separated setting of convars and UI values
--- @realm client
-function PANEL:SetValue(val, ignoreCallbackEnabledVar)
-    self:SetIgnoreCallbackEnabledVar(ignoreCallbackEnabledVar)
-
-    if self.inverted then
-        val = not val
-    end
-
-    self.Button:SetValue(val)
-end
-
----
+-- overwrites the default function
 -- @param boolean value
 -- @realm client
 function PANEL:SetDefaultValue(value)
@@ -204,13 +85,6 @@ function PANEL:SetDefaultValue(value)
     if ispanel(reset) then
         reset.noDefault = noDefault
     end
-end
-
----
--- @return boolean defaultValue, if unset returns false
--- @realm client
-function PANEL:GetDefaultValue()
-    return tobool(self.default)
 end
 
 ---
@@ -334,35 +208,5 @@ end
 function PANEL:GetTextParams()
     return self.params
 end
-
----
--- @param any val
--- @realm client
-function PANEL:ValueChanged(val)
-    if self.inverted then
-        val = not val
-    end
-
-    if self.serverConVar and not self:GetIgnoreCallbackEnabledVar() then
-        cvars.ChangeServerConVar(self.serverConVar, val and "1" or "0")
-    elseif self.databaseInfo and not self:GetIgnoreCallbackEnabledVar() then
-        database.SetValue(
-            self.databaseInfo.name,
-            self.databaseInfo.itemName,
-            self.databaseInfo.key,
-            val
-        )
-    else
-        self:SetIgnoreCallbackEnabledVar(false)
-    end
-
-    self:OnValueChanged(val)
-end
-
----
--- overwrites the base function with an empty function
--- @param any val
--- @realm client
-function PANEL:OnValueChanged(val) end
 
 derma.DefineControl("DCheckBoxLabelTTT2", "", PANEL, "DButtonTTT2")
