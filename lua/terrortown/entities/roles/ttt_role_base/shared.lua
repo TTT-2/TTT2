@@ -45,7 +45,7 @@ ROLE.score = {
     suicideMultiplier = -1,
 
     -- The amount of score points gained when your team wins.
-    winMultiplier = 1,
+    winMultiplier = 3,
 }
 
 ROLE.karma = {
