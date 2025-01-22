@@ -1669,8 +1669,8 @@ function GM:TTT2CanTakeCredits(ply, rag, isLongRange) end
 
 ---
 -- Use this hook to prevent or override the transfer of credits from a corpse to a player.
--- @param Entity rag The ragdoll that is inspected
 -- @param Player ply The @{Player} attempting to find credits from ragdoll
+-- @param Entity rag The ragdoll that is inspected
 -- @return nil|boolean Return false to prevent normal transfer
 -- @hook
 -- @realm server

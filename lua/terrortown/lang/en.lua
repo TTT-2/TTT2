@@ -2403,6 +2403,7 @@ L.searchbar_roles_placeholder = "Search roles..."
 L.label_menu_search_no_items = "No items matched your search."
 
 L.submenu_roles_overview_title = "Roles Overview (READ ME)"
+
 -- Is there a way to ahve some sort of external file that's possibly-localized?
 L.roles_overview_html = [[
 <h1>Overview</h1>
@@ -2689,9 +2690,6 @@ considered. (This is relevant in the presence of forced subroles.)</p>
 
 ]]
 
--- 2025-01-19
-L.help_rolelayering_enable = "The red and green border around the icon shows if the role is currently enabled. Right click on an icon to quickly enable/disable that role."
-
 -- 2025-01-07
 L.graph_sort_mode_none = "No Sorting"
 L.graph_sort_mode_highlight_order = "Highlighted First"
@@ -2798,3 +2796,9 @@ L.label_inspect_no_subroles = "No subroles were selectable."
 L.header_roleinspect_stage_final = "Final Roles"
 L.help_roleinspect_stage_final = [[
 This shows the final role assignments. These may have been modified by a hook after subroles were assigned.]]
+
+-- 2025-01-19
+L.help_rolelayering_enable = "The red and green border around the icon shows if the role is currently enabled. Right click on an icon to quickly enable/disable that role."
+
+-- 2025-01-20
+L.label_hud_show_team_name = "Enable showing team name next to role name"
