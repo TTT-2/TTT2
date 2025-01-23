@@ -190,13 +190,13 @@ function gameEffects.ExplosiveSphereDamage(dmgowner, source, damage, origin, out
             dFraction = 1.0 - math.max((d - innerRadius) / radiDiff,0.0)
 
             --Next Iteration if we are outside the radius
-            if dFraction < 0.0 then 
-                continue 
+            if dFraction < 0.0 then
+                continue
             end
 
             dmg = math.Round(damage * dFraction * ((exponentialFalloff and dFraction) or 1))
 
-            local dmginfo = DamageInfo()				
+            local dmginfo = DamageInfo()
             dmginfo:SetDamage(dmg)
             dmginfo:SetAttacker(dmgowner)
             dmginfo:SetInflictor(source)
