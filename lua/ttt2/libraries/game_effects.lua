@@ -185,7 +185,9 @@ function gameEffects.ExplosiveSphereDamage(
     local diff = nil
     local dmg = 0
     local radiDiff = (outerRadius - innerRadius)
-    for _, ply in pairs(player.GetAll()) do
+    local plys = player.GetAll()
+    for i = 1, #plys do
+        local ply = plys[i]
         if IsValid(ply) and ply:Team() == TEAM_TERROR then
             diff = origin - ply:GetPos()
             --we are using Length on purpose here. We would need a sqrt somewhere anyway and with this we dont need to square the radi
