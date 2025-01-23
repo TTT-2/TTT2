@@ -1347,28 +1347,22 @@ function SKIN:PaintTooltipTTT2(panel, w, h)
 
     if panel:HasText() then
         local text = TryT(panel:GetText())
+        local textColor = utilGetDefaultColor(colors.background)
 
-        if string.find(text, "\n") then
-            -- has newlines, use drawDrawText
-            drawDrawText(
-                text,
-                panel:GetFont(),
-                10, --0.5 * w,
-                4 + sizeArrow,
-                utilGetDefaultColor(colors.background),
-                TEXT_ALIGN_LEFT
-            )
-        else
-            -- no newlines, can use drawSimpleText
+        local wrapped = drawGetWrappedText(text, ScrW() - 20, panel:GetFont())
+        local _, lineHeight = drawGetTextSize("", panel:GetFont())
+        local y = 4 + sizeArrow
+        for i = 1, #wrapped do
             drawSimpleText(
-                text,
+                wrapped[i],
                 panel:GetFont(),
-                0.5 * w,
-                0.5 * (h + sizeArrow),
-                utilGetDefaultColor(colors.background),
-                TEXT_ALIGN_CENTER,
-                TEXT_ALIGN_CENTER
+                10,
+                y,
+                textColor,
+                TEXT_ALIGN_LEFT,
+                TEXT_ALIGN_TOP
             )
+            y = y + lineHeight
         end
     end
 end
