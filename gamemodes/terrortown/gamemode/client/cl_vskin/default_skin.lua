@@ -1903,10 +1903,7 @@ function SKIN:PaintSearchbar(panel, w, h)
     )
 
     -- Draw small blue bar on the bottom
-    --drawBox(leftPad, h - sizes.border - bottomPad, w - widthPad, sizes.border, colorBar)
-
-    -- Draw small blue bar across the top
-    drawBox(leftPad, topPad, w - widthPad, sizes.border, colorBar)
+    drawBox(leftPad, h - sizes.border - bottomPad, w - widthPad, sizes.border, colorBar)
 
     -- If not focussed draw placeholder text
     if panel:GetIsOnFocus() then
@@ -2350,7 +2347,6 @@ function SKIN:PaintPlayerGraphTTT2(panel, w, h)
         else
             thisBarColor = barColor
         end
-        --print(item.x, item.y)
         drawBox(item.x, item.y, item.w, item.h, thisBarColor)
         -- then the value text
         if item.valueWidth > w - item.x - item.w - padding then
@@ -2362,7 +2358,6 @@ function SKIN:PaintPlayerGraphTTT2(panel, w, h)
                 thisTextCol = valueInsideColor
             end
             local x = item.x + item.w - item.valueWidth - padding
-            --print(x, item.y)
             drawSimpleText(
                 tostring(item.data.value),
                 panel:GetFont(),
@@ -2374,7 +2369,6 @@ function SKIN:PaintPlayerGraphTTT2(panel, w, h)
             )
         else
             -- the value will fit outside the bar, draw it there
-            --print(item.x + item.w + padding, item.y)
             drawSimpleText(
                 tostring(item.data.value),
                 panel:GetFont(),

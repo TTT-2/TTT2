@@ -108,8 +108,6 @@ local axisSizeTbl = {
 ---
 -- @ignore
 function PANEL:PerformLayout()
-    --self:InvalidateChildren() -- Make sure we invoke our childrens' layout functions
-
     local mainPanel = self.mainPanel
     if not IsValid(mainPanel) then
         -- no main panel, nothing to actually layout
