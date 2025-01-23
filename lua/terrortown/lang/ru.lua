@@ -1172,6 +1172,7 @@ L.tooltip_karma_gained = "Изменение кармы в этом раунде
 L.tooltip_score_gained = "Изменение счёта в этом раунде:"
 L.tooltip_roles_time = "Изменение роли в этом раунде:"
 
+--L.tooltip_finish_score_win = "Win: {score}"
 L.tooltip_finish_score_alive_teammates = "Живые товарищи: {score}"
 L.tooltip_finish_score_alive_all = "Живые игроки: {score}"
 L.tooltip_finish_score_timelimit = "Истечение времени: {score}"
@@ -1179,6 +1180,7 @@ L.tooltip_finish_score_dead_enemies = "Мёртвые противники: {sco
 L.tooltip_kill_score = "Убийство: {score}"
 L.tooltip_bodyfound_score = "Нахождение тела: {score}"
 
+--L.finish_score_win = "Win:"
 L.finish_score_alive_teammates = "Живые товарищи:"
 L.finish_score_alive_all = "Живые игроки:"
 L.finish_score_timelimit = "Истечение времени:"
