@@ -122,7 +122,7 @@ function EVENT:CalculateScore()
             score_timelimit = wintype == WIN_TIMELIMIT and math.ceil(
                 otherAlivePlayers * roleData.score.timelimitMultiplier
             ) or 0,
-            score_win = wintype == team and roleData.score.winMultiplier or 0,
+            score_win = wintype == team and roleData.score.winMultiplier,
         })
     end
 end
