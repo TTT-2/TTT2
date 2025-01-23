@@ -14,6 +14,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added option to use right click to enable/disable roles in the role layering menu (by @TimGoll)
 - Added option to enable team name next to role name on the HUD (by @milkwxter)
 - Added score event for winning with configurable role parameter (by @MrXonte)
+- Added ExplosiveSphereDamage game effect for easy calculation of explosion damage through walls (by @MrXonte)
 
 ### Fixed
 
@@ -59,6 +60,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Moved all role-related admin options into the "Roles" menu (by @nike4613)
 - Improved description of role layering (by @nike4613)
 - Improved the role layering menu by showing which role is enabled and which is disabled (by @TimGoll)
+- Reworked C4 damage calculation with new gameEffect ExplosiveSphereDamage (by @MrXonte)
 
 ## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
 

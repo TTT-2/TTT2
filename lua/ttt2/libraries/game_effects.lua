@@ -161,51 +161,51 @@ end
 -- @internal
 -- @realm server
 function gameEffects.ExplosiveSphereDamage(dmgowner, source, damage, origin, outerRadius, innerRadius, exponentialFalloff)
-	-- It seems intuitive to use FindInSphere here, but that will find all ents
-	-- in the radius, whereas there exist only ~16 players. Hence it is more
-	-- efficient to cycle through all those players and do a Lua-side distance
-	-- check.
+    -- It seems intuitive to use FindInSphere here, but that will find all ents
+    -- in the radius, whereas there exist only ~16 players. Hence it is more
+    -- efficient to cycle through all those players and do a Lua-side distance
+    -- check.
 
-	if outerRadius < innerRadius then
-		ErrorNoHalt("[Game Effects Explosive Sphere Damage] Outer radius too high! Setting both radi to outer radius.")
-		innerRadius = outerRadius
-	end
+    if outerRadius < innerRadius then
+        ErrorNoHalt("[Game Effects Explosive Sphere Damage] Outer radius too high! Setting both radi to outer radius.")
+        innerRadius = outerRadius
+    end
 
-	-- pre-declare to avoid realloc
-	local d = 0.0
-	local dFraction = 0.0
-	local diff = nil
-	local dmg = 0
-	local radiDiff = (outerRadius - innerRadius)
-	for _, ply in pairs(player.GetAll()) do
-		if IsValid(ply) and ply:Team() == TEAM_TERROR then
+    -- pre-declare to avoid realloc
+    local d = 0.0
+    local dFraction = 0.0
+    local diff = nil
+    local dmg = 0
+    local radiDiff = (outerRadius - innerRadius)
+    for _, ply in pairs(player.GetAll()) do
+        if IsValid(ply) and ply:Team() == TEAM_TERROR then
 
-			diff = origin - ply:GetPos()
-			--we are using Length on purpose here. We would need a sqrt somewhere anyway and with this we dont need to square the radi
-			d = diff:Length()
-			--we now turn this into a % of damage based of the value of d
-			--100% from 0 to innerRadius
-			--100% to 0% from innerRadius to outerRadius
-			--<0% from outerRadius to infinity
-			dFraction = 1.0 - math.max((d - innerRadius) / radiDiff,0.0)
+            diff = origin - ply:GetPos()
+            --we are using Length on purpose here. We would need a sqrt somewhere anyway and with this we dont need to square the radi
+            d = diff:Length()
+            --we now turn this into a % of damage based of the value of d
+            --100% from 0 to innerRadius
+            --100% to 0% from innerRadius to outerRadius
+            --<0% from outerRadius to infinity
+            dFraction = 1.0 - math.max((d - innerRadius) / radiDiff,0.0)
 
-			--Next Iteration if we are outside the radius
-			if dFraction < 0.0 then 
-				continue 
-			end
+            --Next Iteration if we are outside the radius
+            if dFraction < 0.0 then 
+                continue 
+            end
 
-			dmg = math.Round(damage * dFraction * ((exponentialFalloff and dFraction) or 1))
+            dmg = math.Round(damage * dFraction * ((exponentialFalloff and dFraction) or 1))
 
-			local dmginfo = DamageInfo()				
-			dmginfo:SetDamage(dmg)
-			dmginfo:SetAttacker(dmgowner)
-			dmginfo:SetInflictor(source)
-			dmginfo:SetDamageType(DMG_BLAST)
-			dmginfo:SetDamageForce(diff)
-			dmginfo:SetDamagePosition(ply:GetPos())
-			ply:TakeDamageInfo(dmginfo)
-		end
-	end
+            local dmginfo = DamageInfo()				
+            dmginfo:SetDamage(dmg)
+            dmginfo:SetAttacker(dmgowner)
+            dmginfo:SetInflictor(source)
+            dmginfo:SetDamageType(DMG_BLAST)
+            dmginfo:SetDamageForce(diff)
+            dmginfo:SetDamagePosition(ply:GetPos())
+            ply:TakeDamageInfo(dmginfo)
+        end
+    end
 end
 
 -- vFIRE INTEGRATION

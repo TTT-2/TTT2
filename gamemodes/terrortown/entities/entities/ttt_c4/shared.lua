@@ -194,8 +194,8 @@ function ENT:Explode(tr)
             r_inner = r_inner / 2.5
             r_outer = r_outer / 2.5
         end
-		
-		gameEffects.ExplosiveSphereDamage(dmgowner, self, self:GetDmg(), pos, r_outer, r_inner, true)
+
+        gameEffects.ExplosiveSphereDamage(dmgowner, self, self:GetDmg(), pos, r_outer, r_inner, true)
 
         local effect = EffectData()
         effect:SetStart(pos)
