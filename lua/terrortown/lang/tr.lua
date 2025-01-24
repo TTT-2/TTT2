@@ -2421,14 +2421,14 @@ sunucunuzda yapacağınız değişiklikler için çok önemlidir.
 <h2>Terminoloji</h2>
 
 <ul>
-  <li><em>Rol</em> &mdash; Raunt başlangıcında bir oyuncuya atanan rol,
+<li><em>Rol</em> &mdash; Raunt başlangıcında bir oyuncuya atanan rol,
 örn. <em>Hain</em>, <em>Masum</em>, <em>Ruh Çağıran (Necromancer)</em>vb.</li>
 <li><em>Temel rol</em> &mdash; İlk olarak seçilen ve oyuncunun alacağı son rol
 için bir tür üst düzey şablon görevi gören <em>rol</em>. <em>Temel roller</em>
 son roller olabilir. Ör. <em>Masum</em>, <em>Hain</em>, <em>Korsan</em></li>
 <li><em>Alt rol</em> &mdash; <em>Temel rolün</em> iyileştirilmesi için bir rol atılmasıdır.
 Her olası <em>alt rol</em> bir <em>temel rolle</em> ilişkilendirilir; öyle ki,
-bir oyuncuya bir <em>alt rol</em> alabilmesi için uygun <em>temel rolün</em> atanmış 
+bir oyuncuya bir <em>alt rol</em> alabilmesi için uygun <em>temel rolün</em> atanmış
 olması gerekir. Örn. <em>Dedektif</em> (M-alt rol), <em>Tetikçi</em>
 (T-alt rol), <em>Hayatta Kalma Uzmanı</em> (M-alt rol), vb.</li>
 </ul>
@@ -2439,100 +2439,100 @@ olması gerekir. Örn. <em>Dedektif</em> (M-alt rol), <em>Tetikçi</em>
 
 <ol>
 
-  <li>
-    <p>
+<li>
+<p>
 Her bir role verilebilecek oyuncu sayısını belirler.
 <em>Masum</em> ve <em>Hain'in</em> her zaman boş yuvaları vardır.
-    </p>
-    <p>
+</p>
+<p>
 Tüm roller (hem temel hem de alt roller) burada hesaplanır. Alt roller
 yalnızca karşılık gelen temel rolleri varsa seçilebilir yuvalara sahiptir.
-    </p>
-    <p>
+</p>
+<p>
 Her role dağıtılma şansı verilir. Bu şans
 başarısız olursa, bu adım olası oyuncu sayısını sıfıra ayarlar.
-    </p>
-    <p>
+</p>
+<p>
 <em>Kodu</em>
 <code>roleselection.GetAllSelectableRolesList</code>
-    </p>
-  </li>
+</p>
+</li>
 
-  <li>
-    <p>
+<li>
+<p>
 Dağıtılacak olan, katman yapılandırmasıyla sınırlanacak ve yapılandırılmış
 maksimum rol sayısıyla sınırlandırılacak rolleri seçin. Bu işlem,
 çok karmaşık olduğu için kendisine başka bir bölümde yer verilmiştir. Detaylar
 bir sonraki bölümdedir.
-    </p>
-    <p>
+</p>
+<p>
 <em>Kodu</em>
 <code>roleselection.GetSelectableRolesList</code>
-    </p>
-  </li>
+</p>
+</li>
 
-  <li>
-    <p>
-Zorunlu rolleri atayın. Bu aslında basit bir işlemdir; Bir oyuncuya birden fazla 
+<li>
+<p>
+Zorunlu rolleri atayın. Bu aslında basit bir işlemdir; Bir oyuncuya birden fazla
 zorunlu rolün atandığı durumu mantıklı bir şekilde ele almanın mantıklı bir açıklaması
 vardır. Bu yaygın olarak kullanılmaz, ancak bütünlük için dahil edilir.
-    </p>
-  </li>
+</p>
+</li>
 
-  <li>
-    <p>
-Oyuncu listesini rastgele karıştırın. Bu muhtemelen rol dağılımını 
+<li>
+<p>
+Oyuncu listesini rastgele karıştırın. Bu muhtemelen rol dağılımını
 çok fazla etkilemese de, oyuncu katılım sırasına
 bağlı kalmamayı garantiler.
-    </p>
-  </li>
+</p>
+</li>
 
-  <li>
-    <p>
+<li>
+<p>
 Her seçilebilir temel rol için (sırasıyla <em>Hain</em>,
 <em>Masum</em>, geriye kalan temel roller):
-   </p>
-    <ol type="a">
-      <li>
-        <p>
+</p>
+<ol type="a">
+<li>
+<p>
 Ana kutuya izin verilen sayıda oyuncu ata. (Bu
 daha sonra detaylandırılacaktır.)
-        </p>
+</p>
 <p><em>Kodu</em> <code>SelectBaseRolePlayers</code></p>
-      </li>
-      <li>
-        <p>
+</li>
+<li>
+<p>
 Temel rol <em>Masum</em> değilse, bu temel role
 sahip oyuncuları mümkün olan alt rollere "yükseltmeye" çalışın. (Bu
 daha sonra detaylandırılacaktır.)
-        </p>
+</p>
 <p><em>Kodu</em> <code>UpgradeRoles</code></p>
-      </li>
-    </ol>
-  </li>
+</li>
+</ol>
+</li>
 
-  <li>
-    <p>
+<li>
+<p>
 Henüz bir rol atanmamış tüm oyunculara <em>Masum</em> rolü atanır.
-    </p>
-  </li>
+</p>
+</li>
 
-  <li>
-    <p>
+<li>
+<p>
 <em>Masum</em> temel rolüne sahip tüm oyuncuların rolleri
 tam olarak 5b adımında olduğu gibi "yükseltilmiştir".
-    </p>
-  </li>
+</p>
+</li>
 
-  <li>
-    <p>
+<li>
+<p>
 <code>TTT2ModifyFinalRoles</code> hook'u, diğer eklentilerin son rolleri
 değişiklik yapmasına izin vermek için kullanılır.
-    </p>
-  </li>
+</p>
+</li>
 
-  <li>
-    <p>
+<li>
+<p>
 Her oyuncunun rol ağırlıkları son rollerine göre güncellenir.
 (Oyuncunun son rolü bir alt rol ise, karşılık gelen temel rolleri
 güncellenir.)
@@ -2546,34 +2546,34 @@ Rol Katmanlama (diğer adıyla <code>roleselection.GetSelectableRolesList</code>
 </h3>
 
 <p>Rol katmanlama, rol seçiminin en kontrol edilebilir ve tarihsel olarak en kötü açıklanabilir kısmıdır. Kısacası, <em>rol katmanlama</em>
- <em>hangi</em> rollerin <em>nasıl</em> dağıtılabileceğini DEĞİL, hangi rollerin dağıtılabileceğini belirler.</p>
+<em>hangi</em> rollerin <em>nasıl</em> dağıtılabileceğini DEĞİL, hangi rollerin dağıtılabileceğini belirler.</p>
 
 <p>Algoritma aşağıdaki gibidir:</p>
 <ol>
-  <li>
+<li>
 <p>Yapılandırılan her temel rol katmanı için (daha fazla role ihtiyaç
 duyulacak kadar oyuncu olduğu sürece):</p>
-    <ol type="a">
-      <li>
-        <p>
+<ol type="a">
+<li>
+<p>
 Oyuncu yuvası olmayan katmandaki tüm rolleri kaldır.
 (Bu, daha önce rastgele dağıtılmamasına karar verilen
 rolleri kaldıracaktır.)
-        </p>
-      </li>
-      <li>
-        <p>
+</p>
+</li>
+<li>
+<p>
 Katmanın kalanından rastgele bir rol seç.
-        </p>
-      </li>
-      <li>
-        <p>
+</p>
+</li>
+<li>
+<p>
 Rolü, temel roller listesine ekle.
-        </p>
-      </li>
-    </ol>
-  </li>
-  <li>
+</p>
+</li>
+</ol>
+</li>
+<li>
 <p>Katmanlı olmayan temel rolleri rastgele yinele. Bu tür her temel rol için,
 rolü son aday listesine ekle.</p>
 </li>
@@ -2587,9 +2587,9 @@ alt roller dahil):</p>
 <ol type="a">
 <li>
 <p>Rastgele bir temel rol adayı seçin.</p>
-      </li>
-      <li>
-        <p>
+</li>
+<li>
+<p>
 Bu temel rol için tanımlanmış herhangi bir katman varsa: Mevcut ilk katmandan
 rastgele bir alt rol seçin. Katmanı kaldırın.
 </p>
@@ -2606,11 +2606,11 @@ rastgele bir alt rol seçin. Bu alt rolü katmansız listeden kaldırın.
 <p>
 Temel rolün artık alt rol katmanları veya alt rolleri yoksa: Temel rolü daha fazla
 düşünmeden kaldırın (YALNIZCA bu döngü için. Aday listesinde kalır.)
-        </p>
-      </li>
-    </ol>
-  </li>
-  <li>
+</p>
+</li>
+</ol>
+</li>
+<li>
 <p>Temel rol ve alt rol aday listeleri artık atanacaktır.</p>
 </li>
 </ol>
@@ -2628,21 +2628,21 @@ düşünmeden kaldırın (YALNIZCA bu döngü için. Aday listesinde kalır.)
 "yalnızca temel rol" veya "mod 3" olarak ayarlanmışsa:
 Mevcut oyuncular arasından bu temel rol ile ilişkili ağırlığa
 göre ağırlıklandırılmış rastgele bir oyuncu seçin. (Her oyuncunun ağırlığa göre listede birden çok kez seçildiğini düşünün.)
-    </p>
-    <p>
+</p>
+<p>
 <em>Rastgele rol dağıtımı</em> "devre dışı" veya "yalnızca alt roller" olarak ayarlanmışsa:
 Mevcut oyuncular arasından eşit olasılıkla rastgele bir oyuncu seçin.
-    </p>
-  </li>
+</p>
+</li>
 
-  <li>
-    <p>
+<li>
+<p>
 Seçilen oyuncunun rol için yeterli karması varsa, tüm yuvaları
 doldurmaya yetecek kadar oyuncu yoksa, 1/3 şans geçerse veya hedef
 temel rol <em>Masum</em> ise: Oyuncuyu mevcut oyuncular listesinden
 çıkarın ve oyuncuya temel rolü atayın.
-    </p>
-  </li>
+</p>
+</li>
 </ol>
 
 <h3>Alt Rol Seçimi (diğer adıyla <code>UpgradeRoles</code>)</h3>
@@ -2654,28 +2654,28 @@ dikkate alınır. (Bu, zorunlu alt rollerin varlığıyla ilgilidir.)</p>
 
 <p>Atanacak oyuncular ve atanabilir daha fazla alt rol olduğu sürece:</p>
 <ol>
-  <li>
+<li>
 <p>Rolün atanacağı bir oyuncu seçin.</p>
-    <p>
+<p>
 <em>Rastgele rol dağıtımı</em> "yalnızca alt roller" veya "mod 3" olarak ayarlanmışsa:
 Mevcut oyuncular arasından, bu temel rol ile ilişkili ağırlığa göre
 ağırlıklandırılmış rastgele bir oyuncu seçin.
-    </p>
-    <p>
+</p>
+<p>
 <em>Rastgele rol dağıtımı</em> "devre dışı" veya "yalnızca temel roller" olarak ayarlanmışsa:
 Mevcut oyuncular arasından eşit olasılıkla rastgele bir oyuncu seçin.
-    </p>
-  </li>
+</p>
+</li>
 
-  <li>
-    <p>
+<li>
+<p>
 Seçilen oyuncunun rol için yeterli karması varsa, tüm yuvaları doldurmaya
 yetecek kadar oyuncu yoksa veya 1/3 şansı varsa
 (bu, yukarıdakiyle aynı durumdur ve kodda paylaşılan bir işlevdir):
 Mevcut oyuncular listesinden oyuncuyu seçin ve oyuncuya alt rolü
 atayın. Alt rolün tüm boş yuvaları doldurulmuşsa, dikkate almayın.
-    </p>
-  </li>
+</p>
+</li>
 </ol>
 
 ]]
