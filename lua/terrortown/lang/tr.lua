@@ -1170,7 +1170,7 @@ L.tooltip_karma_gained = "Bu raunt için Karma değişiklikleri"
 L.tooltip_score_gained = "Bu raunt için puan değişiklikleri"
 L.tooltip_roles_time = "Bu raunt için rol değişiklikleri"
 
---L.tooltip_finish_score_win = "Win: {score}"
+L.tooltip_finish_score_win = "Kazanma: {score}"
 L.tooltip_finish_score_alive_teammates = "Canlı takım arkadaşları {score}"
 L.tooltip_finish_score_alive_all = "Canlı oyuncular {score}"
 L.tooltip_finish_score_timelimit = "Süre doldu {score}"
@@ -1178,7 +1178,7 @@ L.tooltip_finish_score_dead_enemies = "Ölü düşmanlar {score}"
 L.tooltip_kill_score = "Öldürme {score}"
 L.tooltip_bodyfound_score = "Ceset bulundu {score}"
 
---L.finish_score_win = "Win:"
+--L.finish_score_win = "Kazanma:"
 L.finish_score_alive_teammates = "Canlı takım arkadaşları"
 L.finish_score_alive_all = "Canlı oyuncular"
 L.finish_score_timelimit = "Süre doldu"
@@ -2395,299 +2395,281 @@ L.choice_session_limits_mode_2 = "mod 2: sadece zaman sınırı"
 L.choice_session_limits_mode_3 = "mod 3: sadece raunt sınırı"
 
 -- 2024-12-30
---L.searchbar_roles_placeholder = "Search roles..."
---L.label_menu_search_no_items = "No items matched your search."
+L.searchbar_roles_placeholder = "Rol ara..."
+L.label_menu_search_no_items = "Aramanızla eşleşen bir öğe bulunamadı."
 
---L.submenu_roles_overview_title = "Roles Overview (READ ME)"
+L.submenu_roles_overview_title = "Rollere Genel Bakış (BENİ OKU)"
 
 -- Is there a way to ahve some sort of external file that's possibly-localized?
---L.roles_overview_html = [[
---<h1>Overview</h1>
---
---One of TTT2's core mechanics is the <em>role</em>. They control what your
---goals are, who your teammates are, and what you can do. The way that they
---are distributed to players is thus very important. The role distribution
---system is very complicated, and the menus in this tab control almost every
---aspect of that system. For many of the options available, understanding how
---the system as a whole works can be crucial to being able to make the changes
---you want for your server.
---
---<h2>Terminology</h2>
---
---<ul>
---<li><em>Role</em> &mdash; The role assigned to a player at round start,
---e.g. <em>Traitor</em>, <em>Innocent</em>, <em>Necromancer</em>, etc.</li>
---<li><em>Base role</em> (or <em>baserole</em>) &mdash; A <em>role</em>
---selected first, that acts as a kind of high-level template for the final
---role a player will recieve. <em>Base roles</em> can be final roles. Ex.
---<em>Innocent</em>, <em>Traitor</em>, <em>Pirate</em></li>
---<li><em>Sub role</em> (or <em>subrole</em>) &mdash; A role assigned as a
---refinement of a <em>base role</em>. Each possible <em>sub role</em> is
---associated with a <em>base role</em>, such that a player must have been
---assigned the appropriate <em>base role</em> for them to end up with a
---<em>sub role</em>. Ex. <em>Detective</em> (I-subrole), <em>Hitman</em>
---(T-subrole), <em>Survivalist</em> (I-subrole), etc.</li>
---</ul>
---
---<h2>The Algorithm</h2>
---
---<em>Implementation is</em> <code>roleselection.SelectRoles</code>
---
---<ol>
---
---<li>
---<p>
---Determine the number of players that can be given each role.
---<em>Innocent</em> and <em>Traitor</em> always have available slots.
---</p>
---<p>
---All roles (both base- and sub-roles) get the computed here. Subroles
---only have selectable slots if their corresponding baseroles do.
---</p>
---<p>
---Each role is assigned a chance that it's distributed. If that chance
---fails, this step sets the possible number of players to zero.
---</p>
---<p>
---<em>Implemented in</em>
---<code>roleselection.GetAllSelectableRolesList</code>
---</p>
---</li>
---
---<li>
---<p>
---Select the roles that will actually be distributed, limited by the
---layer configuration and configured maximum number of roles. This process
---is sufficiently complicated to be worthy of its own section; details
---are in the next section.
---</p>
---<p>
---<em>Implemented in</em>
---<code>roleselection.GetSelectableRolesList</code>
---</p>
---</li>
---
---<li>
---<p>
---Assign forced roles. This is mostly simple; there is some extra logic to
---sanely deal with the case where a player was assigned multiple forced
---roles. This is not commonly used, but is included for completeness.
---</p>
---</li>
---
---<li>
---<p>
---Randomly shuffle the list of players. Though this likely doesn't
---meaningfully impact the role distribution, it guarantees that there is no
---dependence on player join order.
---</p>
---</li>
---
---<li>
---<p>
---For each selectable baserole (in order <em>Traitor</em>,
---<em>Innocent</em>, remaining baseroles):
---</p>
---<ol type="a">
---<li>
---<p>
---Assign up to the allowed number of players to the baserole. (This
---will be detailed later.)
---</p>
---<p><em>Implemented in</em> <code>SelectBaseRolePlayers</code></p>
---</li>
---<li>
---<p>
---If the baserole is not <em>Innocent</em>, try to "upgrade" players
---with that baserole to possible subroles. (This will also be detailed
---later.)
---</p>
---<p><em>Implemented in</em> <code>UpgradeRoles</code></p>
---</li>
---</ol>
---</li>
---
---<li>
---<p>
---All players not yet assigned a role are assigned <em>Innocent</em>.
---</p>
---</li>
---
---<li>
---<p>
---All players with the <em>Innocent</em> baserole have their role
---"upgraded" exactly as in step 5b.
---</p>
---</li>
---
---<li>
---<p>
---The hook <code>TTT2ModifyFinalRoles</code> is called to allow other
---addons to affect final roles.
---</p>
---</li>
---
---<li>
---<p>
---Role weights for each player are updated according to their final role.
---(If the player's final role is a subrole, their corresponding baserole
---is also updated.)
---</p>
---</li>
---
---</ol>
---
---<h3>
---Role Layering (a.k.a. <code>roleselection.GetSelectableRolesList</code>)
---</h3>
---
---<p>Role layering is the most controllable part of role selection, and historically the worst explained. In short, <em>role layering</em>
---determines <em>what</em> roles can be distributed, but NOT <em>how</em>.</p>
---
---<p>The algorithm is as follows:</p>
---<ol>
---<li>
---<p>For each baserole layer configured (as long as there are enough
---players that more roles are needed):</p>
---<ol type="a">
---<li>
---<p>
---Remove all roles in the layer with no available player slots.
---(This will remove roles which were previously randomly decided
---to not be distributed.)
---</p>
---</li>
---<li>
---<p>
---Select one role from what's left of the layer at random.
---</p>
---</li>
---<li>
---<p>
---Add the role to the final list of candidate baseroles.
---</p>
---</li>
---</ol>
---</li>
---<li>
---<p>Randomly iterate non-layered baseroles. For each such baserole,
---add the role to the final candidate list.</p>
---</li>
---<li>
---<p>Modify each candidate baserole's available slots so that the sum is the
---total number of players, preferring candidates added first.</p>
---</li>
---<li>
---<p>Now, subroles. Evaluate once per selectable subrole (including all
---layered and unlayered subroles for all baseroles in the baserole
---candidate list):</p>
---<ol type="a">
---<li>
---<p>Randomly select a baserole candidate.</p>
---</li>
---<li>
---<p>
---If there are any layers defined for that baserole: Select a random
---subrole from the first available layer. Remove the layer.
---</p>
---<p>
---If there are no layers defined for that baserole: Select a random
---subrole from the unlayered subroles. Remove that subrole from the
---unlayered list.
---</p>
---</li>
---<li>
---<p>Add the selected subrole to the final candidate list.</p>
---</li>
---<li>
---<p>
---If the baserole has no more subrole layers or subroles: Remove the
---baserole from further consideration (for this loop ONLY. It stays
---in the candidate list.)
---</p>
---</li>
---</ol>
---</li>
---<li>
---<p>The baserole and subrole candidate lists now contain the roles which
---will be assigned.</p>
---</li>
---</ol>
---
---<h3>Baserole Selection (a.k.a. <code>SelectBaseRolePlayers</code>)</h3>
---
---<p>Recall that we assign ALL players to ONE baserole.</p>
---<p>As long as there are players to assign, and more available slots to
---assign:</p>
---<ol>
---<li>
---<p>Select a player to assign the role to.</p>
---<p>
---If <em>role derandomization</em> (see <em>Role Derandomization</em>
---section in <em>General Role Settings</em> tab) is set to "baseroles
---only" or "both": Select a random player from the available players
---weighted by the weight associated with this baserole. (Think of it
---as if each player occurs multiple times in the list, according to
---the weight.)
---</p>
---<p>
---If <em>role derandomization</em> is set to "disabled" or "subroles
---only": Select a random player from the available players, with equal
---probability.
---</p>
---</li>
---
---<li>
---<p>
---If the selected player has enough karma for the role, there are not
---enough players to fill all slots, a 1/3 chance passes, or the target
---baserole is <em>Innocent</em>: Remove the player from the list of
---available players and assign the player the baserole.
---</p>
---</li>
---</ol>
---
---<h3>Subrole Selection (a.k.a. <code>UpgradeRoles</code>)</h3>
---
---<p>This is <em>very</em> similar to baserole selection.</p>
---<p>When upgrading roles, ALL subroles associated with a baserole are
---processed together. All players with that baserole are handled together.</p>
---<p>Only subroles that have assignable slots that are not filled are
---considered. (This is relevant in the presence of forced subroles.)</p>
---
---<p>As long as there are players to assign, and more subroles which
---are assignable:</p>
---<ol>
---<li>
---<p>Select a player to assign the role to.</p>
---<p>
---If <em>role derandomization</em> is set to "subroles only" or
---"both": Select a random player from the available players weighted
---by the weight associated with this baserole.
---</p>
---<p>
---If <em>role derandomization</em> is set to "disabled" or "baseroles
---only": Select a random player from the available players, with equal
---probability.
---</p>
---</li>
---
---<li>
---<p>
---If the selected player has enough karma for the role, there are not
---enough players to fill all slots, or a 1/3 chance passes (this is the
---same condition as above, and in the code, is a shared function): Remove
---the player from the list of available players and assign the player the
---subrole. If the subrole has had all available slots filled, remote it
---from consideration.
---</p>
---</li>
---</ol>
---
---]]
+L.roles_overview_html = [[
+<h1>Genel Bakış</h1>
+
+TTT2'nin temel mekaniklerinden biri <em>roldür</em>. Roller hedeflerinizi,
+ekip arkadaşlarınızın kimler olduğunu ve neler yapabileceğinizi belirler.
+Oyunculara rollerin dağıtılış şekli bu nedenle çok önemlidir. Rol dağıtım
+sistemi çok karmaşıktır ve bu sekmedeki menüler hemen hemen sistemin her
+yönünü kontrol eder. Seçenekleri ve sistemin nasıl işlediğini anlamak
+sunucunuzda yapacağınız değişiklikler için çok önemlidir.
+
+<h2>Terminoloji</h2>
+
+<ul>
+  <li><em>Rol</em> — Raunt başlangıcında bir oyuncuya atanan rol,
+örn. <em>Hain</em>, <em>Masum</em>, <em>Ruh Çağıran (Necromancer)</em>vb.</li>
+<li><em>Temel rol</em> — İlk olarak seçilen ve oyuncunun alacağı son rol için bir tür üst düzey şablon görevi gören <em>rol</em>. <em>Temel roller</em> son roller olabilir. Ör.
+<em>Masum</em>, <em>Hain</em>, <em>Korsan</em></li>
+<li><em>Alt rol</em> — <em>Temel rolün</em> iyileştirilmesi için bir rol atılmasıdır. Her olası <em>alt rol</em> bir <em>temel rolle</em> ilişkilendirilir; öyle ki, bir oyuncuya bir <em>alt rol</em> alabilmesi için uygun <em>temel rolün</em> atanmış olması gerekir. Örn. <em>Dedektif</em> (M-temel rol), <em>Tetikçi</em>
+(T-temel rol), <em>Hayatta Kalma Uzmanı</em> (M-temel rol), vb.</li>
+</ul>
+
+<h2>Algoritma</h2>
+
+<em>Uygulama şekli</em> <code>roleselection.SelectRoles</code>
+
+<ol>
+
+  <li>
+    <p>
+Her bir role verilebilecek oyuncu sayısını belirler.
+<em>Masum</em> ve <em>Hain'in</em> her zaman boş yuvaları vardır.
+    </p>
+    <p>
+Tüm roller (hem temel hem de alt roller) burada hesaplanır. Alt roller
+yalnızca karşılık gelen temel rolleri varsa seçilebilir yuvalara sahiptir.
+    </p>
+    <p>
+Her role dağıtılma şansı verilir. Bu şans
+başarısız olursa, bu adım olası oyuncu sayısını sıfıra ayarlar.
+</p>
+<p>
+<em>Uygulandığı yer</em>
+<code>roleselection.GetAllSelectableRolesList</code>
+</p>
+</li>
+
+<li>
+<p>
+Dağıtılacak olan, katman yapılandırmasıyla sınırlanacak ve yapılandırılmış
+maksimum rol sayısıyla sınırlandırılacak rolleri seçin. Bu işlem,
+çok karmaşık olduğu için kendisine başka bir bölümde yer verilmiştir. Detaylar
+bir sonraki bölümdedir.
+</p>
+<p>
+<em>Uygulandığı yer</em>
+<code>roleselection.GetSelectableRolesList</code>
+</p>
+</li>
+
+<li>
+<p>
+Zorunlu rolleri atayın. Bu aslında basit bir işlemdir; Bir oyuncuya birden fazla 
+zorunlu rolün atandığı durumu mantıklı bir şekilde ele almanın mantıklı bir açıklaması
+vardır. Bu yaygın olarak kullanılmaz, ancak bütünlük için dahil edilir.
+</p>
+</li>
+
+<li>
+<p>
+Oyuncu listesini rastgele karıştır. Bu muhtemelen rol dağılımını 
+çok fazla etkilemese de, oyuncu katılım sırasına
+bağlı kalmamayı garantiler.
+</p>
+</li>
+
+<li>
+<p>
+Her seçilebilir temel rol için (sırasıyla <em>Hain</em>,
+<em>Masum</em>, geriye kalan temel roller):
+</p>
+<ol type="a">
+<li>
+<p>
+Ana kutuya izin verilen sayıda oyuncu ata. (Bu
+daha sonra detaylandırılacaktır.)
+</p>
+<p><em>Uygulandığı yer</em> <code>SelectBaseRolePlayers</code></p>
+</li>
+<li>
+<p>
+Temel rol <em>Masum</em> değilse, bu temel role
+sahip oyuncuları mümkün olan alt rollere &quot;yükseltmeye&quot; çalışın. (Bu
+daha sonra detaylandırılacaktır.)
+</p>
+<p><em>Uygulandığı yer</em> <code>UpgradeRoles</code></p>
+</li>
+</ol>
+</li>
+
+<li>
+<p>
+Henüz bir rol atanmamış tüm oyunculara <em>Masum</em> rolü atanır.
+</p>
+</li>
+
+<li>
+<p>
+<em>Masum</em> temel rolüne sahip tüm oyuncuların rolleri
+tam olarak 5b adımında olduğu gibi &quot;yükseltilmiştir&quot;.
+</p>
+</li>
+
+<li>
+<p>
+<code>TTT2ModifyFinalRoles</code> hook'u, diğer eklentilerin son rolleri
+değişiklik yapmasına izin vermek için kullanılır.
+</p>
+</li>
+
+<li>
+<p>
+Her oyuncunun rol ağırlıkları son rollerine göre güncellenir.
+(Oyuncunun son rolü bir alt rol ise, karşılık gelen temel rolleri
+güncellenir.)
+</p>
+</li>
+
+</ol>
+
+<h3>
+Rol Katmanlama (diğer adıyla <code>roleselection.GetSelectableRolesList</code>)
+</h3>
+
+<p>Rol katmanlama, rol seçiminin en kontrol edilebilir ve tarihsel olarak en kötü açıklanabilir kısmıdır. Kısacası, <em>rol katmanlama</em>
+ <em>hangi</em> rollerin <em>nasıl</em> dağıtılabileceğini DEĞİL, hangi rollerin dağıtılabileceğini belirler.</p>
+
+<p>Algoritma aşağıdaki gibidir:</p>
+<ol>
+<li>
+<p>Yapılandırılan her temel rol katmanı için (daha fazla role ihtiyaç
+duyulacak kadar oyuncu olduğu sürece):</p>
+<ol type="a">
+<li>
+<p>
+Oyuncu yuvası olmayan katmandaki tüm rolleri kaldır.
+(Bu, daha önce rastgele dağıtılmamasına karar verilen
+rolleri kaldıracaktır.)
+</p>
+</li>
+<li>
+<p>
+Katmanın kalanından rastgele bir rol seç.
+</p>
+</li>
+<li>
+<p>
+Rolü, temel roller listesine ekle.
+</p>
+</li>
+</ol>
+</li>
+<li>
+<p>Katmanlı olmayan temel rolleri rastgele yinele. Bu tür her temel rol için,
+rolü son aday listesine ekle.</p>
+</li>
+<li>
+<p>Her adayın temel rolünün mevcut yuvalarını, ilk eklenen adayları tercih ederek, toplamın toplam oyuncu sayısı olacak şekilde değiştir.</p>
+</li>
+<li>
+<p>Şimdi, alt roller. Seçilebilir alt rol başına bir kez değerlendirme (temel rol aday listesindeki
+tüm temel roller için tüm katmanlı ve katmansız
+alt roller dahil):</p>
+<ol type="a">
+<li>
+<p>Rastgele bir temel rol adayı seçin.</p>
+</li>
+<li>
+<p>
+Bu temel rol için tanımlanmış herhangi bir katman varsa: Mevcut ilk katmandan
+rastgele bir alt rol seçin. Katmanı kaldırın.
+</p>
+<p>
+Temel rol için tanımlanmış katman yoksa: Katmansız alt rollerden
+rastgele bir alt rol seçin. Bu alt rolü katmansız listeden kaldırın.
+
+</p>
+</li>
+<li>
+<p>Seçilen alt rolü son aday listesine ekleyin.</p>
+</li>
+<li>
+<p>
+Temel rolün artık alt rol katmanları veya alt rolleri yoksa: Temel rolü daha fazla
+düşünmeden kaldırın (YALNIZCA bu döngü için. Aday listesinde kalır.)
+</p>
+</li>
+</ol>
+</li>
+<li>
+<p>Temel rol ve alt rol aday listeleri artık atanacaktır.</p>
+</li>
+</ol>
+
+<h3>Temel Rol Seçimi (diğer adıyla <code>SelectBaseRolePlayers</code>)</h3>
+
+<p>TÜM oyuncuları BİR temel role atadığımızı hatırlayın.</p>
+<p>Atanacak oyuncular ve atanacak daha fazla kullanılabilir yuva olduğu sürece:
+</p>
+<ol>
+<li>
+<p>Rolün atanacağı bir oyuncu seçin.</p>
+<p>
+<em>Rastgele rol dağıtımı</em> (<em>Genel Rol Ayarları</em> sekmesindeki <em>Rastgele Rol Dağıtımı</em> bölümüne bakın)
+&quot;yalnızca temel rol&quot; veya &quot;mod 3&quot; olarak ayarlanmışsa:
+Mevcut oyuncular arasından bu temel rol ile ilişkili ağırlığa
+göre ağırlıklandırılmış rastgele bir oyuncu seçin. (Her oyuncunun ağırlığa göre listede birden çok kez seçildiğini düşünün.)
+</p>
+<p>
+<em>Rastgele rol dağıtımı</em> &quot;devre dışı&quot; veya &quot;yalnızca alt roller&quot; olarak ayarlanmışsa:
+Mevcut oyuncular arasından eşit olasılıkla rastgele bir oyuncu seçin.
+</p>
+</li>
+
+<li>
+<p>Seçilen oyuncunun rol için yeterli karması varsa, tüm yuvaları
+doldurmaya yetecek kadar oyuncu yoksa, 1/3 şans geçerse veya hedef
+temel rol <em>Masum</em> ise: Oyuncuyu mevcut oyuncular listesinden
+çıkarın ve oyuncuya temel rolü atayın.
+</p>
+</li>
+</ol>
+
+<h3>Alt Rol Seçimi (diğer adıyla <code>UpgradeRoles</code>)</h3>
+
+<p>Bu, temel rol seçimine <em>çok</em> benzer.</p>
+<p>Rolleri yükseltirken, bir temel rolle ilişkili TÜM alt roller birlikte işlenir. Bu temel role sahip tüm oyuncular birlikte ele alınır.</p>
+<p>Yalnızca doldurulmamış atanabilir yuvalara sahip alt roller
+dikkate alınır. (Bu, zorunlu alt rollerin varlığıyla ilgilidir.)</p>
+
+<p>Atanacak oyuncular ve atanabilir daha fazla alt rol olduğu sürece:
+</p>
+<ol>
+<li>
+<p>Rolün atanacağı bir oyuncu seçin.</p>
+<p>
+<em>Rastgele rol dağıtımı</em> &quot;yalnızca alt roller&quot; veya &quot;mod 3&quot; olarak ayarlanmışsa:
+Mevcut oyuncular arasından, bu temel rol ile ilişkili ağırlığa göre
+ağırlıklandırılmış rastgele bir oyuncu seçin.
+</p>
+<p>
+<em>Rastgele rol dağıtımı</em> &quot;devre dışı&quot; veya &quot;yalnızca temel roller&quot; olarak ayarlanmışsa:
+Mevcut oyuncular arasından eşit olasılıkla rastgele bir oyuncu seçin.
+</p>
+</li>
+
+<li>
+<p>Seçilen oyuncunun rol için yeterli karması varsa, tüm yuvaları doldurmaya
+yetecek kadar oyuncu yoksa veya 1/3 şansı varsa
+(bu, yukarıdakiyle aynı durumdur ve kodda paylaşılan bir işlevdir):
+Mevcut oyuncular listesinden oyuncuyu seçin ve oyuncuya alt rolü
+atayın. Alt rolün tüm boş yuvaları doldurulmuşsa, dikkate almayın.
+    </p>
+  </li>
+</ol>
+
+]]
 
 -- 2025-01-19
---L.help_rolelayering_enable = "The red and green border around the icon shows if the role is currently enabled. Right click on an icon to quickly enable/disable that role."
+L.help_rolelayering_enable = "Simgenin etrafındaki kırmızı ve yeşil kenarlık, rolün şu anda etkin olup olmadığını gösterir. Bu rolü hızlı bir şekilde etkinleştirmek/devre dışı bırakmak için bir simgeye sağ tıklayın."
 
 -- 2025-01-20
---L.label_hud_show_team_name = "Enable showing team name next to role name"
+L.label_hud_show_team_name = "Rol adının yanında takım adını göstermeyi etkinleştir"
