@@ -593,7 +593,7 @@ L.report_tab_scores = "Puanlar"
 L.report_tab_scores_tip = "Sadece bu rauntta her oyuncunun aldığı puan"
 
 -- Event log saving
-L.report_save = "Kaydı .txt olarak kaydet"
+L.report_save = ".txt olarak kaydet"
 L.report_save_tip = "Olay Kaydını bir metin dosyasına kaydeder"
 L.report_save_error = "Kaydedilecek Olay Kaydı verisi yok."
 L.report_save_result = "Olay Kaydı şuraya kaydedildi:"
@@ -1170,7 +1170,7 @@ L.tooltip_karma_gained = "Bu raunt için Karma değişiklikleri"
 L.tooltip_score_gained = "Bu raunt için puan değişiklikleri"
 L.tooltip_roles_time = "Bu raunt için rol değişiklikleri"
 
-L.tooltip_finish_score_win = "Kazanma: {score}"
+--L.tooltip_finish_score_win = "Kazanılan: {score}"
 L.tooltip_finish_score_alive_teammates = "Canlı takım arkadaşları {score}"
 L.tooltip_finish_score_alive_all = "Canlı oyuncular {score}"
 L.tooltip_finish_score_timelimit = "Süre doldu {score}"
@@ -1178,7 +1178,7 @@ L.tooltip_finish_score_dead_enemies = "Ölü düşmanlar {score}"
 L.tooltip_kill_score = "Öldürme {score}"
 L.tooltip_bodyfound_score = "Ceset bulundu {score}"
 
---L.finish_score_win = "Kazanma:"
+--L.finish_score_win = "Kazanılan:"
 L.finish_score_alive_teammates = "Canlı takım arkadaşları"
 L.finish_score_alive_all = "Canlı oyuncular"
 L.finish_score_timelimit = "Süre doldu"
@@ -1317,8 +1317,14 @@ L.header_rolelayering_role = "{role} dağıtımı"
 L.header_rolelayering_baserole = "Temel rol dağıtma"
 L.submenu_roles_rolelayering_title = "Rol Dağıtma"
 L.header_rolelayering_info = "Rol dağıtma bilgileri"
-L.help_rolelayering_roleselection = [[Rol dağılım süreci iki aşamaya ayrılmıştır. İlk aşamada masum, hain ve aşağıdaki 'temel rol dağıtımı' kutusunda listelenen temel roller dağıtılır. İkinci aşama, bu temel rolleri bir alt role yükseltmek için kullanılır.]]
-L.help_rolelayering_layers = [[Her dağıtımdan yalnızca bir rol seçilir. İlk olarak, özel katmanlardan gelen roller, ilk katmandan başlayarak son katmana ulaşılana kadar dağıtılır veya daha fazla rol yükseltilemez. Hangisi önce olursa olsun, yükseltilebilir slotlar hala mevcutsa, katmanlanmamış roller de dağıtılacaktır.]]
+L.help_rolelayering_roleselection = [[
+Rol dağılım süreci iki aşamaya ayrılmıştır. İlk aşamada masum, hain ve aşağıdaki 'temel rol dağıtımı' kutusunda listelenen temel roller dağıtılır. İkinci aşama, bu temel rolleri bir alt role yükseltmek için kullanılır.
+
+Daha fazla ayrıntıyı genel bakış sekmesinde bulabilirsiniz.]]
+L.help_rolelayering_layers = [[
+Role özgü değişkenlere göre atanabilir roller belirlendikten sonra (rastgele seçilme şansı da dahil!), dağıtım için her katmandan bir rol (varsa) seçilir. Katmanlar işlendikten sonra katmanlanmamış roller rastgele seçilir. Doldurulması gereken yuva kalmadığı anda rol seçimi durdurulur.
+
+Convar ile ilgili gereksinimler nedeniyle dikkate alınmayan roller dağıtılmaz.]]
 L.scoreboard_voice_tooltip = "Ses seviyesini değiştirmek için kaydırın"
 
 -- 2021-06-15
@@ -2411,20 +2417,25 @@ sistemi çok karmaşıktır ve bu sekmedeki menüler hemen hemen sistemin her
 yönünü kontrol eder. Seçenekleri ve sistemin nasıl işlediğini anlamak
 sunucunuzda yapacağınız değişiklikler için çok önemlidir.
 
+
 <h2>Terminoloji</h2>
 
 <ul>
-  <li><em>Rol</em> — Raunt başlangıcında bir oyuncuya atanan rol,
+  <li><em>Rol</em> &mdash; Raunt başlangıcında bir oyuncuya atanan rol,
 örn. <em>Hain</em>, <em>Masum</em>, <em>Ruh Çağıran (Necromancer)</em>vb.</li>
-<li><em>Temel rol</em> — İlk olarak seçilen ve oyuncunun alacağı son rol için bir tür üst düzey şablon görevi gören <em>rol</em>. <em>Temel roller</em> son roller olabilir. Ör.
-<em>Masum</em>, <em>Hain</em>, <em>Korsan</em></li>
-<li><em>Alt rol</em> — <em>Temel rolün</em> iyileştirilmesi için bir rol atılmasıdır. Her olası <em>alt rol</em> bir <em>temel rolle</em> ilişkilendirilir; öyle ki, bir oyuncuya bir <em>alt rol</em> alabilmesi için uygun <em>temel rolün</em> atanmış olması gerekir. Örn. <em>Dedektif</em> (M-temel rol), <em>Tetikçi</em>
-(T-temel rol), <em>Hayatta Kalma Uzmanı</em> (M-temel rol), vb.</li>
+<li><em>Temel rol</em> &mdash; İlk olarak seçilen ve oyuncunun alacağı son rol
+için bir tür üst düzey şablon görevi gören <em>rol</em>. <em>Temel roller</em>
+son roller olabilir. Ör. <em>Masum</em>, <em>Hain</em>, <em>Korsan</em></li>
+<li><em>Alt rol</em> &mdash; <em>Temel rolün</em> iyileştirilmesi için bir rol atılmasıdır.
+Her olası <em>alt rol</em> bir <em>temel rolle</em> ilişkilendirilir; öyle ki,
+bir oyuncuya bir <em>alt rol</em> alabilmesi için uygun <em>temel rolün</em> atanmış 
+olması gerekir. Örn. <em>Dedektif</em> (M-alt rol), <em>Tetikçi</em>
+(T-alt rol), <em>Hayatta Kalma Uzmanı</em> (M-alt rol), vb.</li>
 </ul>
 
 <h2>Algoritma</h2>
 
-<em>Uygulama şekli</em> <code>roleselection.SelectRoles</code>
+<em>Kodu</em> <code>roleselection.SelectRoles</code>
 
 <ol>
 
@@ -2440,68 +2451,69 @@ yalnızca karşılık gelen temel rolleri varsa seçilebilir yuvalara sahiptir.
     <p>
 Her role dağıtılma şansı verilir. Bu şans
 başarısız olursa, bu adım olası oyuncu sayısını sıfıra ayarlar.
-</p>
-<p>
-<em>Uygulandığı yer</em>
+    </p>
+    <p>
+<em>Kodu</em>
 <code>roleselection.GetAllSelectableRolesList</code>
-</p>
-</li>
+    </p>
+  </li>
 
-<li>
-<p>
+  <li>
+    <p>
 Dağıtılacak olan, katman yapılandırmasıyla sınırlanacak ve yapılandırılmış
 maksimum rol sayısıyla sınırlandırılacak rolleri seçin. Bu işlem,
 çok karmaşık olduğu için kendisine başka bir bölümde yer verilmiştir. Detaylar
 bir sonraki bölümdedir.
-</p>
-<p>
-<em>Uygulandığı yer</em>
+    </p>
+    <p>
+<em>Kodu</em>
 <code>roleselection.GetSelectableRolesList</code>
-</p>
-</li>
+    </p>
+  </li>
 
-<li>
-<p>
+  <li>
+    <p>
 Zorunlu rolleri atayın. Bu aslında basit bir işlemdir; Bir oyuncuya birden fazla 
 zorunlu rolün atandığı durumu mantıklı bir şekilde ele almanın mantıklı bir açıklaması
 vardır. Bu yaygın olarak kullanılmaz, ancak bütünlük için dahil edilir.
-</p>
-</li>
+    </p>
+  </li>
 
-<li>
-<p>
-Oyuncu listesini rastgele karıştır. Bu muhtemelen rol dağılımını 
+  <li>
+    <p>
+Oyuncu listesini rastgele karıştırın. Bu muhtemelen rol dağılımını 
 çok fazla etkilemese de, oyuncu katılım sırasına
 bağlı kalmamayı garantiler.
-</p>
-</li>
+    </p>
+  </li>
 
-<li>
-<p>
+  <li>
+    <p>
 Her seçilebilir temel rol için (sırasıyla <em>Hain</em>,
 <em>Masum</em>, geriye kalan temel roller):
-</p>
-<ol type="a">
-<li>
-<p>
+   </p>
+    <ol type="a">
+      <li>
+        <p>
 Ana kutuya izin verilen sayıda oyuncu ata. (Bu
 daha sonra detaylandırılacaktır.)
-</p>
-<p><em>Uygulandığı yer</em> <code>SelectBaseRolePlayers</code></p>
-</li>
-<li>
-<p>
+        </p>
+<p><em>Kodu</em> <code>SelectBaseRolePlayers</code></p>
+      </li>
+      <li>
+        <p>
 Temel rol <em>Masum</em> değilse, bu temel role
-sahip oyuncuları mümkün olan alt rollere &quot;yükseltmeye&quot; çalışın. (Bu
+sahip oyuncuları mümkün olan alt rollere "yükseltmeye" çalışın. (Bu
 daha sonra detaylandırılacaktır.)
 </p>
-<p><em>Uygulandığı yer</em> <code>UpgradeRoles</code></p>
-</li>
-</ol>
-</li>
+<p><em>Kodu</em> <code>UpgradeRoles</code></p>
+      </li>
+    </ol>
+  </li>
 
-<li>
-<p>
+
+  <li>
+    <p>
 Henüz bir rol atanmamış tüm oyunculara <em>Masum</em> rolü atanır.
 </p>
 </li>
@@ -2509,7 +2521,7 @@ Henüz bir rol atanmamış tüm oyunculara <em>Masum</em> rolü atanır.
 <li>
 <p>
 <em>Masum</em> temel rolüne sahip tüm oyuncuların rolleri
-tam olarak 5b adımında olduğu gibi &quot;yükseltilmiştir&quot;.
+tam olarak 5b adımında olduğu gibi "yükseltilmiştir".
 </p>
 </li>
 
@@ -2614,12 +2626,12 @@ düşünmeden kaldırın (YALNIZCA bu döngü için. Aday listesinde kalır.)
 <p>Rolün atanacağı bir oyuncu seçin.</p>
 <p>
 <em>Rastgele rol dağıtımı</em> (<em>Genel Rol Ayarları</em> sekmesindeki <em>Rastgele Rol Dağıtımı</em> bölümüne bakın)
-&quot;yalnızca temel rol&quot; veya &quot;mod 3&quot; olarak ayarlanmışsa:
+"yalnızca temel rol" veya "mod 3" olarak ayarlanmışsa:
 Mevcut oyuncular arasından bu temel rol ile ilişkili ağırlığa
 göre ağırlıklandırılmış rastgele bir oyuncu seçin. (Her oyuncunun ağırlığa göre listede birden çok kez seçildiğini düşünün.)
 </p>
 <p>
-<em>Rastgele rol dağıtımı</em> &quot;devre dışı&quot; veya &quot;yalnızca alt roller&quot; olarak ayarlanmışsa:
+<em>Rastgele rol dağıtımı</em> "devre dışı" veya "yalnızca alt roller" olarak ayarlanmışsa:
 Mevcut oyuncular arasından eşit olasılıkla rastgele bir oyuncu seçin.
 </p>
 </li>
@@ -2646,12 +2658,12 @@ dikkate alınır. (Bu, zorunlu alt rollerin varlığıyla ilgilidir.)</p>
 <li>
 <p>Rolün atanacağı bir oyuncu seçin.</p>
 <p>
-<em>Rastgele rol dağıtımı</em> &quot;yalnızca alt roller&quot; veya &quot;mod 3&quot; olarak ayarlanmışsa:
+<em>Rastgele rol dağıtımı</em> "yalnızca alt roller" veya "mod 3" olarak ayarlanmışsa:
 Mevcut oyuncular arasından, bu temel rol ile ilişkili ağırlığa göre
 ağırlıklandırılmış rastgele bir oyuncu seçin.
 </p>
 <p>
-<em>Rastgele rol dağıtımı</em> &quot;devre dışı&quot; veya &quot;yalnızca temel roller&quot; olarak ayarlanmışsa:
+<em>Rastgele rol dağıtımı</em> "devre dışı" veya "yalnızca temel roller" olarak ayarlanmışsa:
 Mevcut oyuncular arasından eşit olasılıkla rastgele bir oyuncu seçin.
 </p>
 </li>
