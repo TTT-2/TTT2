@@ -1,3 +1,7 @@
+if SERVER then
+    AddCSLuaFile()
+end
+
 ---
 -- Role inspection module. Enables admin inspection of role selection decisions.
 -- @module roleinspect

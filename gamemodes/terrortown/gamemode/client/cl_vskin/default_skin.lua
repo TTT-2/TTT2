@@ -52,7 +52,6 @@ local drawFilteredShadowedTexture = draw.FilteredShadowedTexture
 local drawOutlinedBox = draw.OutlinedBox
 local drawFilteredTexture = draw.FilteredTexture
 local drawSimpleText = draw.SimpleText
-local drawDrawText = draw.DrawText
 local drawLine = draw.Line
 local drawGetWrappedText = draw.GetWrappedText
 local drawGetTextSize = draw.GetTextSize
