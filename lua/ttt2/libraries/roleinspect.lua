@@ -105,18 +105,12 @@ ROLEINSPECT_REASON_CHANCE = "roleinspect_reason_chance" -- Player assigned role 
 ROLEINSPECT_REASON_WEIGHTED_CHANCE = "roleinspect_reason_weighted_chance" -- Player assigned role through weighted random selection
 ROLEINSPECT_REASON_NOT_ASSIGNED = "roleinspect_reason_not_assigned" -- Player assigned a role because they were not otherwise assigned one
 
-local getDecisionsImpl
-
 if SERVER then
     roleinspect.decisions = {}
     ---
     -- Enables recording information for role inspection.
     -- @realm server
     roleinspect.cvar = CreateConVar("ttt2_roleinspect_enable", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
-
-    getDecisionsImpl = function(callback)
-        callback(roleinspect.decisions)
-    end
 
     local function EmptyTable()
         return {}
@@ -233,15 +227,9 @@ if SERVER then
     end)
 end
 
+local recvCallbacks
 if CLIENT then
-    local recvCallbacks = {}
-
-    getDecisionsImpl = function(callback)
-        recvCallbacks[#recvCallbacks + 1] = callback
-
-        net.Start("TTT2SyncRoleInspectInfo")
-        net.SendToServer()
-    end
+    recvCallbacks = {}
 
     net.ReceiveStream("TTT2SyncRoleInspectInfo", function(data)
         while #recvCallbacks > 0 do
@@ -257,4 +245,15 @@ end
 -- @note When called on a client which does not have admin permissions, the callback is still called, but with an empty table.
 -- @param function callback Called with the decision table as the only argument.
 -- @realm shared
-roleinspect.GetDecisions = getDecisionsImpl
+function roleinspect.GetDecisions(callback)
+    if CLIENT then
+        recvCallbacks[#recvCallbacks + 1] = callback
+
+        net.start("TTT2SyncRoleInspectInfo")
+        net.SendToServer()
+    end
+
+    if SERVER then
+        callback(roleinspect.decisions)
+    end
+end

@@ -75,7 +75,7 @@ function PANEL:AllowUserSort(allow)
                 -- cycle between the sort modes
                 local mode = self.sortMode + 1
                 if mode > GRAPH_SORT_MODE_MAX then
-                    mode = 0
+                    mode = GRAPH_SORT_MODE_NONE
                 end
                 self.sortMode = mode
                 self:InvalidateLayout()
@@ -176,7 +176,6 @@ function PANEL:PerformLayout()
 
     local y = padding
     local w = math.max(padding + self:GetMinWidth() + padding, self:GetWide())
-    --local w = padding + self:GetMinWidth() + padding
 
     local titleX = 0
     local titleY = 0
@@ -205,15 +204,11 @@ function PANEL:PerformLayout()
         end
 
         y = y + titleHeight + padding
-        --sepY = y
-        --y = y + 1 + padding -- separator
     elseif self.button then
         self.button:SetPos(padding, y)
         local bw, bh = self.button:GetSize()
         w = math.max(w, bw + padding)
         y = y + bh + padding
-        --sepY = y
-        --y = y + 1 + padding -- separator
     end
 
     -- next space out the graph rows
