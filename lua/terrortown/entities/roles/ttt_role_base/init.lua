@@ -24,26 +24,42 @@ function ROLE:RemoveRoleLoadout(ply, isRoleChange) end
 -- Checks whether a role is able to get selected (and maybe assigned to a @{Player}) if the round starts
 -- @param boolean avoidHook should the @{hook.TTT2RoleNotSelectable} hook be ignored?
 -- @return boolean
+-- @return ROLEINSPECT_REASON
 -- @realm server
 function ROLE:IsSelectable(avoidHook)
-    return self == roles.INNOCENT
-        or self == roles.TRAITOR
-        or (GetConVar("ttt_newroles_enabled"):GetBool() or self == roles.DETECTIVE)
-            and not self.notSelectable
-            and GetConVar("ttt_" .. self.name .. "_enabled"):GetBool()
-            ---
-            -- @realm server
-            and (avoidHook or not hook.Run("TTT2RoleNotSelectable", self))
+    if self == roles.INNOCENT or self == roles.TRAITOR then
+        return true, ROLEINSPECT_REASON_PASSED
+    end
+
+    if self ~= roles.DETECTIVE and not GetConVar("ttt_newroles_enabled"):GetBool() then
+        return false, ROLEINSPECT_REASON_NOT_ENABLED
+    end
+
+    if self.notSelectable then
+        return false, ROLEINSPECT_REASON_NOT_SELECTABLE
+    end
+
+    if not GetConVar("ttt_" .. self.name .. "_enabled"):GetBool() then
+        return false, ROLEINSPECT_REASON_NOT_ENABLED
+    end
+
+    ---
+    -- @realm server
+    if not avoidHook and hook.Run("TTT2RoleNotSelectable", self) then
+        return false, ROLEINSPECT_REASON_NOT_SELECTABLE
+    end
+
+    return true, ROLEINSPECT_REASON_PASSED
 end
 
 ---
 -- Returns the available amount of this role based on the given amount of available players
 -- @param number ply_count amount of available players
--- @return number selectable amount of this role
+-- @return number,ROLEINSPECT_REASON selectable amount of this role, the ROLEINSPECT_REASON the decision was made, if any
 -- @realm server
 function ROLE:GetAvailableRoleCount(ply_count)
     if ply_count < GetConVar("ttt_" .. self.name .. "_min_players"):GetInt() then
-        return 0
+        return 0, ROLEINSPECT_REASON_NO_PLAYERS
     end
 
     local maxCVar = GetConVar("ttt_" .. self.name .. "_max")
@@ -57,7 +73,7 @@ function ROLE:GetAvailableRoleCount(ply_count)
     local role_count = math.floor(ply_count * GetConVar("ttt_" .. self.name .. "_pct"):GetFloat())
 
     -- make sure there is at least 1 of the role
-    return math.Clamp(role_count, 1, maxAmount)
+    return math.Clamp(role_count, 1, maxAmount), ROLEINSPECT_REASON_LOW_PROPORTION
 end
 
 -- Returns if the role can be awarded credits for a kill. Is is intended to award credits
