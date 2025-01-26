@@ -249,7 +249,7 @@ function roleinspect.GetDecisions(callback)
     if CLIENT then
         recvCallbacks[#recvCallbacks + 1] = callback
 
-        net.start("TTT2SyncRoleInspectInfo")
+        net.Start("TTT2SyncRoleInspectInfo")
         net.SendToServer()
     end
 
