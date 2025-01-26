@@ -495,8 +495,9 @@ local function PopulateUnhandledRoleStage(stage, form, stageData)
         label = "help_" .. roleinspect.GetStageFullName(stage),
     })
 
-    -- TODO: read decisions to try to create a crude approximation of the data in
-    -- the case of new stages
+    form:MakeHelp({
+        label = "help_roleinspect_unknown_stage"
+    })
 end
 
 function CLGAMEMODESUBMENU:Populate(parent)

@@ -2706,6 +2706,7 @@ This information is only ever available for the last round which was started on 
 Must be enabled when role selection happens (when the round starts) to take effect.]]
 L.label_roleinspect_enable = "Enable capturing role selection inspection information"
 L.label_roleinspect_no_data = "No role inspection data is available."
+L.help_roleinspect_unknown_stage = "Unknown stage when rendering UI. Please open an issue."
 
 -- Decisions
 L.roleinspect_decision_none = "No decision was made."
