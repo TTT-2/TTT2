@@ -1121,7 +1121,7 @@ local function SelectForcedRoles(plys, selectableRoles)
             roleselection.finalRoles[ply] = subrole
             curCount = curCount + 1
 
-            roleselect.ReportDecision(
+            roleinspect.ReportDecision(
                 ROLEINSPECT_STAGE_FORCED,
                 subrole,
                 ply,
