@@ -1768,8 +1768,8 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
         drawFilteredShadowedTexture(
             widthBorder,
             widthBorder,
-            sizeIconRole - widthBorder2,
-            sizeIconRole - widthBorder2,
+            sizeIconRole,
+            sizeIconRole,
             panel:GetMaterial(),
             colorIcon.a,
             colorIcon
@@ -1778,8 +1778,8 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
         drawFilteredTexture(
             widthBorder,
             widthBorder,
-            sizeIconRole - widthBorder2,
-            sizeIconRole - widthBorder2,
+            sizeIconRole,
+            sizeIconRole,
             panel:GetMaterial(),
             colorIcon.a * 0.5,
             colorIcon

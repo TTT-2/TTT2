@@ -236,7 +236,7 @@ function PANEL:InitRoles(layeredRoles)
             ic:SetTooltip(roleData.name)
             ic:SetTooltipFixedPosition(0, 64)
             ic:SetServerConVar("ttt_" .. roleData.name .. "_enabled")
-            ic:EnableIndicator(true)
+            ic:SetIsActiveIndicator(true)
 
             ic.subrole = subrole
 

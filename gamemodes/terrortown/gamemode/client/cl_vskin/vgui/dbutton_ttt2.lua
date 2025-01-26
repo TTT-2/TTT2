@@ -74,7 +74,10 @@ function PANEL:SetConVar(cvar)
         return
     end
 
-    self:SetDefaultValue(tobool(GetConVar(cvar):GetDefault()))
+    self.convar = GetConVar(cvar)
+
+    self:SetDefaultValue(tobool(self.convar:GetDefault()))
+    self:SetValue(self.convar:GetBool())
 end
 
 local callbackEnabledVarTracker = 0
@@ -217,7 +220,9 @@ function PANEL:ValueChanged(val)
         val = not val
     end
 
-    if self.serverConVar and not self:GetIgnoreCallbackEnabledVar() then
+    if self.convar then
+        self.convar:SetBool(val)
+    elseif self.serverConVar and not self:GetIgnoreCallbackEnabledVar() then
         cvars.ChangeServerConVar(self.serverConVar, val and "1" or "0")
     elseif self.databaseInfo and not self:GetIgnoreCallbackEnabledVar() then
         database.SetValue(
