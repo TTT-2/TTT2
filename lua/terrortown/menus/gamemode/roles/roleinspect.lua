@@ -496,7 +496,7 @@ local function PopulateUnhandledRoleStage(stage, form, stageData)
     })
 
     form:MakeHelp({
-        label = "help_roleinspect_unknown_stage"
+        label = "help_roleinspect_unknown_stage",
     })
 end
 
