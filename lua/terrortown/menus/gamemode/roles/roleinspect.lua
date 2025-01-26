@@ -1,8 +1,6 @@
 --- @ignore
 
 local table = table
---local TryT = LANG.TryTranslation
---local ParT = LANG.GetParamTranslation
 local DynT = LANG.GetDynamicTranslation
 
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
@@ -371,16 +369,12 @@ local function PopulateSubrolesStage(stage, form, stageData)
         -- assignment has baserole, subroles, players
         local baserole = assignment.baserole
         local baseroleData = roles.GetByIndex(baserole)
-        --local subroles = assignment.subroles
-        --local players = assignment.players
 
         local baseroleForm = vgui.CreateTTT2Form(
             form,
             DynT("header_inspect_upgrade_order", { name = baseroleData.name }, true)
         )
         baseroleForm:SetExpanded(false) -- default to being collapsed
-
-        -- TODO: display available subroles
 
         local recBaseroleData = stageData.roles[baserole]
         if not recBaseroleData then
@@ -536,7 +530,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
             labelNoContent:SetText("label_roleinspect_no_data")
             labelNoContent:SetFont("DermaTTT2Title")
             labelNoContent:Dock(FILL)
-            --labelNoContent:FitContents()
             return
         end
 
