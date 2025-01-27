@@ -157,14 +157,7 @@ end
 -- @param number innerRadius The inner border for the explosion damage where falloff starts.
 -- @internal
 -- @realm server
-function gameEffects.ExplosiveSphereDamage(
-    attacker,
-    inflictor,
-    damage,
-    origin,
-    outerRadius,
-    innerRadius
-)
+function gameEffects.ExplosiveSphereDamage(attacker, inflictor, damage, origin, outerRadius, innerRadius)
     -- It seems intuitive to use FindInSphere here, but that will find all ents
     -- in the radius, whereas there exist only ~16 players. Hence it is more
     -- efficient to cycle through all those players and do a Lua-side distance
@@ -199,14 +192,14 @@ function gameEffects.ExplosiveSphereDamage(
         --100% to 0% from innerRadius to outerRadius
         --<0% from outerRadius to infinity
         dFraction = 1.0 - math.max((d - innerRadius) / radiDiff, 0.0)
-            
+
         --Next Iteration if we are outside the radius
         if dFraction < 0.0 then
             continue
         end
-        
+
         dmg = math.Round(damage * dFraction * dFraction)
-            
+  
         local dmginfo = DamageInfo()
         dmginfo:SetDamage(dmg)
         dmginfo:SetAttacker(attacker)
@@ -215,7 +208,6 @@ function gameEffects.ExplosiveSphereDamage(
         dmginfo:SetDamageForce(diff)
         dmginfo:SetDamagePosition(ply:GetPos())
         ply:TakeDamageInfo(dmginfo)
-        
     end
 end
 
