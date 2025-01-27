@@ -149,23 +149,21 @@ function gameEffects.RadiusDamage(dmginfo, pos, radius, inflictor)
 end
 
 -- Creates explosion damage in a sphere through walls. Very useful for making explosives that aren't line of sight based.
--- @param Player dmgowner The player that causes this explosion.
--- @param Entity source The entity that causes this explosion.
+-- @param Player attacker The player that causes this explosion.
+-- @param Entity inflictor The entity that causes this explosion.
 -- @param number damage The maximum damage done by this explosion.
 -- @param Vector origin The center of the explosion.
 -- @param number outerRadius The outer border for the explosion damage and its falloff.
 -- @param number innerRadius The inner border for the explosion damage where falloff starts.
--- @param boolean exponentialFalloff If the damage falloff should be FALSE: Linear, TRUE: exponential.
 -- @internal
 -- @realm server
 function gameEffects.ExplosiveSphereDamage(
-    dmgowner,
-    source,
+    attacker,
+    inflictor,
     damage,
     origin,
     outerRadius,
-    innerRadius,
-    exponentialFalloff
+    innerRadius
 )
     -- It seems intuitive to use FindInSphere here, but that will find all ents
     -- in the radius, whereas there exist only ~16 players. Hence it is more
@@ -188,32 +186,36 @@ function gameEffects.ExplosiveSphereDamage(
     local plys = player.GetAll()
     for i = 1, #plys do
         local ply = plys[i]
-        if IsValid(ply) and ply:Team() == TEAM_TERROR then
-            diff = origin - ply:GetPos()
-            --we are using Length on purpose here. We would need a sqrt somewhere anyway and with this we dont need to square the radi
-            d = diff:Length()
-            --we now turn this into a % of damage based of the value of d
-            --100% from 0 to innerRadius
-            --100% to 0% from innerRadius to outerRadius
-            --<0% from outerRadius to infinity
-            dFraction = 1.0 - math.max((d - innerRadius) / radiDiff, 0.0)
 
-            --Next Iteration if we are outside the radius
-            if dFraction < 0.0 then
-                continue
-            end
-
-            dmg = math.Round(damage * dFraction * ((exponentialFalloff and dFraction) or 1))
-
-            local dmginfo = DamageInfo()
-            dmginfo:SetDamage(dmg)
-            dmginfo:SetAttacker(dmgowner)
-            dmginfo:SetInflictor(source)
-            dmginfo:SetDamageType(DMG_BLAST)
-            dmginfo:SetDamageForce(diff)
-            dmginfo:SetDamagePosition(ply:GetPos())
-            ply:TakeDamageInfo(dmginfo)
+        if not IsValid(ply) or not ply:IsTerror() then
+            continue
         end
+
+        diff = origin - (ply:GetPos() + ply:OBBCenter())
+        --we are using Length on purpose here. We would need a sqrt somewhere anyway and with this we dont need to square the radi
+        d = diff:Length()
+        --we now turn this into a % of damage based of the value of d
+        --100% from 0 to innerRadius
+        --100% to 0% from innerRadius to outerRadius
+        --<0% from outerRadius to infinity
+        dFraction = 1.0 - math.max((d - innerRadius) / radiDiff, 0.0)
+            
+        --Next Iteration if we are outside the radius
+        if dFraction < 0.0 then
+            continue
+        end
+        
+        dmg = math.Round(damage * dFraction * dFraction)
+            
+        local dmginfo = DamageInfo()
+        dmginfo:SetDamage(dmg)
+        dmginfo:SetAttacker(attacker)
+        dmginfo:SetInflictor(inflictor)
+        dmginfo:SetDamageType(DMG_BLAST)
+        dmginfo:SetDamageForce(diff)
+        dmginfo:SetDamagePosition(ply:GetPos())
+        ply:TakeDamageInfo(dmginfo)
+        
     end
 end
 
