@@ -158,13 +158,13 @@ end
 -- @internal
 -- @realm server
 function gameEffects.ExplosiveSphereDamage(
-        attacker,
-        inflictor,
-        damage,
-        origin,
-        outerRadius,
-        innerRadius
-    )
+    attacker,
+    inflictor,
+    damage,
+    origin,
+    outerRadius,
+    innerRadius
+)
     -- It seems intuitive to use FindInSphere here, but that will find all ents
     -- in the radius, whereas there exist only ~16 players. Hence it is more
     -- efficient to cycle through all those players and do a Lua-side distance
