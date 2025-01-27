@@ -201,8 +201,7 @@ function ENT:Explode(tr)
             self:GetDmg(),
             pos,
             r_outer,
-            r_inner,
-            true
+            r_inner
         )
 
         local effect = EffectData()
