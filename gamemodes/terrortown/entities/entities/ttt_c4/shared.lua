@@ -854,7 +854,15 @@ else -- CLIENT
         --100% from 0 to innerRadius
         --100% to 0% from innerRadius to outerRadius
         --0% from outerRadius to infinity
-        local dFraction = math.max(1.0 - math.max((mvData:GetEntityDistance() - ent:GetRadiusInner()) / (ent:GetRadius() - ent:GetRadiusInner()), 0.0), 0.0)
+        local dFraction = math.max(
+            1.0
+                - math.max(
+                    (mvData:GetEntityDistance() - ent:GetRadiusInner())
+                        / (ent:GetRadius() - ent:GetRadiusInner()),
+                    0.0
+                ),
+            0.0
+        )
         local dmg = math.Round(ent:GetDmg() * dFraction * dFraction)
 
         if dmg <= 0 then
