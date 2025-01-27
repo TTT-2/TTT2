@@ -213,7 +213,7 @@ function gameEffects.ExplosiveSphereDamage(
         dmginfo:SetInflictor(inflictor)
         dmginfo:SetDamageType(DMG_BLAST)
         dmginfo:SetDamageForce(diff)
-        dmginfo:SetDamagePosition(ply:GetPos())
+        dmginfo:SetDamagePosition(ply:GetPos() + ply:OBBCenter())
         ply:TakeDamageInfo(dmginfo)
     end
 end
