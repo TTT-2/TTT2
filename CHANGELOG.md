@@ -15,6 +15,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a menu to allow admins to inspect, in detail, how and why roles are distributed as they are (by @nike4613)
 - Added option to enable team name next to role name on the HUD (by @milkwxter)
 - Added score event for winning with configurable role parameter (by @MrXonte)
+- Added ExplosiveSphereDamage game effect for easy calculation of explosion damage through walls (by @MrXonte)
 
 ### Fixed
 
@@ -39,6 +40,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed a few errors in shop error messages (by @Histalek)
 - Fixed `markerVision`'s registry table being able to contain duplicate obsolete entries, thus fixing potential syncing issues with markers (by @TW1STaL1CKY)
 - Fixed issue in new Ammo dropping that could cause an error when dropping for modified weapon bases. (by @MrXonte)
+- Fixed C4 not showing the correct inflictor when the player is killed (by @TimGoll)
 
 ### Changed
 
@@ -60,6 +62,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Moved all role-related admin options into the "Roles" menu (by @nike4613)
 - Improved description of role layering (by @nike4613)
 - Improved the role layering menu by showing which role is enabled and which is disabled (by @TimGoll)
+- Reworked C4 damage calculation with new gameEffect ExplosiveSphereDamage (by @MrXonte)
 
 ## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
 
