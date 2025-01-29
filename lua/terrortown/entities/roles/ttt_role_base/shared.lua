@@ -40,9 +40,12 @@ ROLE.score = {
     -- round ended with nobody winning, usually a negative number.
     timelimitMultiplier = 0,
 
-    -- The amount of points gained by killing yourself. Should be a
+    -- The amount of score points gained by killing yourself. Should be a
     -- negative number for most roles.
     suicideMultiplier = -1,
+
+    -- The amount of score points gained when your team wins.
+    winMultiplier = 3,
 }
 
 ROLE.karma = {

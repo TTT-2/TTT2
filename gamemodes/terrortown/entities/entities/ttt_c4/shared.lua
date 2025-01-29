@@ -109,7 +109,7 @@ function ENT:Initialize()
     end
 
     if not self:GetRadius() then
-        self:SetRadius(1000)
+        self:SetRadius(1500)
     end
 
     if not self:GetDmg() then
@@ -142,55 +142,6 @@ function ENT.SafeWiresForTime(t)
         return 4
     else
         return 5
-    end
-end
-
----
--- @param Entity dmgowner
--- @param Vector center
--- @param number radius
--- @realm shared
-function ENT:SphereDamage(dmgowner, center, radius)
-    -- It seems intuitive to use FindInSphere here, but that will find all ents
-    -- in the radius, whereas there exist only ~16 players. Hence it is more
-    -- efficient to cycle through all those players and do a Lua-side distance
-    -- check.
-
-    local r = radius * radius -- square so we can compare with dot product directly
-
-    -- pre-declare to avoid realloc
-    local d = 0.0
-    local diff = nil
-    local dmg = 0
-
-    local plys = playerGetAll()
-    for i = 1, #plys do
-        local ply = plys[i]
-        if ply:Team() ~= TEAM_TERROR then
-            continue
-        end
-
-        -- dot of the difference with itself is distance squared
-        diff = center - ply:GetPos()
-        d = diff:Dot(diff)
-
-        if d >= r then
-            continue
-        end
-
-        -- deadly up to a certain range, then a quick falloff within 100 units
-        d = math.max(0, math.sqrt(d) - 490)
-        dmg = -0.01 * (d * d) + 125
-
-        local dmginfo = DamageInfo()
-        dmginfo:SetDamage(dmg)
-        dmginfo:SetAttacker(dmgowner)
-        dmginfo:SetInflictor(self)
-        dmginfo:SetDamageType(DMG_BLAST)
-        dmginfo:SetDamageForce(center - ply:GetPos())
-        dmginfo:SetDamagePosition(ply:GetPos())
-
-        ply:TakeDamageInfo(dmginfo)
     end
 end
 
@@ -244,11 +195,14 @@ function ENT:Explode(tr)
             r_outer = r_outer / 2.5
         end
 
-        -- damage through walls
-        self:SphereDamage(dmgowner, pos, r_inner)
-
-        -- explosion damage
-        util.BlastDamage(self, dmgowner, pos, r_outer, self:GetDmg())
+        gameEffects.ExplosiveSphereDamage(
+            dmgowner,
+            ents.Create("weapon_ttt_c4"),
+            self:GetDmg(),
+            pos,
+            r_outer,
+            r_inner
+        )
 
         local effect = EffectData()
         effect:SetStart(pos)
@@ -905,9 +859,24 @@ else -- CLIENT
 
         local color = COLOR_WHITE
 
-        if mvData:GetEntityDistance() > ent:GetRadius() then
+        --Calculating damage falloff with inverse square method
+        --100% from 0 to innerRadius
+        --100% to 0% from innerRadius to outerRadius
+        --0% from outerRadius to infinity
+        local dFraction = math.max(
+            1.0
+                - math.max(
+                    (mvData:GetEntityDistance() - ent:GetRadiusInner())
+                        / (ent:GetRadius() - ent:GetRadiusInner()),
+                    0.0
+                ),
+            0.0
+        )
+        local dmg = math.Round(ent:GetDmg() * dFraction * dFraction)
+
+        if dmg <= 0 then
             mvData:AddDescriptionLine(TryT("c4_marker_vision_safe_zone"), COLOR_GREEN)
-        elseif mvData:GetEntityDistance() > ent:GetRadiusInner() then
+        elseif dmg < 100 then
             mvData:AddDescriptionLine(TryT("c4_marker_vision_damage_zone"), COLOR_ORANGE)
 
             color = COLOR_ORANGE

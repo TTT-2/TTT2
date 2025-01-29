@@ -1352,15 +1352,24 @@ function SKIN:PaintTooltipTTT2(panel, w, h)
     )
 
     if panel:HasText() then
-        drawSimpleText(
-            TryT(panel:GetText()),
-            panel:GetFont(),
-            0.5 * w,
-            0.5 * (h + sizeArrow),
-            utilGetDefaultColor(colors.background),
-            TEXT_ALIGN_CENTER,
-            TEXT_ALIGN_CENTER
-        )
+        local text = TryT(panel:GetText())
+        local textColor = utilGetDefaultColor(colors.background)
+
+        local wrapped = drawGetWrappedText(text, ScrW() - 20, panel:GetFont())
+        local _, lineHeight = drawGetTextSize("", panel:GetFont())
+        local y = 4 + sizeArrow
+        for i = 1, #wrapped do
+            drawSimpleText(
+                wrapped[i],
+                panel:GetFont(),
+                10,
+                y,
+                textColor,
+                TEXT_ALIGN_LEFT,
+                TEXT_ALIGN_TOP
+            )
+            y = y + lineHeight
+        end
     end
 end
 
@@ -1775,8 +1784,8 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
         drawFilteredShadowedTexture(
             widthBorder,
             widthBorder,
-            sizeIconRole - widthBorder2,
-            sizeIconRole - widthBorder2,
+            sizeIconRole,
+            sizeIconRole,
             panel:GetMaterial(),
             colorIcon.a,
             colorIcon
@@ -1785,8 +1794,8 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
         drawFilteredTexture(
             widthBorder,
             widthBorder,
-            sizeIconRole - widthBorder2,
-            sizeIconRole - widthBorder2,
+            sizeIconRole,
+            sizeIconRole,
             panel:GetMaterial(),
             colorIcon.a * 0.5,
             colorIcon
@@ -2297,6 +2306,85 @@ end
 function SKIN:PaintWeaponPreviewTTT2(panel, w, h)
     if panel:HasModel() then
         panel:DrawModel()
+    end
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintPlayerGraphTTT2(panel, w, h)
+    local renderData = panel.renderData
+    local padding = panel:GetPadding()
+
+    if panel.title ~= "" then
+        -- title text
+        drawSimpleText(
+            panel.title,
+            panel:GetFont(),
+            renderData.titleX,
+            renderData.titleY,
+            colors.helpText,
+            TEXT_ALIGN_LEFT,
+            TEXT_ALIGN_TOP
+        )
+    end
+
+    local barColor = utilGetChangedColor(colors.background, 30)
+    local valueInsideColor = utilGetDefaultColor(barColor)
+    local valueOutsideColor = utilGetDefaultColor(colors.background)
+
+    if renderData.sepY then
+        -- title separator
+        drawBox(0, renderData.sepY, w, 1, barColor)
+    end
+
+    local hBarColor = colors.accent
+    local hValueInsideColor = colors.accentText
+
+    -- then the items
+    for i = 1, #renderData.order do
+        local item = renderData.order[i]
+        -- first, draw the bar
+        local thisBarColor
+        if item.data.highlight then
+            thisBarColor = hBarColor
+        else
+            thisBarColor = barColor
+        end
+        drawBox(item.x, item.y, item.w, item.h, thisBarColor)
+        -- then the value text
+        if item.valueWidth > w - item.x - item.w - padding then
+            -- the value would take up too much space outside, put it inside
+            local thisTextCol
+            if item.data.highlight then
+                thisTextCol = hValueInsideColor
+            else
+                thisTextCol = valueInsideColor
+            end
+            local x = item.x + item.w - item.valueWidth - padding
+            drawSimpleText(
+                tostring(item.data.value),
+                panel:GetFont(),
+                x,
+                item.y,
+                thisTextCol,
+                TEXT_ALIGN_LEFT,
+                TEXT_ALIGN_TOP
+            )
+        else
+            -- the value will fit outside the bar, draw it there
+            drawSimpleText(
+                tostring(item.data.value),
+                panel:GetFont(),
+                item.x + item.w + padding,
+                item.y,
+                valueOutsideColor,
+                TEXT_ALIGN_LEFT,
+                TEXT_ALIGN_TOP
+            )
+        end
     end
 end
 

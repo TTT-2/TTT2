@@ -31,6 +31,7 @@ if SERVER then
     ---
     -- @ignore
     function ROLE:GetAvailableRoleCount(ply_count)
-        return math.floor(ply_count * ttt_min_inno_pct:GetFloat())
+        return math.floor(ply_count * ttt_min_inno_pct:GetFloat()),
+            ROLEINSPECT_REASON_LOW_PROPORTION
     end
 end
