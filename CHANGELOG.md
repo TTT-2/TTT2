@@ -39,6 +39,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed a few errors in shop error messages (by @Histalek)
 - Fixed `markerVision`'s registry table being able to contain duplicate obsolete entries, thus fixing potential syncing issues with markers (by @TW1STaL1CKY)
 - Fixed issue in new Ammo dropping that could cause an error when dropping for modified weapon bases. (by @MrXonte)
+- Fixed C4 not showing the correct inflictor when the player is killed (by @TimGoll)
 
 ### Changed
 
