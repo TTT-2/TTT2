@@ -2388,5 +2388,9 @@ function SKIN:PaintPlayerGraphTTT2(panel, w, h)
     end
 end
 
+function SKIN:PaintSelectionPanelTTT2(panel, w, h)
+    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.handle)
+end
+
 -- REGISTER DERMA SKIN
 derma.DefineSkin(SKIN.Name, "TTT2 default skin for all vgui elements", SKIN)

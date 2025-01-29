@@ -28,6 +28,9 @@ function ENT:CalculateMenuSizes()
         - 3 * self.sizes.padding
         - vskin.GetHeaderHeight()
         - vskin.GetBorderSize()
+
+    self.sizes.widthTopButton = (self.sizes.widthMainArea - 4 * self.sizes.padding) / 5
+    self.sizes.heightTopButton = 50
 end
 
 function ENT:ShowMenu()
@@ -43,6 +46,115 @@ function ENT:ShowMenu()
     end
 
     frame:SetPadding(self.sizes.padding, self.sizes.padding, self.sizes.padding, self.sizes.padding)
+
+    -- CONTENT AREA
+    local mainBox = vgui.Create("DPanelTTT2", frame)
+    mainBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+    mainBox:DockMargin(0, 0, 0, 0)
+    mainBox:Dock(TOP)
+
+    local contentLayout = vgui.Create("DIconLayout", mainBox)
+    contentLayout:Dock(FILL)
+
+    local box = contentLayout:Add("DInfoItemTTT2")
+    box:SetSize(self.sizes.widthContentBox, 100)
+    box:DockMargin(0, 0, 0, self.sizes.padding)
+    box:Dock(TOP)
+    box:SetData({
+        text = {
+            title = {
+                body = "search_title_spectator",
+                params = nil,
+            },
+            text = {
+                {
+                    body = "search_spec",
+                    params = nil,
+                },
+            },
+        },
+    })
+
+    local selectionPanel = contentLayout:Add("DPanelTTT2")
+    selectionPanel:SetSize(self.sizes.widthContentBox, 250)
+    selectionPanel:DockMargin(0, 0, 0, 0)
+    selectionPanel:Dock(TOP)
+    selectionPanel.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "SelectionPanelTTT2", slf, w, h)
+
+        return true
+    end
+
+    local decisionLayout = vgui.Create("DIconLayout", selectionPanel)
+    decisionLayout:Dock(FILL)
+
+    local buttonPanel = decisionLayout:Add("DPanelTTT2")
+    buttonPanel:SetSize(
+        self.sizes.widthMainArea - 2 * self.sizes.padding,
+        self.sizes.heightTopButton
+    )
+    buttonPanel:DockMargin(0, 0, 0, 0)
+    buttonPanel:Dock(TOP)
+
+    local buttonLayout = vgui.Create("DIconLayout", buttonPanel)
+    buttonLayout:Dock(FILL)
+
+    local buttonTime1 = buttonLayout:Add("DButtonTTT2")
+    buttonTime1:SetSize(self.sizes.widthTopButton, self.sizes.heightTopButton)
+    buttonTime1:DockMargin(0, 0, 0, 0)
+    buttonTime1:Dock(LEFT)
+    buttonTime1:SetText("0:25")
+    buttonTime1.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "ButtonRoundEndLeftTTT2", slf, w, h)
+
+        return true
+    end
+
+    local buttonTime2 = buttonLayout:Add("DButtonTTT2")
+    buttonTime2:SetSize(self.sizes.widthTopButton, self.sizes.heightTopButton)
+    buttonTime2:DockMargin(self.sizes.padding, 0, 0, 0)
+    buttonTime2:Dock(LEFT)
+    buttonTime2:SetText("0:45")
+    buttonTime2.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "ButtonRoundEndLeftTTT2", slf, w, h)
+
+        return true
+    end
+
+    local buttonTime3 = buttonLayout:Add("DButtonTTT2")
+    buttonTime3:SetSize(self.sizes.widthTopButton, self.sizes.heightTopButton)
+    buttonTime3:DockMargin(self.sizes.padding, 0, 0, 0)
+    buttonTime3:Dock(LEFT)
+    buttonTime3:SetText("1:15")
+    buttonTime3.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "ButtonRoundEndLeftTTT2", slf, w, h)
+
+        return true
+    end
+
+    local buttonTime4 = buttonLayout:Add("DButtonTTT2")
+    buttonTime4:SetSize(self.sizes.widthTopButton, self.sizes.heightTopButton)
+    buttonTime4:DockMargin(self.sizes.padding, 0, 0, 0)
+    buttonTime4:Dock(LEFT)
+    buttonTime4:SetText("2:00")
+    buttonTime4.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "ButtonRoundEndLeftTTT2", slf, w, h)
+
+        return true
+    end
+
+    local buttonTime5 = buttonLayout:Add("DButtonTTT2")
+    buttonTime5:SetSize(self.sizes.widthTopButton, self.sizes.heightTopButton)
+    buttonTime5:DockMargin(self.sizes.padding, 0, 0, 0)
+    buttonTime5:Dock(LEFT)
+    buttonTime5:SetText("3:00")
+    buttonTime5.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "ButtonRoundEndLeftTTT2", slf, w, h)
+
+        return true
+    end
+
+    -----------------
 
     -- BUTTONS
     local buttonArea = vgui.Create("DButtonPanelTTT2", frame)
