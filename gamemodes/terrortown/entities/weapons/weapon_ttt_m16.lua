@@ -44,8 +44,8 @@ SWEP.ViewModel = "models/weapons/cstrike/c_rif_m4a1.mdl"
 SWEP.WorldModel = "models/weapons/w_rif_m4a1.mdl"
 SWEP.idleResetFix = true
 
-SWEP.IronSightsPos = Vector(-7.58, -9.2, 0.55)
-SWEP.IronSightsAng = Vector(2.599, -1.3, -3.6)
+SWEP.IronSightsPos = Vector(-7.639, -9.2, 0.55)
+SWEP.IronSightsAng = Vector(2.9, -1.3, -3.6)
 
 ---
 -- @ignore
@@ -57,7 +57,7 @@ function SWEP:SetZoom(state)
     end
 
     if state then
-        owner:SetFOV(42, 0.5)
+        owner:SetFOV(62, 0.5)
     else
         owner:SetFOV(0, 0.2)
     end
