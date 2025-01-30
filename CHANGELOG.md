@@ -41,6 +41,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed `markerVision`'s registry table being able to contain duplicate obsolete entries, thus fixing potential syncing issues with markers (by @TW1STaL1CKY)
 - Fixed issue in new Ammo dropping that could cause an error when dropping for modified weapon bases. (by @MrXonte)
 - Fixed C4 not showing the correct inflictor when the player is killed (by @TimGoll)
+- Fixed M16 Ironsight misalignment (by @SvveetMavis) 
 
 ### Changed
 
@@ -63,6 +64,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Improved description of role layering (by @nike4613)
 - Improved the role layering menu by showing which role is enabled and which is disabled (by @TimGoll)
 - Reworked C4 damage calculation with new gameEffect ExplosiveSphereDamage (by @MrXonte)
+- Changed the amount the M16 zooms in (by @SvveetMavis)
 
 ## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
 
