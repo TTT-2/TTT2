@@ -1,6 +1,6 @@
 ---
 -- @class PANEL
--- @section DPanelTTT2
+-- @section TTT2:DPanel
 
 local PANEL = {}
 

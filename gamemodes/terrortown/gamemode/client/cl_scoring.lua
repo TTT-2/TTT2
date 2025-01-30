@@ -153,7 +153,7 @@ function CLSCORE:CreatePanel()
     end
 
     -- LEFT HAND MENU STRIP
-    local menuBox = vgui.Create("DPanelTTT2", frame)
+    local menuBox = vgui.Create("TTT2:DPanel", frame)
     menuBox:SetSize(self.sizes.widthMenu, self.sizes.heightMainArea)
     menuBox:DockMargin(0, self.sizes.padding, 0, self.sizes.padding)
     menuBox:Dock(LEFT)
@@ -168,7 +168,7 @@ function CLSCORE:CreatePanel()
     menuBoxGrid:SetSpaceY(self.sizes.padding)
 
     -- RIGHT HAND MAIN AREA
-    local mainBox = vgui.Create("DPanelTTT2", frame)
+    local mainBox = vgui.Create("TTT2:DPanel", frame)
     mainBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
     mainBox:DockMargin(
         self.sizes.padding,
@@ -178,7 +178,7 @@ function CLSCORE:CreatePanel()
     )
     mainBox:Dock(RIGHT)
 
-    local contentBox = vgui.Create("DPanelTTT2", mainBox)
+    local contentBox = vgui.Create("TTT2:DPanel", mainBox)
     contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
     contentBox:Dock(TOP)
 

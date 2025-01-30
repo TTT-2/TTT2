@@ -167,4 +167,4 @@ function PANEL:Paint(w, h)
     return false
 end
 
-derma.DefineControl("DColoredTextBoxTTT2", "", PANEL, "DPanelTTT2")
+derma.DefineControl("DColoredTextBoxTTT2", "", PANEL, "TTT2:DPanel")

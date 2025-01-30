@@ -73,7 +73,7 @@ function TRADIO:Toggle(radioEnt)
     self.menuFrame:SetKeyboardInputEnabled(false)
     self.menuFrame.OnKeyCodePressed = util.BasicKeyHandler
 
-    local contentBox = vgui.Create("DPanelTTT2", self.menuFrame)
+    local contentBox = vgui.Create("TTT2:DPanel", self.menuFrame)
     contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
     contentBox:Dock(TOP)
 

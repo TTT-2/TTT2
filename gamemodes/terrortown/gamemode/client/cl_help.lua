@@ -236,7 +236,7 @@ function HELPSCRN:ShowMainMenu()
         return
     end
 
-    local labelSpacer = dsettings:Add("DLabelTTT2")
+    local labelSpacer = dsettings:Add("TTT2:DLabel")
     labelSpacer.OwnLine = true
     labelSpacer:SetText("label_menu_admin_spacer")
     labelSpacer:SetSize(width - 2 * self.padding - scrollSize, heightAdminSeperator)

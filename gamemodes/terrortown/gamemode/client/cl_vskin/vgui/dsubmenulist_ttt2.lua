@@ -204,12 +204,12 @@ function PANEL:SelectFirst(index)
     -- If a non-zero index was specified, we don't want to present the unpopulated message, because we're doing a search.
     -- In that case, we want to display a message that there were no results.
     if index ~= 0 then
-        local msgLabel = vgui.Create("DLabelTTT2", self.contentArea)
+        local msgLabel = vgui.Create("TTT2:DLabel", self.contentArea)
         msgLabel:SetText("label_menu_search_no_items")
         msgLabel:SetFont("DermaTTT2Title")
         msgLabel:Dock(FILL)
 
-        local dummyPnl = vgui.Create("DPanel", self.contentArea)
+        local dummyPnl = vgui.Create("TTT2:DPanel", self.contentArea)
         dummyPnl:Dock(LEFT)
 
         return
@@ -221,7 +221,7 @@ function PANEL:SelectFirst(index)
     end
 
     -- no content, fill the content area appropriately
-    local labelNoContent = vgui.Create("DLabelTTT2", self.contentArea)
+    local labelNoContent = vgui.Create("TTT2:DLabel", self.contentArea)
     local widthContent = self.contentArea:GetSize()
 
     labelNoContent:SetText("label_menu_not_populated")
@@ -314,4 +314,4 @@ function PANEL:Clear()
     return tobool(cleared and self.navAreaScroll:Clear())
 end
 
-derma.DefineControl("DSubmenuListTTT2", "", PANEL, "DPanelTTT2")
+derma.DefineControl("DSubmenuListTTT2", "", PANEL, "TTT2:DPanel")

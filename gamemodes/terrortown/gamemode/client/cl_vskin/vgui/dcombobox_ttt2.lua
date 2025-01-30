@@ -16,7 +16,7 @@ AccessorFunc(PANEL, "m_bDoSort", "SortItems", FORCE_BOOL)
 ---
 -- @ignore
 function PANEL:Init()
-    self.DropButton = vgui.Create("DPanel", self)
+    self.DropButton = vgui.Create("TTT2:DPanel", self)
     self.DropButton:SetMouseInputEnabled(false)
     self.DropButton.ComboBox = self
 

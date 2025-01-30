@@ -266,4 +266,4 @@ function PANEL:Paint(w, h)
     return true
 end
 
-derma.DefineControl("DPlayerGraphTTT2", "", PANEL, "DPanelTTT2")
+derma.DefineControl("DPlayerGraphTTT2", "", PANEL, "TTT2:DPanel")

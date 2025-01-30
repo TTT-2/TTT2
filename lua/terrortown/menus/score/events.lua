@@ -41,14 +41,14 @@ function CLSCOREMENU:Populate(parent)
     frameBoxes:Dock(FILL)
 
     -- SWITCHER BETWEEN ROUND BEGIN AND ROUND END
-    local buttonBox = frameBoxes:Add("DPanelTTT2")
+    local buttonBox = frameBoxes:Add("TTT2:DPanel")
     buttonBox:SetSize(sizes.widthMainArea, sizes.heightTopButtonPanel + 2 * sizes.padding)
     buttonBox:DockPadding(0, sizes.padding, 0, sizes.padding)
 
     local buttonBoxRow = vgui.Create("DIconLayout", buttonBox)
     buttonBoxRow:Dock(FILL)
 
-    local buttonBoxRowLabel = buttonBoxRow:Add("DLabelTTT2")
+    local buttonBoxRowLabel = buttonBoxRow:Add("TTT2:DLabel")
     buttonBoxRowLabel:SetSize(sizes.widthTopLabel, sizes.heightTopButtonPanel)
     buttonBoxRowLabel:SetText("label_show_events")
     buttonBoxRowLabel.Paint = function(slf, w, h)
@@ -57,7 +57,7 @@ function CLSCOREMENU:Populate(parent)
         return true
     end
 
-    local buttonBoxRowPanel = buttonBoxRow:Add("DPanelTTT2")
+    local buttonBoxRowPanel = buttonBoxRow:Add("TTT2:DPanel")
     buttonBoxRowPanel:SetSize(2 * sizes.widthTopButton + sizes.padding, sizes.heightTopButtonPanel)
 
     local buttonBoxRowButton1 = vgui.Create("DButtonTTT2", buttonBoxRowPanel)

@@ -161,7 +161,7 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
             for numPly = 1, amountPly do
                 local ply = plys[numPly]
 
-                local plyRowPanel = teamPlayerBox:Add("DPanelTTT2")
+                local plyRowPanel = teamPlayerBox:Add("TTT2:DPanel")
                 plyRowPanel:SetSize(widthColumn, sizes.heightRow)
 
                 local plyRow = vgui.Create("DIconLayout", plyRowPanel)
@@ -181,7 +181,7 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                     plyNameBox:EnableFlashColor(true)
                 end
 
-                local plyRolesTooltipPanel = vgui.Create("DPanelTTT2")
+                local plyRolesTooltipPanel = vgui.Create("TTT2:DPanel")
 
                 local roleBucket = {}
                 local plyRoles = CLSCORE.eventsPlayerRoles[ply.sid64] or {}
@@ -216,7 +216,7 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                     plyKarmaBox:SetTitleFont("DermaTTT2CatHeader")
                     plyKarmaBox:SetTooltip("tooltip_karma_gained")
 
-                    local plyKarmaTooltipPanel = vgui.Create("DPanelTTT2")
+                    local plyKarmaTooltipPanel = vgui.Create("TTT2:DPanel")
 
                     local karmaBucket = {}
                     local plyKarmaList = CLSCORE.eventsPlayerKarma[ply.sid64] or {}
@@ -245,7 +245,7 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                 plyPointsBox:SetTitleFont("DermaTTT2CatHeader")
                 plyPointsBox:SetTooltip("tooltip_score_gained")
 
-                local plyScoreTooltipPanel = vgui.Create("DPanelTTT2")
+                local plyScoreTooltipPanel = vgui.Create("TTT2:DPanel")
 
                 local scoreBucket = {}
                 local plyScores = CLSCORE.eventsPlayerScores[ply.sid64] or {}
@@ -321,14 +321,14 @@ function CLSCOREMENU:Populate(parent)
     winBox:SetTitleFont("DermaTTT2TextHuge")
 
     -- SWITCHER BETWEEN ROUND BEGIN AND ROUND END
-    local buttonBox = frameBoxes:Add("DPanelTTT2")
+    local buttonBox = frameBoxes:Add("TTT2:DPanel")
     buttonBox:SetSize(sizes.widthMainArea, sizes.heightTopButtonPanel + 2 * sizes.padding)
     buttonBox:DockPadding(0, sizes.padding, 0, sizes.padding)
 
     local buttonBoxRow = vgui.Create("DIconLayout", buttonBox)
     buttonBoxRow:Dock(FILL)
 
-    local buttonBoxRowLabel = buttonBoxRow:Add("DLabelTTT2")
+    local buttonBoxRowLabel = buttonBoxRow:Add("TTT2:DLabel")
     buttonBoxRowLabel:SetSize(sizes.widthTopLabel, sizes.heightTopButtonPanel)
     buttonBoxRowLabel:SetText("label_show_roles")
     buttonBoxRowLabel.Paint = function(slf, w, h)
@@ -337,7 +337,7 @@ function CLSCOREMENU:Populate(parent)
         return true
     end
 
-    local buttonBoxRowPanel = buttonBoxRow:Add("DPanelTTT2")
+    local buttonBoxRowPanel = buttonBoxRow:Add("TTT2:DPanel")
     buttonBoxRowPanel:SetSize(2 * sizes.widthTopButton + sizes.padding, sizes.heightTopButtonPanel)
 
     local buttonBoxRowButton1 = vgui.Create("DButtonTTT2", buttonBoxRowPanel)

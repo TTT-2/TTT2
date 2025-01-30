@@ -189,7 +189,7 @@ end
 -- @return Panel The created textentry
 -- @realm client
 function PANEL:MakeTextEntry(data)
-    local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -340,7 +340,7 @@ end
 -- @return Panel The created slider
 -- @realm client
 function PANEL:MakeSlider(data)
-    local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -426,7 +426,7 @@ end
 -- @return Panel The created slider
 -- @realm client
 function PANEL:MakeButton(data)
-    local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -481,7 +481,7 @@ end
 -- @return Panel The created label
 -- @realm client
 function PANEL:MakeComboBox(data)
-    local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -584,7 +584,7 @@ end
 -- @return Panel The created label
 -- @realm client
 function PANEL:MakeBinder(data)
-    local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -669,7 +669,7 @@ end
 -- @return Panel The created helpbox
 -- @realm client
 function PANEL:MakeHelp(data)
-    local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
     left:SetTextParams(data.params)
@@ -717,8 +717,8 @@ end
 -- @return Panel The created label
 -- @realm client
 function PANEL:MakeColorMixer(data)
-    local left = vgui.Create("DLabelTTT2", self)
-    local right = vgui.Create("DPanel", self)
+    local left = vgui.Create("TTT2:DLabel", self)
+    local right = vgui.Create("TTT2:DPanel", self)
 
     left:SetTall(data.height or 240)
     right:SetTall(data.height or 240)
@@ -780,7 +780,7 @@ end
 -- @return Panel The created panel
 -- @realm client
 function PANEL:MakePanel()
-    local panel = vgui.Create("DPanelTTT2", self)
+    local panel = vgui.Create("TTT2:DPanel", self)
 
     self:AddItem(panel)
 
