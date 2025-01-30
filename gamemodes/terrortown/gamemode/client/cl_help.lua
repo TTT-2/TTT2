@@ -327,9 +327,10 @@ function HELPSCRN:BuildContentArea()
 
     -- ADD BUTTON BOX AND BUTTONS
     if self.submenuClass:HasButtonPanel() then
-        local buttonArea = vgui.Create("DButtonPanelTTT2", parent)
-        buttonArea:SetSize(width2, heightButtonPanel)
-        buttonArea:Dock(BOTTOM)
+        local buttonArea = vgui.Create("TTT2:DPanel", parent)
+            :SetSize(width2, heightButtonPanel)
+            :Dock(BOTTOM)
+            :SetPaintHookName("ButtonPanelTTT2")
 
         self.submenuClass:PopulateButtonPanel(buttonArea)
     end

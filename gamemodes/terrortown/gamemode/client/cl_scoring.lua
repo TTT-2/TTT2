@@ -154,14 +154,10 @@ function CLSCORE:CreatePanel()
 
     -- LEFT HAND MENU STRIP
     local menuBox = vgui.Create("TTT2:DPanel", frame)
-    menuBox:SetSize(self.sizes.widthMenu, self.sizes.heightMainArea)
-    menuBox:DockMargin(0, self.sizes.padding, 0, self.sizes.padding)
-    menuBox:Dock(LEFT)
-    menuBox.Paint = function(slf, w, h)
-        derma.SkinHook("Paint", "VerticalBorderedBoxTTT2", slf, w, h)
-
-        return false
-    end
+        :SetSize(self.sizes.widthMenu, self.sizes.heightMainArea)
+        :DockMargin(0, self.sizes.padding, 0, self.sizes.padding)
+        :Dock(LEFT)
+        :SetPaintHookName("VerticalBorderedBoxTTT2")
 
     local menuBoxGrid = vgui.Create("DIconLayout", menuBox)
     menuBoxGrid:Dock(FILL)
@@ -169,38 +165,34 @@ function CLSCORE:CreatePanel()
 
     -- RIGHT HAND MAIN AREA
     local mainBox = vgui.Create("TTT2:DPanel", frame)
-    mainBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
-    mainBox:DockMargin(
-        self.sizes.padding,
-        self.sizes.padding,
-        self.sizes.padding,
-        self.sizes.padding
-    )
-    mainBox:Dock(RIGHT)
+        :SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+        :DockMargin(self.sizes.padding, self.sizes.padding, self.sizes.padding, self.sizes.padding)
+        :Dock(RIGHT)
 
     local contentBox = vgui.Create("TTT2:DPanel", mainBox)
-    contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
-    contentBox:Dock(TOP)
+        :SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+        :Dock(TOP)
 
-    local buttonArea = vgui.Create("DButtonPanelTTT2", mainBox)
-    buttonArea:SetSize(self.sizes.widthMainArea, self.sizes.heightBottomButtonPanel)
-    buttonArea:Dock(BOTTOM)
+    local buttonArea = vgui.Create("TTT2:DPanel", mainBox)
+        :SetSize(self.sizes.widthMainArea, self.sizes.heightBottomButtonPanel)
+        :Dock(BOTTOM)
+        :SetPaintHookName("ButtonPanelTTT2")
 
     local buttonSave = vgui.Create("TTT2:DButton", buttonArea)
-    buttonSave:SetText("report_save")
-    buttonSave:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-    buttonSave:SetPos(0, self.sizes.padding + 1)
-    buttonSave.DoClick = function(btn)
-        self:SaveLog()
-    end
+        :SetSize(self.sizes.widthButton, self.sizes.heightButton)
+        :SetPos(0, self.sizes.padding + 1)
+        :SetText("report_save")
+        :On("LeftClick", function()
+            self:SaveLog()
+        end)
 
     local buttonClose = vgui.Create("TTT2:DButton", buttonArea)
-    buttonClose:SetText("close")
-    buttonClose:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-    buttonClose:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
-    buttonClose.DoClick = function(btn)
-        self:HidePanel()
-    end
+        :SetSize(self.sizes.widthButton, self.sizes.heightButton)
+        :SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
+        :SetText("close")
+        :On("LeftClick", function()
+            self:HidePanel()
+        end)
 
     -- POPULATE SIDEBAR PANEL
     local lastActive

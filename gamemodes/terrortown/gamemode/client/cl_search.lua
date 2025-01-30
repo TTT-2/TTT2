@@ -205,28 +205,28 @@ function SEARCHSCREEN:Show(data)
     local rd = roles.GetByIndex(data.subrole)
     local clientRoleData = client:GetSubRoleData()
 
-    local contentBox = vgui.Create("DPanelTTT2", frame)
-    contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
-    contentBox:Dock(TOP)
+    local contentBox = vgui.Create("TTT2:DPanel", frame)
+        :SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+        :Dock(TOP)
 
     local profileBox = vgui.Create("DProfilePanelTTT2", contentBox)
-    profileBox:SetSize(self.sizes.widthProfileArea, self.sizes.heightMainArea)
-    profileBox:Dock(LEFT)
-    profileBox:SetModel(data.playerModel)
-    profileBox:SetPlayerIcon(
-        playerDataKnown and draw.GetAvatarMaterial(data.sid64, "medium")
-            or materialPlayerIconUnknown
-    )
-    profileBox:SetPlayerRoleColor(playerDataKnown and data.roleColor or COLOR_SLATEGRAY)
-    profileBox:SetPlayerRoleIcon(playerDataKnown and rd.iconMaterial or materialRoleUnknown)
-    profileBox:SetPlayerRoleString(playerDataKnown and rd.name or "search_team_role_unknown")
-    profileBox:SetPlayerTeamString(playerDataKnown and data.team or "search_team_role_unknown")
+        :SetSize(self.sizes.widthProfileArea, self.sizes.heightMainArea)
+        :Dock(LEFT)
+        :SetModel(data.playerModel)
+        :SetPlayerIcon(
+            playerDataKnown and draw.GetAvatarMaterial(data.sid64, "medium")
+                or materialPlayerIconUnknown
+        )
+        :SetPlayerRoleColor(playerDataKnown and data.roleColor or COLOR_SLATEGRAY)
+        :SetPlayerRoleIcon(playerDataKnown and rd.iconMaterial or materialRoleUnknown)
+        :SetPlayerRoleString(playerDataKnown and rd.name or "search_team_role_unknown")
+        :SetPlayerTeamString(playerDataKnown and data.team or "search_team_role_unknown")
 
     -- ADD STATUS BOX AND ITS CONTENT
     local contentAreaScroll = vgui.Create("DScrollPanelTTT2", contentBox)
-    contentAreaScroll:SetVerticalScrollbarEnabled(true)
-    contentAreaScroll:SetSize(self.sizes.widthContentArea, self.sizes.heightMainArea)
-    contentAreaScroll:Dock(RIGHT)
+        :SetVerticalScrollbarEnabled(true)
+        :SetSize(self.sizes.widthContentArea, self.sizes.heightMainArea)
+        :Dock(RIGHT)
 
     local searchMode = bodysearch.GetInspectConfirmMode()
 
@@ -323,18 +323,19 @@ function SEARCHSCREEN:Show(data)
     end
 
     -- BUTTONS
-    local buttonArea = vgui.Create("DButtonPanelTTT2", frame)
-    buttonArea:SetSize(self.sizes.width, self.sizes.heightBottomButtonPanel)
-    buttonArea:Dock(BOTTOM)
+    local buttonArea = vgui.Create("TTT2:DPanel", frame)
+        :SetSize(self.sizes.width, self.sizes.heightBottomButtonPanel)
+        :Dock(BOTTOM)
+        :SetPaintHookName("ButtonPanelTTT2")
 
-    local buttonReport = vgui.Create("DButtonTTT2", buttonArea)
-    buttonReport:SetText("search_call")
-    buttonReport:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-    buttonReport:SetPos(0, self.sizes.padding + 1)
-    buttonReport.DoClick = function(btn)
+    local buttonReport = vgui.Create("TTT2:DButton", buttonArea)
+        :SetText("search_call")
+        :SetSize(self.sizes.widthButton, self.sizes.heightButton)
+        :SetPos(0, self.sizes.padding + 1)
+        :SetIcon(roles.DETECTIVE.iconMaterial, true, 16)
+            .DoClick = function(btn)
         bodysearch.ClientReportsCorpse(data.rag)
     end
-    buttonReport:SetIcon(roles.DETECTIVE.iconMaterial, true, 16)
 
     if not bodysearch.CanReportBody(data.ragOwner) then
         buttonReport:SetEnabled(false)
@@ -342,7 +343,7 @@ function SEARCHSCREEN:Show(data)
 
     local playerCanTakeCredits = bodysearch.CanTakeCredits(client, data.rag)
 
-    local buttonConfirm = vgui.Create("DButtonTTT2", buttonArea)
+    local buttonConfirm = vgui.Create("TTT2:DButton", buttonArea)
 
     if client:IsSpec() then
         local text = "search_confirm"
