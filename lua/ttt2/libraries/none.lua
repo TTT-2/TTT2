@@ -65,15 +65,15 @@ function AccessorFunc(tableScope, varName, name, forceType, returnSelf)
 
     if forceType == FORCE_BOOL_IS then
         tableScope["Is" .. name] = function(slf)
-            return self[varName]
+            return slf[varName]
         end
     elseif forceType == FORCE_BOOL_HAS then
         tableScope["Has" .. name] = function(slf)
-            return self[varName]
+            return slf[varName]
         end
     else
         tableScope["Get" .. name] = function(slf)
-            return self[varName]
+            return slf[varName]
         end
     end
 
