@@ -12,11 +12,6 @@ AccessorFunc(PANEL, "m_bBackground", "PaintBackground", FORCE_BOOL, true)
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bIsMenuComponent", "IsMenu", FORCE_BOOL) -- ??? needed in TTT2:DComboBox?
-
----
--- @accessor boolean
--- @realm client
 AccessorFunc(PANEL, "m_bDisableTabbing", "TabbingDisabled", FORCE_BOOL) -- ??? needed in TTT2:DTextEntry?
 
 ---
@@ -76,7 +71,6 @@ function PANEL:OnMousePressed(mouseCode)
     self:TriggerOnWithBase("Depressed", mouseCode)
 end
 
----
 ---
 -- Called whenever a mouse key was released while the panel is focused.
 -- @ref https://wiki.facepunch.com/gmod/PANEL:OnMouseReleased
