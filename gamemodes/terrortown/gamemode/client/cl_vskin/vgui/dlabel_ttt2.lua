@@ -80,6 +80,11 @@ AccessorFunc(PANEL, "m_PaintHookName", "PaintHookName", FORCE_STRING, true)
 -- @realm client
 AccessorFunc(PANEL, "m_TextParams", "TextParams", nil, true)
 
+---
+-- @accessor Color
+-- @realm client
+AccessorFunc(PANEL, "m_cColor", "Color", FORCE_COLOR, true)
+
 -- data attached to the panel is put in its own scope
 PANEL._eventListeners = {}
 PANEL._attached = {}
@@ -175,6 +180,7 @@ end
 ---
 -- Calls the functions on the hook table that are registered to this hook.
 -- @param string eventName The name of the event
+-- @param any ... The hook parameters
 -- @return any Returns whatever the specific hook may return
 -- @internal
 -- @realm client
@@ -198,6 +204,7 @@ end
 -- Calls the functions on the hook table that are registered to this hook. Also
 -- calls the Panel function with the hook name if it exists
 -- @param string eventName The name of the event
+-- @param any ... The hook parameters
 -- @return any Returns whatever the specific hook may return
 -- @internal
 -- @realm client
@@ -212,6 +219,7 @@ end
 ---
 -- Calls the deprecated hook function directly registered on the Panel.
 -- @param string eventName The name of the event
+-- @param any ... The hook parameters
 -- @return any Returns whatever the specific hook may return
 -- @internal
 -- @realm client
@@ -357,6 +365,53 @@ function PANEL:Toggle()
     self:SetToggle(not self:GetToggle())
 
     self:TriggerOnWithBase("Toggle", self:GetToggle())
+end
+
+---
+-- Adds an icon to the panel. The icon can have a dropshadow and a fixed size.
+-- @param Material iconMaterial The icon material that should be added
+-- @param[default=false] boolean isShadowed Set to true if a dropshadow is desired
+-- @param[default=32] number size The size in pixels
+-- @return Panel Returns the panel itself
+-- @realm client
+function PANEL:SetIcon(icon, isShadowed, size)
+    self.m_mIconMaterial = iconMaterial
+    self.m_bIconShadow = isShadowed or false
+    self.m_nIconSize = size or 32
+
+    return self
+end
+
+---
+-- Returns the added icon material, nil if none was added.
+-- @return Material|nil The added material
+-- @realm client
+function PANEL:GetIcon()
+    return self.m_mIconMaterial
+end
+
+---
+-- Checks whether the panel has an attached icon.
+-- @return boolean True if there is an icon attached
+-- @realm client
+function PANEL:HasIcon()
+    return self.m_mIconMaterial ~= nil
+end
+
+---
+-- Returns if the icon should have a drop shadow, nil if not set.
+-- @return boolean|nil True if drop shadow is enabled
+-- @realm client
+function PANEL:IsIconShadowed()
+    return self.m_bIconShadow
+end
+
+---
+-- Returns the icon size nil if not set.
+-- @return number|nil The size in pixels
+-- @realm client
+function PANEL:GetIconSize()
+    return self.m_nIconSize
 end
 
 -- HOOKS DEFINED IN THE ENGINE --

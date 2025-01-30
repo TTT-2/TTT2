@@ -174,6 +174,7 @@ function PANEL:SetValue(val, ignoreCallbackEnabledVar)
 end
 
 ---
+-- Returns the value of the panel that can be assigned by database or convar.
 -- @return boolean Returns the value of the button if there is one
 -- assigned. It can be assigned by attaching convars or database values.
 -- @realm client
@@ -182,7 +183,10 @@ function PANEL:GetValue()
 end
 
 ---
--- @param boolean value
+-- Sets the default value. If it is set, it can be used to reset the value
+-- to its default.
+-- @param boolean value The default value
+-- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:SetDefaultValue(value)
     if isbool(value) then
@@ -193,13 +197,22 @@ function PANEL:SetDefaultValue(value)
     else
         self.default = nil
     end
+
+    self:TriggerOnWithBase("DefaultChanged", self.default)
+
+    return self
 end
 
+---
+-- Returns true if this panel has a default value assigned.
+-- @return boolean True if a default value is assigned
+-- @realm client
 function PANEL:HasDefaultValue()
     return self.default ~= nil
 end
 
 ---
+-- Returns the default value assigned to the panel.
 -- @return boolean defaultValue, if unset returns false
 -- @realm client
 function PANEL:GetDefaultValue()
@@ -207,6 +220,7 @@ function PANEL:GetDefaultValue()
 end
 
 ---
+-- TODO this has to be refactored - this shouldn't be split into two functions
 -- @param any val
 -- @realm client
 function PANEL:ValueChanged(val)
@@ -248,82 +262,20 @@ function PANEL:OnChange(val) end
 -- @realm client
 function PANEL:OnDefaultChange(val) end
 
+-- TODO END
+
 ---
--- @return boolean
+-- Adds a new console command to be called when the button is clicked.
+-- @param string command The command name
+-- @param string arguments The parameters as a string
+-- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:IsDown()
-    return self.Depressed
-end
+function PANEL:AddConsoleCommand(command, arguments)
+    self:On("LeftClick", function()
+        RunConsoleCommand(command, arguments)
+    end)
 
----
--- @param string strName
--- @param string strArgs
--- @realm client
-function PANEL:SetConsoleCommand(strName, strArgs)
-    self.DoClick = function(slf, val)
-        RunConsoleCommand(strName, strArgs)
-    end
-end
-
----
--- @param Color color
--- @realm client
-function PANEL:SetColor(color)
-    self.data.color = color
-end
-
----
--- @return Color|nil
--- @realm client
-function PANEL:GetColor()
-    return self.data.color
-end
-
----
--- @param Material icon
--- @param[default=false] boolean is_shadowed
--- @param[default=32] number size
--- @realm client
-function PANEL:SetIcon(icon, is_shadowed, size)
-    self.data.icon = icon
-    self.data.icon_shadow = is_shadowed or false
-    self.data.icon_size = size or 32
-end
-
----
--- @return Material|nil
--- @realm client
-function PANEL:GetIcon()
-    return self.data.icon
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:HasIcon()
-    return self.data.icon ~= nil
-end
-
----
--- @return boolean|nil
--- @realm client
-function PANEL:IsIconShadowed()
-    return self.data.icon_shadow
-end
-
----
--- @return number|nil
--- @realm client
-function PANEL:GetIconSize()
-    return self.data.icon_size
-end
-
----
--- @ignore
-function PANEL:SizeToContents()
-    local w, h = self:GetContentSize()
-
-    self:SetSize(w + 8, h + 4)
+    return self
 end
 
 -- SET DEFAULT HOOK BEHAVIOUR --
