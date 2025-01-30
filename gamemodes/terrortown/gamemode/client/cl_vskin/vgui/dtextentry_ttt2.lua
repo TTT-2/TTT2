@@ -12,7 +12,7 @@ local font = "DermaTTT2Text"
 AccessorFunc(PANEL, "heightMult", "HeightMult")
 
 ---
--- @accessor bool
+-- @accessor boolean
 -- @realm client
 AccessorFunc(PANEL, "isOnFocus", "IsOnFocus")
 

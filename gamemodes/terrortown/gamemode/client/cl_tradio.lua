@@ -84,7 +84,7 @@ function TRADIO:Toggle(radioEnt)
     buttonField:Dock(TOP)
 
     for sound, translationName in pairs(sounds) do
-        local buttonReport = vgui.Create("DButtonTTT2", buttonField)
+        local buttonReport = vgui.Create("TTT2:DButton", buttonField)
         buttonReport:SetText(LANG.GetTranslation(translationName))
         buttonReport:SetSize(self.sizes.widthButton, self.sizes.heightButton)
         buttonReport.DoClick = function(btn)

@@ -186,7 +186,7 @@ function CLSCORE:CreatePanel()
     buttonArea:SetSize(self.sizes.widthMainArea, self.sizes.heightBottomButtonPanel)
     buttonArea:Dock(BOTTOM)
 
-    local buttonSave = vgui.Create("DButtonTTT2", buttonArea)
+    local buttonSave = vgui.Create("TTT2:DButton", buttonArea)
     buttonSave:SetText("report_save")
     buttonSave:SetSize(self.sizes.widthButton, self.sizes.heightButton)
     buttonSave:SetPos(0, self.sizes.padding + 1)
@@ -194,7 +194,7 @@ function CLSCORE:CreatePanel()
         self:SaveLog()
     end
 
-    local buttonClose = vgui.Create("DButtonTTT2", buttonArea)
+    local buttonClose = vgui.Create("TTT2:DButton", buttonArea)
     buttonClose:SetText("close")
     buttonClose:SetSize(self.sizes.widthButton, self.sizes.heightButton)
     buttonClose:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)

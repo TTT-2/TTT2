@@ -1,18 +1,18 @@
 ---
 -- @class PANEL
--- @section DButtonTTT2
+-- @section TTT2:DButton
 
 local PANEL = {}
 
 local soundClick = Sound("common/talk.wav")
 
 ---
--- @accessor bool
+-- @accessor boolean
 -- @realm client
 AccessorFunc(PANEL, "m_bIgnoreCallbackEnabledVar", "IgnoreCallbackEnabledVar", FORCE_BOOL)
 
 ---
--- @accessor bool
+-- @accessor boolean
 -- @realm client
 AccessorFunc(PANEL, "m_bDisplayInverted", "Inverted", FORCE_BOOL_IS, true)
 
@@ -334,4 +334,9 @@ function PANEL:OnLeftClickInternal()
     sound.ConditionalPlay(soundClick, SOUND_TYPE_BUTTONS)
 end
 
-derma.DefineControl("DButtonTTT2", "A standard Button", PANEL, "TTT2:DLabel")
+derma.DefineControl(
+    "TTT2:DButton",
+    "The standard button used in TTT2 with convar and database support",
+    PANEL,
+    "TTT2:DLabel"
+)

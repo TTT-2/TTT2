@@ -340,7 +340,7 @@ function CLSCOREMENU:Populate(parent)
     local buttonBoxRowPanel = buttonBoxRow:Add("TTT2:DPanel")
     buttonBoxRowPanel:SetSize(2 * sizes.widthTopButton + sizes.padding, sizes.heightTopButtonPanel)
 
-    local buttonBoxRowButton1 = vgui.Create("DButtonTTT2", buttonBoxRowPanel)
+    local buttonBoxRowButton1 = vgui.Create("TTT2:DButton", buttonBoxRowPanel)
     buttonBoxRowButton1:SetSize(sizes.widthTopButton, sizes.heightTopButton)
     buttonBoxRowButton1:DockMargin(sizes.padding, sizes.padding, 0, sizes.padding)
     buttonBoxRowButton1:Dock(LEFT)
@@ -351,7 +351,7 @@ function CLSCOREMENU:Populate(parent)
         return true
     end
 
-    local buttonBoxRowButton2 = vgui.Create("DButtonTTT2", buttonBoxRowPanel)
+    local buttonBoxRowButton2 = vgui.Create("TTT2:DButton", buttonBoxRowPanel)
     buttonBoxRowButton2:SetSize(sizes.widthTopButton, sizes.heightTopButton)
     buttonBoxRowButton2:DockMargin(0, sizes.padding, 0, sizes.padding)
     buttonBoxRowButton2:Dock(RIGHT)

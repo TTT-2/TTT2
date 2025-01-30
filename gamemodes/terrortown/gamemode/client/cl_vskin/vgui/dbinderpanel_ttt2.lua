@@ -8,7 +8,7 @@ local PANEL = {}
 -- @ignore
 function PANEL:Init()
     self.binder = vgui.Create("DBinderTTT2", self)
-    self.disable = vgui.Create("DButtonTTT2", self)
+    self.disable = vgui.Create("TTT2:DButton", self)
 
     self.binder.Paint = function(slf, w, h)
         derma.SkinHook("Paint", "BinderButtonTTT2", slf, w, h)

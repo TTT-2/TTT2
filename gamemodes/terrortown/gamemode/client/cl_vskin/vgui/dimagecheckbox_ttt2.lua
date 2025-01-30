@@ -386,5 +386,5 @@ derma.DefineControl(
     "DImageCheckBoxTTT2",
     "A special button with image or model that acts as a checkbox",
     PANEL,
-    "DButtonTTT2"
+    "TTT2:DButton"
 )

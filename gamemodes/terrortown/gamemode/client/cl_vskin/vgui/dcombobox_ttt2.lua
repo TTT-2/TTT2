@@ -606,4 +606,4 @@ function PANEL:GetResetButton()
     return self.resetButton
 end
 
-derma.DefineControl("DComboBoxTTT2", "", PANEL, "DButtonTTT2")
+derma.DefineControl("DComboBoxTTT2", "", PANEL, "TTT2:DButton")

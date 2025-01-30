@@ -121,7 +121,7 @@ function PANEL:Rebuild() end
 -- FUNCTIONS TO POPULATE THE FORM
 
 local function MakeButton(parent)
-    local button = vgui.Create("DButtonTTT2", parent)
+    local button = vgui.Create("TTT2:DButton", parent)
 
     button:SetText("button_default")
     button:SetSize(32, 32)
@@ -436,7 +436,7 @@ function PANEL:MakeButton(data)
         return true
     end
 
-    local right = vgui.Create("DButtonTTT2", self)
+    local right = vgui.Create("TTT2:DButton", self)
 
     right:SetText(data.buttonLabel)
 
