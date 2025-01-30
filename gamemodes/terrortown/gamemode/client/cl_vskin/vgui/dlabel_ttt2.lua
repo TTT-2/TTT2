@@ -168,6 +168,13 @@ function PANEL:TriggerOn(eventName, ...)
     end
 end
 
+---
+-- Calls the functions on the hook table that are registered to this hook. Also
+-- calls the Panel function with the hook name if it exists
+-- @param string eventName The name of the event
+-- @return any Returns whatever the specific hook may return
+-- @internal
+-- @realm client
 function PANEL:TriggerOnWith(eventName, ...)
     self:TriggerOn(eventName, ...)
 
@@ -176,14 +183,20 @@ function PANEL:TriggerOnWith(eventName, ...)
     end
 end
 
+---
+-- Calls the deprecated hook function directly registered on the Panel.
+-- @param string eventName The name of the event
+-- @return any Returns whatever the specific hook may return
+-- @internal
+-- @realm client
 function PANEL:TriggerDeprecatedEvent(eventName, ...)
     if isfunction(self[eventName]) then
-        self[eventName](...)
-
         ErrorNoHaltWithStack(
             "[DEPRECATION WARNING]: Overwriting hooks for panels is no longer recommended, use PANEL:On() instead. Hook: "
                 .. eventName
         )
+
+        return self[eventName](...)
     end
 end
 

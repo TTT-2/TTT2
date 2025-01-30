@@ -7,103 +7,61 @@ local PANEL = {}
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bBackground", "PaintBackground", FORCE_BOOL)
+AccessorFunc(PANEL, "m_bBackground", "PaintBackground", FORCE_BOOL, true)
 
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bIsMenuComponent", "IsMenu", FORCE_BOOL)
+AccessorFunc(PANEL, "m_bIsMenuComponent", "IsMenu", FORCE_BOOL) -- ??? needed in TTT2:DComboBox?
 
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bDisableTabbing", "TabbingDisabled", FORCE_BOOL)
-
----
--- @accessor boolean
--- @realm client
-AccessorFunc(PANEL, "m_bDisabled", "Disabled")
-
----
--- @accessor Color
--- @realm client
-AccessorFunc(PANEL, "m_bgColor", "BackgroundColor")
-
----
--- @accessor Panel
--- @realm client
-Derma_Hook(PANEL, "Paint", "Paint", "Panel")
-
----
--- @accessor Panel
--- @realm client
-Derma_Hook(PANEL, "ApplySchemeSettings", "Scheme", "Panel")
-
----
--- @accessor Panel
--- @realm client
-Derma_Hook(PANEL, "PerformLayout", "Layout", "Panel")
+AccessorFunc(PANEL, "m_bDisableTabbing", "TabbingDisabled", FORCE_BOOL) -- ??? needed in TTT2:DTextEntry?
 
 ---
 -- @ignore
 function PANEL:Init()
+    self:SetEnabled(true)
     self:SetPaintBackground(true)
 
-    -- This turns off the engine drawing
-    self:SetPaintBackgroundEnabled(false)
-    self:SetPaintBorderEnabled(false)
+    -- remove some hooks here so that it looks cleaner when the
+    -- class table is printed
+    self.OnToggled = nil
+    self.OnLeftClick = nil
+    self.OnLeftClickInternal = nil
+    self.OnRightClick = nil
+    self.OnMiddleClick = nil
+    self.OnDoubleClick = nil
+    self.OnDoubleClickInternal = nil
 
-    self.tooltip = {
-        fixedPosition = nil,
-        fixedSize = nil,
-        delay = 0,
-        text = "",
-        font = "DermaTTT2Text",
-        sizeArrow = 8,
-    }
-
-    local oldSetTooltipPanel = self.SetTooltipPanel
-
-    self.SetTooltipPanel = function(slf, panel)
-        slf:SetTooltipPanelOverride("DTooltipTTT2")
-
-        oldSetTooltipPanel(slf, panel)
-    end
+    -- TODO: maybe some engine hooks should be removed here as well?
 end
 
 ---
--- @param boolean bDisabled
+-- Sets the enabled state of a disable-able panel object, such as a DButton or DTextEntry.
+-- @param boolean state Whether to enable or disable the panel object
+-- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetDisabled(bDisabled)
-    self.m_bDisabled = bDisabled
+function PANEL:SetEnabled(state)
+    self.m_bEnabled = state
 
-    if bDisabled then
-        self:SetAlpha(75)
-        self:SetMouseInputEnabled(false)
-    else
+    if state then
         self:SetAlpha(255)
         self:SetMouseInputEnabled(true)
+    else
+        self:SetAlpha(75)
+        self:SetMouseInputEnabled(false)
     end
 end
 
 ---
--- @param boolean bEnabled
+-- Called whenever a mouse key was pressed while the panel is focused.
+-- @ref https://wiki.facepunch.com/gmod/PANEL:OnMousePressed
+-- @param number mouseCode The key code of the mouse button pressed
+-- @hook
 -- @realm client
-function PANEL:SetEnabled(bEnabled)
-    self:SetDisabled(not bEnabled)
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:IsEnabled()
-    return not self:GetDisabled()
-end
-
----
--- @param number mousecode
--- @realm client
-function PANEL:OnMousePressed(mousecode)
+function PANEL:OnMousePressed(mouseCode)
     if self:IsSelectionCanvas() and not dragndrop.IsDragging() then
         self:StartBoxSelection()
 
@@ -112,150 +70,36 @@ function PANEL:OnMousePressed(mousecode)
 
     if self:IsDraggable() then
         self:MouseCapture(true)
-        self:DragMousePress(mousecode)
+        self:DragMousePress(mouseCode)
     end
+
+    self:TriggerOnWithBase("Depressed", mouseCode)
 end
 
 ---
--- @param number mousecode
+---
+-- Called whenever a mouse key was released while the panel is focused.
+-- @ref https://wiki.facepunch.com/gmod/PANEL:OnMouseReleased
+-- @param number mouseCode The key code of the mouse button released
+-- @hook
 -- @realm client
-function PANEL:OnMouseReleased(mousecode)
+function PANEL:OnMouseReleased(mouseCode)
     if self:EndBoxSelection() then
         return
     end
 
     self:MouseCapture(false)
 
-    if self:DragMouseRelease(mousecode) then
-        return
-    end
-end
-
----
--- @realm client
-function PANEL:UpdateColours() end
-
----
--- @param number x
--- @param number y
--- @realm client
-function PANEL:SetTooltipFixedPosition(x, y)
-    self.tooltip.fixedPosition = {
-        x = x,
-        y = y,
-    }
-end
-
----
--- @return number, number
--- @realm client
-function PANEL:GetTooltipFixedPosition()
-    return self.tooltip.fixedPosition.x, self.tooltip.fixedPosition.y
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:HasTooltipFixedPosition()
-    return self.tooltip.fixedPosition ~= nil
-end
-
----
--- @param number w
--- @param number h
--- @realm client
-function PANEL:SetTooltipFixedSize(w, h)
-    -- +2 are the outline pixels
-    self.tooltip.fixedSize = {
-        w = w + 2,
-        h = h + self.tooltip.sizeArrow + 2,
-    }
-end
-
----
--- @return number, number
--- @realm client
-function PANEL:GetTooltipFixedSize()
-    return self.tooltip.fixedSize.w, self.tooltip.fixedSize.h
-end
-
----
--- @realm client
-function PANEL:HasTooltipFixedSize()
-    return self.tooltip.fixedSize ~= nil
-end
-
----
--- @param number delay
--- @realm client
-function PANEL:SetTooltipOpeningDelay(delay)
-    self.tooltip.delay = delay
-end
-
----
--- @return number
--- @realm client
-function PANEL:GetTooltipOpeningDelay()
-    return self.tooltip.delay
-end
-
----
--- @param string text
--- @realm client
-function PANEL:SetTooltip(text)
-    self:SetTooltipPanelOverride("DTooltipTTT2")
-
-    self.tooltip.text = text
-end
-
----
--- @return string
--- @realm client
-function PANEL:GetTooltipText()
-    return self.tooltip.text
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:HasTooltipText()
-    return self.tooltip.text ~= nil and self.tooltip.text ~= ""
-end
-
----
--- @param string font
--- @realm client
-function PANEL:SetTooltipFont(font)
-    self.tooltip.font = font
-end
-
----
--- @return string
--- @realm client
-function PANEL:GetTooltipFont()
-    return self.tooltip.font
-end
-
----
--- @param Panel master
--- @realm client
-function PANEL:SetMaster(master)
-    if not IsValid(master) then
+    if self:DragMouseRelease(mouseCode) then
         return
     end
 
-    self.master = master
+    self:TriggerOnWithBase("Released", mouseCode)
 end
 
----
--- @return number
--- @realm client
-function PANEL:GetIndentationMargin()
-    if not IsValid(self.master) then
-        return 0
-    end
-
-    return 10 + self.master:GetIndentationMargin()
-end
-
-derma.DefineControl("DPanelTTT2", "", PANEL, "Panel")
+derma.DefineControl(
+    "TTT2:DPanel",
+    "The basic Panel everything in TTT2 is based on",
+    PANEL,
+    "TTT2:DLabel"
+)
