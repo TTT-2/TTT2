@@ -7,86 +7,65 @@ local PANEL = {}
 local soundClick = Sound("common/talk.wav")
 
 ---
--- @accessor boolean
+-- @accessor bool
 -- @realm client
-AccessorFunc(PANEL, "m_bBorder", "DrawBorder", FORCE_BOOL)
+AccessorFunc(PANEL, "m_bIgnoreCallbackEnabledVar", "IgnoreCallbackEnabledVar", FORCE_BOOL)
 
 ---
 -- @accessor bool
 -- @realm client
-AccessorFunc(PANEL, "ignoreCallbackEnabledVar", "IgnoreCallbackEnabledVar", FORCE_BOOL)
+AccessorFunc(PANEL, "m_bDisplayInverted", "Inverted", FORCE_BOOL_IS, true)
 
 ---
 -- @ignore
 function PANEL:Init()
-    self:SetContentAlignment(5)
+    -- sets the content alignment in the element
+    self:SetContentAlignment(CONTENT_ALIGN_CENTER) -- TODO: rendering should respect that
 
-    self:SetTall(22)
+    -- enable mouse and keyboard input to interact with button
     self:SetMouseInputEnabled(true)
     self:SetKeyboardInputEnabled(true)
 
+    -- set the cursor to show the user they can interact
     self:SetCursor("hand")
+
+    -- set the default name for the paint hook
+    self:SetPaintHookName("ButtonTTT2")
+
+    -- set visual defaults
     self:SetFont("DermaTTT2Button")
-    -- remove label and overwrite function
-    self:SetText("")
-    self.SetText = function(slf, text)
-        slf.data.text = text
-    end
-
-    self.data = {}
-
-    -- hack a sound into the DoClick function after it is initialized
-    timer.Simple(0, function()
-        if not IsValid(self) then
-            return
-        end
-
-        local oldClick = self.DoClick
-        local oldRightClick = self.DoRightClick
-
-        self.DoClick = function(slf)
-            sound.ConditionalPlay(soundClick, SOUND_TYPE_BUTTONS)
-
-            oldClick(slf)
-        end
-
-        self.DoRightClick = function(slf)
-            sound.ConditionalPlay(soundClick, SOUND_TYPE_BUTTONS)
-
-            oldRightClick(slf)
-        end
-    end)
 end
 
 ---
--- This is only used temporarily to keep old variables without breaking the style of "no enable to disable" checkboxes
--- @param bool invert
+-- Attaches a client side convar to this button, its state also
+-- reflects on the state of the button.
+-- @param string cvar The convar name
+-- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetInverted(invert)
-    self.inverted = invert
-end
-
----
--- @param string cvar
--- @realm client
-function PANEL:SetConVar(cvar)
+function PANEL:AttachConVar(cvar)
     if not ConVarExists(cvar or "") then
-        return
+        return self
     end
 
     self.convar = GetConVar(cvar)
 
     self:SetDefaultValue(tobool(self.convar:GetDefault()))
     self:SetValue(self.convar:GetBool())
+
+    return self
 end
 
 local callbackEnabledVarTracker = 0
+
 ---
--- @param string cvar
+-- Attaches a server side convar to this button, its state also
+-- reflects on the state of the button.
+-- @param string cvar The convar name
+-- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetServerConVar(cvar)
+function PANEL:AttachServerConVar(cvar)
     if not cvar or cvar == "" then
-        return
+        return self
     end
 
     self.serverConVar = cvar
@@ -105,10 +84,11 @@ function PANEL:SetServerConVar(cvar)
 
     local callback = function(conVarName, oldValue, newValue)
         if not IsValid(self) then
-            -- We need to remove the callback in a timer, because otherwise the ConVar change callback code
-            -- will throw an error while looping over the callbacks.
-            -- This happens, because the callback is removed from the same table that is iterated over.
-            -- Thus, the table size changes while iterating over it and leads to a nil callback as the last entry.
+            -- We need to remove the callback in a timer, because otherwise the ConVar change
+            -- callback code will throw an error while looping over the callbacks.
+            -- This happens, because the callback is removed from the same table that is
+            -- iterated over. Thus, the table size changes while iterating over it and leads to
+            -- a nil callback as the last entry.
             timer.Simple(0, function()
                 cvars.RemoveChangeCallback(conVarName, myIdentifierString)
             end)
@@ -120,14 +100,19 @@ function PANEL:SetServerConVar(cvar)
     end
 
     cvars.AddChangeCallback(cvar, callback, myIdentifierString)
+
+    return self
 end
 
 ---
--- @param table databaseInfo containing {name, itemName, key}
+-- Attaches a database object to this button, its state also
+-- reflects on the state of the button.
+-- @param table databaseInfo DatabaseInfo object containing {name, itemName, key}
+-- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetDatabase(databaseInfo)
+function PANEL:AttachDatabase(databaseInfo)
     if not istable(databaseInfo) then
-        return
+        return self
     end
 
     local name = databaseInfo.name
@@ -163,22 +148,29 @@ function PANEL:SetDatabase(databaseInfo)
     end
 
     database.AddChangeCallback(name, itemName, key, OnDatabaseChangeCallback, myIdentifierString)
+
+    return self
 end
 
 ---
--- @param any val
--- @param boolean ignoreCallbackEnabledVar To avoid endless loops, separated setting of convars and UI values
+-- Sets the value attached to a button. This can be controlled by convars, or manually.
+-- @param boolean val The value that should be set
+-- @param boolean ignoreCallbackEnabledVar To avoid endless loops, separated setting of
+-- convars and UI values
+-- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:SetValue(val, ignoreCallbackEnabledVar)
     self:SetIgnoreCallbackEnabledVar(ignoreCallbackEnabledVar)
 
-    if self.inverted then
+    if self:GetInverted() then
         val = not val
     end
 
     self.value = val
 
-    self:OnChange(self.value)
+    self:TriggerOnWithBase("Change", self.value)
+
+    return self
 end
 
 ---
@@ -198,25 +190,27 @@ function PANEL:SetDefaultValue(value)
         -- as it is inverted when the default button is pressed
 
         self.default = value
-
-        noDefault = false
     else
         self.default = nil
     end
+end
+
+function PANEL:HasDefaultValue()
+    return self.default ~= nil
 end
 
 ---
 -- @return boolean defaultValue, if unset returns false
 -- @realm client
 function PANEL:GetDefaultValue()
-    return tobool(self.default)
+    return self.default or false
 end
 
 ---
 -- @param any val
 -- @realm client
 function PANEL:ValueChanged(val)
-    if self.inverted then
+    if self:IsInverted() then
         val = not val
     end
 
@@ -255,46 +249,10 @@ function PANEL:OnChange(val) end
 function PANEL:OnDefaultChange(val) end
 
 ---
--- @return string
--- @realm client
-function PANEL:GetText()
-    return self.data.text
-end
-
----
--- @param table params
--- @realm client
-function PANEL:SetTextParams(params)
-    self.data.params = params
-end
-
----
--- @return table
--- @realm client
-function PANEL:GetTextParams()
-    return self.data.params
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:HasTextParams()
-    return self.data.params ~= nil
-end
-
----
 -- @return boolean
 -- @realm client
 function PANEL:IsDown()
     return self.Depressed
-end
-
----
--- @ignore
-function PANEL:Paint(w, h)
-    derma.SkinHook("Paint", "ButtonTTT2", self, w, h)
-
-    return false
 end
 
 ---
@@ -366,6 +324,14 @@ function PANEL:SizeToContents()
     local w, h = self:GetContentSize()
 
     self:SetSize(w + 8, h + 4)
+end
+
+-- SET DEFAULT HOOK BEHAVIOUR --
+
+---
+-- @ignore
+function PANEL:OnLeftClickInternal()
+    sound.ConditionalPlay(soundClick, SOUND_TYPE_BUTTONS)
 end
 
 derma.DefineControl("DButtonTTT2", "A standard Button", PANEL, "TTT2:DLabel")

@@ -20,6 +20,9 @@ function PANEL:Init()
     self:SetEnabled(true)
     self:SetPaintBackground(true)
 
+    -- set the default name for the paint hook
+    self:SetPaintHookName("PanelTTT2")
+
     -- remove some hooks here so that it looks cleaner when the
     -- class table is printed
     self.OnToggled = nil
@@ -48,6 +51,8 @@ function PANEL:SetEnabled(state)
         self:SetAlpha(75)
         self:SetMouseInputEnabled(false)
     end
+
+    return self
 end
 
 ---

@@ -46,6 +46,9 @@ function AccessorFuncDT(tbl, varName, name)
     end
 end
 
+FORCE_BOOL_IS = 10
+FORCE_BOOL_HAS = 11
+
 ---
 -- Adds simple Get/Set accessor functions on the specified table. Can also force the value to be set to a number, bool or string.
 -- @ref https://wiki.facepunch.com/gmod/Global.AccessorFunc
@@ -60,8 +63,18 @@ function AccessorFunc(tableScope, varName, name, forceType, returnSelf)
         debug.Trace()
     end
 
-    tableScope["Get" .. name] = function(slf)
-        return self[varName]
+    if forceType == FORCE_BOOL_IS then
+        tableScope["Is" .. name] = function(slf)
+            return self[varName]
+        end
+    elseif forceType == FORCE_BOOL_HAS then
+        tableScope["Has" .. name] = function(slf)
+            return self[varName]
+        end
+    else
+        tableScope["Get" .. name] = function(slf)
+            return self[varName]
+        end
     end
 
     if forceType == FORCE_STRING then
@@ -88,7 +101,7 @@ function AccessorFunc(tableScope, varName, name, forceType, returnSelf)
         return
     end
 
-    if forceType == FORCE_BOOL then
+    if forceType == FORCE_BOOL or forceType == FORCE_BOOL_IS or forceType == FORCE_BOOL_HAS then
         tableScope["Set" .. name] = function(slf, v)
             slf[varName] = tobool(v)
 

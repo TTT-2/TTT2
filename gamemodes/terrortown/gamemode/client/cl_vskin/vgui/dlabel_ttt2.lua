@@ -2,6 +2,32 @@
 -- @class PANEL
 -- @section TTT2:DLabel
 
+-- HOOKS ATTACHABLE WITH ON FOR TTT2:DLABEL:
+-- engine:
+--   Think
+--   CursorEntered
+--   CursorExited
+-- custom:
+--   OnDepressed(mouseCode)
+--   OnReleased(mouseCode)
+--   OnToggled(mouseCode)
+--   OnLeftClick
+--   OnLeftClickInternal
+--   OnRightClick
+--   OnMiddleClick
+--   OnDoubleClick
+--   OnDoubleClickInternal
+
+CONTENT_ALIGN_BOTTOM_LEFT = 1
+CONTENT_ALIGN_BOTTOM_CENTER = 2
+CONTENT_ALIGN_BOTTOM_RIGHT = 3
+CONTENT_ALIGN_CENTER_LEFT = 4
+CONTENT_ALIGN_CENTER = 5
+CONTENT_ALIGN_CENTER_RIGHT = 6
+CONTENT_ALIGN_TOP_LEFT = 7
+CONTENT_ALIGN_TOP_CENTER = 8
+CONTENT_ALIGH_TOP_RIGHT = 9
+
 local PANEL = {}
 
 ---
@@ -12,12 +38,12 @@ AccessorFunc(PANEL, "m_FontName", "Font", true)
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bDoubleClicking", "DoubleClickingEnabled", FORCE_BOOL, true)
+AccessorFunc(PANEL, "m_bDoubleClicking", "DoubleClickingEnabled", FORCE_BOOL_IS, true)
 
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bAutoStretchVertical", "AutoStretchVertical", FORCE_BOOL, true)
+AccessorFunc(PANEL, "m_bAutoStretchVertical", "AutoStretchVerticalEnabled", FORCE_BOOL_IS, true)
 
 ---
 -- @accessor boolean
@@ -42,7 +68,7 @@ AccessorFunc(PANEL, "m_bToggle", "Toggle", FORCE_BOOL)
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bDepressed", "Depressed", FORCE_BOOL)
+AccessorFunc(PANEL, "m_bDepressed", "Depressed", FORCE_BOOL_IS)
 
 ---
 -- @accessor string
@@ -313,11 +339,11 @@ function PANEL:IsEnabled()
 end
 
 ---
--- Returns whether the mouse button is pressed down on this panel.
--- @return boolean Whether the mouse button is depressed
+-- Returns if a label has text params set.
+-- @return boolean Returns true if a label has text params
 -- @realm client
-function PANEL:IsDepressed()
-    return self.m_bDepressed
+function PANEL:HasTextParams()
+    return self.m_TextParams ~= nil
 end
 
 ---
@@ -351,7 +377,7 @@ function PANEL:ApplySchemeSettings() end
 function PANEL:Think()
     self:TriggerOn("Think")
 
-    if self:GetAutoStretchVertical() then
+    if self:IsAutoStretchVerticalEnabled() then
         self:SizeToContentsY()
     end
 end
@@ -399,7 +425,11 @@ function PANEL:OnMousePressed(mouseCode)
         return
     end
 
-    if mouseCode == MOUSE_LEFT and not dragndrop.IsDragging() and self.m_bDoubleClicking then
+    if
+        mouseCode == MOUSE_LEFT
+        and not dragndrop.IsDragging()
+        and self:IsDoubleClickingEnabled()
+    then
         if self.LastClickTime and SysTime() - self.LastClickTime < 0.2 then
             self:TriggerDeprecatedEvent("DoDoubleClickInternal")
             self:TriggerDeprecatedEvent("DoDoubleClick")
@@ -431,7 +461,7 @@ function PANEL:OnMousePressed(mouseCode)
 end
 
 ---
---Called whenever a mouse key was released while the panel is focused.
+-- Called whenever a mouse key was released while the panel is focused.
 -- @ref https://wiki.facepunch.com/gmod/PANEL:OnMouseReleased
 -- @param number mouseCode The key code of the mouse button released
 -- @hook
