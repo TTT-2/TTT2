@@ -44,8 +44,8 @@ SWEP.ViewModel = "models/weapons/cstrike/c_rif_m4a1.mdl"
 SWEP.WorldModel = "models/weapons/w_rif_m4a1.mdl"
 SWEP.idleResetFix = true
 
-SWEP.IronSightsPos = Vector(-7.639, -9.2, 0.55)
-SWEP.IronSightsAng = Vector(2.9, -1.3, -3.6)
+SWEP.IronSightsPos = Vector(-7.677, -9.2, 0.55)
+SWEP.IronSightsAng = Vector(2.95, -1.4, -3.7)
 
 ---
 -- @ignore
