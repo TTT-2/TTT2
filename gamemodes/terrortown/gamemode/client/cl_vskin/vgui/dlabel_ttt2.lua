@@ -559,7 +559,9 @@ function PANEL:OnDoubleClickInternal() end
 -- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:SetTooltip(text)
-    self:SetTooltipPanelOverride("TTT2:DTooltip")
+    if text then
+        self:SetTooltipPanelOverride("TTT2:DTooltip")
+    end
 
     self._tooltip.text = text
 
@@ -569,7 +571,9 @@ end
 -- TODO review this - do we actually need this? what of this code is needed? looks strange.
 -- @return Panel Returns the panel itself
 function PANEL:SetTooltipPanel(panel)
-    self:SetTooltipPanelOverride("TTT2:DTooltip")
+    if panel then
+        self:SetTooltipPanelOverride("TTT2:DTooltip")
+    end
 
     -- original code before the overwrite
     self.pnlTooltipPanel = panel
