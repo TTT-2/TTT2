@@ -27,21 +27,128 @@ end
 -- The create @{function} names are based on the var name and the prefix "Get" and "Set"
 -- @note Instead of using this function simply replace `ENT:DTVar()` calls with `ENT:NetworkVar()`.
 -- @param table tbl the @{table} that should receive the Getter and Setter @{function}
--- @param string varname the name the tbl @{table} should have as key value
+-- @param string varName the name the tbl @{table} should have as key value
 -- @param string name the name that should be concatenated to the prefix "Get" and "Set"
 -- @deprecated
 -- @realm shared
-function AccessorFuncDT(tbl, varname, name)
+function AccessorFuncDT(tbl, varName, name)
     ErrorNoHaltWithStack(
         "[DEPRECATION WARNING] Using `AccessorFuncDT` is deprecated and will be removed in a future version."
     )
     tbl["Get" .. name] = function(s)
-        return s.dt and s.dt[varname]
+        return s.dt and s.dt[varName]
     end
 
     tbl["Set" .. name] = function(s, v)
         if s.dt then
-            s.dt[varname] = v
+            s.dt[varName] = v
+        end
+    end
+end
+
+---
+-- Adds simple Get/Set accessor functions on the specified table. Can also force the value to be set to a number, bool or string.
+-- @ref https://wiki.facepunch.com/gmod/Global.AccessorFunc
+-- @param table tableScope The table to add the accessor functions to
+-- @param string varName The key of the table to be get/set
+-- @param string name The name of the functions (will be prefixed with Get and Set)
+-- @param[opt] number forceType The type the setter should force to (uses FORCE enum)
+-- @param[default=false] returnSelf Makes Setters return a reference to itself
+-- @realm shared
+function AccessorFunc(tableScope, varName, name, forceType, returnSelf)
+    if not tableScope then
+        debug.Trace()
+    end
+
+    tableScope["Get" .. name] = function(slf)
+        return self[varName]
+    end
+
+    if forceType == FORCE_STRING then
+        tableScope["Set" .. name] = function(slf, v)
+            slf[varName] = tostring(v)
+
+            if returnSelf then
+                return slf
+            end
+        end
+
+        return
+    end
+
+    if forceType == FORCE_NUMBER then
+        tableScope["Set" .. name] = function(slf, v)
+            slf[varName] = tonumber(v)
+
+            if returnSelf then
+                return slf
+            end
+        end
+
+        return
+    end
+
+    if forceType == FORCE_BOOL then
+        tableScope["Set" .. name] = function(slf, v)
+            slf[varName] = tobool(v)
+
+            if returnSelf then
+                return slf
+            end
+        end
+
+        return
+    end
+
+    if forceType == FORCE_ANGLE then
+        tableScope["Set" .. name] = function(slf, v)
+            slf[varName] = Angle(v)
+
+            if returnSelf then
+                return slf
+            end
+        end
+
+        return
+    end
+
+    if forceType == FORCE_COLOR then
+        tableScope["Set" .. name] = function(slf, v)
+            if type(v) == "Vector" then
+                slf[varName] = v:ToColor()
+            else
+                slf[varName] = string.ToColor(tostring(v))
+            end
+
+            if returnSelf then
+                return slf
+            end
+        end
+
+        return
+    end
+
+    if forceType == FORCE_VECTOR then
+        tableScope["Set" .. name] = function(slf, v)
+            if IsColor(v) then
+                slf[varName] = v:ToVector()
+            else
+                slf[varName] = Vector(v)
+            end
+
+            if returnSelf then
+                return slf
+            end
+        end
+
+        return
+    end
+
+    tableScope["Set" .. name] = function(slf, v)
+        slf[varName] = v
+
+        if returnSelf then
+            return slf
         end
     end
 end
