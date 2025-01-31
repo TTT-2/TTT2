@@ -362,11 +362,12 @@ function HELPSCRN:ShowSubmenu(menuClass)
     self.currentMenuId = menuClass.type
 
     -- BUILD GENERAL BOX STRUCTURE
-    local navArea = vgui.Create("DNavPanelTTT2", frame)
-    navArea:SetWide(widthNav)
-    navArea:SetPos(0, 0)
-    navArea:DockPadding(0, 0, 1, 0)
-    navArea:Dock(LEFT)
+    local navArea = vgui.Create("TTT2:DPanel", frame)
+        :SetWide(widthNav)
+        :SetPos(0, 0)
+        :DockPadding(0, 0, 1, 0)
+        :Dock(LEFT)
+        :SetPaintHookName("NavPanelTTT2")
 
     local contentArea = vgui.Create("TTT2:DPanel", frame)
         :SetSize(widthContent, heightContent - vskin.GetHeaderHeight() - vskin.GetBorderSize())
@@ -377,12 +378,10 @@ function HELPSCRN:ShowSubmenu(menuClass)
 
     -- MAKE SEPARATE SUBMENULIST ON THE NAVAREA WITH A CONTENT AREA
     local submenuList = vgui.Create("DSubmenuListTTT2", navArea)
-    submenuList:Dock(FILL)
-    submenuList:SetPadding(self.padding)
-    submenuList:SetBasemenuClass(menuClass, contentArea)
-    if menuClass.searchBarPlaceholderText then
-        submenuList:SetSearchBarPlaceholderText(menuClass.searchBarPlaceholderText)
-    end
+        :Dock(FILL)
+        :SetPadding(self.padding)
+        :SetBasemenuClass(menuClass, contentArea)
+        :SetSearchBarPlaceholderText(menuClass.searchBarPlaceholderText)
 
     -- REFRESH SIZE OF SUBMENULIST FOR CORRECT SUBMENU DEPENDENT SIZE
     submenuList:InvalidateLayout(true)

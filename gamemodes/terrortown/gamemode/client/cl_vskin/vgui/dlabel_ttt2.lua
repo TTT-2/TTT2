@@ -132,6 +132,34 @@ function PANEL:Init()
         return slf
     end
 
+    local _SetWide = self.SetWide
+    self.SetWide = function(slf, ...)
+        _SetWide(slf, ...)
+
+        return slf
+    end
+
+    local _SetWidth = self.SetWidth
+    self.SetWidth = function(slf, ...)
+        _SetWidth(slf, ...)
+
+        return slf
+    end
+
+    local _SetTall = self.SetTall
+    self.SetTall = function(slf, ...)
+        _SetTall(slf, ...)
+
+        return slf
+    end
+
+    local _SetHeight = self.SetHeight
+    self.SetHeight = function(slf, ...)
+        _SetHeight(slf, ...)
+
+        return slf
+    end
+
     local _SetPos = self.SetPos
     self.SetPos = function(slf, ...)
         _SetPos(slf, ...)

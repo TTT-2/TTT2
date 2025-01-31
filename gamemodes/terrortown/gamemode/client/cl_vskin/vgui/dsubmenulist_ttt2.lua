@@ -63,14 +63,16 @@ end
 -- @param string placeholder The placeholder text.
 -- @realm client
 function PANEL:SetSearchBarPlaceholderText(placeholder)
-    if not self.searchBar then
-        return
+    if not placeholder or not self.searchBar then
+        return self
     end
 
     self.searchBar:SetPlaceholderText(placeholder)
     if self.searchBar:GetValue() == "" then
         self.searchBar:SetCurrentPlaceholderText(placeholder)
     end
+
+    return self
 end
 
 ---
