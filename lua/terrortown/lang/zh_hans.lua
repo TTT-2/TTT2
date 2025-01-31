@@ -313,11 +313,6 @@ L.polter_desc = [[
 -- Radio
 L.radio_broken = "你的收音机已被摧毁！"
 
-L.radio_desc = [[
-播放音效来误导或欺骗玩家。
-
-将收音机安放下来，然后用该页面的收音机菜单播放。]]
-
 -- Silenced pistol
 L.sipistol_name = "消音手枪"
 

@@ -313,11 +313,6 @@ L.polter_desc = [[
 -- Radio
 L.radio_broken = "你的收音機已被摧毀！"
 
-L.radio_desc = [[
-播放音樂使人們分心、誤導。
-
-將收音機置於某處，在選單使用收音機並播放音樂。]]
-
 -- Silenced pistol
 L.sipistol_name = "消音手槍"
 

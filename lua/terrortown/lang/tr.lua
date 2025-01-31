@@ -313,11 +313,6 @@ Enerji patlamaları yakındaki insanlara zarar verir.]]
 -- Radio
 L.radio_broken = "Radyonuz yok edildi!"
 
-L.radio_desc = [[
-Dikkat dağıtmak veya kandırmak için sesler çıkarır.
-
-Radyoyu bir yere yerleştirin ve ardından bu menüdeki Radyo sekmesini kullanarak üzerindeki sesleri çalın.]]
-
 -- Silenced pistol
 L.sipistol_name = "Susturuculu Tabanca"
 

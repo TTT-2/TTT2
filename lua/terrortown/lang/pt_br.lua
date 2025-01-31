@@ -313,11 +313,6 @@ A energia causa dano em pessoas que estejam nas proximidades.]]
 -- Radio
 L.radio_broken = "Seu Rádio foi destruído!"
 
-L.radio_desc = [[
-Reproduz sons para distrair e/ou enganar.
-
-Posicione o Rádio em algum lugar, e então reproduza os sons nele utilizando a aba Rádio deste menu.]]
-
 -- Silenced pistol
 L.sipistol_name = "Pistola Silenciada"
 
