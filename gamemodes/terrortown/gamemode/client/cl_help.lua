@@ -368,14 +368,12 @@ function HELPSCRN:ShowSubmenu(menuClass)
     navArea:DockPadding(0, 0, 1, 0)
     navArea:Dock(LEFT)
 
-    local contentArea = vgui.Create("DContentPanelTTT2", frame)
-    contentArea:SetSize(
-        widthContent,
-        heightContent - vskin.GetHeaderHeight() - vskin.GetBorderSize()
-    )
-    contentArea:SetPos(widthNav, 0)
-    contentArea:DockPadding(self.padding, self.padding, self.padding, self.padding)
-    contentArea:Dock(TOP)
+    local contentArea = vgui.Create("TTT2:DPanel", frame)
+        :SetSize(widthContent, heightContent - vskin.GetHeaderHeight() - vskin.GetBorderSize())
+        :SetPos(widthNav, 0)
+        :DockPadding(self.padding, self.padding, self.padding, self.padding)
+        :Dock(TOP)
+        :SetPaintHookName("ContentPanelTTT2")
 
     -- MAKE SEPARATE SUBMENULIST ON THE NAVAREA WITH A CONTENT AREA
     local submenuList = vgui.Create("DSubmenuListTTT2", navArea)

@@ -98,7 +98,6 @@ TTTFiles = {
         on = "client",
     },
     cl_vskin__vgui__dnavpanel = { file = "cl_vskin/vgui/dnavpanel_ttt2.lua", on = "client" },
-    cl_vskin__vgui__dcontentpanel = { file = "cl_vskin/vgui/dcontentpanel_ttt2.lua", on = "client" },
     cl_vskin__vgui__dshopcard = { file = "cl_vskin/vgui/dshopcard_ttt2.lua", on = "client" },
     cl_vskin__vgui__dcombocard = { file = "cl_vskin/vgui/dcombocard_ttt2.lua", on = "client" },
     cl_vskin__vgui__dcategoryheader = {
