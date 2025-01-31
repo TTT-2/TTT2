@@ -60,9 +60,6 @@ local ENTS = 1
 local COLOR = 2
 local MODE = 3
 
---FIXME: You can decide if you want this to be a option for users, should be adressed before merge
-local enable_thin_line_workaround = false
-
 local function SetRenderType(render_type)
     if
         render_type ~= OUTLINE_RENDERTYPE_BEFORE_VM
@@ -394,7 +391,7 @@ local function Render()
     -- when its only 1px thick, so if AA is on we add 1px to compensate.
     -- This is done in all cases to still differentiate between 1px and 2px outlines
     local outline_thickness = OutlineThickness
-    if enable_thin_line_workaround and cvMaterialAntialias:GetInt() ~= 0 then
+    if cvMaterialAntialias:GetInt() ~= 0 then
         outline_thickness = outline_thickness + 1
     end
 
