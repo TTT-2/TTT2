@@ -116,10 +116,6 @@ local function ResetCurrentListsSize()
     ListsSize[GetRenderType()] = {}
 end
 
-local function SetCurrentList(value)
-    Lists[GetRenderType()] = value
-end
-
 local function SetCurrentListSize(size)
     ListsSize[GetRenderType()][GetOutlineThickness()] = size
 end
