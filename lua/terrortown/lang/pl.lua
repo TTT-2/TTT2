@@ -313,11 +313,6 @@ Rani ludzi, których trafi.]]
 -- Radio
 L.radio_broken = "Twoje radio zostało zniszczone!"
 
-L.radio_desc = [[
-Odtwarza dźwięki lub odgłosy.
-
-Postaw gdzieś radio, i potem puszczaj dźwięki używając specjalnej zakładki w tym menu.]]
-
 -- Silenced pistol
 L.sipistol_name = "Pistolet z tłumikiem"
 

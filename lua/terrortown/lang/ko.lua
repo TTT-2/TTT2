@@ -308,11 +308,6 @@ L.polter_desc = [[
 -- Radio
 L.radio_broken = "라디오가 파괴되었습니다!"
 
-L.radio_desc = [[
-라디오는 주의를 분산시키거나 유인하는 소리를 재생합니다.
-
-아무 곳에나 설치해서, 라디오 메뉴를 열어 소리를 재생할 수 있습니다. ]]
-
 -- Silenced pistol
 L.sipistol_name = "소음 권총"
 

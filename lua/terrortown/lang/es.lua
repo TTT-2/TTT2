@@ -313,11 +313,6 @@ El daño de energía daña a las personas en corta distancia.]]
 -- Radio
 L.radio_broken = "¡Tu radio fue destruida!"
 
-L.radio_desc = [[
-Reproduce sonidos para distraer o confundir.
-
-Coloca la radio y luego reproduce sonidos en la pestaña de Radio en este menú.]]
-
 -- Silenced pistol
 L.sipistol_name = "Pistola Silenciada"
 

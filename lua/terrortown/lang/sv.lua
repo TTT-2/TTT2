@@ -313,11 +313,6 @@ Explosionerna skadar spelare i närheten.]]
 -- Radio
 L.radio_broken = "Din Radio har blivit förstörd!"
 
-L.radio_desc = [[
-Spelar upp distraherande eller bedragande ljud.
-
-Placera radion någonstans, och spela sedan upp ljud på den genom att använda Radio-fliken i den här menyn.]]
-
 -- Silenced pistol
 L.sipistol_name = "Ljuddämpad Pistol"
 

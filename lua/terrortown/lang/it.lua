@@ -313,11 +313,6 @@ Le scariche di energia danneggiano i giocatori nelle vicinanze.]]
 -- Radio
 L.radio_broken = "La tua Radio è stata distrutta!"
 
-L.radio_desc = [[
-Fa dei suoni per distrarre o ingannare.
-
-Piazza la radio da qualche parte, poi fai partire dei suoni dalla finestra Radio in questo menù.]]
-
 -- Silenced pistol
 L.sipistol_name = "Pistola silenziata"
 

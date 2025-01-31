@@ -313,11 +313,6 @@ Die Energiespitzen schädigen nahestehende Spieler.]]
 -- Radio
 L.radio_broken = "Dein Radio wurde zerstört!"
 
-L.radio_desc = [[
-Spielt Geräusche zur Ablenkung ab.
-
-Platziere das Radio irgendwo und spiele Geräusche im Reiter "Radio" dieses Menüs ab.]]
-
 -- Silenced pistol
 L.sipistol_name = "Schallgedämpfte Pistole"
 

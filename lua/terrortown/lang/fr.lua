@@ -313,11 +313,6 @@ Ces éclats d'énergie peuvent frapper les gens à proximité.]]
 -- Radio
 L.radio_broken = "Votre Radio a été détruite !"
 
-L.radio_desc = [[
-Joue des sons pour distraire ou tromper.
-
-Placez la radio quelque part, ensuite jouez des sons depuis l'onglet Radio dans ce menu.]]
-
 -- Silenced pistol
 L.sipistol_name = "Pistolet Silencieux"
 

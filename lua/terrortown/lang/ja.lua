@@ -313,11 +313,6 @@ L.polter_desc = [[
 -- Radio
 L.radio_broken = "ラジオが破壊された！"
 
-L.radio_desc = [[
-注意を逸らしたり欺くために音を再生できる機械。
-
-どこか適当な場所にラジオを置いてから、ショップメニュー内のラジオメニューから音を再生できます。]]
-
 -- Silenced pistol
 L.sipistol_name = "消音ピストル"
 
