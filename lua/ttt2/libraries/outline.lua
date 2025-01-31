@@ -141,9 +141,12 @@ local function InitializeCurrentListIfNeeded()
 end
 
 ---
+-- Adds an outline to a given list of entities.
 -- @param table ents List of @{Entity}
--- @param Color color
+-- @param Color color The color of the added outline
 -- @param number mode [OUTLINE_MODE_BOTH, OUTLINE_MODE_NOTVISIBLE, OUTLINE_MODE_VISIBLE]
+-- @param number render_type [OUTLINE_RENDERTYPE_BEFORE_VM, OUTLINE_RENDERTYPE_BEFORE_EF, OUTLINE_RENDERTYPE_AFTER_EF]
+-- @param number outline_thickness The thickness of the added outline in pixels
 -- @realm client
 function outline.Add(ents, color, mode, render_type, outline_thickness)
     -- Make the default behaviour comply with older revisions
@@ -405,6 +408,7 @@ local function Render()
 end
 
 local function RenderOutlines()
+    -- @realm client
     hook.Run("PreDrawOutlines", GetRenderType())
 
     local listSizes = GetCurrentListsSize()
