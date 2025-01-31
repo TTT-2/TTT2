@@ -237,15 +237,11 @@ function HELPSCRN:ShowMainMenu()
     end
 
     local labelSpacer = dsettings:Add("TTT2:DLabel")
-    labelSpacer.OwnLine = true
-    labelSpacer:SetText("label_menu_admin_spacer")
-    labelSpacer:SetSize(width - 2 * self.padding - scrollSize, heightAdminSeperator)
-    labelSpacer:SetFont("DermaTTT2TextLarge")
-    labelSpacer.Paint = function(slf, w, h)
-        derma.SkinHook("Paint", "LabelSpacerTTT2", slf, w, h)
-
-        return true
-    end
+    labelSpacer
+        :SetSize(width - 2 * self.padding - scrollSize, heightAdminSeperator)
+        :SetFont("DermaTTT2TextLarge")
+        :SetText("label_menu_admin_spacer")
+        :SetPaintHookName("LabelSpacerTTT2")
 
     AddMenuButtons(menusAdmin, dsettings, widthMainMenuButton, heightMainMenuButton)
 end
