@@ -16,6 +16,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added option to enable team name next to role name on the HUD (by @milkwxter)
 - Added score event for winning with configurable role parameter (by @MrXonte)
 - Added ExplosiveSphereDamage game effect for easy calculation of explosion damage through walls (by @MrXonte)
+- Added support for outlines of different thickness (by @Wardenpotato)
 
 ### Fixed
 
@@ -42,6 +43,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed issue in new Ammo dropping that could cause an error when dropping for modified weapon bases. (by @MrXonte)
 - Fixed C4 not showing the correct inflictor when the player is killed (by @TimGoll)
 - Fixed M16 Ironsight misalignment (by @SvveetMavis) 
+- Fixed outline interactions with certain weapon scopes
+- Fixed outlines not rendering uniformly
 
 ### Changed
 
