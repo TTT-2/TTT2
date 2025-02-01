@@ -43,8 +43,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed issue in new Ammo dropping that could cause an error when dropping for modified weapon bases. (by @MrXonte)
 - Fixed C4 not showing the correct inflictor when the player is killed (by @TimGoll)
 - Fixed M16 Ironsight misalignment (by @SvveetMavis) 
-- Fixed outline interactions with certain weapon scopes
-- Fixed outlines not rendering uniformly
+- Fixed outline interactions with certain weapon scopes (by @WardenPotato)
+- Fixed outlines not rendering uniformly (by @WardenPotato)
 
 ### Changed
 
