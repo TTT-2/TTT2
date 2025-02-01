@@ -81,6 +81,11 @@ AccessorFunc(PANEL, "m_PaintHookName", "PaintHookName", FORCE_STRING, true)
 AccessorFunc(PANEL, "m_TextParams", "TextParams", nil, true)
 
 ---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_nTextAlign", "TextAlign", FORCE_NUMBER, true)
+
+---
 -- @accessor Color
 -- @realm client
 AccessorFunc(PANEL, "m_cColor", "Color", FORCE_COLOR, true)
@@ -440,6 +445,26 @@ end
 -- @realm client
 function PANEL:GetIconSize()
     return self.m_nIconSize
+end
+
+---
+-- Enables a pulsating background flash color used to hightlight things. The
+-- color is determined automatically by the panel color.
+-- @param boolean state Set to true to enable pulsating background.
+-- @return Panel Returns the panel itself
+-- @realm client
+function PANEL:EnableFlashColor(state)
+    self.m_bEnableFlashColor = state
+
+    return self
+end
+
+---
+-- Checks whether the panel has background flash color enabled.
+-- @return boolean Returns true if the flash color is enabled
+-- @realm client
+function PANEL:HasFlashColor()
+    return self.m_bEnableFlashColor or false
 end
 
 -- HOOKS DEFINED IN THE ENGINE --

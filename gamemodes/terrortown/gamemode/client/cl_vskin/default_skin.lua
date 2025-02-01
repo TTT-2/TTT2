@@ -1171,24 +1171,15 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintColoredTextBoxTTT2(panel, w, h)
-    local colorBackground
+    local colorBackground = panel:GetColor() or colors.background
+    local colorLightenAmount = panel:GetAttached("ColorLighten")
 
-    -- get the background color
-    if panel:HasDynamicColor() then
-        colorBackground = utilGetChangedColor(
-            panel:GetDynamicParentColor() or colors.background,
-            panel:GetDynamicParentColorShift()
-        )
-    else
-        colorBackground = panel:GetColor()
+    if colorLightenAmount then
+        colorBackground = utilGetChangedColor(colorBackground, colorLightenAmount)
     end
 
-    -- set the dynamic background color for the child elements
-    panel.dynBaseColor = colorBackground
-
     local colorText = utilGetDefaultColor(colorBackground)
-    local align = panel:GetTitleAlign()
-    local alpha = mathRound(colorText.a * panel:GetTitleOpacity())
+    local align = panel:GetTextAlign()
     local hasIcon = panel:HasIcon()
     local pad = mathRound(0.1 * h)
     local sizeIcon = h - 2 * pad
@@ -1203,19 +1194,19 @@ function SKIN:PaintColoredTextBoxTTT2(panel, w, h)
     end
 
     drawShadowedText(
-        TryT(panel:GetTitle()),
-        panel:GetTitleFont(),
+        TryT(panel:GetText()),
+        panel:GetFont(),
         (align == TEXT_ALIGN_CENTER) and (0.5 * w)
             or (hasIcon and (sizeIcon + 4 * pad) or (2 * pad)),
         0.5 * h,
-        ColorAlpha(colorText, alpha),
+        colorText,
         align,
         TEXT_ALIGN_CENTER,
         1
     )
 
     if hasIcon then
-        drawFilteredShadowedTexture(pad, pad, sizeIcon, sizeIcon, panel:GetIcon(), alpha, colorText)
+        drawFilteredShadowedTexture(pad, pad, sizeIcon, sizeIcon, panel:GetIcon(), 255, colorText)
     end
 end
 
@@ -1225,15 +1216,14 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintColoredBoxTTT2(panel, w, h)
-    -- get the background color
-    if panel:HasDynamicColor() then
-        panel.dynBaseColor =
-            utilGetChangedColor(panel:GetDynamicParentColor() or colors.background, 30)
-    else
-        panel.dynBaseColor = panel:GetColor()
+    local colorBackground = panel:GetColor() or colors.background
+    local colorLightenAmount = panel:GetAttached("ColorLighten")
+
+    if colorLightenAmount then
+        colorBackground = utilGetChangedColor(colorBackground, colorLightenAmount)
     end
 
-    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel.dynBaseColor)
+    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
 end
 
 ---

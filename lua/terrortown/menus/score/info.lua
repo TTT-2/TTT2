@@ -4,9 +4,9 @@ local TryT = LANG.TryTranslation
 local ParT = LANG.GetParamTranslation
 local IsKarmaEnabled = KARMA.IsEnabled
 
-local function GetPanelTextSize(pnl)
-    surface.SetFont(pnl:GetTitleFont())
-    return surface.GetTextSize(TryT(pnl:GetTitle()))
+local function GetPanelTextSize(pnl) --todo move to perform layout
+    surface.SetFont(pnl:GetFont())
+    return surface.GetTextSize(TryT(pnl:GetText()))
 end
 
 local function MakePlayerGenericTooltip(parent, ply, items, title)
@@ -19,25 +19,27 @@ local function MakePlayerGenericTooltip(parent, ply, items, title)
     local boxLayout = vgui.Create("DIconLayout", parent)
     boxLayout:Dock(FILL)
 
-    local titleBox = boxLayout:Add("DColoredTextBoxTTT2")
-    titleBox:SetDynamicColor(parent, 0)
-    titleBox:SetTitle(title)
-    titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
+    local titleBox = boxLayout
+        :Add("TTT2:DPanel")
+        :SetText(title)
+        :SetTextAlign(TEXT_ALIGN_LEFT)
+        :SetPaintHookName("ColoredTextBoxTTT2")
 
-    local lengthLongestLine, titleHeight = GetPanelTextSize(titleBox)
+    local lengthLongestLine, titleHeight = GetPanelTextSize(titleBox) --todo: move to perform layout
     local height = math.max(initTitleHeight, titleHeight)
+
     titleBox:SetHeight(height)
 
     for i = 1, #items do
         local thing = items[i]
-        local plyRow = boxLayout:Add("DColoredTextBoxTTT2")
-        plyRow:SetDynamicColor(parent, 0)
-        plyRow:SetTitleAlign(TEXT_ALIGN_LEFT)
+
+        local plyRow = boxLayout:Add("TTT2:DPanel")
+
         if thing.title then
-            plyRow:SetTitle(thing.title)
+            plyRow:SetText(thing.title)
         end
 
-        local rowWidth, rowHeight = GetPanelTextSize(plyRow)
+        local rowWidth, rowHeight = GetPanelTextSize(plyRow) --todo move to perform layout
 
         if thing.iconMaterial then
             plyRow:SetIcon(thing.iconMaterial)
@@ -49,7 +51,12 @@ local function MakePlayerGenericTooltip(parent, ply, items, title)
         end
 
         rowHeight = math.max(lineHeight, rowHeight)
-        plyRow:SetHeight(rowHeight)
+
+        plyRow
+            :SetHeight(rowHeight)
+            :SetTextAlign(TEXT_ALIGN_LEFT)
+            :SetPaintHookName("ColoredTextBoxTTT2")
+
         height = height + rowHeight
     end
 
@@ -119,9 +126,11 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
     -- FILL THE COLUMNS
     for numColumn = 1, 3 do
-        teamInfoBox[numColumn] = playerCoumns:Add("DColoredBoxTTT2")
-        teamInfoBox[numColumn]:SetSize(widthColumn, maxHeightColumn)
-        teamInfoBox[numColumn]:SetDynamicColor(parent, 30)
+        teamInfoBox[numColumn] = playerCoumns:Add("TTT2:DPanel")
+        teamInfoBox[numColumn]
+            :SetSize(widthColumn, maxHeightColumn)
+            :Attach("ColorLighten", 30)
+            :SetPaintHookName("ColoredBoxTTT2")
 
         local teamPlayersList = columnData[numColumn]
         local teamNamesList = columnTeams[numColumn]
@@ -138,25 +147,29 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
             local colorTeamLight = util.ColorLighten(colorTeam, 35)
             local colorTeamDark = util.ColorDarken(colorTeam, 20)
 
-            local teamBox = columnBox:Add("DColoredTextBoxTTT2")
-            teamBox:SetDynamicColor(parent, 15)
-            teamBox:SetSize(
-                widthColumn,
-                sizes.heightTitleRow
-                    + amountPly * sizes.heightRow
-                    + (amountPly + 1) * sizes.paddingSmall
-            )
+            local teamBox = columnBox:Add("TTT:DPanel")
+            teamBox
+                :Attach("ColorLighten", 15)
+                :SetSize(
+                    widthColumn,
+                    sizes.heightTitleRow
+                        + amountPly * sizes.heightRow
+                        + (amountPly + 1) * sizes.paddingSmall
+                )
+                :SetPaintHookName("ColoredTextBoxTTT2")
 
             local teamPlayerBox = vgui.Create("DIconLayout", teamBox)
             teamPlayerBox:SetSpaceY(sizes.paddingSmall)
             teamPlayerBox:Dock(FILL)
 
-            local teamNameBox = teamPlayerBox:Add("DColoredTextBoxTTT2")
-            teamNameBox:SetSize(widthColumn, sizes.heightTitleRow)
-            teamNameBox:SetColor(colorTeam)
-            teamNameBox:SetTitle(teamNamesList[numTeam])
-            teamNameBox:SetTitleFont("DermaTTT2TextLarger")
-            teamNameBox:SetIcon(teamData.iconMaterial)
+            local teamNameBox = teamPlayerBox:Add("TTT2:DPanel")
+            teamNameBox
+                :SetSize(widthColumn, sizes.heightTitleRow)
+                :SetColor(colorTeam)
+                :SetText(teamNamesList[numTeam])
+                :SetFont("DermaTTT2TextLarger")
+                :SetIcon(teamData.iconMaterial)
+                :SetPaintHookName("ColoredTextBoxTTT2")
 
             for numPly = 1, amountPly do
                 local ply = plys[numPly]
@@ -168,18 +181,6 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                 plyRow:SetSpaceX(sizes.padding)
                 plyRow:DockMargin(sizes.padding, 0, 0, 0)
                 plyRow:Dock(FILL)
-
-                local plyNameBox = plyRow:Add("DColoredTextBoxTTT2")
-                plyNameBox:SetSize(widthName, sizes.heightRow)
-                plyNameBox:SetDynamicColor(parent, 15)
-                plyNameBox:SetTitle(ply.nick .. ((showDeath and not ply.alive) and " (†)" or ""))
-                plyNameBox:SetTitleAlign(TEXT_ALIGN_LEFT)
-                plyNameBox:SetIcon(roles.GetByIndex(ply.role).iconMaterial)
-
-                -- highlight local player
-                if ply.sid64 == localPly64 then
-                    plyNameBox:EnableFlashColor(true)
-                end
 
                 local plyRolesTooltipPanel = vgui.Create("TTT2:DPanel")
 
@@ -203,19 +204,26 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                     "tooltip_roles_time"
                 )
 
-                plyNameBox:SetTooltipPanel(plyRolesTooltipPanel)
-                plyNameBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
-                plyNameBox:SetTooltipFixedSize(widthRolesTooltip, heightRolesTooltip)
+                local plyNameBox = plyRow:Add("TTT2:DPanel")
+                plyNameBox
+                    :SetSize(widthName, sizes.heightRow)
+                    :Attach("ColorLighten", 15)
+                    :SetText(ply.nick .. ((showDeath and not ply.alive) and " (†)" or ""))
+                    :SetTextAlign(TEXT_ALIGN_LEFT)
+                    :SetIcon(roles.GetByIndex(ply.role).iconMaterial)
+                    :SetPaintHookName("ColoredTextBoxTTT2")
+                    :SetTooltipPanel(plyRolesTooltipPanel)
+                    :SetTooltipFixedPosition(0, sizes.heightRow + 1)
+                    :SetTooltipFixedSize(widthRolesTooltip, heightRolesTooltip)
+
                 plyRolesTooltipPanel:SetSize(widthRolesTooltip, heightRolesTooltip)
 
-                if IsKarmaEnabled() then
-                    local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
-                    plyKarmaBox:SetSize(sizes.widthKarma, sizes.heightRow)
-                    plyKarmaBox:SetColor(colorTeamLight)
-                    plyKarmaBox:SetTitle(CLSCORE.eventsInfoKarma[ply.sid64] or 0)
-                    plyKarmaBox:SetTitleFont("DermaTTT2CatHeader")
-                    plyKarmaBox:SetTooltip("tooltip_karma_gained")
+                -- highlight local player
+                if ply.sid64 == localPly64 then
+                    plyNameBox:EnableFlashColor(true)
+                end
 
+                if IsKarmaEnabled() then
                     local plyKarmaTooltipPanel = vgui.Create("TTT2:DPanel")
 
                     local karmaBucket = {}
@@ -232,18 +240,29 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                         "tooltip_karma_gained"
                     )
 
-                    plyKarmaBox:SetTooltipPanel(plyKarmaTooltipPanel)
-                    plyKarmaBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
-                    plyKarmaBox:SetTooltipFixedSize(widthKarmaTooltip, heightKarmaTooltip)
+                    local plyKarmaBox = plyRow:Add("TTT2:DPanel")
+                    plyKarmaBox
+                        :SetSize(sizes.widthKarma, sizes.heightRow)
+                        :SetColor(colorTeamLight)
+                        :SetText(CLSCORE.eventsInfoKarma[ply.sid64] or 0)
+                        :SetFont("DermaTTT2CatHeader")
+                        :SetTooltip("tooltip_karma_gained") --TODO set tooltip + settooltippanel?
+                        :SetTooltipPanel(plyKarmaTooltipPanel)
+                        :SetTooltipFixedPosition(0, sizes.heightRow + 1)
+                        :SetTooltipFixedSize(widthKarmaTooltip, heightKarmaTooltip)
+                        :SetPaintHookName("ColoredTextBoxTTT2")
+
                     plyKarmaTooltipPanel:SetSize(widthKarmaTooltip, heightKarmaTooltip)
                 end
 
-                local plyPointsBox = plyRow:Add("DColoredTextBoxTTT2")
-                plyPointsBox:SetSize(sizes.widthScore, sizes.heightRow)
-                plyPointsBox:SetColor(colorTeamDark)
-                plyPointsBox:SetTitle(CLSCORE.eventsInfoScores[ply.sid64] or 0)
-                plyPointsBox:SetTitleFont("DermaTTT2CatHeader")
-                plyPointsBox:SetTooltip("tooltip_score_gained")
+                local plyPointsBox = plyRow:Add("TTT2:DPanel")
+                plyPointsBox
+                    :SetSize(sizes.widthScore, sizes.heightRow)
+                    :SetColor(colorTeamDark)
+                    :SetText(CLSCORE.eventsInfoScores[ply.sid64] or 0)
+                    :SetFont("DermaTTT2CatHeader")
+                    :SetTooltip("tooltip_score_gained")
+                    :SetPaintHookName("ColoredTextBoxTTT2")
 
                 local plyScoreTooltipPanel = vgui.Create("TTT2:DPanel")
 
@@ -314,11 +333,13 @@ function CLSCOREMENU:Populate(parent)
     frameBoxes:Dock(FILL)
 
     -- CREATE WIN TITLE BOX
-    local winBox = frameBoxes:Add("DColoredTextBoxTTT2")
-    winBox:SetColor(CLSCORE.eventsInfoTitleColor)
-    winBox:SetSize(sizes.widthMainArea, sizes.heightHeaderPanel)
-    winBox:SetTitle(CLSCORE.eventsInfoTitleText)
-    winBox:SetTitleFont("DermaTTT2TextHuge")
+    local winBox = frameBoxes:Add("TTT2:DPanel")
+    winBox
+        :SetColor(CLSCORE.eventsInfoTitleColor)
+        :SetSize(sizes.widthMainArea, sizes.heightHeaderPanel)
+        :SetText(CLSCORE.eventsInfoTitleText)
+        :SetFont("DermaTTT2TextHuge")
+        :SetPaintHookName("ColoredTextBoxTTT2")
 
     -- SWITCHER BETWEEN ROUND BEGIN AND ROUND END
     local buttonBox = frameBoxes
