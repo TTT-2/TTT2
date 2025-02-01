@@ -441,6 +441,7 @@ end)
 
 ---
 -- A rendering hook that is run in @{GM:PostDrawEffects}, @{GM:PreDrawEffects} and @{GM:PreDrawViewModels} before the outlines are rendered.
+-- @param number render_type [OUTLINE_RENDERTYPE_BEFORE_VM, OUTLINE_RENDERTYPE_BEFORE_EF, OUTLINE_RENDERTYPE_AFTER_EF]
 -- @2D
 -- @hook
 -- @realm client
