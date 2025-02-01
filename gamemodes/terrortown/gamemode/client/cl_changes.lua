@@ -2211,6 +2211,86 @@ function CreateChanges()
         os.time({ year = 2024, month = 09, day = 20 })
     )
 
+    AddChange(
+        "TTT2 Base - v0.14.1b",
+        [[
+
+        <h2>Added</h2>
+        <ul>
+            <li>Added Korean translation (by @Kojap)</li>
+            <li>Added diagnostic information to the addonchecker output.</li>
+            <ul>
+                <li>This also includes a Garry's Mod version check which triggers a warning if TTT2 is not compatible. First baseline version is '240313' (by @NickCloudAT)</li>
+            </ul>
+            <li>Added <code>GM:TTT2PlayDeathScream</code> hook to cancel or overwrite/change the deathscream sound that plays, when you die (by @NickCloudAT)</li>
+            <li>Added support for "toggle_zoom" binds to trigger the radio commands menu (by @TW1STaL1CKY)</li>
+            <li>Added option to use right click to enable/disable roles in the role layering menu (by @TimGoll)</li>
+            <li>Added a menu to allow admins to inspect, in detail, how and why roles are distributed as they are (by @nike4613)</li>
+            <li>Added option to enable team name next to role name on the HUD (by @milkwxter)</li>
+            <li>Added score event for winning with configurable role parameter (by @MrXonte)</li>
+            <li>Added ExplosiveSphereDamage game effect for easy calculation of explosion damage through walls (by @MrXonte)</li>
+            <li>Added support for outlines of different thickness (by @Wardenpotato)</li>
+        </ul>
+        <h2>Fixed</h2>
+        <ul>
+            <li>Fixed missing translation for None role error by removing it (by @mexikoedi)</li>
+            <li>Fixed sometimes entity use triggering the wrong or no entity (by @TimGoll)</li>
+            <li>Fixed translation of muting Terrorists and Spectators (by @mexikoedi)</li>
+            <li>Fixed continuous use being broken, meaing that holding E on a health station did nothing (by @TimGoll)</li>
+            <li>Fixed the loadingscreen disable causing an error (by @TimGoll)</li>
+            <li>Fixed the rounds left always displaying one less than actually left (by @TimGoll)</li>
+            <li>Fixed rendering glitches in the loading screen (by @TimGoll)</li>
+            <li>Fixed weapon pickup through walls (by @MrXonte)</li>
+            <li>Fixed spectating player still being visible through thermalvision after killing that player (by @MrXonte)</li>
+            <li>Fixed Magneto-stick not using C_Hands (by @SvveetMavis)</li>
+            <li>Fixed console error when dropping ammo for weapons with no AmmoEnt (by @MrXonte)</li>
+            <li>Fixed client error for a not fully initialized client (by @Histalek)</li>
+            <li>Fixed the targetID corpse hint not respecting <code>ttt_identify_body_woconfirm</code> (by @Histalek)</li>
+            <li>Fixed the beacon not being properly translated when placed (by @Histalek)</li>
+            <li>Fixed binoculars zooming not being predicted (by @Histalek)</li>
+            <li>Fixed an error when trying to pickup a placed equipment (e.g. beacon) (by @Histalek)</li>
+            <li>Fixed corpse searching sound playing when searched by a spectator, searched covertly, or searched long range (by @TW1STaL1CKY)</li>
+            <li>Fixed the mute button in the scoreboard not working (by @TW1STaL1CKY)</li>
+            <li>Fixed a few errors in shop error messages (by @Histalek)</li>
+            <li>Fixed <code>markerVision</code>'s registry table being able to contain duplicate obsolete entries, thus fixing potential syncing issues with markers (by @TW1STaL1CKY)</li>
+            <li>Fixed issue in new Ammo dropping that could cause an error when dropping for modified weapon bases. (by @MrXonte)</li>
+            <li>Fixed C4 not showing the correct inflictor when the player is killed (by @TimGoll)</li>
+            <li>Fixed M16 Ironsight misalignment (by @SvveetMavis)</li>
+            <li>Fixed outline interactions with certain weapon scopes (by @WardenPotato)</li>
+            <li>Fixed outlines not rendering uniformly (by @WardenPotato)</li>
+        </ul>
+        <h2>Changed</h2>
+        <ul>
+            <li>Updated French translation (by @MisterClems)</li>
+            <li>Updated Turkish localization (by @NovaDiablox)</li>
+            <li>Changed it so that continous use doesn't require direct focus; healing at a health station also works when looking around as long as you stay close by (by @TimGoll)</li>
+            <li>Updated Russian localization (by @Satton2)</li>
+            <li>Updated targetID to use <code>Vehicle:GetDriver</code> instead of the <code>ttt_driver</code> NWEntity (by @Histalek)</li>
+            <li>Updated Russian and English localization files (by @Satton2)</li>
+            <li>Updated old TTT HUD to show name of spectated player (by @somefnfplayerlol)</li>
+            <li>Changes to the enabled map prefixes will not be announced to players anymore (by @Histalek)</li>
+            <li>By default only <code>ttt</code> and <code>ttt2</code> map prefixes are enabled (by @Histalek)</li>
+            <li>Updated <code>ttt_identify_body_woconfirm</code> to be replicated across the server and client (by @Wryyyong)</li>
+            <li>Changed how Ammo is dropped; if drop should be from reserve ammo, now tries to drop a full ammo box instead of a full clip. (by @MrXonte)</li>
+            <li>Updated <code>ttt_spec_prop_control</code> to be replicated across the server and client (by @NickCloudAT)</li>
+            <ul>
+                <li>With this, the KeyHelp feature also hides the PropSpec bind if PropSpec is disabled on the server</li>
+            </ul>
+            <li>Renamed <code>ttt_session_limits_enabled</code> to <code>ttt_session_limits_mode</code>, introducing a four-mode control (0-3) for managing how TTT2 ends a session. (by @NickCloudAT)</li>
+            <ul>
+                <li>Modes: 0 = No session limit, 1 = Default TTT, 2 = Only time limit, 3 = Only round limit</li>
+            </ul>
+            <li>Moved all role-related admin options into the "Roles" menu (by @nike4613)</li>
+            <li>Improved description of role layering (by @nike4613)</li>
+            <li>Improved the role layering menu by showing which role is enabled and which is disabled (by @TimGoll)</li>
+            <li>Reworked C4 damage calculation with new gameEffect ExplosiveSphereDamage (by @MrXonte)</li>
+            <li>Changed the amount the M16 zooms in (by @SvveetMavis)</li>
+        </ul>
+
+    ]],
+        os.time({ year = 2025, month = 02, day = 01 })
+    )
+
     ---
     -- run hook for other addons to add their changelog as well
     -- @realm client
