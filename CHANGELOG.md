@@ -4,6 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Fixed
+
+- Fixed new outlines' `OUTLINE_MODE_VISIBLE` and `OUTLINE_MODE_BOTH`
+
 ## [v0.14.1b](https://github.com/TTT-2/TTT2/tree/v0.14.1b) (2025-02-01)
 
 ### Added
