@@ -294,7 +294,7 @@ local function Render()
                 mode == OUTLINE_MODE_BOTH and STENCIL_REPLACE or STENCIL_KEEP
             )
             render.SetStencilFailOperation(STENCIL_KEEP)
-            render.SetStencilPassOperation(STENCIL_KEEP)
+            render.SetStencilPassOperation(STENCIL_REPLACE)
 
             RenderModels(render_ents)
         elseif mode == OUTLINE_MODE_NOTVISIBLE then
