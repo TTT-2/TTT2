@@ -322,7 +322,7 @@ function SEARCHSCREEN:Show(data)
     local buttonArea = vgui.Create("TTT2:DPanel", frame)
         :SetSize(self.sizes.width, self.sizes.heightBottomButtonPanel)
         :Dock(BOTTOM)
-        :SetPaintHookName("ButtonPanelTTT2")
+        :SetOutline(0, 0, 0, 1)
 
     local buttonReport = vgui.Create("TTT2:DButton", buttonArea)
         :SetText("search_call")

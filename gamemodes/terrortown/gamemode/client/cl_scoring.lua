@@ -176,7 +176,7 @@ function CLSCORE:CreatePanel()
     local buttonArea = vgui.Create("TTT2:DPanel", mainBox)
         :SetSize(self.sizes.widthMainArea, self.sizes.heightBottomButtonPanel)
         :Dock(BOTTOM)
-        :SetPaintHookName("ButtonPanelTTT2")
+        :SetOutline(0, 0, 0, 1)
 
     local buttonSave = vgui.Create("TTT2:DButton", buttonArea)
         :SetSize(self.sizes.widthButton, self.sizes.heightButton)

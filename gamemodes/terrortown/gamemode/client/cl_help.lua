@@ -326,7 +326,7 @@ function HELPSCRN:BuildContentArea()
         local buttonArea = vgui.Create("TTT2:DPanel", parent)
             :SetSize(width2, heightButtonPanel)
             :Dock(BOTTOM)
-            :SetPaintHookName("ButtonPanelTTT2")
+            :SetOutline(0, 0, 0, 1)
 
         self.submenuClass:PopulateButtonPanel(buttonArea)
     end
@@ -358,19 +358,20 @@ function HELPSCRN:ShowSubmenu(menuClass)
     self.currentMenuId = menuClass.type
 
     -- BUILD GENERAL BOX STRUCTURE
-    local navArea = vgui.Create("TTT2:DPanel", frame)
+    local navArea = vgui
+        .Create("TTT2:DPanel", frame)
         :SetWide(widthNav)
         :SetPos(0, 0)
-        :DockPadding(0, 0, 1, 0)
+        :DockPadding(0, 0, 1, 0) -- todo still needed with new outline?
         :Dock(LEFT)
-        :SetPaintHookName("NavPanelTTT2")
+        :SetOutline(0, 0, 1, 0)
 
     local contentArea = vgui.Create("TTT2:DPanel", frame)
         :SetSize(widthContent, heightContent - vskin.GetHeaderHeight() - vskin.GetBorderSize())
         :SetPos(widthNav, 0)
         :DockPadding(self.padding, self.padding, self.padding, self.padding)
         :Dock(TOP)
-        :SetPaintHookName("ContentPanelTTT2")
+        :SetColorShift(30)
 
     -- MAKE SEPARATE SUBMENULIST ON THE NAVAREA WITH A CONTENT AREA
     local submenuList = vgui.Create("DSubmenuListTTT2", navArea)

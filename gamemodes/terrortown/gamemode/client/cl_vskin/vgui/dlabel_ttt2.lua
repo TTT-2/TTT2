@@ -79,9 +79,19 @@ AccessorFunc(PANEL, "m_nTextAlign", "TextAlign", FORCE_NUMBER, true)
 AccessorFunc(PANEL, "m_cColor", "Color", FORCE_COLOR, true)
 
 ---
+-- @accessor Color
+-- @realm client
+AccessorFunc(PANEL, "m_cOutlineColor", "OutlineColor", FORCE_COLOR, true)
+
+---
 -- @accessor number
 -- @realm client
 AccessorFunc(PANEL, "m_nColorShift", "ColorShift", FORCE_NUMBER, true)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_nOutlineColorShift", "OutlineColorShift", FORCE_NUMBER, true)
 
 ---
 -- @accessor number
@@ -107,6 +117,16 @@ AccessorFunc(PANEL, "m_nVerticalTextAlign", "VerticalTextAlign", FORCE_NUMBER, t
 -- @accessor number
 -- @realm client
 AccessorFunc(PANEL, "m_nPadding", "Padding", FORCE_NUMBER, true)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_nBackgroundAlpha", "BackgroundAlpha", FORCE_NUMBER, true)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_nOutlineAlpha", "OutlineAlpha", FORCE_NUMBER, true)
 
 ---
 -- @accessor number
@@ -151,6 +171,7 @@ function PANEL:Init()
     self:SetTall(20)
     self:SetFont("DermaTTT2Text")
     self:SetTextAlign(TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    self:SetOutlineOpacity(200)
 
     -- set the defaults for the tooltip
     self:SetTooltipFixedPosition(nil)
@@ -641,12 +662,71 @@ function PANEL:HasCornerRadius()
     return self.m_bCornerRadius or false
 end
 
+---
+-- Sets the outline thickness of a panel.
+-- @note If one parameter is provided, this value is for all four sides. If two values
+-- are provided, the first is for the vertival outlines, the second for the horizontal.
+-- If four are provided they are set left, top, right, bottom.
+-- @param number ... The outline thickness
+-- @return Panel Returns the panel itself
+-- @realm client
+function PANEL:SetOutline(...)
+    local sizes = { ... }
+
+    if #sizes == 0 then
+        self.m_nOutlineLeft = nil
+        self.m_nOutlineTop = nil
+        self.m_nOutlineRight = nil
+        self.m_nOutlineBottom = nil
+    elseif #sizes == 1 then
+        self.m_nOutlineLeft = sizes[1]
+        self.m_nOutlineTop = sizes[1]
+        self.m_nOutlineRight = sizes[1]
+        self.m_nOutlineBottom = sizes[1]
+    elseif #sizes == 2 then
+        self.m_nOutlineLeft = sizes[1]
+        self.m_nOutlineTop = sizes[2]
+        self.m_nOutlineRight = sizes[1]
+        self.m_nOutlineBottom = sizes[2]
+    elseif #sizes == 4 then
+        self.m_nOutlineLeft = sizes[1]
+        self.m_nOutlineTop = sizes[2]
+        self.m_nOutlineRight = sizes[3]
+        self.m_nOutlineBottom = sizes[4]
+    else
+        error(
+            "[TTT2] PANEL:SetOutline expects 1, 2 or 4 arguments, "
+                .. tostring(#sizes)
+                .. " were provided."
+        )
+    end
+
+    return self
+end
+
+---
+-- Gets the outline ticknesses for all four sides.
+-- @return number The left outline
+-- @return number The top outline
+-- @return number The rihgt outline
+-- @return number The bottom outline
+-- @realm client
+function PANEL:GetOutline()
+    return self.m_nOutlineLeft, self.m_nOutlineTop, self.m_nOutlineRight, self.m_nOutlineBottom
+end
+
+---
+-- Checks whether the panel has an outline applied.
+-- @return boolean Returns true if the panel has an outline
+function PANEL:HasOutline()
+    return self.m_nOutlineLeft ~= nil
+end
 
 -- HOOKS DEFINED IN THE ENGINE --
 
 ---
 -- Called every frame to paint the element.
--- @note This hook will not run if the panel is completely off the screen, and will still run if 
+-- @note This hook will not run if the panel is completely off the screen, and will still run if
 -- any parts of the panel are still on screen.
 -- @param number w The panel's width
 -- @param number h The panel's height
@@ -679,9 +759,22 @@ end
 function PANEL:OnVSkinUpdate()
     local colorBackground = self:ApplyVSkinColor(
         "background",
-        util.GetChangedColor(self:GetColor() or vskin.GetBackgroundColor(), self:GetColorShift())
+        ColorAlpha(
+            util.GetChangedColor(
+                self:GetColor() or vskin.GetBackgroundColor(),
+                self:GetColorShift()
+            ),
+            self:GetBackgroundAlpha()
+        )
     )
     local colorText = self:ApplyVSkinColor("text", util.GetDefaultColor(colorBackground))
+    local colorOutline = self:ApplyVSkinColor(
+        "outline",
+        ColorAlpha(
+            util.GetChangedColor(self:GetOutlineColor() or colorText, self:GetOutlineColorShift()),
+            self:GetOutlineAlpha()
+        )
+    )
     local colorFlash = self:ApplyVSkinColor("flash", colorText)
 end
 
@@ -757,7 +850,7 @@ function PANEL:OnRebuildLayout(w, h)
         local maxWidthText = w - 2 * padding
 
         if self:HasIcon() then
-            maxWidthText - sizeIcon - marginIcon
+            maxWidthText = sizeIcon - marginIcon
         end
 
         -- trim the text if necessary

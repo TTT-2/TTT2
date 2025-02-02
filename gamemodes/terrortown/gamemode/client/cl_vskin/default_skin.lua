@@ -227,7 +227,7 @@ function SKIN:PaintIconTTT2(panel, w, h)
     if panel:HasTextShadow() then
         drawFilteredShadowedTexture(
             panel:GetVSkinDimension("posIconX"),
-            panel:GetVSkinDimension("posIconX"),
+            panel:GetVSkinDimension("posIconY"),
             sizeIcon,
             sizeIcon,
             panel:GetIcon(),
@@ -237,7 +237,7 @@ function SKIN:PaintIconTTT2(panel, w, h)
     else
         drawFilteredTexture(
             panel:GetVSkinDimension("posIconX"),
-            panel:GetVSkinDimension("posIconX"),
+            panel:GetVSkinDimension("posIconY"),
             sizeIcon,
             sizeIcon,
             panel:GetIcon(),
@@ -295,33 +295,6 @@ function SKIN:PaintFrameTTT2(panel, w, h)
         TEXT_ALIGN_CENTER,
         1
     )
-end
-
----
--- Draws the Panel
--- @param Panel panel
--- @param number w
--- @param number h
--- @realm client
-function SKIN:PaintPanel(panel, w, h) end
-
----
--- @param Panel panel
--- @param number w
--- @param number h
--- @realm client
-function SKIN:PaintNavPanelTTT2(panel, w, h)
-    local _, _, rightPad = panel:GetDockPadding()
-    drawBox(w - rightPad, 0, rightPad, h, ColorAlpha(colors.default, 200))
-end
-
----
--- @param Panel panel
--- @param number w
--- @param number h
--- @realm client
-function SKIN:PaintButtonPanelTTT2(panel, w, h)
-    drawBox(0, 0, w, 1, ColorAlpha(colors.default, 200))
 end
 
 ---
