@@ -171,22 +171,49 @@ end
 -- @ignore
 function SKIN:PaintColoredBoxTTT2(panel, w, h)
     if panel:CornerRadius() then
-        drawBox(0, 0, w, h, panel:GetVSkinColor("background"))
+        if panel:HasOutline() then
+            local left, top, right, bottom = panel:GetOutline()
 
-        if panel:HasFlashColor() then
-            local colorFlash = panel:GetVSkinColor("flash")
-            colorFlash.a = math.Round(15 * (math.sin((CurTime() % 2 - 1) * math.pi) + 1.1))
-
-            drawBox(0, 0, w, h, colorFlash)
+            drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel:GetVSkinColor("outline"))
+            drawRoundedBox(
+                sizes.cornerRadius,
+                left,
+                top,
+                w - left - right,
+                h - top - bottom,
+                panel:GetVSkinColor("background")
+            )
+        else
+            drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel:GetVSkinColor("background"))
         end
-    else
-        drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel:GetVSkinColor("background"))
 
         if panel:HasFlashColor() then
             local colorFlash = panel:GetVSkinColor("flash")
             colorFlash.a = math.Round(15 * (math.sin((CurTime() % 2 - 1) * math.pi) + 1.1))
 
             drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorFlash)
+        end
+    else
+        if panel:HasOutline() then
+            local left, top, right, bottom = panel:GetOutline()
+
+            drawBox(0, 0, w, h, panel:GetVSkinColor("outline"))
+            drawBox(
+                left,
+                top,
+                w - left - right,
+                h - top - bottom,
+                panel:GetVSkinColor("background")
+            )
+        else
+            drawBox(0, 0, w, h, panel:GetVSkinColor("background"))
+        end
+
+        if panel:HasFlashColor() then
+            local colorFlash = panel:GetVSkinColor("flash")
+            colorFlash.a = math.Round(15 * (math.sin((CurTime() % 2 - 1) * math.pi) + 1.1))
+
+            drawBox(0, 0, w, h, colorFlash)
         end
     end
 end
@@ -295,15 +322,6 @@ function SKIN:PaintFrameTTT2(panel, w, h)
         TEXT_ALIGN_CENTER,
         1
     )
-end
-
----
--- @param Panel panel
--- @param number w
--- @param number h
--- @realm client
-function SKIN:PaintContentPanelTTT2(panel, w, h)
-    drawBox(0, 0, w, h, colors.content)
 end
 
 ---
