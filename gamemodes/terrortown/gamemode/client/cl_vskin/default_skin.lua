@@ -187,7 +187,7 @@ function SKIN:PaintColoredBoxTTT2(panel, w, h)
             drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel:GetVSkinColor("background"))
         end
 
-        if panel:HasFlashColor() then
+        if panel:HasFlashColor() and panel:IsEnabled() then
             local colorFlash = panel:GetVSkinColor("flash")
             colorFlash.a = math.Round(15 * (math.sin((CurTime() % 2 - 1) * math.pi) + 1.1))
 
@@ -209,7 +209,7 @@ function SKIN:PaintColoredBoxTTT2(panel, w, h)
             drawBox(0, 0, w, h, panel:GetVSkinColor("background"))
         end
 
-        if panel:HasFlashColor() then
+        if panel:HasFlashColor() and panel:IsEnabled() then
             local colorFlash = panel:GetVSkinColor("flash")
             colorFlash.a = math.Round(15 * (math.sin((CurTime() % 2 - 1) * math.pi) + 1.1))
 
@@ -702,83 +702,6 @@ function SKIN:PaintCategoryHeaderTTT2(panel, w, h)
         0.5 * h,
         colorText,
         TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_CENTER
-    )
-end
-
----
--- @param Panel panel
--- @param number w
--- @param number h
--- @realm client
-function SKIN:PaintButtonTTT2(panel, w, h)
-    local colorLine = colors.accentDark
-    local colorBox = colors.accent
-    local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
-    local shift = 0
-
-    if not panel:IsEnabled() then
-        local colorAccentDisabled = utilGetChangedColor(colors.default, 150)
-
-        colorLine = utilColorDarken(colorAccentDisabled, 50)
-        colorBox = utilGetChangedColor(colors.default, 150)
-        colorText = ColorAlpha(utilGetDefaultColor(colorAccentDisabled), 220)
-    elseif panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-        colorLine = colors.accentDarkActive
-        colorBox = colors.accentActive
-        colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
-        shift = 1
-    elseif panel.Hovered then
-        colorLine = colors.accentDarkHover
-        colorBox = colors.accentHover
-        colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
-    end
-
-    drawBox(0, 0, w, h, colorBox)
-    drawBox(0, h - sizes.border, w, sizes.border, colorLine)
-
-    local translatedText = ""
-    if panel:HasTextParams() then
-        translatedText = string.upper(ParT(panel:GetText(), panel:GetTextParams()))
-    else
-        translatedText = string.upper(TryT(panel:GetText()))
-    end
-
-    local font = panel:GetFont()
-    local xText = 0.5 * w
-
-    if panel:HasIcon() then
-        local widthText = drawGetTextSize(translatedText, font)
-        local padding = 5
-        local sizeIcon = panel:GetIconSize()
-        local yIcon = 0.5 * (h - sizeIcon)
-
-        xText = 0.5 * (w + sizeIcon + padding)
-
-        local xIcon = xText - sizeIcon - padding - 0.5 * widthText
-
-        if panel:IsIconShadowed() then
-            drawFilteredShadowedTexture(
-                xIcon,
-                yIcon,
-                sizeIcon,
-                sizeIcon,
-                panel:GetIcon(),
-                255,
-                colorText
-            )
-        else
-            drawFilteredTexture(xIcon, yIcon, sizeIcon, sizeIcon, panel:GetIcon(), 255, COLOR_WHITE)
-        end
-    end
-
-    drawShadowedText(
-        translatedText,
-        font,
-        xText,
-        0.5 * (h - sizes.border) + shift,
-        colorText,
-        TEXT_ALIGN_CENTER,
         TEXT_ALIGN_CENTER
     )
 end

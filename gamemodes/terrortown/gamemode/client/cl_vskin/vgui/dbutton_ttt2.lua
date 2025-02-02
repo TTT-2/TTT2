@@ -19,8 +19,7 @@ AccessorFunc(PANEL, "m_bDisplayInverted", "Inverted", FORCE_BOOL_IS, true)
 ---
 -- @ignore
 function PANEL:Init()
-    -- sets the content alignment in the element
-    self:SetContentAlignment(CONTENT_ALIGN_CENTER) -- TODO: rendering should respect that
+    _G["TTT2:DPanel"].Init(self) -- todo should be nicer
 
     -- enable mouse and keyboard input to interact with button
     self:SetMouseInputEnabled(true)
@@ -34,6 +33,95 @@ function PANEL:Init()
 
     -- set visual defaults
     self:SetFont("DermaTTT2Button")
+end
+
+---
+-- @ignore
+function PANEL:OnVSkinUpdate()
+    local colorBackground, colorText, colorOutline, colorFlash
+
+    -- PANEL DISABLED
+    if not self:IsEnabled() then
+        local colorDefault = util.GetDefaultColor(vskin.GetBackgroundColor())
+        local colorAccentDisabled = utilGetChangedColor(colorDefault, 150)
+
+        colorBackground = util.GetChangedColor(colorAccentDisabled, 150)
+        colorText = ColorAlpha(util.GetDefaultColor(colorAccentDisabled), 220)
+        colorOutline = util.GetChangedColor(colorAccentDisabled, -50)
+
+    -- PANEL IS PRESSED
+    elseif self:IsDepressed() or self:IsSelected() or self:GetToggle() then
+        colorBackground = ColorAlpha(
+            util.GetChangedColor(
+                self:GetColor() or util.GetActiveColor(vskin.GetAccentColor()),
+                self:GetColorShift()
+            ),
+            self:GetBackgroundAlpha()
+        )
+        colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 220)
+        colorOutline = ColorAlpha(
+            util.GetChangedColor(
+                self:GetOutlineColor() or util.GetActiveColor(vskin.GetDarkAccentColor()),
+                self:GetOutlineColorShift()
+            ),
+            self:GetOutlineAlpha()
+        )
+
+    -- PANEL IS HOVERED
+    elseif self:IsHovered() then
+        colorBackground = ColorAlpha(
+            util.GetChangedColor(
+                self:GetColor() or util.GetHoverColor(vskin.GetAccentColor()),
+                self:GetColorShift()
+            ),
+            self:GetBackgroundAlpha()
+        )
+        colorText = ColorAlpha(util.GetHoverColor(colorBackground), 220)
+        colorOutline = ColorAlpha(
+            util.GetChangedColor(
+                self:GetOutlineColor() or util.GetActiveColor(vskin.GetDarkAccentColor()),
+                self:GetOutlineColorShift()
+            ),
+            self:GetOutlineAlpha()
+        )
+
+    -- NORMAL COLORS
+    else
+        colorBackground = ColorAlpha(
+            util.GetChangedColor(self:GetColor() or vskin.GetAccentColor(), self:GetColorShift()),
+            self:GetBackgroundAlpha()
+        )
+        colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 220)
+        colorOutline = ColorAlpha(
+            util.GetChangedColor(
+                self:GetOutlineColor() or vskin.GetDarkAccentColor(),
+                self:GetOutlineColorShift()
+            ),
+            self:GetOutlineAlpha()
+        )
+    end
+
+    self:ApplyVSkinColor("background", colorBackground)
+    self:ApplyVSkinColor("text", colorText)
+    self:ApplyVSkinColor("outline", colorOutline)
+    self:ApplyVSkinColor("flash", colorText)
+end
+
+---
+-- @ignore
+function PANEL:OnRebuildLayout(w, h)
+    _G["TTT2:DPanel"].OnRebuildLayout(self, w, h) -- todo should be nicer
+
+    -- if the panel is depressed, the text and icon should be shifted by one pixel
+    if self:IsDepressed() or self:IsSelected() or self:GetToggle() then
+        if self:HasIcon() then
+            self:ApplyVSkinDimension("posIconY", self:GetVSkinDimension("posIconY") - 1)
+        end
+
+        if self:HasText() then
+            self:ApplyVSkinDimension("posTextY", self:GetVSkinDimension("posTextY") - 1)
+        end
+    end
 end
 
 ---
@@ -290,5 +378,5 @@ derma.DefineControl(
     "TTT2:DButton",
     "The standard button used in TTT2 with convar and database support",
     PANEL,
-    "TTT2:DLabel"
+    "TTT2:DPanel"
 )
