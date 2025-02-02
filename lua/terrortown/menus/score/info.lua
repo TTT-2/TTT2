@@ -284,10 +284,11 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                     "tooltip_score_gained"
                 )
 
-                plyPointsBox:SetTooltipPanel(plyScoreTooltipPanel)
-                plyPointsBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
-                plyPointsBox:SetTooltipFixedSize(widthScoreTooltip, heightScoreTooltip)
-                plyScoreTooltipPanel:SetSize(widthScoreTooltip, heightScoreTooltip)
+                plyPointsBox
+                    :SetTooltipPanel(plyScoreTooltipPanel)
+                    :SetTooltipFixedPosition(0, sizes.heightRow + 1)
+                    :SetTooltipFixedSize(widthScoreTooltip, heightScoreTooltip)
+                    :SetSize(widthScoreTooltip, heightScoreTooltip)
             end
         end
     end
