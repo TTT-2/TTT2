@@ -313,11 +313,6 @@ Ces éclats d'énergie peuvent frapper les gens à proximité.]]
 -- Radio
 L.radio_broken = "Votre Radio a été détruite !"
 
-L.radio_desc = [[
-Joue des sons pour distraire ou tromper.
-
-Placez la radio quelque part, ensuite jouez des sons depuis l'onglet Radio dans ce menu.]]
-
 -- Silenced pistol
 L.sipistol_name = "Pistolet Silencieux"
 
@@ -2799,3 +2794,9 @@ L.vehicle_enter = "Appuyez sur [{usekey}] pour entrer dans le véhicule"
 
 -- 2025-01-20
 --L.label_hud_show_team_name = "Enable showing team name next to role name"
+
+-- 2025-01-31
+--L.radio_desc = [[
+--Plays sounds to distract or deceive.
+--
+--Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]

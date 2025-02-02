@@ -313,11 +313,6 @@ L.polter_desc = [[
 -- Radio
 L.radio_broken = "你的收音机已被摧毁！"
 
-L.radio_desc = [[
-播放音效来误导或欺骗玩家。
-
-将收音机安放下来，然后用该页面的收音机菜单播放。]]
-
 -- Silenced pistol
 L.sipistol_name = "消音手枪"
 
@@ -2799,3 +2794,9 @@ L.label_player_role = "选择角色"
 
 -- 2025-01-20
 --L.label_hud_show_team_name = "Enable showing team name next to role name"
+
+-- 2025-01-31
+--L.radio_desc = [[
+--Plays sounds to distract or deceive.
+--
+--Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]

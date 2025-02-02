@@ -313,11 +313,6 @@ The energy bursts damage people in close proximity.]]
 -- Radio
 L.radio_broken = "Your Radio has been destroyed!"
 
-L.radio_desc = [[
-Plays sounds to distract or deceive.
-
-Place the radio somewhere, and then play sounds on it using the Radio tab in this menu.]]
-
 -- Silenced pistol
 L.sipistol_name = "Silenced Pistol"
 
@@ -2805,6 +2800,12 @@ L.help_rolelayering_enable = "The red and green border around the icon shows if 
 
 -- 2025-01-20
 L.label_hud_show_team_name = "Enable showing team name next to role name"
+
+-- 2025-01-31
+L.radio_desc = [[
+Plays sounds to distract or deceive.
+
+Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
 
 -- 2025-02-02
 L.tooltip_plyroles_over_time = "{number}. {rolename} ({teamname})"

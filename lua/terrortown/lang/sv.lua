@@ -313,11 +313,6 @@ Explosionerna skadar spelare i närheten.]]
 -- Radio
 L.radio_broken = "Din Radio har blivit förstörd!"
 
-L.radio_desc = [[
-Spelar upp distraherande eller bedragande ljud.
-
-Placera radion någonstans, och spela sedan upp ljud på den genom att använda Radio-fliken i den här menyn.]]
-
 -- Silenced pistol
 L.sipistol_name = "Ljuddämpad Pistol"
 
@@ -2805,3 +2800,9 @@ L.body_confirm_one = "{finder} bekräftade att {victim} har dött."
 
 -- 2025-01-20
 --L.label_hud_show_team_name = "Enable showing team name next to role name"
+
+-- 2025-01-31
+--L.radio_desc = [[
+--Plays sounds to distract or deceive.
+--
+--Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]

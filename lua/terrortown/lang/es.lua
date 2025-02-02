@@ -313,11 +313,6 @@ El daño de energía daña a las personas en corta distancia.]]
 -- Radio
 L.radio_broken = "¡Tu radio fue destruida!"
 
-L.radio_desc = [[
-Reproduce sonidos para distraer o confundir.
-
-Coloca la radio y luego reproduce sonidos en la pestaña de Radio en este menú.]]
-
 -- Silenced pistol
 L.sipistol_name = "Pistola Silenciada"
 
@@ -2805,3 +2800,9 @@ L.decoy_help_primary = "Colocar el señuelo"
 
 -- 2025-01-20
 --L.label_hud_show_team_name = "Enable showing team name next to role name"
+
+-- 2025-01-31
+--L.radio_desc = [[
+--Plays sounds to distract or deceive.
+--
+--Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]

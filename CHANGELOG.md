@@ -4,6 +4,12 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Fixed
+
+- Fixed new outlines' `OUTLINE_MODE_VISIBLE` and `OUTLINE_MODE_BOTH`
+
+## [v0.14.1b](https://github.com/TTT-2/TTT2/tree/v0.14.1b) (2025-02-01)
+
 ### Added
 
 - Added Korean translation (by @Kojap)
@@ -16,6 +22,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added option to enable team name next to role name on the HUD (by @milkwxter)
 - Added score event for winning with configurable role parameter (by @MrXonte)
 - Added ExplosiveSphereDamage game effect for easy calculation of explosion damage through walls (by @MrXonte)
+- Added support for outlines of different thickness (by @Wardenpotato)
 
 ### Fixed
 
@@ -41,6 +48,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed `markerVision`'s registry table being able to contain duplicate obsolete entries, thus fixing potential syncing issues with markers (by @TW1STaL1CKY)
 - Fixed issue in new Ammo dropping that could cause an error when dropping for modified weapon bases. (by @MrXonte)
 - Fixed C4 not showing the correct inflictor when the player is killed (by @TimGoll)
+- Fixed M16 Ironsight misalignment (by @SvveetMavis) 
+- Fixed outline interactions with certain weapon scopes (by @WardenPotato)
+- Fixed outlines not rendering uniformly (by @WardenPotato)
 
 ### Changed
 
@@ -63,6 +73,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Improved description of role layering (by @nike4613)
 - Improved the role layering menu by showing which role is enabled and which is disabled (by @TimGoll)
 - Reworked C4 damage calculation with new gameEffect ExplosiveSphereDamage (by @MrXonte)
+- Changed the amount the M16 zooms in (by @SvveetMavis)
 
 ## [v0.14.0b](https://github.com/TTT-2/TTT2/tree/v0.14.0b) (2024-09-20)
 

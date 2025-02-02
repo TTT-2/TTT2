@@ -313,11 +313,6 @@ L.polter_desc = [[
 -- Radio
 L.radio_broken = "Ваше Радіо знищено!"
 
-L.radio_desc = [[
-Відтворює звуки, щоб відвернути увагу гравців.
-
-Поставте Радіо десь неподалік, а потім відтворюйте на ньому звуки за допомогою відповідної вкладки.]]
-
 -- Silenced pistol
 L.sipistol_name = "Пістолет із глушником"
 
@@ -2805,3 +2800,9 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 
 -- 2025-01-20
 --L.label_hud_show_team_name = "Enable showing team name next to role name"
+
+-- 2025-01-31
+--L.radio_desc = [[
+--Plays sounds to distract or deceive.
+--
+--Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]

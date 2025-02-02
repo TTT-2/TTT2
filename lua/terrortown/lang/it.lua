@@ -313,11 +313,6 @@ Le scariche di energia danneggiano i giocatori nelle vicinanze.]]
 -- Radio
 L.radio_broken = "La tua Radio è stata distrutta!"
 
-L.radio_desc = [[
-Fa dei suoni per distrarre o ingannare.
-
-Piazza la radio da qualche parte, poi fai partire dei suoni dalla finestra Radio in questo menù.]]
-
 -- Silenced pistol
 L.sipistol_name = "Pistola silenziata"
 
@@ -2805,3 +2800,9 @@ L.decoy_help_primary = "Piazza un esca"
 
 -- 2025-01-20
 --L.label_hud_show_team_name = "Enable showing team name next to role name"
+
+-- 2025-01-31
+--L.radio_desc = [[
+--Plays sounds to distract or deceive.
+--
+--Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]

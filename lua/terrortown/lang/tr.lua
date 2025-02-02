@@ -313,11 +313,6 @@ Enerji patlamaları yakındaki insanlara zarar verir.]]
 -- Radio
 L.radio_broken = "Radyonuz yok edildi!"
 
-L.radio_desc = [[
-Dikkat dağıtmak veya kandırmak için sesler çıkarır.
-
-Radyoyu bir yere yerleştirin ve ardından bu menüdeki Radyo sekmesini kullanarak üzerindeki sesleri çalın.]]
-
 -- Silenced pistol
 L.sipistol_name = "Susturuculu Tabanca"
 
@@ -2793,3 +2788,9 @@ L.help_rolelayering_enable = "Simgenin etrafındaki kırmızı ve yeşil kenarl�
 
 -- 2025-01-20
 L.label_hud_show_team_name = "Rol adının yanında takım adını göstermeyi etkinleştir"
+
+-- 2025-01-31
+--L.radio_desc = [[
+--Plays sounds to distract or deceive.
+--
+--Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]

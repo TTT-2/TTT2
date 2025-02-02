@@ -313,11 +313,6 @@ L.polter_desc = [[
 -- Radio
 L.radio_broken = "ラジオが破壊された！"
 
-L.radio_desc = [[
-注意を逸らしたり欺くために音を再生できる機械。
-
-どこか適当な場所にラジオを置いてから、ショップメニュー内のラジオメニューから音を再生できます。]]
-
 -- Silenced pistol
 L.sipistol_name = "消音ピストル"
 
@@ -2802,3 +2797,9 @@ L.label_player_role = "役職選択"
 
 -- 2025-01-20
 --L.label_hud_show_team_name = "Enable showing team name next to role name"
+
+-- 2025-01-31
+--L.radio_desc = [[
+--Plays sounds to distract or deceive.
+--
+--Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]

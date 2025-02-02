@@ -308,11 +308,6 @@ L.polter_desc = [[
 -- Radio
 L.radio_broken = "라디오가 파괴되었습니다!"
 
-L.radio_desc = [[
-라디오는 주의를 분산시키거나 유인하는 소리를 재생합니다.
-
-아무 곳에나 설치해서, 라디오 메뉴를 열어 소리를 재생할 수 있습니다. ]]
-
 -- Silenced pistol
 L.sipistol_name = "소음 권총"
 
@@ -2802,3 +2797,9 @@ L.label_crosshair_size_gap = "크로스헤어 공간 배율"
 
 -- 2025-01-20
 --L.label_hud_show_team_name = "Enable showing team name next to role name"
+
+-- 2025-01-31
+--L.radio_desc = [[
+--Plays sounds to distract or deceive.
+--
+--Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
