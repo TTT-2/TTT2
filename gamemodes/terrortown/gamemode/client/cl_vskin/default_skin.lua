@@ -1,8 +1,6 @@
 -- @class SKIN
 -- @section default_skin
 
-local materialClose = Material("vgui/ttt/vskin/icon_close")
-local materialBack = Material("vgui/ttt/vskin/icon_back")
 local materialCollapseOpened = Material("vgui/ttt/vskin/icon_collapse_opened")
 local materialCollapseClosed = Material("vgui/ttt/vskin/icon_collapse_closed")
 local materialRhombus = Material("vgui/ttt/vskin/rhombus")
@@ -358,85 +356,6 @@ function SKIN:PaintFrameTTT2(panel, w, h)
         0.5 * sizes.header,
         colors.titleText,
         TEXT_ALIGN_CENTER,
-        TEXT_ALIGN_CENTER,
-        1
-    )
-end
-
----
--- @param Panel panel
--- @param number w
--- @param number h
--- @realm client
-function SKIN:PaintWindowCloseButton(panel, w, h)
-    local colorBackground = colors.accent
-    local colorText = ColorAlpha(colors.accentText, 150)
-    local shift = 0
-    local padding = 15
-
-    if not panel:IsEnabled() then
-        colorText = ColorAlpha(colors.accentText, 70)
-    elseif panel.Depressed or panel:IsSelected() then
-        colorBackground = colors.accentActive
-        colorText = ColorAlpha(colors.accentText, 200)
-        shift = 1
-    elseif panel.Hovered then
-        colorBackground = colors.accentHover
-        colorText = colors.accentText
-    end
-
-    drawBox(0, 0, w, h, colorBackground)
-    drawFilteredShadowedTexture(
-        padding,
-        padding + shift,
-        w - 2 * padding,
-        h - 2 * padding,
-        materialClose,
-        colorText.a,
-        colorText
-    )
-end
-
----
--- @param Panel panel
--- @param number w
--- @param number h
--- @realm client
-function SKIN:PaintWindowBackButton(panel, w, h)
-    local colorBackground = colors.accent
-    local colorText = ColorAlpha(colors.accentText, 150)
-    local shift = 0
-    local padding_w = 10
-    local padding_h = 15
-
-    if not panel:IsEnabled() then
-        colorText = ColorAlpha(colors.accentText, 70)
-    elseif panel.Depressed or panel:IsSelected() then
-        colorBackground = colors.accentActive
-        colorText = ColorAlpha(colors.accentText, 200)
-        shift = 1
-    elseif panel.Hovered then
-        colorBackground = colors.accentHover
-        colorText = colors.accentText
-    end
-
-    drawBox(0, 0, w, h, colorBackground)
-    drawFilteredShadowedTexture(
-        padding_w,
-        padding_h + shift,
-        h - 2 * padding_h,
-        h - 2 * padding_h,
-        materialBack,
-        colorText.a,
-        colorText
-    )
-    drawShadowedText(
-        TryT("button_menu_back"),
-        "DermaTTT2TitleSmall",
-        h - padding_w,
-        0.5 * h + shift,
-        colorText,
-        TEXT_ALIGN_LEFT,
         TEXT_ALIGN_CENTER,
         1
     )

@@ -49,6 +49,8 @@ AccessorFunc(PANEL, "m_iMinHeight", "MinHeight", FORCE_NUMBER)
 -- @realm client
 AccessorFunc(PANEL, "m_bBackgroundBlur", "BackgroundBlur", FORCE_BOOL)
 
+-- TODO refactor this, there can be lots removed
+
 ---
 -- @ignore
 function PANEL:Init()
@@ -219,27 +221,15 @@ function PANEL:OnClear() end
 function PANEL:InitButtons()
     -- add close button
     self.btnClose = vgui.Create("TTT2:DButton", self)
-    self.btnClose:SetText("")
-    self.btnClose:SetVisible(true)
-
-    self.btnClose.DoClick = function(button)
-        self:Close()
-    end
-
-    self.btnClose.Paint = function(panel, w, h)
-        derma.SkinHook("Paint", "WindowCloseButton", panel, w, h)
-    end
+        :SetIcon(Material("vgui/ttt/vskin/icon_close"))
+        :On("LeftClick", function()
+            self:Close()
+        end)
 
     -- add back button
     self.btnBack = vgui.Create("TTT2:DButton", self)
-    self.btnBack:SetText("")
-    self.btnBack:SetVisible(true)
-
-    self.btnBack.DoClick = function(button) end
-
-    self.btnBack.Paint = function(panel, w, h)
-        derma.SkinHook("Paint", "WindowBackButton", panel, w, h)
-    end
+        :SetText("button_menu_back")
+        :SetIcon(Material("vgui/ttt/vskin/icon_back"))
 end
 
 ---
@@ -313,9 +303,9 @@ function PANEL:CloseButtonClickOverride(fn)
         return
     end
 
-    self.btnClose.DoClick = function(button)
+    self.btnClose:On("LeftClick", function(button)
         fn(button)
-    end
+    end)
 end
 
 ---
