@@ -734,6 +734,8 @@ end
 -- @return boolean Returning true prevents the background from being drawn
 -- @realm client
 function PANEL:Paint(w, h)
+    derma.SkinHook("Paint", "Pre" .. self:GetPaintHookName(), self, w, h)
+
     if self:PaintBackground() then
         derma.SkinHook("Paint", "ColoredBoxTTT2", self, w, h)
     end
@@ -746,8 +748,7 @@ function PANEL:Paint(w, h)
         derma.SkinHook("Paint", "IconTTT2", self, w, h)
     end
 
-    -- Todo probably not needed anymore
-    derma.SkinHook("Paint", self:GetPaintHookName(), self, w, h)
+    derma.SkinHook("Paint", "Post" .. self:GetPaintHookName(), self, w, h)
 
     return true
 end
