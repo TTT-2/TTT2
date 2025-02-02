@@ -469,13 +469,15 @@ end
 -- Adds an icon to the panel. The icon can have a dropshadow and a fixed size.
 -- @note Horizontal text alignment is also applied to the icon.
 -- @param Material iconMaterial The icon material that should be added
--- @param[default=false] boolean isShadowed Set to true if a dropshadow is desired
+-- @param[default=DRAW_SHADOW_DISABLED] boolean isShadowed Set to enable/disable drop shadow
+-- @param[default=DRAW_ICON_SIMPLE] boolean isSimple Set to enable/disable icon coloring
 -- @param[default=32] number size The size in pixels
 -- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetIcon(icon, isShadowed, size)
+function PANEL:SetIcon(icon, isShadowed, isSimple, size)
     self.m_mIconMaterial = iconMaterial
-    self.m_bIconShadow = isShadowed or false
+    self.m_bIconShadow = isShadowed or DRAW_SHADOW_DISABLED
+    self.m_bIconSimple = isSimple or DRAW_ICON_SIMPLE
     self.m_nIconSize = size or 32
 
     return self
@@ -511,6 +513,13 @@ end
 -- @realm client
 function PANEL:GetIconSize()
     return self.m_nIconSize
+end
+
+-- Returns whether the icon is simple or has RGB colors.
+-- @return boolean Returns true if the icon is simple
+-- @realm client
+function PANEL:IsIconSimple()
+    return self.m_bIconSimple
 end
 
 ---
@@ -650,6 +659,10 @@ function PANEL:Paint(w, h)
 
     if self:HasText() then
         derma.SkinHook("Paint", "LabelTTT2", self, w, h)
+    end
+
+    if self:HasIcon() then
+        derma.SkinHook("Paint", "IconTTT2", self, w, h)
     end
 
     -- Todo probably not needed anymore

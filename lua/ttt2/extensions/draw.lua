@@ -12,6 +12,9 @@ end
 DRAW_SHADOW_ENABLED = true
 DRAW_SHADOW_DISABLED = true
 
+DRAW_ICON_SIMPLE = true
+DRAW_ICON_RGB = false
+
 local render = render
 local surface = surface
 local draw = draw

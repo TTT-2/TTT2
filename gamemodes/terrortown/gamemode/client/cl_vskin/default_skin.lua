@@ -218,6 +218,35 @@ function SKIN:PaintLabelTTT2(panel, w, h)
     end
 end
 
+---
+-- @ignore
+function SKIN:PaintIconTTT2(panel, w, h)
+    local color = panel:IsIconSimple() and panel:GetVSkinColor("text") or COLOR_WHITE
+    local sizeIcon = panel:GetVSkinDimension("sizeIncon")
+
+    if panel:HasTextShadow() then
+        drawFilteredShadowedTexture(
+            panel:GetVSkinDimension("posIconX"),
+            panel:GetVSkinDimension("posIconX"),
+            sizeIcon,
+            sizeIcon,
+            panel:GetIcon(),
+            color.a,
+            color
+        )
+    else
+        drawFilteredTexture(
+            panel:GetVSkinDimension("posIconX"),
+            panel:GetVSkinDimension("posIconX"),
+            sizeIcon,
+            sizeIcon,
+            panel:GetIcon(),
+            color.a,
+            color
+        )
+    end
+end
+
 -----------------------------------------------------------------
 
 ---
