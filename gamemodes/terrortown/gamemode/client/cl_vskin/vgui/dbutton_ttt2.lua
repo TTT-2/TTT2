@@ -115,11 +115,21 @@ function PANEL:OnRebuildLayout(w, h)
     -- if the panel is depressed, the text and icon should be shifted by one pixel
     if self:IsDepressed() or self:IsSelected() or self:GetToggle() then
         if self:HasIcon() then
-            self:ApplyVSkinDimension("posIconY", self:GetVSkinDimension("posIconY") - 1)
+            self:ApplyVSkinDimension("posIconY", self:GetVSkinDimension("posIconY") + 1)
         end
 
         if self:HasText() then
-            self:ApplyVSkinDimension("posTextY", self:GetVSkinDimension("posTextY") - 1)
+            self:ApplyVSkinDimension("posTextY", self:GetVSkinDimension("posTextY") + 1)
+        end
+
+        if self:HasDescription() then
+            local posY = self:GetVSkinDimension("posTextY")
+
+            for i = 1, #posY do
+                posY[i] = posY[i] + 1
+            end
+
+            self:ApplyVSkinDimension("posTextY", posY)
         end
     end
 end

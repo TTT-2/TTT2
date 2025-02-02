@@ -169,7 +169,7 @@ end
 
 ---
 -- @ignore
-function SKIN:PaintColoredBoxTTT2(panel, w, h)
+function SKIN:PaintColoredBox(panel, w, h)
     if panel:CornerRadius() then
         if panel:HasOutline() then
             local left, top, right, bottom = panel:GetOutline()
@@ -220,7 +220,7 @@ end
 
 ---
 -- @ignore
-function SKIN:PaintLabelTTT2(panel, w, h)
+function SKIN:PaintText(panel, w, h)
     if panel:HasTextShadow() then
         drawShadowedText(
             panel:GetTranslatedText(),
@@ -247,7 +247,46 @@ end
 
 ---
 -- @ignore
-function SKIN:PaintIconTTT2(panel, w, h)
+function SKIN:PaintDescription(panel, w, h)
+    local font = panel:GetFont()
+    local color = panel:GetVSkinColor("text")
+
+    local lines = panel:TranslatedDescriptionLines()
+    local posX = panel:GetVSkinDimension("posTextX")
+    local posY = panel:GetVSkinDimension("posTableDescriptionY")
+
+    local textAlignHorizonal = panel:GetHorizontalTextAlign()
+    local textAlignVerical = panel:GetVerticalTextAlign()
+
+    for i = 1, #lines do
+        if panel:HasTextShadow() then
+            drawShadowedText(
+                lines[i],
+                font,
+                posX,
+                posY[i],
+                color,
+                textAlignHorizonal,
+                textAlignVerical,
+                1 -- scale
+            )
+        else
+            drawSimpleText(
+                lines[i],
+                font,
+                posX,
+                posY[i],
+                color,
+                textAlignHorizonal,
+                textAlignVerical
+            )
+        end
+    end
+end
+
+---
+-- @ignore
+function SKIN:PaintIcon(panel, w, h)
     local color = panel:IsIconSimple() and panel:GetVSkinColor("text") or COLOR_WHITE
     local sizeIcon = panel:GetVSkinDimension("sizeIncon")
 

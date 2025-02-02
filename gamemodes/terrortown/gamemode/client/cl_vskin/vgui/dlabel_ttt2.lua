@@ -101,6 +101,16 @@ AccessorFunc(PANEL, "m_TranslatedText", "TranslatedText", FORCE_STRING, true)
 ---
 -- @accessor number
 -- @realm client
+AccessorFunc(PANEL, "m_TranslatedDescription", "TranslatedDescription", FORCE_STRING, true)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_TranslatedDescriptionLines", "TranslatedDescriptionLines", nil, true)
+
+---
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "m_nVerticalTextAlign", "VerticalTextAlign", FORCE_NUMBER, true)
 
 ---
@@ -163,13 +173,11 @@ function PANEL:Init()
     -- turn off the engine drawing
     self:SetPaintBackgroundEnabled(false)
 
-    -- set the default name for the paint hook
-    self:SetPaintHookName("LabelTTT2")
-
     -- set visual defaults
     self:SetPaintBackground(true)
     self:SetTall(20)
     self:SetFont("DermaTTT2Text")
+    self:SetDescriptionFont("DermaTTT2Text")
     self:SetTextAlign(TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     self:SetOutlineOpacity(200)
 
@@ -439,7 +447,7 @@ end
 -- SETTERS/GETTERS THAT SET BASIC PARAMETERS --
 
 ---
--- Sets the font of the label.
+-- Sets the font of the panel.
 -- @param string fontName The name of the font
 -- @return Panel Returns the panel itself
 -- @realm client
@@ -450,6 +458,27 @@ function PANEL:SetFont(fontName)
     self:InvalidateLayout()
 
     return self
+end
+
+---
+-- Sets the font of the description of the panel.
+-- @param string fontName The name of the font
+-- @return Panel Returns the panel itself
+-- @realm client
+function PANEL:SetDescriptionFont(fontName)
+    self.m_DescriptionFontName = fontName
+
+    self:InvalidateLayout()
+
+    return self
+end
+
+---
+-- Returns the name of the font used for the description
+-- @return string The description font name
+-- @realm client
+function PANEL:GetDescriptionFont()
+    return self.m_DescriptionFontName
 end
 
 ---
@@ -581,13 +610,13 @@ end
 -- @param string The text of a panel, can be a language identifier
 -- @param[opt] table params Translation params that should be added to the text
 -- @param[default=false] boolean translateParams Should the parameters be translated as well
--- @param[default=false] boolean isShadowed Should the Text be rendered with a shadow
+-- @param[default=false] boolean isShadowed Should the text be rendered with a shadow
 -- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:SetText(text, params, translateParams, isShadowed)
     self.m_Text = text
     self.m_TextParams = params
-    self.m_bTranslateParams = translateParams
+    self.m_bTranslateTextParams = translateParams
     self.m_bTextShadow = isShadowed
 
     return self
@@ -606,6 +635,39 @@ end
 -- @return boolean Returns true if text is added to the panel
 -- @realm client
 function PANEL:HasText()
+    return self.m_Text ~= nil
+end
+
+---
+-- Sets the description to a panel.
+-- @param string The description of a panel, can be a language identifier
+-- @param[opt] table params Translation params that should be added to the description
+-- @param[default=false] boolean translateParams Should the parameters be translated as well
+-- @param[default=false] boolean isShadowed Should the description be rendered with a shadow
+-- @return Panel Returns the panel itself
+-- @realm client
+function PANEL:SetDescription(description, params, translateParams, isShadowed)
+    self.m_Description = description
+    self.m_DescriptionParams = params
+    self.m_bTranslateDescriptionParams = translateParams
+    self.m_bDescriptionShadow = isShadowed
+
+    return self
+end
+
+---
+-- Gets the description set to the panel.
+-- @return string Rerturns the attached description
+-- @realm client
+function PANEL:GetDescription()
+    return self.m_Text or ""
+end
+
+---
+-- Checks whether a panel has any description set to it.
+-- @return boolean Returns true if description is added to the panel
+-- @realm client
+function PANEL:HasDescription()
     return self.m_Text ~= nil
 end
 
@@ -630,7 +692,7 @@ end
 -- @return boolean True if drop shadow is enabled
 -- @realm client
 function PANEL:ShouldTranslateTextParams()
-    return self.m_bTranslateParams or LANG_DONT_TRANSLATE_PARAMS
+    return self.m_bTranslateTextParams or LANG_DONT_TRANSLATE_PARAMS
 end
 
 ---
@@ -737,15 +799,19 @@ function PANEL:Paint(w, h)
     derma.SkinHook("Paint", "Pre" .. self:GetPaintHookName(), self, w, h)
 
     if self:PaintBackground() then
-        derma.SkinHook("Paint", "ColoredBoxTTT2", self, w, h)
+        derma.SkinHook("Paint", "ColoredBox", self, w, h)
     end
 
     if self:HasText() then
-        derma.SkinHook("Paint", "LabelTTT2", self, w, h)
+        derma.SkinHook("Paint", "Text", self, w, h)
+    end
+
+    if self:HasDescription() then
+        derma.SkinHook("Paint", "Description", self, w, h)
     end
 
     if self:HasIcon() then
-        derma.SkinHook("Paint", "IconTTT2", self, w, h)
+        derma.SkinHook("Paint", "Icon", self, w, h)
     end
 
     derma.SkinHook("Paint", "Post" .. self:GetPaintHookName(), self, w, h)
@@ -787,17 +853,25 @@ end
 -- @hook
 -- @realm client
 function PANEL:OnTranslationUpdate()
-    if not self:HasText() then
-        return
+    if self:HasText() then
+        self:SetTranslatedText(
+            LANG.GetDynamicTranslation(
+                self:GetText(),
+                self:GetTextParams(),
+                self:ShouldTranslateTextParams()
+            )
+        )
     end
 
-    self:SetTranslatedText(
-        LANG.GetDynamicTranslation(
-            self:GetText(),
-            self:GetTextParams(),
-            self:ShouldTranslateTextParams()
+    if self:HasDescription() then
+        self:SetTranslatedDescription(
+            LANG.GetDynamicTranslation(
+                self:GetDescription(),
+                self:GetDescriptionParams(),
+                self:ShouldTranslateDescriptionParams()
+            )
         )
-    )
+    end
 end
 
 ---
@@ -862,8 +936,32 @@ function PANEL:OnRebuildLayout(w, h)
         widthText, _ = draw.GetTextSize(textTranslated, self:GetFont())
     end
 
+    -- to simplify things, size to contentsX ignores the description text
+    local descriptionLines, heightDescription
+
+    if self:HasDescription() then
+        descriptionLines, _, heightDescription =
+            draw.GetWrappedText(self:GetTranslatedDescription(), w, self:GetDescriptionFont())
+
+        self:SetTranslatedDescriptionLines(descriptionLines)
+    end
+
     if self:GetFitToContentY() then
-        h = math.max(sizeIcon + 2 * marginIcon, heightText + 2 * padding)
+        local enlarge = 0
+
+        if self:HasText() then
+            enlarge = heightText + 2 * padding
+        end
+
+        if self:HasDescription() then
+            enlarge = enlarge + heightDescription + padding
+        end
+
+        if self:HasIcon() then
+            enlarge = math.max(enlarge, sizeIcon + 2 * marginIcon)
+        end
+
+        h = h + enlarge
 
         self:SetTall(h)
     end
@@ -872,7 +970,7 @@ function PANEL:OnRebuildLayout(w, h)
     local hor = self:GetHorizontalTextAlign()
     local ver = self:GetVerticalTextAlign()
 
-    local posTextX, posTextY
+    local posTextX, posTextY, posDescriptionY
 
     if hor == TEXT_ALIGN_LEFT then
         if self:HasIcon() and self:HasText() then
@@ -911,10 +1009,28 @@ function PANEL:OnRebuildLayout(w, h)
         posTextY = h - padding
     end
 
+    if self:HasDescription() then
+        -- move text out of the way
+        posTextY = posTextY - 0.5 * (heightDescription + padding + heightText)
+        posDescriptionY = {}
+
+        local heightDescriptionLine, _ =
+            draw.GetTextSize(descriptionLines[i], self:GetDescriptionFont())
+
+        for i = 1, #descriptionLines do
+            posDescriptionY[i] = posTextY + heightText + padding + i * heightDescriptionLine
+        end
+    end
+
     -- APPLY CALCULATED SIZES AND POSITIONS
     if self:HasText() then
         self:ApplyVSkinDimension("posTextX", posTextX)
         self:ApplyVSkinDimension("posTextY", posTextY)
+    end
+
+    if self:HasDescription() then
+        self:ApplyVSkinDimension("posTextX", posTextX)
+        self:ApplyVSkinDimension("posTableDescriptionY", posDescriptionY)
     end
 
     if self:HasIcon() then
