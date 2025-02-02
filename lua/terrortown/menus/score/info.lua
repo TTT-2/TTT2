@@ -4,69 +4,42 @@ local TryT = LANG.TryTranslation
 local ParT = LANG.GetParamTranslation
 local IsKarmaEnabled = KARMA.IsEnabled
 
-local function GetPanelTextSize(pnl) --todo move to perform layout
-    surface.SetFont(pnl:GetFont())
-    return surface.GetTextSize(TryT(pnl:GetText()))
-end
-
 local function MakePlayerGenericTooltip(parent, ply, items, title)
-    local initTitleHeight = 25
-    local lineHeight = 20
-    local iconOffset = (
-        (lineHeight - 2 * math.Round(0.1 * lineHeight)) + 4 * math.Round(0.1 * lineHeight)
-    )
-
     local boxLayout = vgui.Create("DIconLayout", parent)
     boxLayout:Dock(FILL)
 
-    local titleBox = boxLayout
-        :Add("TTT2:DPanel")
+    local titleBox = boxLayout:Add("TTT2:DPanel")
+    titleBox
         :SetText(title)
-        :SetTextAlign(TEXT_ALIGN_LEFT)
-        :SetPaintHookName("ColoredTextBoxTTT2")
+        :SetPadding(3) -- todo verify this value
+        :SetHorizontalTextAlign(TEXT_ALIGN_LEFT)
+        :SetFitToContentX(true)
+        :SetFitToContentY(true)
+        :EnableCornerRadius(true) --todo does this need a radius? probably not even a background color?
 
-    local lengthLongestLine, titleHeight = GetPanelTextSize(titleBox) --todo: move to perform layout
-    local height = math.max(initTitleHeight, titleHeight)
-
-    titleBox:SetHeight(height)
+    local lengthLongestLine = titleBox:GetWide()
+    local height = titleBox:GetTall() -- todo at this point the height is probably unknown? manually call perform layout?
 
     for i = 1, #items do
         local thing = items[i]
 
         local plyRow = boxLayout:Add("TTT2:DPanel")
-
-        if thing.title then
-            plyRow:SetText(thing.title)
-        end
-
-        local rowWidth, rowHeight = GetPanelTextSize(plyRow) --todo move to perform layout
-
-        if thing.iconMaterial then
-            plyRow:SetIcon(thing.iconMaterial)
-            rowWidth = rowWidth + iconOffset
-        end
-
-        if rowWidth > lengthLongestLine then
-            lengthLongestLine = rowWidth
-        end
-
-        rowHeight = math.max(lineHeight, rowHeight)
-
         plyRow
-            :SetHeight(rowHeight)
-            :SetTextAlign(TEXT_ALIGN_LEFT)
-            :SetPaintHookName("ColoredTextBoxTTT2")
+            :SetText(thing.title, thing.params, LANG_DO_TRANSLATE_PARAMS)
+            :SetIcon(thing.iconMaterial)
+            :SetPadding(3) -- todo verify this value
+            :SetHorizontalTextAlign(TEXT_ALIGN_LEFT)
+            :SetFitToContentX(true)
+            :SetFitToContentY(true)
+            :EnableCornerRadius(true) --todo does this need a radius? probably not even a background color?
 
-        height = height + rowHeight
+        height = height + plyRow:GetTall() -- todo at this point the height is probably unknown? manually call perform layout?
     end
-
-    -- add some padding to the right margin
-    lengthLongestLine = lengthLongestLine + iconOffset
 
     -- we found the longest line, now make all entries that long
     local children = boxLayout:GetChildren()
     for i = 1, #children do
-        children[i]:SetWidth(lengthLongestLine)
+        children[i]:SetWide(lengthLongestLine)
     end
 
     return lengthLongestLine, height
@@ -129,8 +102,8 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
         teamInfoBox[numColumn] = playerCoumns:Add("TTT2:DPanel")
         teamInfoBox[numColumn]
             :SetSize(widthColumn, maxHeightColumn)
-            :Attach("ColorLighten", 30)
-            :SetPaintHookName("ColoredBoxTTT2")
+            :SetColorShift(30)
+            :EnableCornerRadius(true)
 
         local teamPlayersList = columnData[numColumn]
         local teamNamesList = columnTeams[numColumn]
@@ -149,14 +122,14 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
             local teamBox = columnBox:Add("TTT:DPanel")
             teamBox
-                :Attach("ColorLighten", 15)
-                :SetSize(
+                :SetSize( -- todo look into auto rescale with perform layout
                     widthColumn,
                     sizes.heightTitleRow
                         + amountPly * sizes.heightRow
                         + (amountPly + 1) * sizes.paddingSmall
                 )
-                :SetPaintHookName("ColoredTextBoxTTT2")
+                :SetColorShift(15)
+                :EnableCornerRadius(true)
 
             local teamPlayerBox = vgui.Create("DIconLayout", teamBox)
             teamPlayerBox:SetSpaceY(sizes.paddingSmall)
@@ -168,8 +141,8 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                 :SetColor(colorTeam)
                 :SetText(teamNamesList[numTeam])
                 :SetFont("DermaTTT2TextLarger")
+                :SetHorizontalTextAlign(TEXT_ALIGN_LEFT)
                 :SetIcon(teamData.iconMaterial)
-                :SetPaintHookName("ColoredTextBoxTTT2")
 
             for numPly = 1, amountPly do
                 local ply = plys[numPly]
@@ -186,14 +159,14 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
                 local roleBucket = {}
                 local plyRoles = CLSCORE.eventsPlayerRoles[ply.sid64] or {}
+
                 for i = 1, #plyRoles do
                     local plyRole = plyRoles[i]
                     local roleData = roles.GetByIndex(plyRole.role)
 
                     roleBucket[#roleBucket + 1] = {
-                        title = tostring(i) .. ". " .. TryT(roleData.name) .. " (" .. TryT(
-                            plyRole.team
-                        ) .. ")",
+                        title = "tooltip_plyroles_over_time",
+                        params = { number = i, rolename = roleData.name, teamname = plyRole.team },
                         iconMaterial = roleData.iconMaterial,
                     }
                 end
@@ -207,11 +180,11 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                 local plyNameBox = plyRow:Add("TTT2:DPanel")
                 plyNameBox
                     :SetSize(widthName, sizes.heightRow)
-                    :Attach("ColorLighten", 15)
+                    :SetColorShift(15)
                     :SetText(ply.nick .. ((showDeath and not ply.alive) and " (†)" or ""))
-                    :SetTextAlign(TEXT_ALIGN_LEFT)
+                    :SetHorizontalTextAlign(TEXT_ALIGN_LEFT)
                     :SetIcon(roles.GetByIndex(ply.role).iconMaterial)
-                    :SetPaintHookName("ColoredTextBoxTTT2")
+                    :EnableCornerRadius(true)
                     :SetTooltipPanel(plyRolesTooltipPanel)
                     :SetTooltipFixedPosition(0, sizes.heightRow + 1)
                     :SetTooltipFixedSize(widthRolesTooltip, heightRolesTooltip)
@@ -247,10 +220,10 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                         :SetText(CLSCORE.eventsInfoKarma[ply.sid64] or 0)
                         :SetFont("DermaTTT2CatHeader")
                         :SetTooltip("tooltip_karma_gained") --TODO set tooltip + settooltippanel?
+                        :EnableCornerRadius(true)
                         :SetTooltipPanel(plyKarmaTooltipPanel)
                         :SetTooltipFixedPosition(0, sizes.heightRow + 1)
                         :SetTooltipFixedSize(widthKarmaTooltip, heightKarmaTooltip)
-                        :SetPaintHookName("ColoredTextBoxTTT2")
 
                     plyKarmaTooltipPanel:SetSize(widthKarmaTooltip, heightKarmaTooltip)
                 end
@@ -261,8 +234,8 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                     :SetColor(colorTeamDark)
                     :SetText(CLSCORE.eventsInfoScores[ply.sid64] or 0)
                     :SetFont("DermaTTT2CatHeader")
+                    :EnableCornerRadius(true)
                     :SetTooltip("tooltip_score_gained")
-                    :SetPaintHookName("ColoredTextBoxTTT2")
 
                 local plyScoreTooltipPanel = vgui.Create("TTT2:DPanel")
 
@@ -337,24 +310,24 @@ function CLSCOREMENU:Populate(parent)
     winBox
         :SetColor(CLSCORE.eventsInfoTitleColor)
         :SetSize(sizes.widthMainArea, sizes.heightHeaderPanel)
-        :SetText(CLSCORE.eventsInfoTitleText)
+        :SetText(CLSCORE.eventsInfoTitleText, nil, nil, DRAW_SHADOW_ENABLED)
         :SetFont("DermaTTT2TextHuge")
-        :SetPaintHookName("ColoredTextBoxTTT2")
+        :EnableCornerRadius(true)
 
     -- SWITCHER BETWEEN ROUND BEGIN AND ROUND END
-    local buttonBox = frameBoxes
-        :Add("TTT2:DPanel")
+    local buttonBox = frameBoxes:Add("TTT2:DPanel")
+    buttonBox
         :SetSize(sizes.widthMainArea, sizes.heightTopButtonPanel + 2 * sizes.padding)
         :DockPadding(0, sizes.padding, 0, sizes.padding)
 
     local buttonBoxRow = vgui.Create("DIconLayout", buttonBox)
     buttonBoxRow:Dock(FILL)
 
-    local buttonBoxRowLabel = buttonBoxRow
-        :Add("TTT2:DLabel")
+    local buttonBoxRowLabel = buttonBoxRow:Add("TTT2:DLabel")
+    buttonBoxRowLabel
         :SetSize(sizes.widthTopLabel, sizes.heightTopButtonPanel)
         :SetText("label_show_roles")
-        :SetPaintHookName("LabelRightTTT2")
+        :SetHorizontalTextAlign(TEXT_ALIGN_RIGHT)
 
     local buttonBoxRowPanel = buttonBoxRow:Add("TTT2:DPanel")
     buttonBoxRowPanel:SetSize(2 * sizes.widthTopButton + sizes.padding, sizes.heightTopButtonPanel)

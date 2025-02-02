@@ -9,6 +9,9 @@ if SERVER then
     return -- the rest of the draw library is client only
 end
 
+DRAW_SHADOW_ENABLED = true
+DRAW_SHADOW_DISABLED = true
+
 local render = render
 local surface = surface
 local draw = draw

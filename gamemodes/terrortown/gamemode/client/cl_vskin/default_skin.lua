@@ -168,6 +168,59 @@ function SKIN:UpdatedVSkin()
 end
 
 ---
+-- @ignore
+function SKIN:PaintColoredBoxTTT2(panel, w, h)
+    if panel:CornerRadius() then
+        drawBox(0, 0, w, h, panel:GetVSkinColor("background"))
+
+        if panel:HasFlashColor() then
+            local colorFlash = panel:GetVSkinColor("flash")
+            colorFlash.a = math.Round(15 * (math.sin((CurTime() % 2 - 1) * math.pi) + 1.1))
+
+            drawBox(0, 0, w, h, colorFlash)
+        end
+    else
+        drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel:GetVSkinColor("background"))
+
+        if panel:HasFlashColor() then
+            local colorFlash = panel:GetVSkinColor("flash")
+            colorFlash.a = math.Round(15 * (math.sin((CurTime() % 2 - 1) * math.pi) + 1.1))
+
+            drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorFlash)
+        end
+    end
+end
+
+---
+-- @ignore
+function SKIN:PaintLabelTTT2(panel, w, h)
+    if panel:HasTextShadow() then
+        drawShadowedText(
+            panel:GetTranslatedText(),
+            panel:GetFont(),
+            panel:GetVSkinDimension("posTextX"),
+            panel:GetVSkinDimension("posTextY"),
+            panel:GetVSkinColor("text"),
+            panel:GetHorizontalTextAlign(),
+            panel:GetVerticalTextAlign(),
+            1 -- scale
+        )
+    else
+        drawSimpleText(
+            panel:GetTranslatedText(),
+            panel:GetFont(),
+            panel:GetVSkinDimension("posTextX"),
+            panel:GetVSkinDimension("posTextY"),
+            panel:GetVSkinColor("text"),
+            panel:GetHorizontalTextAlign(),
+            panel:GetVerticalTextAlign()
+        )
+    end
+end
+
+-----------------------------------------------------------------
+
+---
 -- Draws the @{SKIN}'s frame
 -- @param Panel panel
 -- @param number w
@@ -898,40 +951,6 @@ end
 -- @param number w
 -- @param number h
 -- @realm client
-function SKIN:PaintLabelTTT2(panel, w, h)
-    drawSimpleText(
-        TryT(panel:GetText()),
-        panel:GetFont(),
-        0,
-        0.5 * h,
-        utilGetChangedColor(colors.default, 40),
-        TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_CENTER
-    )
-end
-
----
--- @param Panel panel
--- @param number w
--- @param number h
--- @realm client
-function SKIN:PaintLabelRightTTT2(panel, w, h)
-    drawSimpleText(
-        TryT(panel:GetText()),
-        panel:GetFont(),
-        w,
-        0.5 * h,
-        utilGetChangedColor(colors.default, 40),
-        TEXT_ALIGN_RIGHT,
-        TEXT_ALIGN_CENTER
-    )
-end
-
----
--- @param Panel panel
--- @param number w
--- @param number h
--- @realm client
 function SKIN:PaintFormLabelTTT2(panel, w, h)
     local colorText = colors.settingsText
     local colorBox = colors.settingsBox
@@ -1165,68 +1184,6 @@ function SKIN:PaintComboBoxTTT2(panel, w, h)
     )
 end
 
----
--- @param Panel panel
--- @param number w
--- @param number h
--- @realm client
-function SKIN:PaintColoredTextBoxTTT2(panel, w, h)
-    local colorBackground = panel:GetColor() or colors.background
-    local colorLightenAmount = panel:GetAttached("ColorLighten")
-
-    if colorLightenAmount then
-        colorBackground = utilGetChangedColor(colorBackground, colorLightenAmount)
-    end
-
-    local colorText = utilGetDefaultColor(colorBackground)
-    local align = panel:GetTextAlign()
-    local hasIcon = panel:HasIcon()
-    local pad = mathRound(0.1 * h)
-    local sizeIcon = h - 2 * pad
-
-    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
-
-    if panel:HasFlashColor() then
-        local colorFlash = table.Copy(colorText)
-        colorFlash.a = math.Round(15 * (math.sin((CurTime() % 2 - 1) * math.pi) + 1.1))
-
-        drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorFlash)
-    end
-
-    drawShadowedText(
-        TryT(panel:GetText()),
-        panel:GetFont(),
-        (align == TEXT_ALIGN_CENTER) and (0.5 * w)
-            or (hasIcon and (sizeIcon + 4 * pad) or (2 * pad)),
-        0.5 * h,
-        colorText,
-        align,
-        TEXT_ALIGN_CENTER,
-        1
-    )
-
-    if hasIcon then
-        drawFilteredShadowedTexture(pad, pad, sizeIcon, sizeIcon, panel:GetIcon(), 255, colorText)
-    end
-end
-
----
--- @param Panel panel
--- @param number w
--- @param number h
--- @realm client
-function SKIN:PaintColoredBoxTTT2(panel, w, h)
-    local colorBackground = panel:GetColor() or colors.background
-    local colorLightenAmount = panel:GetAttached("ColorLighten")
-
-    if colorLightenAmount then
-        colorBackground = utilGetChangedColor(colorBackground, colorLightenAmount)
-    end
-
-    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
-end
-
----
 -- @param Panel panel
 -- @param number w
 -- @param number h

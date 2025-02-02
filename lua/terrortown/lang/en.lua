@@ -2805,3 +2805,6 @@ L.help_rolelayering_enable = "The red and green border around the icon shows if 
 
 -- 2025-01-20
 L.label_hud_show_team_name = "Enable showing team name next to role name"
+
+-- 2025-02-02
+L.tooltip_plyroles_over_time = "{number}. {rolename} ({teamname})"

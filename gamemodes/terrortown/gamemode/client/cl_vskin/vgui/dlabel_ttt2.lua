@@ -17,16 +17,9 @@
 --   OnMiddleClick
 --   OnDoubleClick
 --   OnDoubleClickInternal
-
-CONTENT_ALIGN_BOTTOM_LEFT = 1
-CONTENT_ALIGN_BOTTOM_CENTER = 2
-CONTENT_ALIGN_BOTTOM_RIGHT = 3
-CONTENT_ALIGN_CENTER_LEFT = 4
-CONTENT_ALIGN_CENTER = 5
-CONTENT_ALIGN_CENTER_RIGHT = 6
-CONTENT_ALIGN_TOP_LEFT = 7
-CONTENT_ALIGN_TOP_CENTER = 8
-CONTENT_ALIGH_TOP_RIGHT = 9
+--   OnVSkinUpdate
+--   OnTranslationUpdate
+--   OnRebuildLayout
 
 local PANEL = {}
 
@@ -43,7 +36,7 @@ AccessorFunc(PANEL, "m_bDoubleClicking", "DoubleClickingEnabled", FORCE_BOOL_IS,
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bAutoStretchVertical", "AutoStretchVerticalEnabled", FORCE_BOOL_IS, true)
+AccessorFunc(PANEL, "m_bAutoStretchVertical", "AutoStretchVerticalEnabled", FORCE_BOOL_IS, true) -- ?? do we use this anywhere?
 
 ---
 -- @accessor boolean
@@ -53,7 +46,7 @@ AccessorFunc(PANEL, "m_bIsMenuComponent", "IsMenu", FORCE_BOOL) -- ??? needed in
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bBackground", "PaintBackground", FORCE_BOOL) -- ??? needed in TTT2:DButton?
+AccessorFunc(PANEL, "m_bPaintBackground", "PaintBackground", FORCE_BOOL)
 
 ---
 -- @accessor boolean
@@ -76,11 +69,6 @@ AccessorFunc(PANEL, "m_bDepressed", "Depressed", FORCE_BOOL_IS)
 AccessorFunc(PANEL, "m_PaintHookName", "PaintHookName", FORCE_STRING, true)
 
 ---
--- @accessor table
--- @realm client
-AccessorFunc(PANEL, "m_TextParams", "TextParams", nil, true)
-
----
 -- @accessor number
 -- @realm client
 AccessorFunc(PANEL, "m_nTextAlign", "TextAlign", FORCE_NUMBER, true)
@@ -90,9 +78,51 @@ AccessorFunc(PANEL, "m_nTextAlign", "TextAlign", FORCE_NUMBER, true)
 -- @realm client
 AccessorFunc(PANEL, "m_cColor", "Color", FORCE_COLOR, true)
 
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_nColorShift", "ColorShift", FORCE_NUMBER, true)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_TranslatedText", "TranslatedText", FORCE_STRING, true)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_nVerticalTextAlign", "VerticalTextAlign", FORCE_NUMBER, true)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_nHorizontalTextAlign", "HorizontalTextAlign", FORCE_NUMBER, true)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_nVerticalTextAlign", "VerticalTextAlign", FORCE_NUMBER, true)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_nPadding", "Padding", FORCE_NUMBER, true)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_bFitToContentX", "FitToContentX", FORCE_BOOL, true)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_bFitToContentY", "FitToContentY", FORCE_BOOL, true)
+
 -- data attached to the panel is put in its own scope
 PANEL._eventListeners = {}
 PANEL._attached = {}
+PANEL._vskinColors = {}
+PANEL._vskinDimension = {}
 PANEL._tooltip = {}
 
 ---
@@ -112,14 +142,15 @@ function PANEL:Init()
 
     -- turn off the engine drawing
     self:SetPaintBackgroundEnabled(false)
-    self:SetPaintBorderEnabled(false)
 
     -- set the default name for the paint hook
     self:SetPaintHookName("LabelTTT2")
 
     -- set visual defaults
+    self:SetPaintBackground(true)
     self:SetTall(20)
     self:SetFont("DermaTTT2Text")
+    self:SetTextAlign(TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
     -- set the defaults for the tooltip
     self:SetTooltipFixedPosition(nil)
@@ -308,11 +339,53 @@ function PANEL:GetAttached(identifier)
 end
 
 ---
--- @ignore
-function PANEL:Paint(w, h)
-    derma.SkinHook("Paint", self:GetPaintHookName(), self, w, h)
+-- Applies a vskin color. VSkin colors are updated on vskin change and are then
+-- cached for further use. They are set in @{OnVSkinUpdate}.
+-- @param string identifier A unique identifer with the name of the color
+-- @param Color color The color that is set here
+-- @return Color Returns the added color as a pass-through
+-- @internal
+-- @realm client
+function PANEL:ApplyVSkinColor(identifier, color)
+    -- the color is copied here to make sure that any modifications to that
+    -- color won't change anything downstram
+    self._vskinColor[identifier] = table.Copy(color)
 
-    return true
+    return color
+end
+
+---
+-- Returns the defined vSkin color for that identifier.
+-- @param string identifier A unique identifer with the name of the color
+-- @return Color The vskin color for that identifier
+-- @imternal
+-- @realm client
+function PANEL:GetVSkinColor(identifier)
+    return self._vskinColor[identifier]
+end
+
+---
+-- Applies a vskin dimension. VSkin dimensions are updated on layout rebuilt and are then
+-- cached for further use. They are set in @{OnVSkinUpdate}.
+-- @param string identifier A unique identifer with the name of the dimension
+-- @param number dimension The dimension that us set here
+-- @return number Returns the added dimension as a pass-through
+-- @internal
+-- @realm client
+function PANEL:ApplyVSkinDimension(identifier, dimension)
+    self._vskinDimension[identifier] = dimension
+
+    return dimension
+end
+
+---
+-- Returns the defined vSkin color for that identifier.
+-- @param string identifier A unique identifer with the name of the dimension
+-- @return dimension The vskin dimension for that identifier
+-- @imternal
+-- @realm client
+function PANEL:GetVSkinDimension(identifier)
+    return self._vskinDimension[identifier]
 end
 
 -- SET THE PRIMARY TO THE DEPENDENT --
@@ -353,7 +426,7 @@ function PANEL:SetFont(fontName)
     self.m_FontName = fontName
 
     self:SetFontInternal(self.m_FontName)
-    self:ApplySchemeSettings()
+    self:InvalidateLayout()
 
     return self
 end
@@ -380,14 +453,6 @@ function PANEL:IsEnabled()
 end
 
 ---
--- Returns if a label has text params set.
--- @return boolean Returns true if a label has text params
--- @realm client
-function PANEL:HasTextParams()
-    return self.m_TextParams ~= nil
-end
-
----
 -- Toggles the state of the panel.
 -- @realm client
 function PANEL:Toggle()
@@ -402,6 +467,7 @@ end
 
 ---
 -- Adds an icon to the panel. The icon can have a dropshadow and a fixed size.
+-- @note Horizontal text alignment is also applied to the icon.
 -- @param Material iconMaterial The icon material that should be added
 -- @param[default=false] boolean isShadowed Set to true if a dropshadow is desired
 -- @param[default=32] number size The size in pixels
@@ -435,7 +501,7 @@ end
 -- Returns if the icon should have a drop shadow, nil if not set.
 -- @return boolean|nil True if drop shadow is enabled
 -- @realm client
-function PANEL:IsIconShadowed()
+function PANEL:HasIconShadow()
     return self.m_bIconShadow
 end
 
@@ -467,15 +533,289 @@ function PANEL:HasFlashColor()
     return self.m_bEnableFlashColor or false
 end
 
+---
+-- Sets the text alignment in both directions.
+-- @param number horizontal The horizontal text alignment
+-- @param number vertical The vertical text alignment
+-- @return Panel Returns the panel itself
+-- @realm client
+function PANEL:SetTextAlign(horizontal, vertical)
+    self:SetHorizontalTextAlign(horizontal)
+    self:SetVertialTextAlign(vertical)
+
+    return self
+end
+
+---
+-- Sets the text to a panel.
+-- @param string The text of a panel, can be a language identifier
+-- @param[opt] table params Translation params that should be added to the text
+-- @param[default=false] boolean translateParams Should the parameters be translated as well
+-- @param[default=false] boolean isShadowed Should the Text be rendered with a shadow
+-- @return Panel Returns the panel itself
+-- @realm client
+function PANEL:SetText(text, params, translateParams, isShadowed)
+    self.m_Text = text
+    self.m_TextParams = params
+    self.m_bTranslateParams = translateParams
+    self.m_bTextShadow = isShadowed
+
+    return self
+end
+
+---
+-- Gets the text set to the panel.
+-- @return string Rerturns the attached text
+-- @realm client
+function PANEL:GetText()
+    return self.m_Text or ""
+end
+
+---
+-- Checks whether a panel has any text set to it.
+-- @return boolean Returns true if text is added to the panel
+-- @realm client
+function PANEL:HasText()
+    return self.m_Text ~= nil
+end
+
+---
+-- Returns if a panel has text params set.
+-- @return boolean Returns true if a label has text params
+-- @realm client
+function PANEL:GetTextParams()
+    return self.m_TextParams or {}
+end
+
+---
+-- Returns if a panel has text params set.
+-- @return boolean Returns true if a label has text params
+-- @realm client
+function PANEL:HasTextParams()
+    return self.m_TextParams ~= nil
+end
+
+---
+-- Returns if the icon should have a drop shadow.
+-- @return boolean True if drop shadow is enabled
+-- @realm client
+function PANEL:ShouldTranslateTextParams()
+    return self.m_bTranslateParams or LANG_DONT_TRANSLATE_PARAMS
+end
+
+---
+-- Returns if the text should have a drop shadow.
+-- @return boolean True if drop shadow is enabled
+-- @realm client
+function PANEL:HasTextShadow()
+    return self.m_bTextShadow or false
+end
+
+---
+-- Enables a corner radius. If set to false, the box is a normal rectange, if set to true, the
+-- box has rounded corners.
+-- @note Backgroun drawing has to be enabled.
+-- @param boolean state Set to true to enable corner radius
+-- @return Panel Returns the panel itself
+-- @realm client
+function PANEL:EnableCornerRadius(state)
+    self.m_bCornerRadius = state
+
+    return self
+end
+
+---
+-- Checks whether this panel has corner radius enabled.
+-- @return boolean Returns true if the corner radius is enabled
+-- @realm client
+function PANEL:HasCornerRadius()
+    return self.m_bCornerRadius or false
+end
+
+
 -- HOOKS DEFINED IN THE ENGINE --
 
 ---
--- Called whenever the panel should apply its scheme (colors, fonts, style). It is called
--- a few frames after panel's creation once.
--- @ref https://wiki.facepunch.com/gmod/PANEL:ApplySchemeSettings
+-- Called every frame to paint the element.
+-- @note This hook will not run if the panel is completely off the screen, and will still run if 
+-- any parts of the panel are still on screen.
+-- @param number w The panel's width
+-- @param number h The panel's height
+-- @return boolean Returning true prevents the background from being drawn
+-- @realm client
+function PANEL:Paint(w, h)
+    if self:PaintBackground() then
+        derma.SkinHook("Paint", "ColoredBoxTTT2", self, w, h)
+    end
+
+    if self:HasText() then
+        derma.SkinHook("Paint", "LabelTTT2", self, w, h)
+    end
+
+    -- Todo probably not needed anymore
+    derma.SkinHook("Paint", self:GetPaintHookName(), self, w, h)
+
+    return true
+end
+
+---
+-- Called whenever the panel should apply its vskin. It is called
+-- on perform layout.
 -- @hook
 -- @realm client
-function PANEL:ApplySchemeSettings() end
+function PANEL:OnVSkinUpdate()
+    local colorBackground = self:ApplyVSkinColor(
+        "background",
+        util.GetChangedColor(self:GetColor() or vskin.GetBackgroundColor(), self:GetColorShift())
+    )
+    local colorText = self:ApplyVSkinColor("text", util.GetDefaultColor(colorBackground))
+    local colorFlash = self:ApplyVSkinColor("flash", colorText)
+end
+
+---
+-- Called whenever the panel should retranslate its content. It is called
+-- on perform layout after the vskin data is updated and before the UI is.
+-- rebuilt.
+-- @hook
+-- @realm client
+function PANEL:OnTranslationUpdate()
+    if not self:HasText() then
+        return
+    end
+
+    self:SetTranslatedText(
+        LANG.GetDynamicTranslation(
+            self:GetText(),
+            self:GetTextParams(),
+            self:ShouldTranslateTextParams()
+        )
+    )
+end
+
+---
+-- Called whenever the panel should rebuild its layout. It is called
+-- on perform layout after the vskin data is updated.
+-- @param number w The panel's width
+-- @param number h The panel's height
+-- @hook
+-- @realm client
+function PANEL:OnRebuildLayout(w, h)
+    local shortestEdge = math.min(w, h)
+    local textTranslated = self:GetTranslatedText() or ""
+    local widthText, heightText = draw.GetTextSize(textTranslated, self:GetFont())
+
+    -- as a basic fallback, this should be a solid padding
+    local padding = self:GetPadding() or math.Round(0.1 * shortestEdge)
+
+    -- PRECALCULATE ICON SIZE
+    local sizeIcon = self:GetIconSize()
+    local posIconX, posIconY, marginIcon
+
+    if sizeIcon == 0 then
+        sizeIcon = shortestEdge
+        marginIcon = 0
+
+        posIconY = 0
+    elseif sizeIcon > 0 then
+        marginIcon = 0.5 * (shortestEdge - sizeIcon)
+
+        posIconY = marginIcon
+    else
+        marginIcon = padding
+
+        sizeIcon = shortestEdge - 2 * marginIcon
+        posIconY = marginIcon
+    end
+
+    -- RESIZE ELEMENT
+    if self:GetFitToContentX() then
+        if self:HasIcon() and self:HasText() then
+            w = widthText + sizeIcon + marginIcon + 2 * padding
+        elseif self:HasIcon() then
+            w = sizeIcon + 2 * marginIcon
+        elseif self:HasText() then
+            w = widthText + 2 * padding
+        end
+
+        self:SetWide(w)
+    -- if the panel has text and the box size isn't influenced by the content, the text should
+    -- be cut off if it is too long to fix
+    elseif self:HasText() then
+        local maxWidthText = w - 2 * padding
+
+        if self:HasIcon() then
+            maxWidthText - sizeIcon - marginIcon
+        end
+
+        -- trim the text if necessary
+        textTranslated = draw.GetLimitedLengthText(textTranslated, maxWidthText, self:GetFont(), "")
+
+        -- update to the new text length after trimming
+        widthText, _ = draw.GetTextSize(textTranslated, self:GetFont())
+    end
+
+    if self:GetFitToContentY() then
+        h = math.max(sizeIcon + 2 * marginIcon, heightText + 2 * padding)
+
+        self:SetTall(h)
+    end
+
+    -- CALCULATE TEXT AND ICON POSITION
+    local hor = self:GetHorizontalTextAlign()
+    local ver = self:GetVerticalTextAlign()
+
+    local posTextX, posTextY
+
+    if hor == TEXT_ALIGN_LEFT then
+        if self:HasIcon() and self:HasText() then
+            posIconX = marginIcon
+            posTextX = posIconX + sizeIcon + padding
+        elseif self:HasIcon() then
+            posIconX = marginIcon
+        elseif self:HasText() then
+            posTextX = padding
+        end
+    elseif hor == TEXT_ALIGN_CENTER then
+        if self:HasIcon() and self:HasText() then
+            posTextX = 0.5 * (w + sizeIcon + padding)
+            posIconX = posTextX - sizeIcon - padding - 0.5 * widthText
+        elseif self:HasIcon() then
+            posIconX = 0.5 * (w - sizeIcon)
+        elseif self:HasText() then
+            posTextX = 0.5 * w
+        end
+    elseif hor == TEXT_ALIGN_RIGHT then
+        if self:HasIcon() and self:HasText() then
+            posIconX = w - marginIcon - sizeIcon
+            posTextX = posIconX - padding
+        elseif self:HasIcon() then
+            posIconX = w - marginIcon - sizeIcon
+        elseif self:HasText() then
+            posTextX = w - padding
+        end
+    end
+
+    if ver == TEXT_ALIGN_TOP then
+        posTextY = padding
+    elseif ver == TEXT_ALIGN_CENTER then
+        posTextY = 0.5 * h
+    elseif ver == TEXT_ALIGN_BOTTOM then
+        posTextY = h - padding
+    end
+
+    -- APPLY CALCULATED SIZES AND POSITIONS
+    if self:HasText() then
+        self:ApplyVSkinDimension("posTextX", posTextX)
+        self:ApplyVSkinDimension("posTextY", posTextY)
+    end
+
+    if self:HasIcon() then
+        self:ApplyVSkinDimension("sizeIcon", sizeIcon)
+
+        self:ApplyVSkinDimension("posIconX", posIconX)
+        self:ApplyVSkinDimension("posIconY", posIconY)
+    end
+end
 
 ---
 -- Called every frame while Panel:IsVisible is true.
@@ -484,20 +824,27 @@ function PANEL:ApplySchemeSettings() end
 -- @realm client
 function PANEL:Think()
     self:TriggerOn("Think")
-
-    if self:IsAutoStretchVerticalEnabled() then
-        self:SizeToContentsY()
-    end
 end
 
 ---
 -- Called whenever the panels' layout needs to be performed again. This means all child panels must
 -- be re-positioned to fit the possibly new size of this panel.
+-- @note Be careful when overwriting this function, consider using @{OnVSkinUpdate} and
+-- @{OnRebuildLayout} instead.
 -- @ref https://wiki.facepunch.com/gmod/PANEL:PerformLayout
+-- @param number w The panel's width
+-- @param number h The panel's height
 -- @hook
 -- @realm client
-function PANEL:PerformLayout()
-    self:ApplySchemeSettings()
+function PANEL:PerformLayout(w, h)
+    w = w or self:GetWide()
+    h = h or self:GetTall()
+
+    -- call internal hooks that are used to rebuild the design. First, the color cache is rebuilt,
+    -- then the translation and lastly the design scaling is redone.
+    self:TriggerOnWithBase("VSkinUpdate")
+    self:TriggerOnWithBase("TranslationUpdate")
+    self:TriggerOnWithBase("RebuildLayout", w, h)
 end
 
 ---

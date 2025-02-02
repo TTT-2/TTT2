@@ -37,10 +37,7 @@ function PANEL:Init()
 end
 
 ---
--- Sets the enabled state of a disable-able panel object, such as a DButton or DTextEntry.
--- @param boolean state Whether to enable or disable the panel object
--- @return Panel Returns the panel itself
--- @realm client
+-- @ignore
 function PANEL:SetEnabled(state)
     self.m_bEnabled = state
 
@@ -56,11 +53,7 @@ function PANEL:SetEnabled(state)
 end
 
 ---
--- Called whenever a mouse key was pressed while the panel is focused.
--- @ref https://wiki.facepunch.com/gmod/PANEL:OnMousePressed
--- @param number mouseCode The key code of the mouse button pressed
--- @hook
--- @realm client
+-- @ignore
 function PANEL:OnMousePressed(mouseCode)
     if self:IsSelectionCanvas() and not dragndrop.IsDragging() then
         self:StartBoxSelection()
@@ -77,11 +70,7 @@ function PANEL:OnMousePressed(mouseCode)
 end
 
 ---
--- Called whenever a mouse key was released while the panel is focused.
--- @ref https://wiki.facepunch.com/gmod/PANEL:OnMouseReleased
--- @param number mouseCode The key code of the mouse button released
--- @hook
--- @realm client
+-- @ignore
 function PANEL:OnMouseReleased(mouseCode)
     if self:EndBoxSelection() then
         return

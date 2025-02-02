@@ -53,7 +53,7 @@ function CLSCOREMENU:Populate(parent)
     buttonBoxRowLabel
         :SetSize(sizes.widthTopLabel, sizes.heightTopButtonPanel)
         :SetText("label_show_events")
-        :SetPaintHookName("LabelRightTTT2")
+        :SetHorizontalTextAlign(TEXT_ALIGN_RIGHT)
 
     local buttonBoxRowPanel = buttonBoxRow:Add("TTT2:DPanel")
     buttonBoxRowPanel:SetSize(2 * sizes.widthTopButton + sizes.padding, sizes.heightTopButtonPanel)
