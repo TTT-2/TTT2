@@ -718,6 +718,7 @@ end
 ---
 -- Checks whether the panel has an outline applied.
 -- @return boolean Returns true if the panel has an outline
+-- @realm client
 function PANEL:HasOutline()
     return self.m_nOutlineLeft ~= nil
 end
@@ -1173,7 +1174,9 @@ function PANEL:SetTooltip(text)
 end
 
 -- TODO review this - do we actually need this? what of this code is needed? looks strange.
+-- @param Panel panel The panel that should be attached
 -- @return Panel Returns the panel itself
+-- @realm client
 function PANEL:SetTooltipPanel(panel)
     if panel then
         self:SetTooltipPanelOverride("TTT2:DTooltip")
