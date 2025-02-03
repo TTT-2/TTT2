@@ -247,7 +247,7 @@ end
 -- @ignore
 function SKIN:PaintDescription(panel, w, h)
     local font = panel:GetFont()
-    local color = panel:GetVSkinColor("text")
+    local color = panel:GetVSkinColor("description")
 
     local lines = panel:TranslatedDescriptionLines()
     local posX = panel:GetVSkinDimension("posTextX")
@@ -285,7 +285,7 @@ end
 ---
 -- @ignore
 function SKIN:PaintIcon(panel, w, h)
-    local color = panel:IsIconSimple() and panel:GetVSkinColor("text") or COLOR_WHITE
+    local color = panel:IsIconSimple() and panel:GetVSkinColor("icon") or COLOR_WHITE
     local sizeIcon = panel:GetVSkinDimension("sizeIncon")
 
     if panel:HasTextShadow() then
@@ -381,79 +381,6 @@ function SKIN:PaintScrollBarGrip(panel, w, h)
     end
 
     drawRoundedBox(sizes.cornerRadius, posX, 0, sizeX, h, colorScrollbar)
-end
-
----
--- @param Panel panel
--- @param number w
--- @param number h
--- @realm client
-function SKIN:PaintMenuButtonTTT2(panel, w, h)
-    if not panel.m_bBackground then
-        return
-    end
-
-    local colorOutline = utilGetChangedColor(colors.default, 170)
-    local colorDescription = utilGetChangedColor(colors.default, 145)
-    local colorText = utilGetChangedColor(colors.default, 65)
-    local colorIcon = utilGetChangedColor(colors.default, 170)
-    local shift = 0
-    local paddingText = 10
-    local paddingIcon = 25
-
-    if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-        colorOutline = utilGetChangedColor(colors.default, 135)
-        colorDescription = utilGetChangedColor(colors.default, 135)
-        colorIcon = utilGetChangedColor(colors.default, 160)
-        colorText = utilGetChangedColor(colors.default, 50)
-        shift = 1
-    elseif panel.Hovered then
-        colorOutline = utilGetChangedColor(colors.default, 135)
-        colorDescription = utilGetChangedColor(colors.default, 135)
-        colorIcon = utilGetChangedColor(colors.default, 160)
-        colorText = utilGetChangedColor(colors.default, 50)
-    end
-
-    drawOutlinedBox(0, 0, w, h, 1, colorOutline)
-    drawFilteredTexture(
-        paddingIcon,
-        paddingIcon + shift,
-        h - 2 * paddingIcon,
-        h - 2 * paddingIcon,
-        panel:GetImage(),
-        colorIcon.a,
-        colorIcon
-    )
-    drawSimpleText(
-        TryT(panel:GetTitle()),
-        panel:GetTitleFont(),
-        h,
-        paddingText + shift,
-        colorText,
-        TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_TOP
-    )
-
-    local desc_wrapped = drawGetWrappedText(
-        TryT(panel:GetDescription()),
-        w - h - 2 * paddingText,
-        panel:GetDescriptionFont()
-    )
-    local line_pos = 35
-
-    for i = 1, #desc_wrapped do
-        drawSimpleText(
-            desc_wrapped[i],
-            panel:GetDescriptionFont(),
-            h,
-            line_pos + paddingText + shift,
-            colorDescription,
-            TEXT_ALIGN_LEFT,
-            TEXT_ALIGN_TOP
-        )
-
-        line_pos = line_pos + 20
-    end
 end
 
 ---

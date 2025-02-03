@@ -155,15 +155,15 @@ local function AddMenuButtons(menuTbl, parent, widthButton, heightButton)
     for i = 1, #menuTbl do
         local menuClass = menuTbl[i]
 
-        local settingsButton = parent:Add("DMenuButtonTTT2")
-        settingsButton:SetSize(widthButton, heightButton)
-        settingsButton:SetTitle(menuClass.title or menuClass.type)
-        settingsButton:SetDescription(menuClass.description)
-        settingsButton:SetImage(menuClass.icon)
-
-        settingsButton.DoClick = function(slf)
-            HELPSCRN:ShowSubmenu(menuClass)
-        end
+        local settingsButton = parent:Add("TTT2:DMainMenuButton")
+        settingsButton
+            :SetSize(widthButton, heightButton)
+            :SetText(menuClass.title or menuClass.type)
+            :SetDescription(menuClass.description)
+            :SetIcon(menuClass.icon)
+            :On("LeftClick", function()
+                HELPSCRN:ShowSubmenu(menuClass)
+            end)
     end
 end
 

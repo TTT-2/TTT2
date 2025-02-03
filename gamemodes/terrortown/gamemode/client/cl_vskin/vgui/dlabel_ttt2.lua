@@ -836,6 +836,8 @@ function PANEL:OnVSkinUpdate()
         )
     )
     local colorText = self:ApplyVSkinColor("text", util.GetDefaultColor(colorBackground))
+    local colorDescription = self:ApplyVSkinColor("description", colorText)
+    local colorIcon = self:ApplyVSkinColor("icon", colorText)
     local colorOutline = self:ApplyVSkinColor(
         "outline",
         ColorAlpha(

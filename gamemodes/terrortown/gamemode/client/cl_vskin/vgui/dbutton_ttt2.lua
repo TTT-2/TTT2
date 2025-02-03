@@ -38,7 +38,7 @@ end
 ---
 -- @ignore
 function PANEL:OnVSkinUpdate()
-    local colorBackground, colorText, colorOutline, colorFlash
+    local colorBackground, colorText, colorOutline
 
     -- PANEL DISABLED
     if not self:IsEnabled() then
@@ -103,6 +103,8 @@ function PANEL:OnVSkinUpdate()
 
     self:ApplyVSkinColor("background", colorBackground)
     self:ApplyVSkinColor("text", colorText)
+    self:ApplyVSkinColor("description", colorText)
+    self:ApplyVSkinColor("icon", colorText)
     self:ApplyVSkinColor("outline", colorOutline)
     self:ApplyVSkinColor("flash", colorText)
 end
