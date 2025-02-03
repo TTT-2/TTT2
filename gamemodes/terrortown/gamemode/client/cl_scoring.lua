@@ -200,24 +200,26 @@ function CLSCORE:CreatePanel()
     for i = 1, #subMenusIndexed do
         local data = subMenusIndexed[i]
 
-        local menuButton = menuBoxGrid:Add("DSubmenuButtonTTT2")
-        menuButton:SetSize(self.sizes.widthMenu - 1, self.sizes.heightMenuButton)
-        menuButton:SetIcon(data.icon)
-        menuButton:SetTooltip(data.title)
-        menuButton.DoClick = function(slf)
-            contentBox:Clear()
+        local menuButton = menuBoxGrid:Add("TTT2:DSubmenuButton")
+        menuButton
+            :SetSize(self.sizes.widthMenu - 1, self.sizes.heightMenuButton)
+            :SetIcon(data.icon)
+            :SetTooltip(data.title)
+            :On("LeftClick", function(slf)
+                contentBox:Clear()
 
-            if isfunction(data.Populate) then
-                data:Populate(contentBox)
-            end
+                if isfunction(data.Populate) then
+                    data:Populate(contentBox)
+                end
 
-            slf:SetActive(true)
-            lastActive:SetActive(false)
-            lastActive = slf
-        end
+                slf:SetToggle(true)
+                lastActive:SetToggle(false)
+                lastActive = slf
+            end)
 
         if i == 1 then
-            menuButton:SetActive(true)
+            menuButton:SetToggle(true)
+
             lastActive = menuButton
         end
     end

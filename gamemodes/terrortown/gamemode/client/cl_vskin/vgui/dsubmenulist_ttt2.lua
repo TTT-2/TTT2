@@ -122,30 +122,26 @@ end
 -- @return panel
 -- @realm client
 function PANEL:AddSubmenuButton(submenuClass)
-    local settingsButton = self.navAreaScrollGrid:Add("DSubmenuButtonTTT2")
+    local settingsButton = self.navAreaScrollGrid:Add("TTT2:DSubmenuButton")
+    settingsButton
+        :SetTitle(submenuClass.title or submenuClass.type)
+        :SetIcon(submenuClass.icon)
+        :SetIconSimple(not submenuClass.iconFullSize)
+        :SetIconBadge(submenuClass.iconBadge)
+        :SetIconBadgeSize(submenuClass.iconBadgeSize)
+        :SetTooltip(submenuClass.tooltip)
+        :On("LeftClick", function(slf)
+            HELPSCRN:SetupContentArea(self.contentArea, submenuClass)
+            HELPSCRN:BuildContentArea()
 
-    settingsButton:SetTitle(submenuClass.title or submenuClass.type)
-    settingsButton:SetIcon(submenuClass.icon, submenuClass.iconFullSize)
-    settingsButton:SetIconBadge(submenuClass.iconBadge)
-    settingsButton:SetIconBadgeSize(submenuClass.iconBadgeSize)
-    settingsButton:SetTooltip(submenuClass.tooltip)
+            -- handle the set/unset of active buttons for the draw process
+            if self.lastActive and self.lastActive.SetActive then
+                self.lastActive:SetToggle(false)
+            end
 
-    settingsButton.PerformLayout = function(panel)
-        panel:SetSize(panel:GetParent():GetWide(), heightNavButton)
-    end
-
-    settingsButton.DoClick = function(slf)
-        HELPSCRN:SetupContentArea(self.contentArea, submenuClass)
-        HELPSCRN:BuildContentArea()
-
-        -- handle the set/unset of active buttons for the draw process
-        if self.lastActive and self.lastActive.SetActive then
-            self.lastActive:SetActive(false)
-        end
-
-        slf:SetActive()
-        self.lastActive = slf
-    end
+            slf:SetToggle(true)
+            self.lastActive = slf
+        end)
 
     return settingsButton
 end

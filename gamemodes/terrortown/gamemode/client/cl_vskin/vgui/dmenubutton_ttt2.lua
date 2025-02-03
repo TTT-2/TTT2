@@ -17,9 +17,9 @@ function PANEL:OnVSkinUpdate()
         colorBackground = ColorAlpha(
             util.GetChangedColor(
                 self:GetColor() or vskin.GetBackgroundColor(),
-                self:GetColorShift()
+                self:GetColorShift() or 0
             ),
-            self:GetBackgroundAlpha()
+            self:GetBackgroundAlpha() or 255
         )
         colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 50)
         olorDescription = util.GetChangedColor(util.GetDefaultColor(colorBackground), 135)
@@ -27,9 +27,9 @@ function PANEL:OnVSkinUpdate()
         colorOutline = ColorAlpha(
             util.GetChangedColor(
                 self:GetOutlineColor() or colorBackground,
-                135 + self:GetOutlineColorShift()
+                135 + self:GetOutlineColorShift() or 0
             ),
-            self:GetOutlineAlpha()
+            self:GetOutlineAlpha() or 255
         )
 
     -- NORMAL COLORS
@@ -37,9 +37,9 @@ function PANEL:OnVSkinUpdate()
         colorBackground = ColorAlpha(
             util.GetChangedColor(
                 self:GetColor() or vskin.GetBackgroundColor(),
-                self:GetColorShift()
+                self:GetColorShift() or 0
             ),
-            self:GetBackgroundAlpha()
+            self:GetBackgroundAlpha() or 255
         )
         colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 65)
         colorDescription = util.GetChangedColor(util.GetDefaultColor(colorBackground), 145)
@@ -47,9 +47,9 @@ function PANEL:OnVSkinUpdate()
         colorOutline = ColorAlpha(
             util.GetChangedColor(
                 self:GetOutlineColor() or colorBackground,
-                170 + self:GetOutlineColorShift()
+                170 + (self:GetOutlineColorShift() or 0)
             ),
-            self:GetOutlineAlpha()
+            self:GetOutlineAlpha() or 255
         )
     end
 

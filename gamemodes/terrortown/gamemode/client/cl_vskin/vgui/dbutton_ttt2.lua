@@ -28,9 +28,6 @@ function PANEL:Init()
     -- set the cursor to show the user they can interact
     self:SetCursor("hand")
 
-    -- set the default name for the paint hook
-    self:SetPaintHookName("ButtonTTT2")
-
     -- set visual defaults
     self:SetFont("DermaTTT2Button")
 end
@@ -54,17 +51,17 @@ function PANEL:OnVSkinUpdate()
         colorBackground = ColorAlpha(
             util.GetChangedColor(
                 self:GetColor() or util.GetActiveColor(vskin.GetAccentColor()),
-                self:GetColorShift()
+                self:GetColorShift() or 0
             ),
-            self:GetBackgroundAlpha()
+            self:GetBackgroundAlpha() or 255
         )
         colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 220)
         colorOutline = ColorAlpha(
             util.GetChangedColor(
                 self:GetOutlineColor() or util.GetActiveColor(vskin.GetDarkAccentColor()),
-                self:GetOutlineColorShift()
+                self:GetOutlineColorShift() or 0
             ),
-            self:GetOutlineAlpha()
+            self:GetOutlineAlpha() or 255
         )
 
     -- PANEL IS HOVERED
@@ -72,32 +69,35 @@ function PANEL:OnVSkinUpdate()
         colorBackground = ColorAlpha(
             util.GetChangedColor(
                 self:GetColor() or util.GetHoverColor(vskin.GetAccentColor()),
-                self:GetColorShift()
+                self:GetColorShift() or 0
             ),
-            self:GetBackgroundAlpha()
+            self:GetBackgroundAlpha() or 255
         )
         colorText = ColorAlpha(util.GetHoverColor(colorBackground), 220)
         colorOutline = ColorAlpha(
             util.GetChangedColor(
                 self:GetOutlineColor() or util.GetActiveColor(vskin.GetDarkAccentColor()),
-                self:GetOutlineColorShift()
+                self:GetOutlineColorShift() or 0
             ),
-            self:GetOutlineAlpha()
+            self:GetOutlineAlpha() or 255
         )
 
     -- NORMAL COLORS
     else
         colorBackground = ColorAlpha(
-            util.GetChangedColor(self:GetColor() or vskin.GetAccentColor(), self:GetColorShift()),
-            self:GetBackgroundAlpha()
+            util.GetChangedColor(
+                self:GetColor() or vskin.GetAccentColor(),
+                self:GetColorShift() or 0
+            ),
+            self:GetBackgroundAlpha() or 255
         )
         colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 220)
         colorOutline = ColorAlpha(
             util.GetChangedColor(
                 self:GetOutlineColor() or vskin.GetDarkAccentColor(),
-                self:GetOutlineColorShift()
+                self:GetOutlineColorShift() or 0
             ),
-            self:GetOutlineAlpha()
+            self:GetOutlineAlpha() or 255
         )
     end
 

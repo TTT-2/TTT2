@@ -179,7 +179,6 @@ function PANEL:Init()
     self:SetFont("DermaTTT2Text")
     self:SetDescriptionFont("DermaTTT2Text")
     self:SetTextAlign(TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-    self:SetOutlineOpacity(200)
 
     -- set the defaults for the tooltip
     self:SetTooltipFixedPosition(nil)
@@ -825,14 +824,15 @@ end
 -- @hook
 -- @realm client
 function PANEL:OnVSkinUpdate()
+    -- todo: rework color alpha: it should only be applied if there is somthing to apply
     local colorBackground = self:ApplyVSkinColor(
         "background",
         ColorAlpha(
             util.GetChangedColor(
                 self:GetColor() or vskin.GetBackgroundColor(),
-                self:GetColorShift()
+                self:GetColorShift() or 0
             ),
-            self:GetBackgroundAlpha()
+            self:GetBackgroundAlpha() or 255
         )
     )
     local colorText = self:ApplyVSkinColor("text", util.GetDefaultColor(colorBackground))
@@ -841,8 +841,11 @@ function PANEL:OnVSkinUpdate()
     local colorOutline = self:ApplyVSkinColor(
         "outline",
         ColorAlpha(
-            util.GetChangedColor(self:GetOutlineColor() or colorText, self:GetOutlineColorShift()),
-            self:GetOutlineAlpha()
+            util.GetChangedColor(
+                self:GetOutlineColor() or colorText,
+                self:GetOutlineColorShift() or 0
+            ),
+            self:GetOutlineAlpha() or 255
         )
     )
     local colorFlash = self:ApplyVSkinColor("flash", colorText)

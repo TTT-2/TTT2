@@ -7,7 +7,80 @@ local PANEL = {}
 ---
 -- @ignore
 function PANEL:Init()
-    self:SetPaintHookName("SubMenuButtonTTT2")
+    _G["TTT2:DButton"].Init(self) -- todo should be nicer
+
+    -- enable toggling when selecting
+    self:SetIsToggle(true)
+    self:SetToggle(false)
+
+    -- set visual defaults
+    self:SetTextAlign(TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+    -- paint hook name is set so that the post hook can be
+    -- used to render badge
+    self:SetPaintHookName("SubmenuButton")
+
+    -- TODO maybe somthing for perform layout:
+    --settingsButton.PerformLayout = function(panel)
+    --    panel:SetSize(panel:GetParent():GetWide(), heightNavButton)
+    --end
+end
+
+---
+-- @ignore
+function PANEL:OnVSkinUpdate()
+    local colorBackground, colorText, colorIcon, colorOutline
+
+    -- PANEL DISABLED
+    -- (not implemented for now)
+
+    -- PANEL IS PRESSED
+    if self:IsDepressed() or self:IsSelected() or self:GetToggle() then
+        colorBackground = ColorAlpha(
+            util.GetChangedColor(
+                self:GetColor() or util.GetActiveColor(vskin.GetAccentColor()),
+                self:GetColorShift() or 0
+            ),
+            self:GetBackgroundAlpha() or 50
+        )
+        colorText =
+            util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(colorBackground), 25))
+        colorIcon = util.GetActiveColor(util.GetChangedColor(COLOR_WHITE, 32))
+        colorOutline = ColorAlpha(
+            util.GetChangedColor(
+                self:GetOutlineColor() or util.GetActiveColor(vskin.GetAccentColor()),
+                self:GetOutlineColorShift() or 0
+            ),
+            self:GetOutlineAlpha() or 255
+        )
+
+    -- PANEL IS HOVERED or NORMAL COLORS
+    else
+        colorBackground = ColorAlpha(
+            util.GetChangedColor(
+                self:GetColor() or util.GetHoverColor(vskin.GetAccentColor()),
+                self:GetColorShift() or 0
+            ),
+            self:GetBackgroundAlpha() or 50
+        )
+        colorText =
+            util.GetHoverColor(util.GetChangedColor(util.GetDefaultColor(colorBackground), 75))
+        colorIcon = util.GetHoverColor(util.GetChangedColor(COLOR_WHITE, 48))
+        colorOutline = ColorAlpha(
+            util.GetChangedColor(
+                self:GetOutlineColor() or util.GetHoverColor(vskin.GetAccentColor()),
+                self:GetOutlineColorShift() or 0
+            ),
+            self:GetOutlineAlpha() or 255
+        )
+    end
+
+    self:ApplyVSkinColor("background", colorBackground)
+    self:ApplyVSkinColor("text", colorText)
+    self:ApplyVSkinColor("description", colorText)
+    self:ApplyVSkinColor("icon", colorIcon)
+    self:ApplyVSkinColor("outline", colorOutline)
+    self:ApplyVSkinColor("flash", colorText)
 end
 
 ---
@@ -36,86 +109,6 @@ end
 -- @realm client
 function PANEL:GetIconBadgeSize()
     return self.contents.iconBadgeSize
-end
-
----
--- @param string title
--- @realm client
-function PANEL:SetTitle(title)
-    self.contents.title = title or ""
-end
-
----
--- @return string
--- @realm client
-function PANEL:GetTitle()
-    return self.contents.title
-end
-
----
--- @param string title_font
--- @realm client
-function PANEL:SetTitleFont(title_font)
-    self.contents.title_font = title_font or ""
-end
-
----
--- @return string
--- @realm client
-function PANEL:GetTitleFont()
-    return self.contents.title_font
-end
-
----
--- @param Material iconMat
--- @param boolean iconFullSize
--- @realm client
-function PANEL:SetIcon(iconMat, iconFullSize)
-    self.contents.icon = iconMat
-    self.contents.iconFullSize = tobool(iconFullSize)
-end
-
----
--- @return icon
--- @realm client
-function PANEL:GetIcon()
-    return self.contents.icon
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:HasIcon()
-    return self.contents.icon ~= nil
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:IsIconFullSize()
-    return self.contents.iconFullSize
-end
-
----
--- @param boolean active
--- @realm client
-function PANEL:SetActive(active)
-    self.contents.active = active == nil and true or active
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:IsActive()
-    return self.contents.active or false
-end
-
----
--- @ignore
-function PANEL:Paint(w, h)
-    derma.SkinHook("Paint", "SubMenuButtonTTT2", self, w, h)
-
-    return false
 end
 
 derma.DefineControl(
