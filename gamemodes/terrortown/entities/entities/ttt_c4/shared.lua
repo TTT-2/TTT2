@@ -731,8 +731,10 @@ else -- CLIENT
         if IsValid(self) then
             if not self:GetArmed() then
                 ShowC4Config(self)
+                self:ShowMenu()
             else
                 ShowC4Disarm(self)
+                self:ShowMenu()
             end
         end
 
