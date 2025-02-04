@@ -14,42 +14,42 @@ function PANEL:OnVSkinUpdate()
 
     -- PANEL IS PRESSED or PANEL IS HOVERED
     if self:IsDepressed() or self:IsSelected() or self:GetToggle() or self:IsHovered() then
-        colorBackground = ColorAlpha(
+        colorBackground = util.GetAlphaColor(
             util.GetChangedColor(
                 self:GetColor() or vskin.GetBackgroundColor(),
                 self:GetColorShift() or 0
             ),
-            self:GetBackgroundAlpha() or 255
+            self:GetBackgroundAlpha()
         )
         colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 50)
         olorDescription = util.GetChangedColor(util.GetDefaultColor(colorBackground), 135)
         colorIcon = util.GetChangedColor(util.GetDefaultColor(colorBackground), 160)
-        colorOutline = ColorAlpha(
+        colorOutline = util.GetAlphaColor(
             util.GetChangedColor(
                 self:GetOutlineColor() or colorBackground,
                 135 + self:GetOutlineColorShift() or 0
             ),
-            self:GetOutlineAlpha() or 255
+            self:GetOutlineAlpha()
         )
 
     -- NORMAL COLORS
     else
-        colorBackground = ColorAlpha(
+        colorBackground = util.GetAlphaColor(
             util.GetChangedColor(
                 self:GetColor() or vskin.GetBackgroundColor(),
                 self:GetColorShift() or 0
             ),
-            self:GetBackgroundAlpha() or 255
+            self:GetBackgroundAlpha()
         )
         colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 65)
         colorDescription = util.GetChangedColor(util.GetDefaultColor(colorBackground), 145)
         colorIcon = util.GetChangedColor(util.GetDefaultColor(colorBackground), 170)
-        colorOutline = ColorAlpha(
+        colorOutline = util.GetAlphaColor(
             util.GetChangedColor(
                 self:GetOutlineColor() or colorBackground,
                 170 + (self:GetOutlineColorShift() or 0)
             ),
-            self:GetOutlineAlpha() or 255
+            self:GetOutlineAlpha()
         )
     end
 

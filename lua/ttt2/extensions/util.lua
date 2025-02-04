@@ -297,6 +297,21 @@ function util.GetActiveColor(color)
     return util.GetChangedColor(color, 40)
 end
 
+---
+-- Sets the alpha value if it is not nil. Similar to @{ColorAlpha} but tolerates
+-- alpha set to nil in which case it returns an unchanged color.
+-- @param Color color The original color
+-- @param[opt] number alpha The alpha value (0..255) of the new color
+-- @return Color The color based on the original color
+-- @realm shared
+function util.GetAlphaColor(color, alpha)
+    if not alpha then
+        return color
+    end
+
+    return ColorAlpha(color, alpha)
+end
+
 local function DoBleed(ent)
     if not IsValid(ent) or (ent:IsPlayer() and (not ent:Alive() or not ent:IsTerror())) then
         return

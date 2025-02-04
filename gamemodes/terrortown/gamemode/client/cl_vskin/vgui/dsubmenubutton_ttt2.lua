@@ -36,7 +36,7 @@ function PANEL:OnVSkinUpdate()
 
     -- PANEL IS PRESSED
     if self:IsDepressed() or self:IsSelected() or self:GetToggle() then
-        colorBackground = ColorAlpha(
+        colorBackground = util.GetAlphaColor(
             util.GetChangedColor(
                 self:GetColor() or util.GetActiveColor(vskin.GetAccentColor()),
                 self:GetColorShift() or 0
@@ -46,17 +46,17 @@ function PANEL:OnVSkinUpdate()
         colorText =
             util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(colorBackground), 25))
         colorIcon = util.GetActiveColor(util.GetChangedColor(COLOR_WHITE, 32))
-        colorOutline = ColorAlpha(
+        colorOutline = util.GetAlphaColor(
             util.GetChangedColor(
                 self:GetOutlineColor() or util.GetActiveColor(vskin.GetAccentColor()),
                 self:GetOutlineColorShift() or 0
             ),
-            self:GetOutlineAlpha() or 255
+            self:GetOutlineAlpha()
         )
 
     -- PANEL IS HOVERED or NORMAL COLORS
     else
-        colorBackground = ColorAlpha(
+        colorBackground = util.GetAlphaColor(
             util.GetChangedColor(
                 self:GetColor() or util.GetHoverColor(vskin.GetAccentColor()),
                 self:GetColorShift() or 0
@@ -66,12 +66,12 @@ function PANEL:OnVSkinUpdate()
         colorText =
             util.GetHoverColor(util.GetChangedColor(util.GetDefaultColor(colorBackground), 75))
         colorIcon = util.GetHoverColor(util.GetChangedColor(COLOR_WHITE, 48))
-        colorOutline = ColorAlpha(
+        colorOutline = util.GetAlphaColor(
             util.GetChangedColor(
                 self:GetOutlineColor() or util.GetHoverColor(vskin.GetAccentColor()),
                 self:GetOutlineColorShift() or 0
             ),
-            self:GetOutlineAlpha() or 255
+            self:GetOutlineAlpha()
         )
     end
 

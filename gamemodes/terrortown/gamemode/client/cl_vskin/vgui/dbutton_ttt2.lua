@@ -48,56 +48,56 @@ function PANEL:OnVSkinUpdate()
 
     -- PANEL IS PRESSED
     elseif self:IsDepressed() or self:IsSelected() or self:GetToggle() then
-        colorBackground = ColorAlpha(
+        colorBackground = util.GetAlphaColor(
             util.GetChangedColor(
                 util.GetActiveColor(self:GetColor() or vskin.GetAccentColor()),
                 self:GetColorShift() or 0
             ),
-            self:GetBackgroundAlpha() or 255
+            self:GetBackgroundAlpha()
         )
         colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 220)
-        colorOutline = ColorAlpha(
+        colorOutline = util.GetAlphaColor(
             util.GetChangedColor(
                 util.GetActiveColor(self:GetOutlineColor() or vskin.GetDarkAccentColor()),
                 self:GetOutlineColorShift() or 0
             ),
-            self:GetOutlineAlpha() or 255
+            self:GetOutlineAlpha()
         )
 
     -- PANEL IS HOVERED
     elseif self:IsHovered() then
-        colorBackground = ColorAlpha(
+        colorBackground = util.GetAlphaColor(
             util.GetChangedColor(
                 util.GetHoverColor(self:GetColor() or vskin.GetAccentColor()),
                 self:GetColorShift() or 0
             ),
-            self:GetBackgroundAlpha() or 255
+            self:GetBackgroundAlpha()
         )
         colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 220)
-        colorOutline = ColorAlpha(
+        colorOutline = util.GetAlphaColor(
             util.GetChangedColor(
                 util.GetActiveColor(self:GetOutlineColor() or vskin.GetDarkAccentColor()),
                 self:GetOutlineColorShift() or 0
             ),
-            self:GetOutlineAlpha() or 255
+            self:GetOutlineAlpha()
         )
 
     -- NORMAL COLORS
     else
-        colorBackground = ColorAlpha(
+        colorBackground = util.GetAlphaColor(
             util.GetChangedColor(
                 self:GetColor() or vskin.GetAccentColor(),
                 self:GetColorShift() or 0
             ),
-            self:GetBackgroundAlpha() or 255
+            self:GetBackgroundAlpha()
         )
         colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 220)
-        colorOutline = ColorAlpha(
+        colorOutline = util.GetAlphaColor(
             util.GetChangedColor(
                 self:GetOutlineColor() or vskin.GetDarkAccentColor(),
                 self:GetOutlineColorShift() or 0
             ),
-            self:GetOutlineAlpha() or 255
+            self:GetOutlineAlpha()
         )
     end
 

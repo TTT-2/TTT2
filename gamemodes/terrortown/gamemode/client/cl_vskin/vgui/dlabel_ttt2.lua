@@ -816,8 +816,27 @@ function PANEL:HasOutline()
     return self.m_nOutlineLeft ~= nil
 end
 
+---
+-- Checks whether a paint hook name is defined for this panel.
+-- @return boolean Returns true if defined
+-- @realm client
 function PANEL:HasPaintHookName()
     return self.m_PaintHookName ~= nil
+end
+
+---
+-- Returns the background color of the parent panel if the parent exists and
+-- has a background color defined.
+-- @return Color|nil Returns the color or nil
+-- @realm client
+function PANEL:GetParentColor()
+    local parent = self:GetParent()
+
+    if not IsValid(parent) then
+        return
+    end
+
+    return parent:GetColor()
 end
 
 -- HOOKS DEFINED IN THE ENGINE --
@@ -864,31 +883,27 @@ end
 -- @hook
 -- @realm client
 function PANEL:OnVSkinUpdate()
-    -- todo: rework color alpha: it should only be applied if there is somthing to apply
-    local colorBackground = self:ApplyVSkinColor(
-        "background",
-        ColorAlpha(
-            util.GetChangedColor(
-                self:GetColor() or vskin.GetBackgroundColor(),
-                self:GetColorShift() or 0
-            ),
-            self:GetBackgroundAlpha() or 255
-        )
+    local colorBackground, colorText, colorOutline
+
+    colorBackground = util.GetAlphaColorColorAlpha(
+        util.GetChangedColor(
+            self:GetColor() or self:GetParentColor() or vskin.GetBackgroundColor(),
+            self:GetColorShift() or 0
+        ),
+        self:GetBackgroundAlpha()
     )
-    local colorText = self:ApplyVSkinColor("text", util.GetDefaultColor(colorBackground))
-    local colorDescription = self:ApplyVSkinColor("description", colorText)
-    local colorIcon = self:ApplyVSkinColor("icon", colorText)
-    local colorOutline = self:ApplyVSkinColor(
-        "outline",
-        ColorAlpha(
-            util.GetChangedColor(
-                self:GetOutlineColor() or colorText,
-                self:GetOutlineColorShift() or 0
-            ),
-            self:GetOutlineAlpha() or 255
-        )
+    colorText = util.GetDefaultColor(colorBackground)
+    colorOutline = util.GetAlphaColor(
+        util.GetChangedColor(self:GetOutlineColor() or colorText, self:GetOutlineColorShift() or 0),
+        self:GetOutlineAlpha()
     )
-    local colorFlash = self:ApplyVSkinColor("flash", colorText)
+
+    self:ApplyVSkinColor("background", colorBackground)
+    self:ApplyVSkinColor("text", colorText)
+    self:ApplyVSkinColor("description", colorText)
+    self:ApplyVSkinColor("icon", colorText)
+    self:ApplyVSkinColor("outline", colorOutline)
+    self:ApplyVSkinColor("flash", colorText)
 end
 
 ---
