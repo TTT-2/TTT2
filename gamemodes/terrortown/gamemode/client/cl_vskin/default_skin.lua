@@ -23,8 +23,6 @@ local TryT = LANG.TryTranslation
 local ParT = LANG.GetParamTranslation
 local DynT = LANG.GetDynamicTranslation
 
-local mathRound = math.Round
-
 local utilGetDefaultColor = util.GetDefaultColor
 local utilGetChangedColor = util.GetChangedColor
 local utilGetHoverColor = util.GetHoverColor
@@ -47,7 +45,6 @@ local drawRoundedBoxEx = draw.RoundedBoxEx
 local drawBox = draw.Box
 local drawShadowedText = draw.ShadowedText
 local drawFilteredShadowedTexture = draw.FilteredShadowedTexture
-local drawOutlinedBox = draw.OutlinedBox
 local drawFilteredTexture = draw.FilteredTexture
 local drawSimpleText = draw.SimpleText
 local drawLine = draw.Line
@@ -315,15 +312,15 @@ end
 -- @ignore
 function SKIN:PaintPostSubmenuButton(panel, w, h)
     -- TODO
-    drawFilteredShadowedTexture(
-        pad + sizes.border + sizeIcon - iconBadgeSize,
-        padIcon + shift + sizeIcon - iconBadgeSize,
-        iconBadgeSize,
-        iconBadgeSize,
-        iconBadge,
-        iconAlpha,
-        colors.accent
-    )
+    --drawFilteredShadowedTexture(
+    --    pad + sizes.border + sizeIcon - iconBadgeSize,
+    --    padIcon + shift + sizeIcon - iconBadgeSize,
+    --    iconBadgeSize,
+    --    iconBadgeSize,
+    --    iconBadge,
+    --    iconAlpha,
+    --    colors.accent
+    --)
 end
 
 -----------------------------------------------------------------
