@@ -168,7 +168,7 @@ end
 ---
 -- @ignore
 function SKIN:PaintColoredBox(panel, w, h)
-    if panel:CornerRadius() then
+    if panel:HasCornerRadius() then
         if panel:HasOutline() then
             local left, top, right, bottom = panel:GetOutline()
 
@@ -286,7 +286,7 @@ end
 -- @ignore
 function SKIN:PaintIcon(panel, w, h)
     local color = panel:IsIconSimple() and panel:GetVSkinColor("icon") or COLOR_WHITE
-    local sizeIcon = panel:GetVSkinDimension("sizeIncon")
+    local sizeIcon = panel:GetVSkinDimension("sizeIcon")
 
     if panel:HasTextShadow() then
         drawFilteredShadowedTexture(

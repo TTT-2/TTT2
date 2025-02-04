@@ -25,13 +25,13 @@ function PANEL:Init()
 
     -- remove some hooks here so that it looks cleaner when the
     -- class table is printed
-    self.OnToggled = nil
-    self.OnLeftClick = nil
-    self.OnLeftClickInternal = nil
-    self.OnRightClick = nil
-    self.OnMiddleClick = nil
-    self.OnDoubleClick = nil
-    self.OnDoubleClickInternal = nil
+    --self.OnToggled = nil
+    --self.OnLeftClick = nil
+    --self.OnLeftClickInternal = nil
+    --self.OnRightClick = nil
+    --self.OnMiddleClick = nil
+    --self.OnDoubleClick = nil
+    --self.OnDoubleClickInternal = nil
 
     -- TODO: maybe some engine hooks should be removed here as well?
 end

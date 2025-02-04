@@ -148,16 +148,16 @@ AccessorFunc(PANEL, "m_bFitToContentX", "FitToContentX", FORCE_BOOL, true)
 -- @realm client
 AccessorFunc(PANEL, "m_bFitToContentY", "FitToContentY", FORCE_BOOL, true)
 
--- data attached to the panel is put in its own scope
-PANEL._eventListeners = {}
-PANEL._attached = {}
-PANEL._vskinColors = {}
-PANEL._vskinDimension = {}
-PANEL._tooltip = {}
-
 ---
 -- @ignore
 function PANEL:Init()
+    -- data attached to the panel is put in its own scope
+    self._eventListeners = {}
+    self._attached = {}
+    self._vskinColor = {}
+    self._vskinDimension = {}
+    self._tooltip = {}
+
     -- enable the panel
     self:SetEnabled(true)
 
@@ -300,11 +300,11 @@ end
 -- @return any Returns whatever the specific hook may return
 -- @internal
 -- @realm client
-function PANEL:TriggerOnWith(eventName, ...)
+function PANEL:TriggerOnWithBase(eventName, ...)
     self:TriggerOn(eventName, ...)
 
     if isfunction(self["On" .. eventName]) then
-        return self["On" .. eventName](...)
+        return self["On" .. eventName](self, ...)
     end
 end
 
@@ -523,7 +523,7 @@ end
 -- @param[default=32] number size The size in pixels
 -- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetIcon(icon, isShadowed, isSimple, size)
+function PANEL:SetIcon(iconMaterial, isShadowed, isSimple, size)
     self.m_mIconMaterial = iconMaterial
     self.m_bIconShadow = isShadowed or DRAW_SHADOW_DISABLED
     self.m_bIconSimple = isSimple or DRAW_ICON_SIMPLE
@@ -599,7 +599,7 @@ end
 -- @realm client
 function PANEL:SetTextAlign(horizontal, vertical)
     self:SetHorizontalTextAlign(horizontal)
-    self:SetVertialTextAlign(vertical)
+    self:SetVerticalTextAlign(vertical)
 
     return self
 end
@@ -638,6 +638,38 @@ function PANEL:HasText()
 end
 
 ---
+-- Returns if a panel has text params set.
+-- @return boolean Returns true if a label has text params
+-- @realm client
+function PANEL:GetTextParams()
+    return self.m_TextParams
+end
+
+---
+-- Returns if a panel has text params set.
+-- @return boolean Returns true if a label has text params
+-- @realm client
+function PANEL:HasTextParams()
+    return self.m_TextParams ~= nil
+end
+
+---
+-- Whether the text params should be translated.
+-- @return boolean True if the text params should be translated
+-- @realm client
+function PANEL:ShouldTranslateTextParams()
+    return self.m_bTranslateTextParams or LANG_DONT_TRANSLATE_PARAMS
+end
+
+---
+-- Returns if the text should have a drop shadow.
+-- @return boolean True if drop shadow is enabled
+-- @realm client
+function PANEL:HasTextShadow()
+    return self.m_bTextShadow or DRAW_SHADOW_ENABLED
+end
+
+---
 -- Sets the description to a panel.
 -- @param string The description of a panel, can be a language identifier
 -- @param[opt] table params Translation params that should be added to the description
@@ -659,7 +691,7 @@ end
 -- @return string Rerturns the attached description
 -- @realm client
 function PANEL:GetDescription()
-    return self.m_Text or ""
+    return self.m_Description or ""
 end
 
 ---
@@ -667,39 +699,39 @@ end
 -- @return boolean Returns true if description is added to the panel
 -- @realm client
 function PANEL:HasDescription()
-    return self.m_Text ~= nil
+    return self.m_Description ~= nil
 end
 
 ---
--- Returns if a panel has text params set.
--- @return boolean Returns true if a label has text params
+-- Returns if a panel has description params set.
+-- @return boolean Returns true if a label has description params
 -- @realm client
-function PANEL:GetTextParams()
-    return self.m_TextParams or {}
+function PANEL:GetDescriptionParams()
+    return self.m_DescriptionParams
 end
 
 ---
--- Returns if a panel has text params set.
--- @return boolean Returns true if a label has text params
+-- Returns if a panel has description params set.
+-- @return boolean Returns true if a label has description params
 -- @realm client
-function PANEL:HasTextParams()
-    return self.m_TextParams ~= nil
+function PANEL:HasDescriptionParams()
+    return self.m_DescriptionParams ~= nil
 end
 
 ---
--- Returns if the icon should have a drop shadow.
+-- Whether the description params should be translated.
+-- @return boolean True if the description params should be translated
+-- @realm client
+function PANEL:ShouldTranslateDescriptionParams()
+    return self.m_bTranslateDescriptionParams or LANG_DONT_TRANSLATE_PARAMS
+end
+
+---
+-- Returns if the description should have a drop shadow.
 -- @return boolean True if drop shadow is enabled
 -- @realm client
-function PANEL:ShouldTranslateTextParams()
-    return self.m_bTranslateTextParams or LANG_DONT_TRANSLATE_PARAMS
-end
-
----
--- Returns if the text should have a drop shadow.
--- @return boolean True if drop shadow is enabled
--- @realm client
-function PANEL:HasTextShadow()
-    return self.m_bTextShadow or false
+function PANEL:HasDescriptionShadow()
+    return self.m_bDescriptionShadow or DRAW_SHADOW_ENABLED
 end
 
 ---
@@ -784,6 +816,10 @@ function PANEL:HasOutline()
     return self.m_nOutlineLeft ~= nil
 end
 
+function PANEL:HasPaintHookName()
+    return self.m_PaintHookName ~= nil
+end
+
 -- HOOKS DEFINED IN THE ENGINE --
 
 ---
@@ -795,9 +831,11 @@ end
 -- @return boolean Returning true prevents the background from being drawn
 -- @realm client
 function PANEL:Paint(w, h)
-    derma.SkinHook("Paint", "Pre" .. self:GetPaintHookName(), self, w, h)
+    if self:HasPaintHookName() then
+        derma.SkinHook("Paint", "Pre" .. self:GetPaintHookName(), self, w, h)
+    end
 
-    if self:PaintBackground() then
+    if self:GetPaintBackground() then
         derma.SkinHook("Paint", "ColoredBox", self, w, h)
     end
 
@@ -813,7 +851,9 @@ function PANEL:Paint(w, h)
         derma.SkinHook("Paint", "Icon", self, w, h)
     end
 
-    derma.SkinHook("Paint", "Post" .. self:GetPaintHookName(), self, w, h)
+    if self:HasPaintHookName() then
+        derma.SkinHook("Paint", "Post" .. self:GetPaintHookName(), self, w, h)
+    end
 
     return true
 end
@@ -931,11 +971,14 @@ function PANEL:OnRebuildLayout(w, h)
         local maxWidthText = w - 2 * padding
 
         if self:HasIcon() then
-            maxWidthText = sizeIcon - marginIcon
+            maxWidthText = maxWidthText - sizeIcon - marginIcon
         end
 
         -- trim the text if necessary
-        textTranslated = draw.GetLimitedLengthText(textTranslated, maxWidthText, self:GetFont(), "")
+        textTranslated =
+            draw.GetLimitedLengthText(textTranslated, maxWidthText, self:GetFont(), "...")
+
+        self:SetTranslatedText(textTranslated)
 
         -- update to the new text length after trimming
         widthText, _ = draw.GetTextSize(textTranslated, self:GetFont())
@@ -1020,7 +1063,7 @@ function PANEL:OnRebuildLayout(w, h)
         posDescriptionY = {}
 
         local heightDescriptionLine, _ =
-            draw.GetTextSize(descriptionLines[i], self:GetDescriptionFont())
+            draw.GetTextSize(descriptionLines[1], self:GetDescriptionFont())
 
         for i = 1, #descriptionLines do
             posDescriptionY[i] = posTextY + heightText + padding + i * heightDescriptionLine
@@ -1350,8 +1393,8 @@ end
 function PANEL:SetTooltipFixedSize(w, h)
     -- +2 are the outline pixels
     self._tooltip.fixedSize = {
-        w = w + 2,
-        h = h + (self._tooltip.sizeArrow or 0) + 2,
+        w = (w or 0) + 2,
+        h = (h or 0) + (self._tooltip.sizeArrow or 0) + 2,
     }
 
     return self
