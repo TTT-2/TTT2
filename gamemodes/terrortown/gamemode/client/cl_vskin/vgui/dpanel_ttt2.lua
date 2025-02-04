@@ -17,23 +17,7 @@ AccessorFunc(PANEL, "m_bDisableTabbing", "TabbingDisabled", FORCE_BOOL) -- ??? n
 ---
 -- @ignore
 function PANEL:Init()
-    self:SetEnabled(true)
-    self:SetPaintBackground(true)
-
-    -- set the default name for the paint hook
-    self:SetPaintHookName("PanelTTT2")
-
-    -- remove some hooks here so that it looks cleaner when the
-    -- class table is printed
-    --self.OnToggled = nil
-    --self.OnLeftClick = nil
-    --self.OnLeftClickInternal = nil
-    --self.OnRightClick = nil
-    --self.OnMiddleClick = nil
-    --self.OnDoubleClick = nil
-    --self.OnDoubleClickInternal = nil
-
-    -- TODO: maybe some engine hooks should be removed here as well?
+    _G["TTT2:DLabel"].Init(self) -- todo should be nicer
 end
 
 ---

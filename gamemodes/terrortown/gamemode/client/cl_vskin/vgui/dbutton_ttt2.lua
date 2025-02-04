@@ -19,7 +19,7 @@ AccessorFunc(PANEL, "m_bDisplayInverted", "Inverted", FORCE_BOOL_IS, true)
 ---
 -- @ignore
 function PANEL:Init()
-    _G["TTT2:DPanel"].Init(self) -- todo should be nicer
+    _G["TTT2:DLabel"].Init(self) -- todo should be nicer
 
     -- enable mouse and keyboard input to interact with button
     self:SetMouseInputEnabled(true)
@@ -40,17 +40,17 @@ function PANEL:OnVSkinUpdate()
     -- PANEL DISABLED
     if not self:IsEnabled() then
         local colorDefault = util.GetDefaultColor(vskin.GetBackgroundColor())
-        local colorAccentDisabled = utilGetChangedColor(colorDefault, 150)
+        local colorAccentDisabled = util.GetChangedColor(colorDefault, 150)
 
-        colorBackground = util.GetChangedColor(colorAccentDisabled, 150)
+        colorBackground = util.GetChangedColor(colorAccentDisabled, 120)
         colorText = ColorAlpha(util.GetDefaultColor(colorAccentDisabled), 220)
-        colorOutline = util.GetChangedColor(colorAccentDisabled, -50)
+        colorOutline = util.ColorDarken(colorAccentDisabled, 50)
 
     -- PANEL IS PRESSED
     elseif self:IsDepressed() or self:IsSelected() or self:GetToggle() then
         colorBackground = ColorAlpha(
             util.GetChangedColor(
-                self:GetColor() or util.GetActiveColor(vskin.GetAccentColor()),
+                util.GetActiveColor(self:GetColor() or vskin.GetAccentColor()),
                 self:GetColorShift() or 0
             ),
             self:GetBackgroundAlpha() or 255
@@ -58,7 +58,7 @@ function PANEL:OnVSkinUpdate()
         colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 220)
         colorOutline = ColorAlpha(
             util.GetChangedColor(
-                self:GetOutlineColor() or util.GetActiveColor(vskin.GetDarkAccentColor()),
+                util.GetActiveColor(self:GetOutlineColor() or vskin.GetDarkAccentColor()),
                 self:GetOutlineColorShift() or 0
             ),
             self:GetOutlineAlpha() or 255
@@ -68,15 +68,15 @@ function PANEL:OnVSkinUpdate()
     elseif self:IsHovered() then
         colorBackground = ColorAlpha(
             util.GetChangedColor(
-                self:GetColor() or util.GetHoverColor(vskin.GetAccentColor()),
+                util.GetHoverColor(self:GetColor() or vskin.GetAccentColor()),
                 self:GetColorShift() or 0
             ),
             self:GetBackgroundAlpha() or 255
         )
-        colorText = ColorAlpha(util.GetHoverColor(colorBackground), 220)
+        colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 220)
         colorOutline = ColorAlpha(
             util.GetChangedColor(
-                self:GetOutlineColor() or util.GetActiveColor(vskin.GetDarkAccentColor()),
+                util.GetActiveColor(self:GetOutlineColor() or vskin.GetDarkAccentColor()),
                 self:GetOutlineColorShift() or 0
             ),
             self:GetOutlineAlpha() or 255
@@ -384,6 +384,20 @@ end
 -- @ignore
 function PANEL:OnLeftClickInternal()
     sound.ConditionalPlay(soundClick, SOUND_TYPE_BUTTONS)
+end
+
+---
+-- I'm not sure why I have to do this - this isn't necessary for other functions
+-- @ignore
+function PANEL:OnMousePressed(mouseCode)
+    _G["TTT2:DLabel"].OnMousePressed(self, mouseCode) -- todo should be nicer
+end
+
+---
+-- I'm not sure why I have to do this - this isn't necessary for other functions
+-- @ignore
+function PANEL:OnMouseReleased(mouseCode)
+    _G["TTT2:DLabel"].OnMouseReleased(self, mouseCode) -- todo should be nicer
 end
 
 derma.DefineControl(

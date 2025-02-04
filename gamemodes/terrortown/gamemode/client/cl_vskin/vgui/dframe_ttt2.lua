@@ -222,14 +222,16 @@ function PANEL:InitButtons()
     -- add close button
     self.btnClose = vgui.Create("TTT2:DButton", self)
         :SetIcon(Material("vgui/ttt/vskin/icon_close"))
+        :SetPadding(15)
         :On("LeftClick", function()
             self:Close()
         end)
 
     -- add back button
     self.btnBack = vgui.Create("TTT2:DButton", self)
-        :SetText("button_menu_back")
         :SetIcon(Material("vgui/ttt/vskin/icon_back"))
+        :SetText("button_menu_back")
+        :SetPadding(15)
 end
 
 ---

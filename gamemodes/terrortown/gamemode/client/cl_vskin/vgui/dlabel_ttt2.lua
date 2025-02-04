@@ -168,7 +168,7 @@ function PANEL:Init()
     -- disable keyboard and mouse input
     self:SetMouseInputEnabled(false)
     self:SetKeyboardInputEnabled(false)
-    self:SetDoubleClickingEnabled(true)
+    self:SetDoubleClickingEnabled(false)
 
     -- turn off the engine drawing
     self:SetPaintBackgroundEnabled(false)
@@ -520,14 +520,14 @@ end
 -- @param Material iconMaterial The icon material that should be added
 -- @param[default=DRAW_SHADOW_DISABLED] boolean isShadowed Set to enable/disable drop shadow
 -- @param[default=DRAW_ICON_SIMPLE] boolean isSimple Set to enable/disable icon coloring
--- @param[default=32] number size The size in pixels
+-- @param[opt] number size The size in pixels, automatically determined if not set
 -- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:SetIcon(iconMaterial, isShadowed, isSimple, size)
     self.m_mIconMaterial = iconMaterial
     self.m_bIconShadow = isShadowed or DRAW_SHADOW_DISABLED
     self.m_bIconSimple = isSimple or DRAW_ICON_SIMPLE
-    self.m_nIconSize = size or 32
+    self.m_nIconSize = size
 
     return self
 end
@@ -938,20 +938,22 @@ function PANEL:OnRebuildLayout(w, h)
     local sizeIcon = self:GetIconSize()
     local posIconX, posIconY, marginIcon
 
-    if sizeIcon == 0 then
-        sizeIcon = shortestEdge
-        marginIcon = 0
+    if self:HasIcon() then
+        if not sizeIcon then
+            marginIcon = padding
 
-        posIconY = 0
-    elseif sizeIcon > 0 then
-        marginIcon = 0.5 * (shortestEdge - sizeIcon)
+            sizeIcon = shortestEdge - 2 * marginIcon
+            posIconY = marginIcon
+        elseif sizeIcon == 0 then
+            sizeIcon = shortestEdge
+            marginIcon = 0
 
-        posIconY = marginIcon
-    else
-        marginIcon = padding
+            posIconY = 0
+        else
+            marginIcon = padding
 
-        sizeIcon = shortestEdge - 2 * marginIcon
-        posIconY = marginIcon
+            posIconY = 0.5 * (shortestEdge - sizeIcon)
+        end
     end
 
     -- RESIZE ELEMENT
@@ -982,36 +984,6 @@ function PANEL:OnRebuildLayout(w, h)
 
         -- update to the new text length after trimming
         widthText, _ = draw.GetTextSize(textTranslated, self:GetFont())
-    end
-
-    -- to simplify things, size to contentsX ignores the description text
-    local descriptionLines, heightDescription
-
-    if self:HasDescription() then
-        descriptionLines, _, heightDescription =
-            draw.GetWrappedText(self:GetTranslatedDescription(), w, self:GetDescriptionFont())
-
-        self:SetTranslatedDescriptionLines(descriptionLines)
-    end
-
-    if self:GetFitToContentY() then
-        local enlarge = 0
-
-        if self:HasText() then
-            enlarge = heightText + 2 * padding
-        end
-
-        if self:HasDescription() then
-            enlarge = enlarge + heightDescription + padding
-        end
-
-        if self:HasIcon() then
-            enlarge = math.max(enlarge, sizeIcon + 2 * marginIcon)
-        end
-
-        h = h + enlarge
-
-        self:SetTall(h)
     end
 
     -- CALCULATE TEXT AND ICON POSITION
@@ -1049,24 +1021,80 @@ function PANEL:OnRebuildLayout(w, h)
         end
     end
 
+    -- to simplify things, size to contentsX ignores the description text
+    local descriptionLines, heightDescription
+
+    if self:HasDescription() then
+        local maxWidthDescription = w - 2 * padding
+
+        if self:HasIcon() then
+            maxWidthDescription = maxWidthDescription - padding - sizeIcon - marginIcon
+        end
+
+        descriptionLines, _, heightDescription = draw.GetWrappedText(
+            self:GetTranslatedDescription(),
+            maxWidthDescription,
+            self:GetDescriptionFont()
+        )
+
+        self:SetTranslatedDescriptionLines(descriptionLines)
+    end
+
+    if self:GetFitToContentY() then
+        local enlarge = 0
+
+        if self:HasText() then
+            enlarge = heightText + 2 * padding
+        end
+
+        if self:HasDescription() then
+            enlarge = enlarge + heightDescription + padding
+        end
+
+        if self:HasIcon() then
+            enlarge = math.max(enlarge, sizeIcon + 2 * marginIcon)
+        end
+
+        h = enlarge
+
+        self:SetTall(h)
+    end
+
     if ver == TEXT_ALIGN_TOP then
         posTextY = padding
+
+        if self:HasIcon() then
+            posIconY = marginIcon
+        end
     elseif ver == TEXT_ALIGN_CENTER then
         posTextY = 0.5 * h
+
+        -- icon position already exists for this case
     elseif ver == TEXT_ALIGN_BOTTOM then
         posTextY = h - padding
+
+        if self:HasIcon() then
+            posIconY = h - sizeIcon - marginIcon
+        end
     end
 
     if self:HasDescription() then
-        -- move text out of the way
-        posTextY = posTextY - 0.5 * (heightDescription + padding + heightText)
-        posDescriptionY = {}
-
-        local heightDescriptionLine, _ =
+        local _, heightDescriptionLine =
             draw.GetTextSize(descriptionLines[1], self:GetDescriptionFont())
 
+        -- move text out of the way
+        if ver == TEXT_ALIGN_TOP then
+            posTextY = posTextY
+        elseif ver == TEXT_ALIGN_CENTER then
+            posTextY = posTextY - 0.5 * (heightDescription + padding)
+        elseif ver == TEXT_ALIGN_BOTTOM then
+            posTextY = posTextY - #descriptionLines * heightDescriptionLine - padding
+        end
+
+        posDescriptionY = {}
+
         for i = 1, #descriptionLines do
-            posDescriptionY[i] = posTextY + heightText + padding + i * heightDescriptionLine
+            posDescriptionY[i] = posTextY + heightText + padding + (i - 1) * heightDescriptionLine
         end
     end
 
@@ -1196,7 +1224,7 @@ end
 function PANEL:OnMouseReleased(mouseCode)
     self:MouseCapture(false)
 
-    if self:GetDisabled() then
+    if not self:IsEnabled() then
         return
     end
 

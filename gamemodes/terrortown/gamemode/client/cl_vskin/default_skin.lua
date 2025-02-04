@@ -219,7 +219,7 @@ end
 ---
 -- @ignore
 function SKIN:PaintText(panel, w, h)
-    if panel:HasTextShadow() then
+    if panel:HasTextShadow() and panel:IsEnabled() then
         drawShadowedText(
             panel:GetTranslatedText(),
             panel:GetFont(),
@@ -246,10 +246,10 @@ end
 ---
 -- @ignore
 function SKIN:PaintDescription(panel, w, h)
-    local font = panel:GetFont()
+    local font = panel:GetDescriptionFont()
     local color = panel:GetVSkinColor("description")
 
-    local lines = panel:TranslatedDescriptionLines()
+    local lines = panel:GetTranslatedDescriptionLines()
     local posX = panel:GetVSkinDimension("posTextX")
     local posY = panel:GetVSkinDimension("posTableDescriptionY")
 
@@ -257,7 +257,7 @@ function SKIN:PaintDescription(panel, w, h)
     local textAlignVerical = panel:GetVerticalTextAlign()
 
     for i = 1, #lines do
-        if panel:HasTextShadow() then
+        if panel:HasTextShadow() and panel:IsEnabled() then
             drawShadowedText(
                 lines[i],
                 font,
@@ -288,7 +288,7 @@ function SKIN:PaintIcon(panel, w, h)
     local color = panel:IsIconSimple() and panel:GetVSkinColor("icon") or COLOR_WHITE
     local sizeIcon = panel:GetVSkinDimension("sizeIcon")
 
-    if panel:HasTextShadow() then
+    if panel:HasTextShadow() and panel:IsEnabled() then
         drawFilteredShadowedTexture(
             panel:GetVSkinDimension("posIconX"),
             panel:GetVSkinDimension("posIconY"),
