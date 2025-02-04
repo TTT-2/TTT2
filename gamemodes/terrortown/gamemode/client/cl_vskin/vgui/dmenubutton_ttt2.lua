@@ -27,7 +27,7 @@ function PANEL:OnVSkinUpdate()
         colorOutline = util.GetAlphaColor(
             util.GetChangedColor(
                 self:GetOutlineColor() or colorBackground,
-                135 + self:GetOutlineColorShift() or 0
+                135 + (self:GetOutlineColorShift() or 0)
             ),
             self:GetOutlineAlpha()
         )

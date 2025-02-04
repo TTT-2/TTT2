@@ -317,9 +317,11 @@ end
 -- @realm client
 function PANEL:TriggerDeprecatedEvent(eventName, ...)
     if isfunction(self[eventName]) then
-        ErrorNoHaltWithStack(
+        ErrorNoHalt(
             "[DEPRECATION WARNING]: Overwriting hooks for panels is no longer recommended, use PANEL:On() instead. Hook: "
                 .. eventName
+                .. " Element: "
+                .. tostring(self)
         )
 
         return self[eventName](...)

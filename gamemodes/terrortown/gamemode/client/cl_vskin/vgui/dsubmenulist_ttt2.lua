@@ -10,6 +10,8 @@ local heightNavButton = 50
 ---
 -- @ignore
 function PANEL:Init()
+    _G["TTT2:DLabel"].Init(self) -- todo should be nicer
+
     -- Make navArea scrollable
     local navAreaScroll = vgui.Create("DScrollPanelTTT2", self)
     navAreaScroll:SetVerticalScrollbarEnabled(true)
@@ -35,11 +37,6 @@ function PANEL:Init()
 
     -- Get the frame to be able to enable keyboardinput on searchbar focus
     self.frame = util.getHighestPanelParent(self)
-
-    -- This turns off the engine drawing
-    self:SetPaintBackgroundEnabled(false)
-    self:SetPaintBorderEnabled(false)
-    self:SetPaintBackground(false)
 end
 
 ---
