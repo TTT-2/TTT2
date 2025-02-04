@@ -2688,8 +2688,8 @@ atayın. Alt rolün tüm boş yuvaları doldurulmuşsa, dikkate almayın.
 --
 --This information is only ever available for the last round which was started on this map with the option enabled.
 --
---Must be enabled when role selection happens (when the round starts) to take effect.]]
---L.label_roleinspect_enable = "Enable capturing role selection inspection information"
+--Must be enabled when role distribution happens (when the round starts) to take effect.]]
+--L.label_roleinspect_enable = "Enable capturing role distribution inspection information"
 --L.label_roleinspect_no_data = "No role inspection data is available."
 --L.help_roleinspect_unknown_stage = "Unknown stage when rendering UI. Please open an issue."
 
@@ -2721,24 +2721,24 @@ atayın. Alt rolün tüm boş yuvaları doldurulmuşsa, dikkate almayın.
 --L.roleinspect_reason_not_selectable_d_no_consider_s_preselect = "The role is not selectable."
 --L.roleinspect_reason_not_enabled_d_no_consider_s_preselect = "The role is not enabled."
 --L.roleinspect_reason_role_chance_d_no_consider_s_preselect = "The random check for whether the role should appear failed."
---L.roleinspect_reason_no_players_d_no_consider_s_preselect = "There are not enough players for this role to spawn."
---L.roleinspect_reason_role_decision_d_no_consider_s_preselect = "The role implementation decided it was not selectable, and provided no more detailed information."
+--L.roleinspect_reason_no_players_d_no_consider_s_preselect = "There are not enough players for this role to be considered."
+--L.roleinspect_reason_role_decision_d_no_consider_s_preselect = "The role distribution decided it was not selectable, and provided no more detailed information."
 
 -- ROLEINSPECT_STAGE_LAYERING
 --L.header_roleinspect_stage_layering = "Stage 2: Layering"
 --L.help_roleinspect_stage_layering = [[
 --This stage distributes candidate roles among player slots. This is also where Role Layering is applied.
 --
---The layers shown here will be different than thoes configured:
+--The layers shown here will be different than those configured:
 --- Roles that did not pass the previous stage are not shown
 --- Layers with no candidate roles are not shown (and layers are renumbered)
 --
 --Hover over each role for details about that role.
 --
 --Max roles: {maxRoles}
---Max baseroles: {maxBaseroles}]]
+--Max base roles: {maxBaseroles}]]
 --L.header_inspect_layers_baseroles = "Base role layers"
---L.header_inspect_layers_subroles = "{baserole} sub-role layers"
+--L.header_inspect_layers_subroles = "{baserole} subrole layers"
 --L.tooltip_layering_role_desc = [[
 --Role: {name}
 --Decision: {decision}
@@ -2746,11 +2746,11 @@ atayın. Alt rolün tüm boş yuvaları doldurulmuşsa, dikkate almayın.
 --# of Players: {finalCount}]]
 --L.header_inspect_layers_order = "Subrole selection order"
 --L.help_inspect_layers_order = [[
---When selecting available subroles, first a baserole is selected (shown as the large icon). Then, a subrole is selected according to layering (shown as the small icon).
+--When selecting available subroles, first a base role is selected (shown as the large icon). Then, a subrole is selected according to layering (shown as the small icon).
 --
---This is important because there is a maximum number of roles (either explicitly, or because of playercount). Once player slots or role slots are filled, assignment stops and all remaining roles are not used.]]
+--This is important because there is a maximum number of roles (either explicitly, or because of player count). Once player slots or role slots are filled, assignment stops and all remaining roles are not used.]]
 --L.tooltip_inspect_layers_baserole = "Base role: {name}"
---L.tooltip_inspect_layers_subrole = "Selected sub role: {name}"
+--L.tooltip_inspect_layers_subrole = "Selected subrole: {name}"
 
 -- Reasons
 
@@ -2761,19 +2761,19 @@ atayın. Alt rolün tüm boş yuvaları doldurulmuşsa, dikkate almayın.
 --L.roleinspect_reason_too_many_roles_d_no_consider_s_layering = "Other roles filled all role slots."
 
 -- ROLEINSPECT_STAGE_BASEROLES
---L.header_roleinspect_stage_baseroles = "Stage 4: Baserole Assignment"
+--L.header_roleinspect_stage_baseroles = "Stage 3: Base role Assignment"
 --L.help_roleinspect_stage_baseroles = [[
---This stage assigns baseroles to players. If derandomization is enabled, players' role weights are considered, and displayed below in a chart.
+--This stage assigns base roles to players. If derandomization is enabled, players' role weights are considered, and displayed below in a chart.
 --
---Each section shows all players which were considered for that baserole, with the highlighted ones being the ones actually selected.]]
+--Each section shows all players which were considered for that base role, with the highlighted ones being the ones actually selected.]]
 --L.header_inspect_baseroles_order = "{name} assignment"
 
 -- ROLEINSPECT_STAGE_SUBROLES
---L.header_roleinspect_stage_subroles = "Stage 5: Subrole Upgrading"
+--L.header_roleinspect_stage_subroles = "Stage 4: Subrole Upgrading"
 --L.help_roleinspect_stage_subroles = [[
---This stage upgrades players to subroles, from previously assigned baseroles.
+--This stage upgrades players to subroles, from previously assigned base roles.
 --
---Information is presented as in the baseroles stage above. Each baserole is upgraded separately.]]
+--Information is presented as in the base roles stage above. Each base role is upgraded separately.]]
 --L.header_inspect_upgrade_order = "Upgrading from {name}"
 --L.header_inspect_subroles_order = "Subrole {name}"
 --L.label_inspect_no_subroles = "No subroles were selectable."

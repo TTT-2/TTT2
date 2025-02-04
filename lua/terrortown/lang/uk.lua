@@ -1315,9 +1315,9 @@ L.hilite_win_traitors = "ЗРАДНИКИ ПЕРЕМОГЛИ"
 --L.help_rolelayering_roleselection = [[
 --The role distribution process is split into two stages. In the first stage base roles are distributed, which are Innocent, Traitor and those listed in the 'base role layer' box below. The second stage is used to upgrade those base roles to a subrole.
 --
---Further details are available in the overview tab.]]
+--Further details are available in the "Roles Overview" submenu.]]
 --L.help_rolelayering_layers = [[
---After determining the assignable roles according to role-specific convars (including the random chance it will be selected at all!), one role from each layer (if there are any) is selected for distribution. After handling the layers, unlayered roles are selected at random. Role selection stops as soon as there are no more slots which need to be filled.
+--After determining the assignable roles according to role-specific convars (including the random chance they will be selected at all!), one role from each layer (if there are any) is selected for distribution. After handling the layers, unlayered roles are selected at random. Role distribution stops as soon as there are no more slots which need to be filled.
 --
 --Roles which are not considered due to convar-related requirements are not distributed.]]
 --L.scoreboard_voice_tooltip = "Scroll to change the volume"
@@ -2322,16 +2322,16 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --
 --mode 0: Disabled - No derandomization is done.
 --
---mode 1: Base roles only - Derandomization is performed for base roles only. Sub-roles will be selected randomly. These are roles like Innocent and Traitor.
+--mode 1: Base roles only - Derandomization is performed for base roles only. Subroles will be selected randomly. These are roles like Innocent and Traitor.
 --
---mode 2: Sub-roles only - Derandomization is performed for sub-roles only. Base roles will be selected randomly. Note that sub-roles are only assigned to players which have already been selected for their base role.
+--mode 2: Subroles only - Derandomization is performed for subroles only. Base roles will be selected randomly. Note that subroles are only assigned to players which have already been selected for their base role.
 --
---mode 3: Base roles AND sub-roles - Derandomization is performed for both base roles and sub-roles.]]
+--mode 3: Base roles AND subroles - Derandomization is performed for both base roles and subroles.]]
 --L.label_roles_derandomize_mode = "Derandomization mode"
 --L.label_roles_derandomize_mode_none = "mode 0: Disabled"
 --L.label_roles_derandomize_mode_base_only = "mode 1: Base roles only"
---L.label_roles_derandomize_mode_sub_only = "mode 2: Sub-roles only"
---L.label_roles_derandomize_mode_base_and_sub = "mode 3: Base roles AND sub-roles"
+--L.label_roles_derandomize_mode_sub_only = "mode 2: Subroles only"
+--L.label_roles_derandomize_mode_base_and_sub = "mode 3: Base roles AND subroles"
 
 --L.help_roles_derandomize_min_weight = [[
 --Derandomization is performed by making the random player selections during role distribution use a weight associated with each role for each player, and that weight increases by 1 each time the player does not get assigned that role. These weights are not persisted between connections, or across maps.
@@ -2380,7 +2380,7 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 
 -- 2025-01-05
 --L.help_session_limits_mode = [[
---There are three different session limit modes you can choose from:
+--There are four different session limit modes you can choose from:
 --
 --mode 0: No session limits. TTT2 will not end the session and will not trigger a map change.
 --
@@ -2405,29 +2405,29 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --L.roles_overview_html = [[
 --<h1>Overview</h1>
 --
---One of TTT2's core mechanics is the <em>role</em>. They control what your
+--One of TTT2's core mechanics are <em>roles</em>. They control what your
 --goals are, who your teammates are, and what you can do. The way that they
 --are distributed to players is thus very important. The role distribution
---system is very complicated, and the menus in this tab control almost every
+--system is very complicated, and submenus in this menu control almost every
 --aspect of that system. For many of the options available, understanding how
---the system as a whole works can be crucial to being able to make the changes
---you want for your server.
+--the distribution system as a whole works can be crucial to being able to make
+--the changes you want for your server.
 --
 --<h2>Terminology</h2>
 --
 --<ul>
 --<li><em>Role</em> &mdash; The role assigned to a player at round start,
 --e.g. <em>Traitor</em>, <em>Innocent</em>, <em>Necromancer</em>, etc.</li>
---<li><em>Base role</em> (or <em>baserole</em>) &mdash; A <em>role</em>
+--<li><em>Base role</em> &mdash; A <em>role</em>
 --selected first, that acts as a kind of high-level template for the final
 --role a player will recieve. <em>Base roles</em> can be final roles. Ex.
 --<em>Innocent</em>, <em>Traitor</em>, <em>Pirate</em></li>
---<li><em>Sub role</em> (or <em>subrole</em>) &mdash; A role assigned as a
---refinement of a <em>base role</em>. Each possible <em>sub role</em> is
+--<li><em>Subrole</em> &mdash; A <em>role</em> assigned as a
+--refinement of a <em>base role</em>. Each possible <em>subrole</em> is
 --associated with a <em>base role</em>, such that a player must have been
 --assigned the appropriate <em>base role</em> for them to end up with a
---<em>sub role</em>. Ex. <em>Detective</em> (I-subrole), <em>Hitman</em>
---(T-subrole), <em>Survivalist</em> (I-subrole), etc.</li>
+--<em>subrole</em>. Ex. <em>Detective</em> (Innocent subrole), <em>Hitman</em>
+--(Traitor subrole), <em>Survivalist</em> (Innocent subrole), etc.</li>
 --</ul>
 --
 --<h2>The Algorithm</h2>
@@ -2442,12 +2442,12 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --<em>Innocent</em> and <em>Traitor</em> always have available slots.
 --</p>
 --<p>
---All roles (both base- and sub-roles) get the computed here. Subroles
---only have selectable slots if their corresponding baseroles do.
+--All roles (both base and subroles) get the computed here. Subroles
+--only have selectable slots if their corresponding base roles do.
 --</p>
 --<p>
 --Each role is assigned a chance that it's distributed. If that chance
---fails, this step sets the possible number of players to zero.
+--fails, this step sets the possible number of players with this role to zero.
 --</p>
 --<p>
 --<em>Implemented in</em>
@@ -2470,9 +2470,9 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --
 --<li>
 --<p>
---Assign forced roles. This is mostly simple; there is some extra logic to
---sanely deal with the case where a player was assigned multiple forced
---roles. This is not commonly used, but is included for completeness.
+--Assign forced roles (those that were asked by some external code or addon).
+--There is also some extra logic to deal with the case where a player was assigned
+--multiple forced roles. This is not commonly used, but is included for completeness.
 --</p>
 --</li>
 --
@@ -2486,22 +2486,22 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --
 --<li>
 --<p>
---For each selectable baserole (in order <em>Traitor</em>,
---<em>Innocent</em>, remaining baseroles):
+--For each selectable base role (in order <em>Traitor</em>,
+--<em>Innocent</em>, remaining base roles):
 --</p>
 --<ol type="a">
 --<li>
 --<p>
---Assign up to the allowed number of players to the baserole. (This
---will be detailed later.)
+--Assign up to the allowed number of players to the base role. (this
+--will be detailed later)
 --</p>
 --<p><em>Implemented in</em> <code>SelectBaseRolePlayers</code></p>
 --</li>
 --<li>
 --<p>
---If the baserole is not <em>Innocent</em>, try to "upgrade" players
---with that baserole to possible subroles. (This will also be detailed
---later.)
+--If the base role is not <em>Innocent</em>, try to "upgrade" players
+--with that base role to possible subroles. (this will also be detailed
+--later)
 --</p>
 --<p><em>Implemented in</em> <code>UpgradeRoles</code></p>
 --</li>
@@ -2516,7 +2516,7 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --
 --<li>
 --<p>
---All players with the <em>Innocent</em> baserole have their role
+--All players with the <em>Innocent</em> base role have their role
 --"upgraded" exactly as in step 5b.
 --</p>
 --</li>
@@ -2531,8 +2531,8 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --<li>
 --<p>
 --Role weights for each player are updated according to their final role.
---(If the player's final role is a subrole, their corresponding baserole
---is also updated.)
+--(if the player's final role is a subrole, their corresponding base role
+--is also updated)
 --</p>
 --</li>
 --
@@ -2542,20 +2542,21 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --Role Layering (a.k.a. <code>roleselection.GetSelectableRolesList</code>)
 --</h3>
 --
---<p>Role layering is the most controllable part of role selection, and historically the worst explained. In short, <em>role layering</em>
+--<p>Role layering is the most controllable part of role distribution, and
+--historically the worst explained. In short, <em>role layering</em>
 --determines <em>what</em> roles can be distributed, but NOT <em>how</em>.</p>
 --
 --<p>The algorithm is as follows:</p>
 --<ol>
 --<li>
---<p>For each baserole layer configured (as long as there are enough
+--<p>For each base role layer configured (as long as there are enough
 --players that more roles are needed):</p>
 --<ol type="a">
 --<li>
 --<p>
 --Remove all roles in the layer with no available player slots.
---(This will remove roles which were previously randomly decided
---to not be distributed.)
+--(this will remove roles which were previously randomly decided
+--to not be distributed)
 --</p>
 --</li>
 --<li>
@@ -2565,34 +2566,34 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --</li>
 --<li>
 --<p>
---Add the role to the final list of candidate baseroles.
+--Add the role to the final list of candidate base roles.
 --</p>
 --</li>
 --</ol>
 --</li>
 --<li>
---<p>Randomly iterate non-layered baseroles. For each such baserole,
+--<p>Randomly iterate non-layered base roles. For each such base role,
 --add the role to the final candidate list.</p>
 --</li>
 --<li>
---<p>Modify each candidate baserole's available slots so that the sum is the
+--<p>Modify each candidate base role's available slots so that the sum is the
 --total number of players, preferring candidates added first.</p>
 --</li>
 --<li>
 --<p>Now, subroles. Evaluate once per selectable subrole (including all
---layered and unlayered subroles for all baseroles in the baserole
+--layered and unlayered subroles for all base roles in the base role
 --candidate list):</p>
 --<ol type="a">
 --<li>
---<p>Randomly select a baserole candidate.</p>
+--<p>Randomly select a base role candidate.</p>
 --</li>
 --<li>
 --<p>
---If there are any layers defined for that baserole: Select a random
+--If there are any layers defined for that base role: Select a random
 --subrole from the first available layer. Remove the layer.
 --</p>
 --<p>
---If there are no layers defined for that baserole: Select a random
+--If there are no layers defined for that base role: Select a random
 --subrole from the unlayered subroles. Remove that subrole from the
 --unlayered list.
 --</p>
@@ -2602,22 +2603,22 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --</li>
 --<li>
 --<p>
---If the baserole has no more subrole layers or subroles: Remove the
---baserole from further consideration (for this loop ONLY. It stays
+--If the base role has no more subrole layers or subroles: Remove the
+--base role from further consideration (for this loop ONLY. It stays
 --in the candidate list.)
 --</p>
 --</li>
 --</ol>
 --</li>
 --<li>
---<p>The baserole and subrole candidate lists now contain the roles which
+--<p>The base role and subrole candidate lists now contain the roles which
 --will be assigned.</p>
 --</li>
 --</ol>
 --
---<h3>Baserole Selection (a.k.a. <code>SelectBaseRolePlayers</code>)</h3>
+--<h3>Base role Selection (a.k.a. <code>SelectBaseRolePlayers</code>)</h3>
 --
---<p>Recall that we assign ALL players to ONE baserole.</p>
+--<p>Recall that we assign ALL players to ONE base role.</p>
 --<p>As long as there are players to assign, and more available slots to
 --assign:</p>
 --<ol>
@@ -2625,15 +2626,15 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --<p>Select a player to assign the role to.</p>
 --<p>
 --If <em>role derandomization</em> (see <em>Role Derandomization</em>
---section in <em>General Role Settings</em> tab) is set to "baseroles
---only" or "both": Select a random player from the available players
---weighted by the weight associated with this baserole. (Think of it
---as if each player occurs multiple times in the list, according to
---the weight.)
+--section in <em>General Role Settings</em> submenu) is set to "base roles
+--only" or "base roles AND subroles": Select a random player from the
+--available ones taking into account the weight associated with this base
+--role. (think of it as if each player occurs multiple times in the list,
+--according to the weight)
 --</p>
 --<p>
 --If <em>role derandomization</em> is set to "disabled" or "subroles
---only": Select a random player from the available players, with equal
+--only": Select a random player from the available onse, with equal
 --probability.
 --</p>
 --</li>
@@ -2642,19 +2643,19 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --<p>
 --If the selected player has enough karma for the role, there are not
 --enough players to fill all slots, a 1/3 chance passes, or the target
---baserole is <em>Innocent</em>: Remove the player from the list of
---available players and assign the player the baserole.
+--base role is <em>Innocent</em>: Remove the player from the list of
+--available players and assign the player the base role.
 --</p>
 --</li>
 --</ol>
 --
 --<h3>Subrole Selection (a.k.a. <code>UpgradeRoles</code>)</h3>
 --
---<p>This is <em>very</em> similar to baserole selection.</p>
---<p>When upgrading roles, ALL subroles associated with a baserole are
---processed together. All players with that baserole are handled together.</p>
+--<p>This is <em>very</em> similar to base role selection.</p>
+--<p>When upgrading roles, ALL subroles associated with a base role are
+--processed together, and the same so goes to all players with that base role.</p>
 --<p>Only subroles that have assignable slots that are not filled are
---considered. (This is relevant in the presence of forced subroles.)</p>
+--considered. (this is relevant in the presence of forced subroles)</p>
 --
 --<p>As long as there are players to assign, and more subroles which
 --are assignable:</p>
@@ -2663,12 +2664,12 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --<p>Select a player to assign the role to.</p>
 --<p>
 --If <em>role derandomization</em> is set to "subroles only" or
---"both": Select a random player from the available players weighted
---by the weight associated with this baserole.
+--"base roles AND subroles": Select a random player from the available ones
+--taking into account the weight associated with this subrole.
 --</p>
 --<p>
---If <em>role derandomization</em> is set to "disabled" or "baseroles
---only": Select a random player from the available players, with equal
+--If <em>role derandomization</em> is set to "disabled" or "base roles
+--only": Select a random player from the available ones, with equal
 --probability.
 --</p>
 --</li>
@@ -2679,7 +2680,7 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --enough players to fill all slots, or a 1/3 chance passes (this is the
 --same condition as above, and in the code, is a shared function): Remove
 --the player from the list of available players and assign the player the
---subrole. If the subrole has had all available slots filled, remote it
+--subrole. If the subrole has had all available slots filled, remove it
 --from consideration.
 --</p>
 --</li>
@@ -2700,8 +2701,8 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --
 --This information is only ever available for the last round which was started on this map with the option enabled.
 --
---Must be enabled when role selection happens (when the round starts) to take effect.]]
---L.label_roleinspect_enable = "Enable capturing role selection inspection information"
+--Must be enabled when role distribution happens (when the round starts) to take effect.]]
+--L.label_roleinspect_enable = "Enable capturing role distribution inspection information"
 --L.label_roleinspect_no_data = "No role inspection data is available."
 --L.help_roleinspect_unknown_stage = "Unknown stage when rendering UI. Please open an issue."
 
@@ -2733,24 +2734,24 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --L.roleinspect_reason_not_selectable_d_no_consider_s_preselect = "The role is not selectable."
 --L.roleinspect_reason_not_enabled_d_no_consider_s_preselect = "The role is not enabled."
 --L.roleinspect_reason_role_chance_d_no_consider_s_preselect = "The random check for whether the role should appear failed."
---L.roleinspect_reason_no_players_d_no_consider_s_preselect = "There are not enough players for this role to spawn."
---L.roleinspect_reason_role_decision_d_no_consider_s_preselect = "The role implementation decided it was not selectable, and provided no more detailed information."
+--L.roleinspect_reason_no_players_d_no_consider_s_preselect = "There are not enough players for this role to be considered."
+--L.roleinspect_reason_role_decision_d_no_consider_s_preselect = "The role distribution decided it was not selectable, and provided no more detailed information."
 
 -- ROLEINSPECT_STAGE_LAYERING
 --L.header_roleinspect_stage_layering = "Stage 2: Layering"
 --L.help_roleinspect_stage_layering = [[
 --This stage distributes candidate roles among player slots. This is also where Role Layering is applied.
 --
---The layers shown here will be different than thoes configured:
+--The layers shown here will be different than those configured:
 --- Roles that did not pass the previous stage are not shown
 --- Layers with no candidate roles are not shown (and layers are renumbered)
 --
 --Hover over each role for details about that role.
 --
 --Max roles: {maxRoles}
---Max baseroles: {maxBaseroles}]]
+--Max base roles: {maxBaseroles}]]
 --L.header_inspect_layers_baseroles = "Base role layers"
---L.header_inspect_layers_subroles = "{baserole} sub-role layers"
+--L.header_inspect_layers_subroles = "{baserole} subrole layers"
 --L.tooltip_layering_role_desc = [[
 --Role: {name}
 --Decision: {decision}
@@ -2758,11 +2759,11 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --# of Players: {finalCount}]]
 --L.header_inspect_layers_order = "Subrole selection order"
 --L.help_inspect_layers_order = [[
---When selecting available subroles, first a baserole is selected (shown as the large icon). Then, a subrole is selected according to layering (shown as the small icon).
+--When selecting available subroles, first a base role is selected (shown as the large icon). Then, a subrole is selected according to layering (shown as the small icon).
 --
---This is important because there is a maximum number of roles (either explicitly, or because of playercount). Once player slots or role slots are filled, assignment stops and all remaining roles are not used.]]
+--This is important because there is a maximum number of roles (either explicitly, or because of player count). Once player slots or role slots are filled, assignment stops and all remaining roles are not used.]]
 --L.tooltip_inspect_layers_baserole = "Base role: {name}"
---L.tooltip_inspect_layers_subrole = "Selected sub role: {name}"
+--L.tooltip_inspect_layers_subrole = "Selected subrole: {name}"
 
 -- Reasons
 
@@ -2773,19 +2774,19 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --L.roleinspect_reason_too_many_roles_d_no_consider_s_layering = "Other roles filled all role slots."
 
 -- ROLEINSPECT_STAGE_BASEROLES
---L.header_roleinspect_stage_baseroles = "Stage 4: Baserole Assignment"
+--L.header_roleinspect_stage_baseroles = "Stage 3: Base role Assignment"
 --L.help_roleinspect_stage_baseroles = [[
---This stage assigns baseroles to players. If derandomization is enabled, players' role weights are considered, and displayed below in a chart.
+--This stage assigns base roles to players. If derandomization is enabled, players' role weights are considered, and displayed below in a chart.
 --
---Each section shows all players which were considered for that baserole, with the highlighted ones being the ones actually selected.]]
+--Each section shows all players which were considered for that base role, with the highlighted ones being the ones actually selected.]]
 --L.header_inspect_baseroles_order = "{name} assignment"
 
 -- ROLEINSPECT_STAGE_SUBROLES
---L.header_roleinspect_stage_subroles = "Stage 5: Subrole Upgrading"
+--L.header_roleinspect_stage_subroles = "Stage 4: Subrole Upgrading"
 --L.help_roleinspect_stage_subroles = [[
---This stage upgrades players to subroles, from previously assigned baseroles.
+--This stage upgrades players to subroles, from previously assigned base roles.
 --
---Information is presented as in the baseroles stage above. Each baserole is upgraded separately.]]
+--Information is presented as in the base roles stage above. Each base role is upgraded separately.]]
 --L.header_inspect_upgrade_order = "Upgrading from {name}"
 --L.header_inspect_subroles_order = "Subrole {name}"
 --L.label_inspect_no_subroles = "No subroles were selectable."
