@@ -669,32 +669,7 @@ end
 -- @return Panel The created helpbox
 -- @realm client
 function PANEL:MakeHelp(data)
-    local left = vgui.Create("TTT2:DLabel", self)
-
-    left:SetText(data.label)
-    left:SetTextParams(data.params)
-    left:SetContentAlignment(7)
-    left:SetAutoStretchVertical(true)
-
-    left.paddingX = 10
-    left.paddingY = 5
-
-    left.Paint = function(slf, w, h)
-        derma.SkinHook("Paint", "HelpLabelTTT2", slf, w, h)
-
-        return true
-    end
-
-    -- make sure the height is based on the amount of text inside
-    left.PerformLayout = function(slf, w, h)
-        local textTranslated =
-            LANG.GetParamTranslation(slf:GetText(), LANG.TryTranslation(slf:GetTextParams()))
-
-        local textWrapped = draw.GetWrappedText(textTranslated, w - 2 * slf.paddingX, slf:GetFont())
-        local _, heightText = draw.GetTextSize("", slf:GetFont())
-
-        slf:SetSize(w, heightText * #textWrapped + 2 * slf.paddingY)
-    end
+    local left = vgui.Create("TTT2:DHelpbox", self):SetText(data.label):SetTextParams(data.params)
 
     self:AddItem(left, nil)
 
@@ -706,7 +681,7 @@ function PANEL:MakeHelp(data)
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
     end
 
-    left:InvalidateLayout(true)
+    left:InvalidateLayout(true) --todo needed?
 
     return left
 end

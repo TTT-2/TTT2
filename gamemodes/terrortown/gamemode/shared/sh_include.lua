@@ -142,6 +142,7 @@ TTTFiles = {
     },
     cl_vskin__vgui__dpippanel = { file = "cl_vskin/vgui/dpippanel_ttt2.lua", on = "client" },
     cl_vskin__vgui__dplayergraph = { file = "cl_vskin/vgui/dplayergraph_ttt2.lua", on = "client" },
+    cl_vskin__vgui__dhelpbox = { file = "cl_vskin/vgui/dhelpbox_ttt2.lua", on = "client" },
 }
 
 if SERVER then
