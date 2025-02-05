@@ -79,17 +79,17 @@ AccessorFunc(PANEL, "m_cColor", "Color", FORCE_COLOR, true)
 AccessorFunc(PANEL, "m_cOutlineColor", "OutlineColor", FORCE_COLOR, true)
 
 ---
--- @accessor number
+-- @accessor string
 -- @realm client
 AccessorFunc(PANEL, "m_TranslatedText", "TranslatedText", FORCE_STRING, true)
 
 ---
--- @accessor number
+-- @accessor string
 -- @realm client
 AccessorFunc(PANEL, "m_TranslatedDescription", "TranslatedDescription", FORCE_STRING, true)
 
 ---
--- @accessor number
+-- @accessor table
 -- @realm client
 AccessorFunc(PANEL, "m_TranslatedDescriptionLines", "TranslatedDescriptionLines", nil, true)
 
@@ -109,12 +109,12 @@ AccessorFunc(PANEL, "m_nHorizontalTextAlign", "HorizontalTextAlign", FORCE_NUMBE
 AccessorFunc(PANEL, "m_nVerticalTextAlign", "VerticalTextAlign", FORCE_NUMBER, true)
 
 ---
--- @accessor number
+-- @accessor boolean
 -- @realm client
 AccessorFunc(PANEL, "m_bFitToContentX", "FitToContentX", FORCE_BOOL, true)
 
 ---
--- @accessor number
+-- @accessor boolean
 -- @realm client
 AccessorFunc(PANEL, "m_bFitToContentY", "FitToContentY", FORCE_BOOL, true)
 
@@ -910,6 +910,43 @@ function PANEL:GetParentColor()
     return parent:GetColor()
 end
 
+---
+-- Appends a binding associated to that panel. They key will be appended after the
+-- text. The binding can be a GMod binding or a TTT2 binding.
+-- @param string binding The key binding name
+-- @return Panel Returns the panel itself
+-- @realm client
+function PANEL:SetKeyBinding(binding)
+    self.m_Binding = binding
+
+    return self
+end
+
+---
+-- Checks whether a key binding was added to the panel.
+-- @return boolean Returns true if a key binding is added
+-- @realm client
+function PANEL:HasKeyBinding()
+    return self.m_Binding ~= nil
+end
+
+---
+-- Returns the translated key binding if there exists one.
+-- @return string The translated key binding
+-- @realm client
+function PANEL:GetTranslatedKeyBindingKey()
+    local key = Key(self.m_Binding) or input.GetKeyName(bind.Find(self.m_Binding))
+
+    if not key then
+        return ""
+    end
+
+    LANG.GetParamTranslation(
+        "binding_panel_bracket",
+        { binding = string.upper(LANG.TryTranslation(key)) }
+    )
+end
+
 -- HOOKS DEFINED IN THE ENGINE --
 
 ---
@@ -973,7 +1010,17 @@ end
 -- @hook
 -- @realm client
 function PANEL:OnTranslationUpdate()
-    if self:HasText() then
+    if self:HasText() and self:HasKeyBinding() then
+        self:SetTranslatedText(
+            LANG.GetDynamicTranslation(
+                self:GetText(),
+                self:GetTextParams(),
+                self:ShouldTranslateTextParams()
+            )
+                .. " "
+                .. self:GetTranslatedKeyBindingKey()
+        )
+    elseif self:HasText() then
         self:SetTranslatedText(
             LANG.GetDynamicTranslation(
                 self:GetText(),
@@ -981,6 +1028,8 @@ function PANEL:OnTranslationUpdate()
                 self:ShouldTranslateTextParams()
             )
         )
+    elseif self:HasKeyBinding() then
+        self:SetTranslatedText(self:GetTranslatedKeyBindingKey())
     end
 
     if self:HasDescription() then
