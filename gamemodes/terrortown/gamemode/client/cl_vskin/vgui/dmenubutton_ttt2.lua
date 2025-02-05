@@ -14,43 +14,19 @@ function PANEL:OnVSkinUpdate()
 
     -- PANEL IS PRESSED or PANEL IS HOVERED
     if self:IsDepressed() or self:IsSelected() or self:GetToggle() or self:IsHovered() then
-        colorBackground = util.GetAlphaColor(
-            util.GetChangedColor(
-                self:GetColor() or vskin.GetBackgroundColor(),
-                self:GetColorShift() or 0
-            ),
-            self:GetBackgroundAlpha()
-        )
+        colorBackground = self:GetColor() or vskin.GetBackgroundColor()
         colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 50)
         olorDescription = util.GetChangedColor(util.GetDefaultColor(colorBackground), 135)
         colorIcon = util.GetChangedColor(util.GetDefaultColor(colorBackground), 160)
-        colorOutline = util.GetAlphaColor(
-            util.GetChangedColor(
-                self:GetOutlineColor() or colorBackground,
-                135 + (self:GetOutlineColorShift() or 0)
-            ),
-            self:GetOutlineAlpha()
-        )
+        colorOutline = util.GetChangedColor(self:GetOutlineColor() or colorBackground, 135)
 
     -- NORMAL COLORS
     else
-        colorBackground = util.GetAlphaColor(
-            util.GetChangedColor(
-                self:GetColor() or vskin.GetBackgroundColor(),
-                self:GetColorShift() or 0
-            ),
-            self:GetBackgroundAlpha()
-        )
+        colorBackground = self:GetColor() or vskin.GetBackgroundColor()
         colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 65)
         colorDescription = util.GetChangedColor(util.GetDefaultColor(colorBackground), 145)
         colorIcon = util.GetChangedColor(util.GetDefaultColor(colorBackground), 170)
-        colorOutline = util.GetAlphaColor(
-            util.GetChangedColor(
-                self:GetOutlineColor() or colorBackground,
-                170 + (self:GetOutlineColorShift() or 0)
-            ),
-            self:GetOutlineAlpha()
-        )
+        colorOutline = util.GetChangedColor(self:GetOutlineColor() or colorBackground, 170)
     end
 
     self:ApplyVSkinColor("background", colorBackground)

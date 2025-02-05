@@ -36,43 +36,21 @@ function PANEL:OnVSkinUpdate()
 
     -- PANEL IS PRESSED
     if self:IsDepressed() or self:IsSelected() or self:GetToggle() then
-        colorBackground = util.GetAlphaColor(
-            util.GetChangedColor(
-                self:GetColor() or util.GetActiveColor(vskin.GetAccentColor()),
-                self:GetColorShift() or 0
-            ),
-            self:GetBackgroundAlpha() or 50
-        )
+        colorBackground =
+            util.GetAlphaColor(self:GetColor() or util.GetActiveColor(vskin.GetAccentColor()), 50)
         colorText =
             util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(colorBackground), 25))
         colorIcon = util.GetActiveColor(util.GetChangedColor(COLOR_WHITE, 32))
-        colorOutline = util.GetAlphaColor(
-            util.GetChangedColor(
-                self:GetOutlineColor() or util.GetActiveColor(vskin.GetAccentColor()),
-                self:GetOutlineColorShift() or 0
-            ),
-            self:GetOutlineAlpha()
-        )
+        colorOutline = self:GetOutlineColor() or util.GetActiveColor(vskin.GetAccentColor())
 
     -- PANEL IS HOVERED or NORMAL COLORS
     else
-        colorBackground = util.GetAlphaColor(
-            util.GetChangedColor(
-                self:GetColor() or util.GetHoverColor(vskin.GetAccentColor()),
-                self:GetColorShift() or 0
-            ),
-            self:GetBackgroundAlpha() or 50
-        )
+        colorBackground =
+            util.GetAlphaColor(self:GetColor() or util.GetHoverColor(vskin.GetAccentColor()), 50)
         colorText =
             util.GetHoverColor(util.GetChangedColor(util.GetDefaultColor(colorBackground), 75))
         colorIcon = util.GetHoverColor(util.GetChangedColor(COLOR_WHITE, 48))
-        colorOutline = util.GetAlphaColor(
-            util.GetChangedColor(
-                self:GetOutlineColor() or util.GetHoverColor(vskin.GetAccentColor()),
-                self:GetOutlineColorShift() or 0
-            ),
-            self:GetOutlineAlpha()
-        )
+        colorOutline = self:GetOutlineColor() or util.GetHoverColor(vskin.GetAccentColor())
     end
 
     self:ApplyVSkinColor("background", colorBackground)

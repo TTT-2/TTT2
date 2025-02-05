@@ -81,16 +81,6 @@ AccessorFunc(PANEL, "m_cOutlineColor", "OutlineColor", FORCE_COLOR, true)
 ---
 -- @accessor number
 -- @realm client
-AccessorFunc(PANEL, "m_nColorShift", "ColorShift", FORCE_NUMBER, true)
-
----
--- @accessor number
--- @realm client
-AccessorFunc(PANEL, "m_nOutlineColorShift", "OutlineColorShift", FORCE_NUMBER, true)
-
----
--- @accessor number
--- @realm client
 AccessorFunc(PANEL, "m_TranslatedText", "TranslatedText", FORCE_STRING, true)
 
 ---
@@ -117,21 +107,6 @@ AccessorFunc(PANEL, "m_nHorizontalTextAlign", "HorizontalTextAlign", FORCE_NUMBE
 -- @accessor number
 -- @realm client
 AccessorFunc(PANEL, "m_nVerticalTextAlign", "VerticalTextAlign", FORCE_NUMBER, true)
-
----
--- @accessor number
--- @realm client
-AccessorFunc(PANEL, "m_nPadding", "Padding", FORCE_NUMBER, true)
-
----
--- @accessor number
--- @realm client
-AccessorFunc(PANEL, "m_nBackgroundAlpha", "BackgroundAlpha", FORCE_NUMBER, true)
-
----
--- @accessor number
--- @realm client
-AccessorFunc(PANEL, "m_nOutlineAlpha", "OutlineAlpha", FORCE_NUMBER, true)
 
 ---
 -- @accessor number
@@ -948,20 +923,9 @@ end
 -- @hook
 -- @realm client
 function PANEL:OnVSkinUpdate()
-    local colorBackground, colorText, colorOutline
-
-    colorBackground = util.GetAlphaColorColorAlpha(
-        util.GetChangedColor(
-            self:GetColor() or self:GetParentColor() or vskin.GetBackgroundColor(),
-            self:GetColorShift() or 0
-        ),
-        self:GetBackgroundAlpha()
-    )
-    colorText = util.GetDefaultColor(colorBackground)
-    colorOutline = util.GetAlphaColor(
-        util.GetChangedColor(self:GetOutlineColor() or colorText, self:GetOutlineColorShift() or 0),
-        self:GetOutlineAlpha()
-    )
+    local colorBackground = self:GetColor() or self:GetParentColor() or vskin.GetBackgroundColor()
+    local colorText = util.GetDefaultColor(colorBackground)
+    local colorOutline = self:GetOutlineColor() or colorText
 
     self:ApplyVSkinColor("background", colorBackground)
     self:ApplyVSkinColor("text", colorText)
