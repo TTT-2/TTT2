@@ -19,7 +19,7 @@ AccessorFunc(PANEL, "m_bDisplayInverted", "Inverted", FORCE_BOOL_IS, true)
 ---
 -- @ignore
 function PANEL:Init()
-    _G["TTT2:DLabel"].Init(self) -- todo should be nicer
+    self:BaseClass().Init(self) -- todo this is probably broken this way?
 
     -- enable mouse and keyboard input to interact with button
     self:SetMouseInputEnabled(true)
@@ -112,7 +112,7 @@ end
 ---
 -- @ignore
 function PANEL:OnRebuildLayout(w, h)
-    _G["TTT2:DPanel"].OnRebuildLayout(self, w, h) -- todo should be nicer
+    self:BaseClass().OnRebuildLayout(self, w, h)
 
     -- if the panel is depressed, the text and icon should be shifted by one pixel
     if self:IsDepressed() or self:IsSelected() or self:GetToggle() then
@@ -390,14 +390,14 @@ end
 -- I'm not sure why I have to do this - this isn't necessary for other functions
 -- @ignore
 function PANEL:OnMousePressed(mouseCode)
-    _G["TTT2:DLabel"].OnMousePressed(self, mouseCode) -- todo should be nicer
+    self:BaseClass().OnMousePressed(self, mouseCode)
 end
 
 ---
 -- I'm not sure why I have to do this - this isn't necessary for other functions
 -- @ignore
 function PANEL:OnMouseReleased(mouseCode)
-    _G["TTT2:DLabel"].OnMouseReleased(self, mouseCode) -- todo should be nicer
+    self:BaseClass().OnMouseReleased(self, mouseCode)
 end
 
 derma.DefineControl(

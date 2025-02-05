@@ -10,7 +10,7 @@ local heightNavButton = 50
 ---
 -- @ignore
 function PANEL:Init()
-    _G["TTT2:DLabel"].Init(self) -- todo should be nicer
+    self:BaseClass().Init(self)
 
     -- Make navArea scrollable
     local navAreaScroll = vgui.Create("DScrollPanelTTT2", self)

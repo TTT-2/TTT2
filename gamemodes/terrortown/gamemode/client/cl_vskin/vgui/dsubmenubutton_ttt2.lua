@@ -7,7 +7,7 @@ local PANEL = {}
 ---
 -- @ignore
 function PANEL:Init()
-    _G["TTT2:DButton"].Init(self) -- todo should be nicer
+    self:BaseClass().Init(self)
 
     -- enable toggling when selecting
     self:SetIsToggle(true)

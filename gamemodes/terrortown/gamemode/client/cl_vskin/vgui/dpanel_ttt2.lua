@@ -17,7 +17,7 @@ AccessorFunc(PANEL, "m_bDisableTabbing", "TabbingDisabled", FORCE_BOOL) -- ??? n
 ---
 -- @ignore
 function PANEL:Init()
-    _G["TTT2:DLabel"].Init(self) -- todo should be nicer
+    self:BaseClass().Init(self)
 end
 
 ---
