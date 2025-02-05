@@ -722,21 +722,52 @@ end
 -- Enables a corner radius. If set to false, the box is a normal rectange, if set to true, the
 -- box has rounded corners.
 -- @note Backgroun drawing has to be enabled.
--- @param boolean state Set to true to enable corner radius
+-- @param boolean ... Set to true to enable corner radius, can be either 1 or 4 parameters
 -- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:EnableCornerRadius(state)
-    self.m_bCornerRadius = state
+function PANEL:EnableCornerRadius(...)
+    local state = { ... }
+
+    if #state == 1 then
+        self.m_bCornerRadiusTopLeft = state[1]
+        self.m_bCornerRadiusTopRight = state[1]
+        self.m_bCornerRadiusBottomLeft = state[1]
+        self.m_bCornerRadiusBottomRight = state[1]
+    elseif #state == 4 then
+        self.m_bCornerRadiusTopLeft = state[1]
+        self.m_bCornerRadiusTopRight = state[2]
+        self.m_bCornerRadiusBottomLeft = state[3]
+        self.m_bCornerRadiusBottomRight = state[4]
+    else
+        ErrorNoHaltWithStack(
+            "[TTT2] PANEL:EnableCornerRadius expects 1 or 4 arguments, "
+                .. tostring(#sizes)
+                .. " were provided."
+        )
+    end
 
     return self
 end
 
 ---
--- Checks whether this panel has corner radius enabled.
+-- Checks whether this panel has a simple (all corners are the same) corner radius enabled.
 -- @return boolean Returns true if the corner radius is enabled
 -- @realm client
 function PANEL:HasCornerRadius()
-    return self.m_bCornerRadius or false
+    return self.m_bCornerRadiusTopLeft or false
+end
+
+---
+-- Returns a list of all four corners and if they have a defined radius.
+-- @return boolean Corner radius state for the top left corner
+-- @return boolean Corner radius state for the top right corner
+-- @return boolean Corner radius state for the bottom left corner
+-- @return boolean Corner radius state for the bottom right corner
+function PANEL:GetCornerRadius()
+    return self.m_bCornerRadiusTopLeft or false,
+        self.m_bCornerRadiusTopRight or false,
+        self.m_bCornerRadiusBottomLeft or false,
+        self.m_bCornerRadiusBottomRight or false
 end
 
 ---
@@ -771,7 +802,7 @@ function PANEL:SetOutline(...)
         self.m_nOutlineRight = sizes[3]
         self.m_nOutlineBottom = sizes[4]
     else
-        error(
+        ErrorNoHaltWithStack(
             "[TTT2] PANEL:SetOutline expects 1, 2 or 4 arguments, "
                 .. tostring(#sizes)
                 .. " were provided."
@@ -832,7 +863,7 @@ function PANEL:SetPadding(...)
         self.m_nPaddingRight = padding[3]
         self.m_nPaddingBottom = padding[4]
     else
-        error(
+        ErrorNoHaltWithStack(
             "[TTT2] PANEL:SetPadding expects 1, 2 or 4 arguments, "
                 .. tostring(#padding)
                 .. " were provided."

@@ -166,27 +166,55 @@ end
 -- @ignore
 function SKIN:PaintColoredBox(panel, w, h)
     if panel:HasCornerRadius() then
+        local tl, tr, bl, br = panel:GetCornerRadius()
+
         if panel:HasOutline() then
             local left, top, right, bottom = panel:GetOutline()
 
-            drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel:GetVSkinColor("outline"))
-            drawRoundedBox(
+            drawRoundedBoxEx(
+                sizes.cornerRadius,
+                0,
+                0,
+                w,
+                h,
+                panel:GetVSkinColor("outline"),
+                tl,
+                tr,
+                bl,
+                br
+            )
+            drawRoundedBoxEx(
                 sizes.cornerRadius,
                 left,
                 top,
                 w - left - right,
                 h - top - bottom,
-                panel:GetVSkinColor("background")
+                panel:GetVSkinColor("background"),
+                tl,
+                tr,
+                bl,
+                br
             )
         else
-            drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel:GetVSkinColor("background"))
+            drawRoundedBoxEx(
+                sizes.cornerRadius,
+                0,
+                0,
+                w,
+                h,
+                panel:GetVSkinColor("background"),
+                tl,
+                tr,
+                bl,
+                br
+            )
         end
 
         if panel:HasFlashColor() and panel:IsEnabled() then
             local colorFlash = panel:GetVSkinColor("flash")
             colorFlash.a = math.Round(15 * (math.sin((CurTime() % 2 - 1) * math.pi) + 1.1))
 
-            drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorFlash)
+            drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorFlash, tl, tr, bl, br)
         end
     else
         if panel:HasOutline() then
