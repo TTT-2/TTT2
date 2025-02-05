@@ -36,11 +36,6 @@ AccessorFunc(PANEL, "m_bDoubleClicking", "DoubleClickingEnabled", FORCE_BOOL_IS,
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bAutoStretchVertical", "AutoStretchVerticalEnabled", FORCE_BOOL_IS, true) -- ?? do we use this anywhere?
-
----
--- @accessor boolean
--- @realm client
 AccessorFunc(PANEL, "m_bIsMenuComponent", "IsMenu", FORCE_BOOL) -- ??? needed in TTT2:DComboBox?
 
 ---
@@ -149,7 +144,11 @@ AccessorFunc(PANEL, "m_bFitToContentX", "FitToContentX", FORCE_BOOL, true)
 AccessorFunc(PANEL, "m_bFitToContentY", "FitToContentY", FORCE_BOOL, true)
 
 ---
--- @ignore
+-- Is called on initialization of the panel.
+-- @note vgui.Register does not support inheritance for the Init function, therefore
+-- this function always has to be set with a call of its base.
+-- @hook
+-- @realm client
 function PANEL:Init()
     -- data attached to the panel is put in its own scope
     self._eventListeners = {}
@@ -256,6 +255,15 @@ end
 -- SPECIAL FUNCTIONS TO HANDLE HOOKS AND EXTENDED FEATURES --
 
 ---
+-- Returns the metatable of the base class if a baseclass exists.
+-- Can be used to call functions on the base.
+-- @return Panel The base class meta table
+-- @realm client
+function PANEL:BaseClass()
+    return gui.GetControlTable(self.Base)
+end
+
+---
 -- Used to register an event on the panel. This can be stuff such as "Click" etc.
 -- @param string eventName The name of the event
 -- @param function callback The callback function that is called in this event
@@ -297,15 +305,14 @@ end
 -- calls the Panel function with the hook name if it exists
 -- @param string eventName The name of the event
 -- @param any ... The hook parameters
--- @return any Returns whatever the specific hook may return
 -- @internal
 -- @realm client
 function PANEL:TriggerOnWithBase(eventName, ...)
-    self:TriggerOn(eventName, ...)
-
     if isfunction(self["On" .. eventName]) then
-        return self["On" .. eventName](self, ...)
+        self["On" .. eventName](self, ...)
     end
+
+    self:TriggerOn(eventName, ...)
 end
 
 ---
@@ -800,10 +807,18 @@ function PANEL:SetOutline(...)
 end
 
 ---
+-- Checks whether the panel has an outline applied.
+-- @return boolean Returns true if the panel has an outline
+-- @realm client
+function PANEL:HasOutline()
+    return self.m_nOutlineLeft ~= nil
+end
+
+---
 -- Gets the outline ticknesses for all four sides.
 -- @return number The left outline
 -- @return number The top outline
--- @return number The rihgt outline
+-- @return number The right outline
 -- @return number The bottom outline
 -- @realm client
 function PANEL:GetOutline()
@@ -811,11 +826,59 @@ function PANEL:GetOutline()
 end
 
 ---
--- Checks whether the panel has an outline applied.
--- @return boolean Returns true if the panel has an outline
+-- Sets the padding of a panel.
+-- @note If one parameter is provided, this value is for all four sides. If two values
+-- are provided, the first is for the vertival padding, the second for the horizontal.
+-- If four are provided they are set left, top, right, bottom.
+-- @param number ... The padding
+-- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:HasOutline()
-    return self.m_nOutlineLeft ~= nil
+function PANEL:SetPadding(...)
+    local padding = { ... }
+
+    if #padding == 0 then
+        self.m_nPaddingLeft = nil
+        self.m_nPaddingTop = nil
+        self.m_nPaddingRight = nil
+        self.m_nPaddingBottom = nil
+    elseif #padding == 1 then
+        self.m_nPadingLeft = padding[1]
+        self.m_nPaddingTop = padding[1]
+        self.m_nPaddingRight = padding[1]
+        self.m_nPaddingBottom = padding[1]
+    elseif #padding == 2 then
+        self.m_nPaddingLeft = padding[1]
+        self.m_nPaddingTop = padding[2]
+        self.m_nPaddingRight = padding[1]
+        self.m_nPaddingBottom = padding[2]
+    elseif #padding == 4 then
+        self.m_nPaddingLeft = padding[1]
+        self.m_nPaddingTop = padding[2]
+        self.m_nPaddingRight = padding[3]
+        self.m_nPaddingBottom = padding[4]
+    else
+        error(
+            "[TTT2] PANEL:SetPadding expects 1, 2 or 4 arguments, "
+                .. tostring(#padding)
+                .. " were provided."
+        )
+    end
+
+    return self
+end
+
+---
+-- Gets the padding for all four sides.
+-- @return number Left padding
+-- @return number Top padding
+-- @return number Right padding
+-- @return number Bottom padding
+-- @realm client
+function PANEL:GetPadding()
+    return self.m_nPaddingLeft or 0,
+        self.m_nPaddingTop or 0,
+        self.m_nPaddingRight or 0,
+        self.m_nPaddingBottom or 0
 end
 
 ---
@@ -944,53 +1007,47 @@ end
 -- @hook
 -- @realm client
 function PANEL:OnRebuildLayout(w, h)
-    local shortestEdge = math.min(w, h)
     local textTranslated = self:GetTranslatedText() or ""
     local widthText, heightText = draw.GetTextSize(textTranslated, self:GetFont())
 
     -- as a basic fallback, this should be a solid padding
-    local padding = self:GetPadding() or math.Round(0.1 * shortestEdge)
+    local padLeft, padTop, padRight, padBottom = self:GetPadding()
 
     -- PRECALCULATE ICON SIZE
     local sizeIcon = self:GetIconSize()
-    local posIconX, posIconY, marginIcon
+    local posIconX, posIconY
 
     if self:HasIcon() then
         if not sizeIcon then
-            marginIcon = padding
-
-            sizeIcon = shortestEdge - 2 * marginIcon
-            posIconY = marginIcon
+            if w < h then
+                sizeIcon = w - padLeft - padRight
+            else
+                sizeIcon = h - padTop - padBottom
+            end
         elseif sizeIcon == 0 then
-            sizeIcon = shortestEdge
-            marginIcon = 0
-
-            posIconY = 0
-        else
-            marginIcon = padding
-
-            posIconY = 0.5 * (shortestEdge - sizeIcon)
+            sizeIcon = math.min(w, h)
         end
     end
 
     -- RESIZE ELEMENT
     if self:GetFitToContentX() then
         if self:HasIcon() and self:HasText() then
-            w = widthText + sizeIcon + marginIcon + 2 * padding
+            -- todo: is this a good idea to have padLeft as distance for icon?
+            w = widthText + sizeIcon + 2 * padLeft + padRight
         elseif self:HasIcon() then
-            w = sizeIcon + 2 * marginIcon
+            w = sizeIcon + padLeft + padRight
         elseif self:HasText() then
-            w = widthText + 2 * padding
+            w = widthText + padLeft + padRight
         end
 
         self:SetWide(w)
     -- if the panel has text and the box size isn't influenced by the content, the text should
-    -- be cut off if it is too long to fix
+    -- be cut off if it is too long to fit
     elseif self:HasText() then
-        local maxWidthText = w - 2 * padding
+        local maxWidthText = w - padLeft - padRight
 
         if self:HasIcon() then
-            maxWidthText = maxWidthText - sizeIcon - marginIcon
+            maxWidthText = maxWidthText - sizeIcon - padLeft
         end
 
         -- trim the text if necessary
@@ -1011,17 +1068,17 @@ function PANEL:OnRebuildLayout(w, h)
 
     if hor == TEXT_ALIGN_LEFT then
         if self:HasIcon() and self:HasText() then
-            posIconX = marginIcon
-            posTextX = posIconX + sizeIcon + padding
+            posIconX = padLeft
+            posTextX = posIconX + sizeIcon + padLeft
         elseif self:HasIcon() then
-            posIconX = marginIcon
+            posIconX = padLeft
         elseif self:HasText() then
-            posTextX = padding
+            posTextX = padLeft
         end
     elseif hor == TEXT_ALIGN_CENTER then
         if self:HasIcon() and self:HasText() then
-            posTextX = 0.5 * (w + sizeIcon + padding)
-            posIconX = posTextX - sizeIcon - padding - 0.5 * widthText
+            posTextX = 0.5 * (w + sizeIcon + 2 * padLeft)
+            posIconX = posTextX - sizeIcon - padLeft - 0.5 * widthText
         elseif self:HasIcon() then
             posIconX = 0.5 * (w - sizeIcon)
         elseif self:HasText() then
@@ -1029,12 +1086,12 @@ function PANEL:OnRebuildLayout(w, h)
         end
     elseif hor == TEXT_ALIGN_RIGHT then
         if self:HasIcon() and self:HasText() then
-            posIconX = w - marginIcon - sizeIcon
-            posTextX = posIconX - padding
+            posIconX = w - padRight - sizeIcon
+            posTextX = posIconX - padLeft
         elseif self:HasIcon() then
-            posIconX = w - marginIcon - sizeIcon
+            posIconX = w - padRight - sizeIcon
         elseif self:HasText() then
-            posTextX = w - padding
+            posTextX = w - padRight
         end
     end
 
@@ -1042,10 +1099,10 @@ function PANEL:OnRebuildLayout(w, h)
     local descriptionLines, heightDescription
 
     if self:HasDescription() then
-        local maxWidthDescription = w - 2 * padding
+        local maxWidthDescription = w - padLeft - padRight
 
         if self:HasIcon() then
-            maxWidthDescription = maxWidthDescription - padding - sizeIcon - marginIcon
+            maxWidthDescription = maxWidthDescription - padLeft - sizeIcon
         end
 
         descriptionLines, _, heightDescription = draw.GetWrappedText(
@@ -1060,16 +1117,16 @@ function PANEL:OnRebuildLayout(w, h)
     if self:GetFitToContentY() then
         local enlarge = 0
 
-        if self:HasText() then
-            enlarge = heightText + 2 * padding
-        end
-
-        if self:HasDescription() then
-            enlarge = enlarge + heightDescription + padding
+        if self:HasText() and self:HasDescription() then
+            enlarge = heightText + heightDescription + 2 * padTop + padBottom
+        elseif self:HasText() then
+            enlarge = heightText + padTop + padBottom
+        elseif self:HasDescription() then
+            enlarge = heightDescription + padTop + padBottom
         end
 
         if self:HasIcon() then
-            enlarge = math.max(enlarge, sizeIcon + 2 * marginIcon)
+            enlarge = math.max(enlarge, sizeIcon + padTop + padBottom)
         end
 
         h = enlarge
@@ -1078,20 +1135,22 @@ function PANEL:OnRebuildLayout(w, h)
     end
 
     if ver == TEXT_ALIGN_TOP then
-        posTextY = padding
+        posTextY = padTop
 
         if self:HasIcon() then
-            posIconY = marginIcon
+            posIconY = padTop
         end
     elseif ver == TEXT_ALIGN_CENTER then
         posTextY = 0.5 * h
 
-        -- icon position already exists for this case
+        if self:HasIcon() then
+            posIconY = 0.5 * (h - sizeIcon)
+        end
     elseif ver == TEXT_ALIGN_BOTTOM then
-        posTextY = h - padding
+        posTextY = h - padBottom
 
         if self:HasIcon() then
-            posIconY = h - sizeIcon - marginIcon
+            posIconY = h - sizeIcon - padBottom
         end
     end
 
@@ -1103,15 +1162,25 @@ function PANEL:OnRebuildLayout(w, h)
         if ver == TEXT_ALIGN_TOP then
             posTextY = posTextY
         elseif ver == TEXT_ALIGN_CENTER then
-            posTextY = posTextY - 0.5 * (heightDescription + padding)
+            if self:HasText() then
+                posTextY = posTextY - 0.5 * (heightDescription + padTop)
+            else
+                posTextY = h - 0.5 * heightDescription
+            end
         elseif ver == TEXT_ALIGN_BOTTOM then
-            posTextY = posTextY - #descriptionLines * heightDescriptionLine - padding
+            if self:HasText() then
+                posTextY = posTextY - #descriptionLines * heightDescriptionLine - padBottom
+            else
+                posTextY = h - #descriptionLines * heightDescriptionLine - padBottom
+            end
         end
 
         posDescriptionY = {}
 
         for i = 1, #descriptionLines do
-            posDescriptionY[i] = posTextY + heightText + padding + (i - 1) * heightDescriptionLine
+            posDescriptionY[i] = posTextY
+                + (self:HasText() and (heightText + padTop) or 0)
+                + (i - 1) * heightDescriptionLine
         end
     end
 
