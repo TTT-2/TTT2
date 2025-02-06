@@ -19,7 +19,7 @@ AccessorFunc(PANEL, "m_bDisplayInverted", "Inverted", FORCE_BOOL_IS, true)
 ---
 -- @ignore
 function PANEL:Init()
-    self:BaseClass().Init(self) -- todo this is probably broken this way?
+    DBase("TTT2:DPanel").Init(self)
 
     -- enable mouse and keyboard input to interact with button
     self:SetMouseInputEnabled(true)
@@ -54,8 +54,7 @@ function PANEL:OnVSkinUpdate()
 
     -- PANEL IS HOVERED
     elseif self:IsHovered() then
-        colorBackground =
-            util.GetHoverColor(self:GetColor() or vskin.GetAccentColor()), self:GetColorShift()
+        colorBackground = util.GetHoverColor(self:GetColor() or vskin.GetAccentColor())
         colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 220)
         colorOutline = util.GetActiveColor(self:GetOutlineColor() or vskin.GetDarkAccentColor())
 
@@ -77,7 +76,7 @@ end
 ---
 -- @ignore
 function PANEL:OnRebuildLayout(w, h)
-    self:BaseClass().OnRebuildLayout(self, w, h)
+    DBase("TTT2:DPanel").OnRebuildLayout(self, w, h)
 
     -- if the panel is depressed, the text and icon should be shifted by one pixel
     if self:IsDepressed() or self:IsSelected() or self:GetToggle() then
@@ -355,14 +354,14 @@ end
 -- I'm not sure why I have to do this - this isn't necessary for other functions
 -- @ignore
 function PANEL:OnMousePressed(mouseCode)
-    self:BaseClass().OnMousePressed(self, mouseCode)
+    DBase("TTT2:DLabel").OnMousePressed(self, mouseCode)
 end
 
 ---
 -- I'm not sure why I have to do this - this isn't necessary for other functions
 -- @ignore
 function PANEL:OnMouseReleased(mouseCode)
-    self:BaseClass().OnMouseReleased(self, mouseCode)
+    DBase("TTT2:DLabel").OnMouseReleased(self, mouseCode)
 end
 
 derma.DefineControl(

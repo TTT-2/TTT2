@@ -160,6 +160,7 @@ function PANEL:Init()
     self:SetTooltipOpeningDelay(0)
     self:SetTooltipFont("DermaTTT2Text")
     self:SetTooltipArrowSize(8)
+    self:SetPadding(8)
 
     -- some basic engine defined functions of panels have to be extended to
     -- support method chaining
@@ -228,15 +229,6 @@ function PANEL:Init()
 end
 
 -- SPECIAL FUNCTIONS TO HANDLE HOOKS AND EXTENDED FEATURES --
-
----
--- Returns the metatable of the base class if a baseclass exists.
--- Can be used to call functions on the base.
--- @return Panel The base class meta table
--- @realm client
-function PANEL:BaseClass()
-    return gui.GetControlTable(self.Base)
-end
 
 ---
 -- Used to register an event on the panel. This can be stuff such as "Click" etc.
@@ -741,7 +733,7 @@ function PANEL:EnableCornerRadius(...)
     else
         ErrorNoHaltWithStack(
             "[TTT2] PANEL:EnableCornerRadius expects 1 or 4 arguments, "
-                .. tostring(#sizes)
+                .. tostring(#state)
                 .. " were provided."
         )
     end
@@ -848,7 +840,7 @@ function PANEL:SetPadding(...)
         self.m_nPaddingRight = nil
         self.m_nPaddingBottom = nil
     elseif #padding == 1 then
-        self.m_nPadingLeft = padding[1]
+        self.m_nPaddingLeft = padding[1]
         self.m_nPaddingTop = padding[1]
         self.m_nPaddingRight = padding[1]
         self.m_nPaddingBottom = padding[1]
@@ -903,7 +895,7 @@ end
 function PANEL:GetParentColor()
     local parent = self:GetParent()
 
-    if not IsValid(parent) then
+    if not IsValid(parent) or not isfunction(parent.GetColor) then
         return
     end
 
@@ -941,7 +933,7 @@ function PANEL:GetTranslatedKeyBindingKey()
         return ""
     end
 
-    LANG.GetParamTranslation(
+    return LANG.GetParamTranslation(
         "binding_panel_bracket",
         { binding = string.upper(LANG.TryTranslation(key)) }
     )
@@ -1054,7 +1046,6 @@ function PANEL:OnRebuildLayout(w, h)
     local textTranslated = self:GetTranslatedText() or ""
     local widthText, heightText = draw.GetTextSize(textTranslated, self:GetFont())
 
-    -- as a basic fallback, this should be a solid padding
     local padLeft, padTop, padRight, padBottom = self:GetPadding()
 
     -- PRECALCULATE ICON SIZE
@@ -1111,30 +1102,30 @@ function PANEL:OnRebuildLayout(w, h)
     local posTextX, posTextY, posDescriptionY
 
     if hor == TEXT_ALIGN_LEFT then
-        if self:HasIcon() and self:HasText() then
+        if self:HasIcon() and (self:HasText() or self:HasDescription()) then
             posIconX = padLeft
             posTextX = posIconX + sizeIcon + padLeft
         elseif self:HasIcon() then
             posIconX = padLeft
-        elseif self:HasText() then
+        elseif self:HasText() or self:HasDescription() then
             posTextX = padLeft
         end
     elseif hor == TEXT_ALIGN_CENTER then
-        if self:HasIcon() and self:HasText() then
+        if self:HasIcon() and (self:HasText() or self:HasDescription()) then
             posTextX = 0.5 * (w + sizeIcon + 2 * padLeft)
             posIconX = posTextX - sizeIcon - padLeft - 0.5 * widthText
         elseif self:HasIcon() then
             posIconX = 0.5 * (w - sizeIcon)
-        elseif self:HasText() then
+        elseif self:HasText() or self:HasDescription() then
             posTextX = 0.5 * w
         end
     elseif hor == TEXT_ALIGN_RIGHT then
-        if self:HasIcon() and self:HasText() then
+        if self:HasIcon() and (self:HasText() or self:HasDescription()) then
             posIconX = w - padRight - sizeIcon
             posTextX = posIconX - padLeft
         elseif self:HasIcon() then
             posIconX = w - padRight - sizeIcon
-        elseif self:HasText() then
+        elseif self:HasText() or self:HasDescription() then
             posTextX = w - padRight
         end
     end
@@ -1209,13 +1200,13 @@ function PANEL:OnRebuildLayout(w, h)
             if self:HasText() then
                 posTextY = posTextY - 0.5 * (heightDescription + padTop)
             else
-                posTextY = h - 0.5 * heightDescription
+                posTextY = 0.5 * (h - (#descriptionLines - 1) * heightDescriptionLine)
             end
         elseif ver == TEXT_ALIGN_BOTTOM then
             if self:HasText() then
-                posTextY = posTextY - #descriptionLines * heightDescriptionLine - padBottom
+                posTextY = posTextY - heightDescription - padBottom
             else
-                posTextY = h - #descriptionLines * heightDescriptionLine - padBottom
+                posTextY = h - (#descriptionLines - 1) * heightDescriptionLine - padBottom
             end
         end
 
@@ -1267,9 +1258,6 @@ end
 -- @hook
 -- @realm client
 function PANEL:PerformLayout(w, h)
-    w = w or self:GetWide()
-    h = h or self:GetTall()
-
     -- call internal hooks that are used to rebuild the design. First, the color cache is rebuilt,
     -- then the translation and lastly the design scaling is redone.
     self:TriggerOnWithBase("VSkinUpdate")

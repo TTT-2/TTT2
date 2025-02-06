@@ -222,3 +222,12 @@ end
 function IsRagdoll(ent)
     return IsValid(ent) and ent:IsPlayerRagdoll()
 end
+
+---
+-- Returns the metatable of the base class if a baseclass exists of this panel.
+-- Can be used to call functions on the base.
+-- @return Panel The base class meta table
+-- @realm shared
+function DBase(name)
+    return _G[name]
+end

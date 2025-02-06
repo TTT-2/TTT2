@@ -7,7 +7,7 @@ local PANEL = {}
 ---
 -- @ignore
 function PANEL:Init()
-    self:BaseClass().Init(self)
+    DBase("TTT2:DButton").Init(self)
 
     -- enable toggling when selecting
     self:SetIsToggle(true)
