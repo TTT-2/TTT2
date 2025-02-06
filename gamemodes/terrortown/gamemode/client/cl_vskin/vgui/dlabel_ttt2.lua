@@ -1237,6 +1237,18 @@ function PANEL:OnRebuildLayout(w, h)
         self:ApplyVSkinDimension("posIconX", posIconX)
         self:ApplyVSkinDimension("posIconY", posIconY)
     end
+
+    -- if the panel changed size and the panel has a parent, the parent should
+    -- be recalculcating its size as well
+    if self:GetFitToContentX() or self:GetFitToContentY() then
+        local parent = self:GetParent()
+
+        if not IsValid(parent) then
+            return
+        end
+
+        parent:InvalidateLayout(true)
+    end
 end
 
 ---
