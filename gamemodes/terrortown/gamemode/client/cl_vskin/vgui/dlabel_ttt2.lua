@@ -755,6 +755,7 @@ end
 -- @return boolean Corner radius state for the top right corner
 -- @return boolean Corner radius state for the bottom left corner
 -- @return boolean Corner radius state for the bottom right corner
+-- @realm client
 function PANEL:GetCornerRadius()
     return self.m_bCornerRadiusTopLeft or false,
         self.m_bCornerRadiusTopRight or false,

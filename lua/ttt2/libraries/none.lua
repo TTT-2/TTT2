@@ -226,6 +226,7 @@ end
 ---
 -- Returns the metatable of the base class if a baseclass exists of this panel.
 -- Can be used to call functions on the base.
+-- @param string name The name of the DPanel class
 -- @return Panel The base class meta table
 -- @realm shared
 function DBase(name)
