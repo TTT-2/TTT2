@@ -6,6 +6,18 @@ local PANEL = {}
 
 ---
 -- @ignore
+function PANEL:Init()
+    DBase("TTT2:DButton").Init(self)
+
+    self:SetFont("DermaTTT2MenuButtonTitle")
+    self:SetDescriptionFont("DermaTTT2MenuButtonDescription")
+    self:SetOutline(1)
+    self:SetPadding(15)
+    self:SetTextAlign(TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+end
+
+---
+-- @ignore
 function PANEL:OnVSkinUpdate()
     local colorBackground, colorText, colorDescription, colorIcon, colorOutline
 
@@ -16,9 +28,12 @@ function PANEL:OnVSkinUpdate()
     if self:IsDepressed() or self:IsSelected() or self:GetToggle() or self:IsHovered() then
         colorBackground = self:GetColor() or vskin.GetBackgroundColor()
         colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 50)
-        olorDescription = util.GetChangedColor(util.GetDefaultColor(colorBackground), 135)
+        colorDescription = util.GetChangedColor(util.GetDefaultColor(colorBackground), 135)
         colorIcon = util.GetChangedColor(util.GetDefaultColor(colorBackground), 160)
-        colorOutline = util.GetChangedColor(self:GetOutlineColor() or colorBackground, 135)
+        colorOutline = util.GetChangedColor(
+            util.GetDefaultColor(self:GetOutlineColor() or colorBackground),
+            135
+        )
 
     -- NORMAL COLORS
     else
@@ -26,7 +41,10 @@ function PANEL:OnVSkinUpdate()
         colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 65)
         colorDescription = util.GetChangedColor(util.GetDefaultColor(colorBackground), 145)
         colorIcon = util.GetChangedColor(util.GetDefaultColor(colorBackground), 170)
-        colorOutline = util.GetChangedColor(self:GetOutlineColor() or colorBackground, 170)
+        colorOutline = util.GetChangedColor(
+            util.GetDefaultColor(self:GetOutlineColor() or colorBackground),
+            170
+        )
     end
 
     self:ApplyVSkinColor("background", colorBackground)

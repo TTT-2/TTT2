@@ -89,13 +89,13 @@ function PANEL:OnRebuildLayout(w, h)
         end
 
         if self:HasDescription() then
-            local posY = self:GetVSkinDimension("posTextY")
+            local posY = self:GetVSkinDimension("posTableDescriptionY")
 
             for i = 1, #posY do
                 posY[i] = posY[i] + 1
             end
 
-            self:ApplyVSkinDimension("posTextY", posY)
+            self:ApplyVSkinDimension("posTableDescriptionY", posY)
         end
     end
 end

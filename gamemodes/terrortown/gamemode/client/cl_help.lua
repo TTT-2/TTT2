@@ -144,12 +144,13 @@ HELPSCRN.padding = 5
 
 -- define sizes
 local width, height = 1100, 700
-local heightMainMenuButton = 120
+local heightMainMenuButton = 110
 
 local widthNav = 300
 local widthContent, heightContent = 800, 700
 local heightButtonPanel = 80
 local heightAdminSeperator = 50
+local sizeIcon = 64
 
 local function AddMenuButtons(menuTbl, parent, widthButton, heightButton)
     for i = 1, #menuTbl do
@@ -160,7 +161,7 @@ local function AddMenuButtons(menuTbl, parent, widthButton, heightButton)
             :SetSize(widthButton, heightButton)
             :SetText(menuClass.title or menuClass.type)
             :SetDescription(menuClass.description)
-            :SetIcon(menuClass.icon)
+            :SetIcon(menuClass.icon, nil, nil, sizeIcon)
             :On("LeftClick", function()
                 HELPSCRN:ShowSubmenu(menuClass)
             end)
@@ -371,7 +372,7 @@ function HELPSCRN:ShowSubmenu(menuClass)
         :SetPos(widthNav, 0)
         :DockPadding(self.padding, self.padding, self.padding, self.padding)
         :Dock(TOP)
-        :SetColorShift(30)
+    --:SetColorShift(30)
 
     -- MAKE SEPARATE SUBMENULIST ON THE NAVAREA WITH A CONTENT AREA
     local submenuList = vgui.Create("DSubmenuListTTT2", navArea)
