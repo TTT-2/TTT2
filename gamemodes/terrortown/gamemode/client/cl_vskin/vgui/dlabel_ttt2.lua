@@ -1113,7 +1113,7 @@ function PANEL:OnRebuildLayout(w, h)
         end
     elseif hor == TEXT_ALIGN_CENTER then
         if self:HasIcon() and (self:HasText() or self:HasDescription()) then
-            posTextX = 0.5 * (w + sizeIcon + 2 * padLeft)
+            posTextX = 0.5 * (w + sizeIcon + padLeft)
             posIconX = posTextX - sizeIcon - padLeft - 0.5 * widthText
         elseif self:HasIcon() then
             posIconX = 0.5 * (w - sizeIcon)
