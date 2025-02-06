@@ -20,6 +20,7 @@
 --   OnVSkinUpdate
 --   OnTranslationUpdate
 --   OnRebuildLayout
+--   VSkinColorPostProcess
 
 local PANEL = {}
 
@@ -77,6 +78,16 @@ AccessorFunc(PANEL, "m_cColor", "Color", FORCE_COLOR, true)
 -- @accessor Color
 -- @realm client
 AccessorFunc(PANEL, "m_cOutlineColor", "OutlineColor", FORCE_COLOR, true)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_nColorShift", "ColorShift", FORCE_NUMBER, true)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_nOutlineColorShift", "OutlineColorShift", FORCE_NUMBER, true)
 
 ---
 -- @accessor string
@@ -275,11 +286,15 @@ end
 -- @internal
 -- @realm client
 function PANEL:TriggerOnWithBase(eventName, ...)
+    return self:TriggerOn(eventName, ...)
+    
     if isfunction(self["On" .. eventName]) then
-        self["On" .. eventName](self, ...)
-    end
+        local returnValue = self["On" .. eventName](self, ...)
 
-    self:TriggerOn(eventName, ...)
+        if returnValue ~= nil then
+            return returnValue
+        end
+    end
 end
 
 ---
@@ -347,15 +362,18 @@ end
 -- cached for further use. They are set in @{OnVSkinUpdate}.
 -- @param string identifier A unique identifer with the name of the color
 -- @param Color color The color that is set here
--- @return Color Returns the added color as a pass-through
+-- @return Panel Returns the panel itself
 -- @internal
 -- @realm client
 function PANEL:ApplyVSkinColor(identifier, color)
     -- the color is copied here to make sure that any modifications to that
     -- color won't change anything downstram
-    self._vskinColor[identifier] = table.Copy(color)
+    color = table.Copy(color)
+    color = self:TriggerOnWithBase("VSkinColorPostProcess", identifier, color) or color
+    
+    self._vskinColor[identifier] = color
 
-    return color
+    return self
 end
 
 ---
@@ -1480,6 +1498,27 @@ function PANEL:OnDoubleClick() end
 -- @hook
 -- @realm client
 function PANEL:OnDoubleClickInternal() end
+
+---
+-- Called after a color is applied to the color cache. Can be used to modify these colors
+-- in a post processing step.
+-- @param string identifier The name of the color 
+-- @param Color color The unchanged color
+-- @return Color|nil Return the color to change it, return nil to keep it unchanged
+-- @hook
+-- @realm client
+function PANEL:OnVSkinColorPostProcess(identifier, color)
+    local colorShiftBackground = self:GetColorShift()
+    local colorShiftOutline = self:GetOutlineColorShift()
+
+    if identifier == "background" and colorShiftBackground and colorShiftBackground ~= 0 then
+        return util.GetChangedColor(color, colorShiftBackground)
+    end
+
+    if identifier == "outline" and colorShiftOutline and colorShiftOutline ~= 0 then
+        return util.GetChangedColor(color, colorShiftOutline)
+    end
+end
 
 -- TOOLTIP RELATED FUNCTIONS --
 
