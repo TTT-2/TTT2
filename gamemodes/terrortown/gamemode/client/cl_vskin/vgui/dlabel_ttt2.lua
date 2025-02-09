@@ -130,6 +130,11 @@ AccessorFunc(PANEL, "m_bFitToContentX", "FitToContentX", FORCE_BOOL, true)
 AccessorFunc(PANEL, "m_bFitToContentY", "FitToContentY", FORCE_BOOL, true)
 
 ---
+-- @accessor boolean
+-- @realm client
+AccessorFunc(PANEL, "m_bVerticalAlign", "VerticalAlign", FORCE_BOOL_HAS, true)
+
+---
 -- Is called on initialization of the panel.
 -- @note vgui.Register does not support inheritance for the Init function, therefore
 -- this function always has to be set with a call of its base.
@@ -164,6 +169,7 @@ function PANEL:Init()
     self:SetFont("DermaTTT2Text")
     self:SetDescriptionFont("DermaTTT2Text")
     self:SetTextAlign(TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    self:SetVerticalAlign(false)
 
     -- set the defaults for the tooltip
     self:SetTooltipFixedPosition(nil)
@@ -286,8 +292,13 @@ end
 -- @internal
 -- @realm client
 function PANEL:TriggerOnWithBase(eventName, ...)
-    return self:TriggerOn(eventName, ...)
-    
+    local returnValue
+    self:TriggerOn(eventName, ...)
+
+    if returnValue ~= nil then
+        return returnValue
+    end
+
     if isfunction(self["On" .. eventName]) then
         local returnValue = self["On" .. eventName](self, ...)
 
@@ -370,7 +381,7 @@ function PANEL:ApplyVSkinColor(identifier, color)
     -- color won't change anything downstram
     color = table.Copy(color)
     color = self:TriggerOnWithBase("VSkinColorPostProcess", identifier, color) or color
-    
+
     self._vskinColor[identifier] = color
 
     return self
@@ -1069,7 +1080,7 @@ function PANEL:OnRebuildLayout(w, h)
 
     -- PRECALCULATE ICON SIZE
     local sizeIcon = self:GetIconSize()
-    local posIconX, posIconY
+    local posIconX, posIconY, posTextX, posTextY, posDescriptionStartY, posDescriptionY
 
     if self:HasIcon() then
         if not sizeIcon then
@@ -1083,21 +1094,36 @@ function PANEL:OnRebuildLayout(w, h)
         end
     end
 
-    -- RESIZE ELEMENT
+    -- RESIZE ELEMENT: the vertical resizing is different for vertical and horizontal alignment
     if self:GetFitToContentX() then
-        if self:HasIcon() and self:HasText() then
-            -- todo: is this a good idea to have padLeft as distance for icon?
-            w = widthText + sizeIcon + 2 * padLeft + padRight
-        elseif self:HasIcon() then
-            w = sizeIcon + padLeft + padRight
-        elseif self:HasText() then
-            w = widthText + padLeft + padRight
+        -- to simplify things, FitToContentsX ignores the description text
+        w = padLeft + padRight
+
+        if self:HasVerticalAlignment() then
+            if self:HasIcon() then
+                w = sizeIcon + padLeft + padRight
+            end
+
+            if self:HasText() then
+                w = math.max(w, widthText + padLeft + padRight)
+            end
+        else
+            if self:HasIcon() and self:HasText() then
+                -- todo: is this a good idea to have padLeft as distance for icon?
+                w = widthText + sizeIcon + 2 * padLeft + padRight
+            elseif self:HasIcon() then
+                w = sizeIcon + padLeft + padRight
+            elseif self:HasText() then
+                w = widthText + padLeft + padRight
+            end
         end
 
         self:SetWide(w)
+    end
+
     -- if the panel has text and the box size isn't influenced by the content, the text should
     -- be cut off if it is too long to fit
-    elseif self:HasText() then
+    if not self:GetFitToContentX() and self:HasText() then
         local maxWidthText = w - padLeft - padRight
 
         if self:HasIcon() then
@@ -1114,48 +1140,59 @@ function PANEL:OnRebuildLayout(w, h)
         widthText, _ = draw.GetTextSize(textTranslated, self:GetFont())
     end
 
-    -- CALCULATE TEXT AND ICON POSITION
     local hor = self:GetHorizontalTextAlign()
-    local ver = self:GetVerticalTextAlign()
 
-    local posTextX, posTextY, posDescriptionY
-
-    if hor == TEXT_ALIGN_LEFT then
-        if self:HasIcon() and (self:HasText() or self:HasDescription()) then
+    -- CALCULATE TEXT AND ICON POSITION
+    if self:HasVerticalAlignment() then
+        if hor == TEXT_ALIGN_LEFT then
             posIconX = padLeft
-            posTextX = posIconX + sizeIcon + padLeft
-        elseif self:HasIcon() then
-            posIconX = padLeft
-        elseif self:HasText() or self:HasDescription() then
             posTextX = padLeft
-        end
-    elseif hor == TEXT_ALIGN_CENTER then
-        if self:HasIcon() and (self:HasText() or self:HasDescription()) then
-            posTextX = 0.5 * (w + sizeIcon + padLeft)
-            posIconX = posTextX - sizeIcon - padLeft - 0.5 * widthText
-        elseif self:HasIcon() then
-            posIconX = 0.5 * (w - sizeIcon)
-        elseif self:HasText() or self:HasDescription() then
+        elseif hor == TEXT_ALIGN_CENTER then
             posTextX = 0.5 * w
-        end
-    elseif hor == TEXT_ALIGN_RIGHT then
-        if self:HasIcon() and (self:HasText() or self:HasDescription()) then
+            posIconX = 0.5 * (w - sizeIcon)
+        elseif hor == TEXT_ALIGN_RIGHT then
             posIconX = w - padRight - sizeIcon
-            posTextX = posIconX - padLeft
-        elseif self:HasIcon() then
-            posIconX = w - padRight - sizeIcon
-        elseif self:HasText() or self:HasDescription() then
             posTextX = w - padRight
+        end
+    else
+        if hor == TEXT_ALIGN_LEFT then
+            if self:HasIcon() and (self:HasText() or self:HasDescription()) then
+                posIconX = padLeft
+                posTextX = posIconX + sizeIcon + padLeft
+            elseif self:HasIcon() then
+                posIconX = padLeft
+            elseif self:HasText() or self:HasDescription() then
+                posTextX = padLeft
+            end
+        elseif hor == TEXT_ALIGN_CENTER then
+            if self:HasIcon() and (self:HasText() or self:HasDescription()) then
+                posTextX = 0.5 * (w + sizeIcon + padLeft)
+                posIconX = posTextX - sizeIcon - padLeft - 0.5 * widthText
+            elseif self:HasIcon() then
+                posIconX = 0.5 * (w - sizeIcon)
+            elseif self:HasText() or self:HasDescription() then
+                posTextX = 0.5 * w
+            end
+        elseif hor == TEXT_ALIGN_RIGHT then
+            if self:HasIcon() and (self:HasText() or self:HasDescription()) then
+                posIconX = w - padRight - sizeIcon
+                posTextX = posIconX - padLeft
+            elseif self:HasIcon() then
+                posIconX = w - padRight - sizeIcon
+            elseif self:HasText() or self:HasDescription() then
+                posTextX = w - padRight
+            end
         end
     end
 
-    -- to simplify things, size to contentsX ignores the description text
     local descriptionLines, heightDescription
 
+    -- HANDLE DESCRIPTION WORD WRAP
     if self:HasDescription() then
         local maxWidthDescription = w - padLeft - padRight
 
-        if self:HasIcon() then
+        -- only substract the width of the icon, if it is next to the text
+        if not self:HasVerticalAlignment() and self:HasIcon() then
             maxWidthDescription = maxWidthDescription - padLeft - sizeIcon
         end
 
@@ -1168,73 +1205,131 @@ function PANEL:OnRebuildLayout(w, h)
         self:SetTranslatedDescriptionLines(descriptionLines)
     end
 
+    -- RESIZE ELEMENT: the handle the vertical panel extension
     if self:GetFitToContentY() then
-        local enlarge = 0
+        h = padTop + padBottom
 
-        if self:HasText() and self:HasDescription() then
-            enlarge = heightText + heightDescription + 2 * padTop + padBottom
-        elseif self:HasText() then
-            enlarge = heightText + padTop + padBottom
-        elseif self:HasDescription() then
-            enlarge = heightDescription + padTop + padBottom
+        if self:HasVerticalAlignment() then
+            local padMultiplier = 0
+
+            if self:HasIcon() then
+                h = h + sizeIcon
+
+                padMultiplier = padMultiplier + 1
+            end
+
+            if self:HasText() then
+                h = h + heightText
+
+                padMultiplier = padMultiplier + 1
+            end
+
+            if self:HasDescription() then
+                h = h + heightDescription
+
+                padMultiplier = padMultiplier + 1
+            end
+
+            h = h + padMultiplier * padTop
+        else
+            if self:HasText() and self:HasDescription() then
+                h = heightText + heightDescription + 2 * padTop + padBottom
+            elseif self:HasText() then
+                h = heightText + padTop + padBottom
+            elseif self:HasDescription() then
+                h = heightDescription + padTop + padBottom
+            end
+
+            if self:HasIcon() then
+                h = math.max(h, sizeIcon + padTop + padBottom)
+            end
         end
-
-        if self:HasIcon() then
-            enlarge = math.max(enlarge, sizeIcon + padTop + padBottom)
-        end
-
-        h = enlarge
 
         self:SetTall(h)
     end
 
-    if ver == TEXT_ALIGN_TOP then
-        posTextY = padTop
+    local ver = self:GetVerticalTextAlign()
 
-        if self:HasIcon() then
-            posIconY = padTop
+    -- VERTICAL POSITIONING
+    if self:HasVerticalAlignment() then
+        -- used to chain positioning
+        local nextPos = padTop
+
+        if ver == TEXT_ALIGN_TOP then
+            if self:HasIcon() then
+                posIconY = nextPos
+
+                nextPos = nextPos + sizeIcon + padTop
+            end
+
+            if self:HasText() then
+                posTextY = nextPos
+
+                nextPos = nextPos + heightText + padTop
+            end
+
+            if self:HasDescription() then
+                posDescriptionStartY = nextPos
+            end
+        elseif ver == TEXT_ALIGN_CENTER then
+            local heightContent = 0
+        elseif ver == TEXT_ALIGN_BOTTOM then
         end
-    elseif ver == TEXT_ALIGN_CENTER then
-        posTextY = 0.5 * h
+    else
+        if ver == TEXT_ALIGN_TOP then
+            posTextY = padTop
 
-        if self:HasIcon() then
-            posIconY = 0.5 * (h - sizeIcon)
+            if self:HasIcon() then
+                posIconY = padTop
+            end
+        elseif ver == TEXT_ALIGN_CENTER then
+            posTextY = 0.5 * h
+
+            if self:HasIcon() then
+                posIconY = 0.5 * (h - sizeIcon)
+            end
+        elseif ver == TEXT_ALIGN_BOTTOM then
+            posTextY = h - padBottom
+
+            if self:HasIcon() then
+                posIconY = h - sizeIcon - padBottom
+            end
         end
-    elseif ver == TEXT_ALIGN_BOTTOM then
-        posTextY = h - padBottom
 
-        if self:HasIcon() then
-            posIconY = h - sizeIcon - padBottom
+        if self:HasDescription() then
+            local _, heightDescriptionLine =
+                draw.GetTextSize(descriptionLines[1], self:GetDescriptionFont())
+
+            -- move text out of the way
+            if ver == TEXT_ALIGN_TOP then
+                posDescriptionStartY = posTextY
+            elseif ver == TEXT_ALIGN_CENTER then
+                if self:HasText() then
+                    -- needed? + (self:HasText() and (heightText + padTop) or 0)
+                    posDescriptionStartY = posTextY - 0.5 * (heightDescription + padTop)
+                else
+                    posDescriptionStartY = 0.5
+                        * (h - (#descriptionLines - 1) * heightDescriptionLine)
+                end
+            elseif ver == TEXT_ALIGN_BOTTOM then
+                if self:HasText() then
+                    -- needed? + (self:HasText() and (heightText + padTop) or 0)
+                    posDescriptionStartY = posTextY - heightDescription - padBottom
+                else
+                    posDescriptionStartY = h
+                        - (#descriptionLines - 1) * heightDescriptionLine
+                        - padBottom
+                end
+            end
         end
     end
 
+    -- HANDLE POSITIONING OF DESCRIPTION LINES
     if self:HasDescription() then
-        local _, heightDescriptionLine =
-            draw.GetTextSize(descriptionLines[1], self:GetDescriptionFont())
-
-        -- move text out of the way
-        if ver == TEXT_ALIGN_TOP then
-            posTextY = posTextY
-        elseif ver == TEXT_ALIGN_CENTER then
-            if self:HasText() then
-                posTextY = posTextY - 0.5 * (heightDescription + padTop)
-            else
-                posTextY = 0.5 * (h - (#descriptionLines - 1) * heightDescriptionLine)
-            end
-        elseif ver == TEXT_ALIGN_BOTTOM then
-            if self:HasText() then
-                posTextY = posTextY - heightDescription - padBottom
-            else
-                posTextY = h - (#descriptionLines - 1) * heightDescriptionLine - padBottom
-            end
-        end
-
         posDescriptionY = {}
 
         for i = 1, #descriptionLines do
-            posDescriptionY[i] = posTextY
-                + (self:HasText() and (heightText + padTop) or 0)
-                + (i - 1) * heightDescriptionLine
+            posDescriptionY[i] = posDescriptionStartY + (i - 1) * heightDescriptionLine
         end
     end
 
@@ -1502,7 +1597,7 @@ function PANEL:OnDoubleClickInternal() end
 ---
 -- Called after a color is applied to the color cache. Can be used to modify these colors
 -- in a post processing step.
--- @param string identifier The name of the color 
+-- @param string identifier The name of the color
 -- @param Color color The unchanged color
 -- @return Color|nil Return the color to change it, return nil to keep it unchanged
 -- @hook
