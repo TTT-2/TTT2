@@ -292,15 +292,14 @@ end
 -- @internal
 -- @realm client
 function PANEL:TriggerOnWithBase(eventName, ...)
-    local returnValue
-    self:TriggerOn(eventName, ...)
+    local returnValue = self:TriggerOn(eventName, ...)
 
     if returnValue ~= nil then
         return returnValue
     end
 
     if isfunction(self["On" .. eventName]) then
-        local returnValue = self["On" .. eventName](self, ...)
+        returnValue = self["On" .. eventName](self, ...)
 
         if returnValue ~= nil then
             return returnValue
@@ -1203,7 +1202,7 @@ function PANEL:OnRebuildLayout(w, h)
         end
     end
 
-    local descriptionLines, heightDescription
+    local descriptionLines, heightDescription, heightDescriptionLine
 
     -- HANDLE DESCRIPTION WORD WRAP
     if self:HasDescription() then
@@ -1219,6 +1218,8 @@ function PANEL:OnRebuildLayout(w, h)
             maxWidthDescription,
             self:GetDescriptionFont()
         )
+
+        _, heightDescriptionLine = draw.GetTextSize(descriptionLines[1], self:GetDescriptionFont())
 
         self:SetTranslatedDescriptionLines(descriptionLines)
     end
@@ -1350,9 +1351,6 @@ function PANEL:OnRebuildLayout(w, h)
         end
 
         if self:HasDescription() then
-            local _, heightDescriptionLine =
-                draw.GetTextSize(descriptionLines[1], self:GetDescriptionFont())
-
             -- move text out of the way
             if ver == TEXT_ALIGN_TOP then
                 if self:HasText() then
