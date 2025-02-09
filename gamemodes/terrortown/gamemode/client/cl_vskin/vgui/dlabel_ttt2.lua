@@ -459,7 +459,7 @@ function PANEL:SetFont(fontName)
     self.m_FontName = fontName
 
     self:SetFontInternal(self.m_FontName)
-    self:InvalidateLayout()
+    self:InvalidateLayout(true)
 
     return self
 end
@@ -472,7 +472,7 @@ end
 function PANEL:SetDescriptionFont(fontName)
     self.m_DescriptionFontName = fontName
 
-    self:InvalidateLayout()
+    self:InvalidateLayout(true)
 
     return self
 end
@@ -493,7 +493,7 @@ end
 function PANEL:SetEnabled(state)
     self.m_bEnabled = state
 
-    self:InvalidateLayout()
+    self:InvalidateLayout(true)
 
     return self
 end
@@ -533,6 +533,8 @@ function PANEL:SetIcon(iconMaterial, isShadowed, isSimple, size)
     self.m_bIconShadow = isShadowed or DRAW_SHADOW_DISABLED
     self.m_bIconSimple = isSimple or DRAW_ICON_SIMPLE
     self.m_nIconSize = size
+
+    self:InvalidateLayout(true)
 
     return self
 end
@@ -585,6 +587,8 @@ end
 function PANEL:EnableFlashColor(state)
     self.m_bEnableFlashColor = state
 
+    self:InvalidateLayout(true)
+
     return self
 end
 
@@ -606,6 +610,8 @@ function PANEL:SetTextAlign(horizontal, vertical)
     self:SetHorizontalTextAlign(horizontal)
     self:SetVerticalTextAlign(vertical)
 
+    self:InvalidateLayout(true)
+
     return self
 end
 
@@ -622,6 +628,8 @@ function PANEL:SetText(text, params, translateParams, isShadowed)
     self.m_TextParams = params
     self.m_bTranslateTextParams = translateParams
     self.m_bTextShadow = isShadowed
+
+    self:InvalidateLayout(true)
 
     return self
 end
@@ -687,6 +695,8 @@ function PANEL:SetDescription(description, params, translateParams, isShadowed)
     self.m_DescriptionParams = params
     self.m_bTranslateDescriptionParams = translateParams
     self.m_bDescriptionShadow = isShadowed
+
+    self:InvalidateLayout(true)
 
     return self
 end
@@ -767,6 +777,8 @@ function PANEL:EnableCornerRadius(...)
         )
     end
 
+    self:InvalidateLayout(true)
+
     return self
 end
 
@@ -831,6 +843,8 @@ function PANEL:SetOutline(...)
         )
     end
 
+    self:InvalidateLayout(true)
+
     return self
 end
 
@@ -892,6 +906,8 @@ function PANEL:SetPadding(...)
         )
     end
 
+    self:InvalidateLayout(true)
+
     return self
 end
 
@@ -940,6 +956,8 @@ end
 -- @realm client
 function PANEL:SetKeyBinding(binding)
     self.m_Binding = binding
+
+    self:InvalidateLayout(true)
 
     return self
 end
@@ -1354,13 +1372,7 @@ function PANEL:OnRebuildLayout(w, h)
     -- if the panel changed size and the panel has a parent, the parent should
     -- be recalculcating its size as well
     if self:GetFitToContentX() or self:GetFitToContentY() then
-        local parent = self:GetParent()
-
-        if not IsValid(parent) then
-            return
-        end
-
-        parent:InvalidateLayout(true)
+        self:InvalidateParent(true)
     end
 end
 
