@@ -1248,7 +1248,7 @@ function PANEL:OnRebuildLayout(w, h)
                 padMultiplier = padMultiplier + 1
             end
 
-            h = h + padMultiplier * padTop
+            h = h + math.min(padMultiplier - 1, 0) * padTop
         else
             if self:HasText() and self:HasDescription() then
                 h = heightText + heightDescription + 2 * padTop + padBottom
@@ -1270,10 +1270,10 @@ function PANEL:OnRebuildLayout(w, h)
 
     -- VERTICAL POSITIONING
     if self:HasVerticalAlignment() then
-        -- used to chain positioning
-        local nextPos = padTop
-
         if ver == TEXT_ALIGN_TOP then
+            -- used to chain positioning
+            local nextPos = padTop
+
             if self:HasIcon() then
                 posIconY = nextPos
 
@@ -1290,8 +1290,43 @@ function PANEL:OnRebuildLayout(w, h)
                 posDescriptionStartY = nextPos
             end
         elseif ver == TEXT_ALIGN_CENTER then
-            local heightContent = 0
+            posIconY = 0.5 * (h - sizeIcon)
+            posTextY = 0.5 * h
+            posDescriptionStartY = 0.5 * (h - (#descriptionLines - 1) * heightDescriptionLine)
+
+            if self:HasIcon() then
+                posTextY = posTextY + 0.5 * (sizeIcon + padTop)
+                posDescriptionStartY = posDescriptionStartY + 0.5 * (sizeIcon + padTop)
+            end
+
+            if self:HasText() then
+                posIconY = posIconY - 0.5 * (heightText + padTop)
+                posDescriptionStartY = posDescriptionStartY + 0.5 * (heightText + padTop)
+            end
+
+            if self:HasDescription() then
+                posIconY = posIconY - 0.5 * (heightDescription + padTop)
+                posTextY = posTextY - 0.5 * (heightDescription + padTop)
+            end
         elseif ver == TEXT_ALIGN_BOTTOM then
+            -- used to chain positioning
+            local nextPos = padBottom
+
+            if self:HasDescription() then
+                posDescriptionStartY = nextPos - (#descriptionLines - 1) * heightDescriptionLine
+
+                nextPos = nextPos - heightDescription - padTop
+            end
+
+            if self:HasText() then
+                posTextY = nextPos
+
+                nextPos = nextPos - heightText - padTop
+            end
+
+            if self:HasIcon() then
+                posIconY = nextPos - heightIcon
+            end
         end
     else
         if ver == TEXT_ALIGN_TOP then
@@ -1320,19 +1355,23 @@ function PANEL:OnRebuildLayout(w, h)
 
             -- move text out of the way
             if ver == TEXT_ALIGN_TOP then
-                posDescriptionStartY = posTextY
+                if self:HasText() then
+                    posDescriptionStartY = posTextY + heightText + padTop
+                else
+                    posDescriptionStartY = posTextY
+                end
             elseif ver == TEXT_ALIGN_CENTER then
                 if self:HasText() then
-                    -- needed? + (self:HasText() and (heightText + padTop) or 0)
-                    posDescriptionStartY = posTextY - 0.5 * (heightDescription + padTop)
+                    posTextY = posTextY - 0.5 * (heightDescription + padTop)
+                    posDescriptionStartY = posTextY + heightText + padTop
                 else
                     posDescriptionStartY = 0.5
                         * (h - (#descriptionLines - 1) * heightDescriptionLine)
                 end
             elseif ver == TEXT_ALIGN_BOTTOM then
                 if self:HasText() then
-                    -- needed? + (self:HasText() and (heightText + padTop) or 0)
-                    posDescriptionStartY = posTextY - heightDescription - padBottom
+                    posTextY = posTextY - heightDescription - padBottom
+                    posDescriptionStartY = posTextY + heightText + padTop
                 else
                     posDescriptionStartY = h
                         - (#descriptionLines - 1) * heightDescriptionLine
