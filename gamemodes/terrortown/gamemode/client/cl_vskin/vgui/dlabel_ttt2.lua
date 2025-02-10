@@ -132,7 +132,7 @@ AccessorFunc(PANEL, "m_bFitToContentY", "FitToContentY", FORCE_BOOL, true)
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bVerticalAlign", "VerticalAlign", FORCE_BOOL_HAS, true)
+AccessorFunc(PANEL, "m_bVerticalAlignment", "VerticalAlignment", FORCE_BOOL_HAS, true)
 
 ---
 -- Is called on initialization of the panel.
@@ -169,7 +169,7 @@ function PANEL:Init()
     self:SetFont("DermaTTT2Text")
     self:SetDescriptionFont("DermaTTT2Text")
     self:SetTextAlign(TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-    self:SetVerticalAlign(false)
+    self:SetVerticalAlignment(false)
 
     -- set the defaults for the tooltip
     self:SetTooltipFixedPosition(nil)
@@ -1143,7 +1143,8 @@ function PANEL:OnRebuildLayout(w, h)
     if not self:GetFitToContentX() and self:HasText() then
         local maxWidthText = w - padLeft - padRight
 
-        if self:HasIcon() then
+        -- only substract the width of the icon, if it is next to the text
+        if not self:HasVerticalAlignment() and self:HasIcon() then
             maxWidthText = maxWidthText - sizeIcon - padLeft
         end
 
@@ -1249,7 +1250,7 @@ function PANEL:OnRebuildLayout(w, h)
                 padMultiplier = padMultiplier + 1
             end
 
-            h = h + math.min(padMultiplier - 1, 0) * padTop
+            h = h + math.max(padMultiplier - 1, 0) * padTop
         else
             if self:HasText() and self:HasDescription() then
                 h = heightText + heightDescription + 2 * padTop + padBottom
@@ -1291,9 +1292,10 @@ function PANEL:OnRebuildLayout(w, h)
                 posDescriptionStartY = nextPos
             end
         elseif ver == TEXT_ALIGN_CENTER then
-            posIconY = 0.5 * (h - sizeIcon)
+            posIconY = 0.5 * (h - (sizeIcon or 0))
             posTextY = 0.5 * h
-            posDescriptionStartY = 0.5 * (h - (#descriptionLines - 1) * heightDescriptionLine)
+            posDescriptionStartY = 0.5
+                * (h - (#(descriptionLines or {}) - 1) * (heightDescriptionLine or 0))
 
             if self:HasIcon() then
                 posTextY = posTextY + 0.5 * (sizeIcon + padTop)
@@ -1311,7 +1313,7 @@ function PANEL:OnRebuildLayout(w, h)
             end
         elseif ver == TEXT_ALIGN_BOTTOM then
             -- used to chain positioning
-            local nextPos = padBottom
+            local nextPos = h - padBottom
 
             if self:HasDescription() then
                 posDescriptionStartY = nextPos - (#descriptionLines - 1) * heightDescriptionLine
@@ -1326,7 +1328,7 @@ function PANEL:OnRebuildLayout(w, h)
             end
 
             if self:HasIcon() then
-                posIconY = nextPos - heightIcon
+                posIconY = nextPos - sizeIcon
             end
         end
     else
