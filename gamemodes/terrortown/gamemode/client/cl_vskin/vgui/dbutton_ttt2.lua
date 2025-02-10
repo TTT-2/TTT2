@@ -49,21 +49,27 @@ function PANEL:OnVSkinUpdate()
     -- PANEL IS PRESSED
     elseif self:IsDepressed() or self:IsSelected() or self:GetToggle() then
         colorBackground = util.GetActiveColor(self:GetColor() or vskin.GetAccentColor())
-        colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 220)
+        colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 35)
         colorOutline = util.GetActiveColor(self:GetOutlineColor() or vskin.GetDarkAccentColor())
 
     -- PANEL IS HOVERED
     elseif self:IsHovered() then
         colorBackground = util.GetHoverColor(self:GetColor() or vskin.GetAccentColor())
-        colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 220)
-        colorOutline = util.GetActiveColor(self:GetOutlineColor() or vskin.GetDarkAccentColor())
+        colorText = util.GetDefaultColor(colorBackground)
+        colorOutline = util.GetHoverColor(self:GetOutlineColor() or vskin.GetDarkAccentColor())
 
     -- NORMAL COLORS
     else
         colorBackground = self:GetColor() or vskin.GetAccentColor()
-        colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 220)
+        colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 25)
         colorOutline = self:GetOutlineColor() or vskin.GetDarkAccentColor()
     end
+
+    print("-----")
+    print(self)
+    print("colorText", colorText)
+    print("colorBackground", colorBackground)
+    print("colorOutline", colorOutline)
 
     self:ApplyVSkinColor("background", colorBackground)
     self:ApplyVSkinColor("text", colorText)

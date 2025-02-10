@@ -170,7 +170,7 @@ function SKIN:PaintColoredBox(panel, w, h)
 
         if panel:HasOutline() then
             local left, top, right, bottom = panel:GetOutline()
-            local bTL, bTR, bBL, bBR = panel:GetCornerRadius()
+            local bTL, bTR, bBL, bBR = panel:GetCornerRadius() -- extra copy to only modify border
             local bX, bY, bW, bH = 0, 0, w, h
 
             -- if there is a corner radius and an outline, the background box should be moved in
