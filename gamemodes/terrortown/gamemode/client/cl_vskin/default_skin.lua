@@ -170,18 +170,50 @@ function SKIN:PaintColoredBox(panel, w, h)
 
         if panel:HasOutline() then
             local left, top, right, bottom = panel:GetOutline()
+            local bTL, bTR, bBL, bBR = panel:GetCornerRadius()
+            local bX, bY, bW, bH = 0, 0, w, h
+
+            -- if there is a corner radius and an outline, the background box should be moved in
+            -- to prevent color bleeding
+            if left == 0 and top == 0 and right == 0 then
+                bY = sizes.cornerRadius
+                bH = bH - sizes.cornerRadius
+
+                -- disabling corner radius here improves performance
+                bTL = false
+                bTR = false
+            elseif top == 0 and right == 0 and bottom == 0 then
+                bW = bW - sizes.cornerRadius
+
+                -- disabling corner radius here improves performance
+                bTR = false
+                bBR = false
+            elseif right == 0 and bottom == 0 and left == 0 then
+                bH = bH - sizes.cornerRadius
+
+                -- disabling corner radius here improves performance
+                bBL = false
+                bBR = false
+            elseif bottom == 0 and left == 0 and top == 0 then
+                bX = sizes.cornerRadius
+                bW = bW - sizes.cornerRadius
+
+                -- disabling corner radius here improves performance
+                bTL = false
+                bBL = false
+            end
 
             drawRoundedBoxEx(
                 sizes.cornerRadius,
-                0,
-                0,
-                w,
-                h,
+                bX,
+                bY,
+                bW,
+                bH,
                 panel:GetVSkinColor("outline"),
-                tl,
-                tr,
-                bl,
-                br
+                bTL,
+                bTR,
+                bBL,
+                bBR
             )
             drawRoundedBoxEx(
                 sizes.cornerRadius,
