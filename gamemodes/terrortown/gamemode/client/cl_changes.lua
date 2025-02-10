@@ -2291,6 +2291,19 @@ function CreateChanges()
         os.time({ year = 2025, month = 02, day = 01 })
     )
 
+    AddChange(
+        "TTT2 Base - v0.14.2b",
+        [[
+
+        <h2>Fixed</h2>
+        <ul>
+            <li>Fixed new outlines' `OUTLINE_MODE_VISIBLE` and `OUTLINE_MODE_BOTH`</li>
+        </ul>
+
+    ]],
+        os.time({ year = 2025, month = 02, day = 02 })
+    )
+
     ---
     -- run hook for other addons to add their changelog as well
     -- @realm client
