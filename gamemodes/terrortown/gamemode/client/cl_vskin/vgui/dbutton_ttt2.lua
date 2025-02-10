@@ -65,12 +65,6 @@ function PANEL:OnVSkinUpdate()
         colorOutline = self:GetOutlineColor() or vskin.GetDarkAccentColor()
     end
 
-    print("-----")
-    print(self)
-    print("colorText", colorText)
-    print("colorBackground", colorBackground)
-    print("colorOutline", colorOutline)
-
     self:ApplyVSkinColor("background", colorBackground)
     self:ApplyVSkinColor("text", colorText)
     self:ApplyVSkinColor("description", colorText)
