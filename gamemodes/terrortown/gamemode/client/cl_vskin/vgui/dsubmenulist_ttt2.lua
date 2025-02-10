@@ -12,15 +12,17 @@ local heightNavButton = 50
 function PANEL:Init()
     DBase("TTT2:DPanel").Init(self)
 
-    -- Make navArea scrollable
-    local navAreaScroll = vgui.Create("DScrollPanelTTT2", self)
-    navAreaScroll:SetVerticalScrollbarEnabled(true)
-    navAreaScroll:Dock(BOTTOM)
-    self.navAreaScroll = navAreaScroll
+    print("initializing", self)
 
-    local origScrollOnVScroll = navAreaScroll.OnVScroll
-    navAreaScroll.OnVScroll = function(pnl, scrollOffset)
+    -- Make navArea scrollable
+    self.navAreaScroll = vgui.Create("DScrollPanelTTT2", self)
+    self.navAreaScroll:SetVerticalScrollbarEnabled(true)
+    self.navAreaScroll:Dock(BOTTOM)
+
+    local origScrollOnVScroll = self.navAreaScroll.OnVScroll
+    self.navAreaScroll.OnVScroll = function(pnl, scrollOffset)
         origScrollOnVScroll(pnl, scrollOffset)
+
         if self.scrollTracker then
             local x, y = self.scrollTracker:GetPos()
             y = math.max(y + scrollOffset, 0)
@@ -29,9 +31,8 @@ function PANEL:Init()
     end
 
     -- Split nav area into a grid layout
-    local navAreaScrollGrid = vgui.Create("DIconLayout", self.navAreaScroll)
-    navAreaScrollGrid:Dock(FILL)
-    self.navAreaScrollGrid = navAreaScrollGrid
+    self.navAreaScrollGrid = vgui.Create("DIconLayout", self.navAreaScroll)
+    self.navAreaScrollGrid:Dock(FILL)
 
     self.scrollTracker = nil
 
@@ -121,9 +122,8 @@ end
 function PANEL:AddSubmenuButton(submenuClass)
     local settingsButton = self.navAreaScrollGrid:Add("TTT2:DSubmenuButton")
     settingsButton
-        :SetTitle(submenuClass.title or submenuClass.type)
-        :SetIcon(submenuClass.icon)
-        :SetIconSimple(not submenuClass.iconFullSize)
+        :SetText(submenuClass.title or submenuClass.type)
+        :SetIcon(submenuClass.icon, not submenuClass.iconFullSize, not submenuClass.iconFullSize)
         :SetIconBadge(submenuClass.iconBadge)
         :SetIconBadgeSize(submenuClass.iconBadgeSize)
         :SetTooltip(submenuClass.tooltip)
@@ -223,6 +223,8 @@ function PANEL:SelectFirst(index)
     labelNoContent:SetSize(widthContent - 40, 50)
     labelNoContent:SetFont("DermaTTT2Title")
     labelNoContent:SetPos(20, 0)
+
+    return self
 end
 
 ---
@@ -246,6 +248,8 @@ function PANEL:AddSearchTracker()
     end
 
     self.scrollTracker = tracker
+
+    return self
 end
 
 ---
@@ -265,6 +269,8 @@ function PANEL:SetBasemenuClass(basemenuClass, contentArea)
     self:ExtendSubmenuList(self.basemenuClass:GetVisibleSubmenus())
     self:SelectFirst()
     self:InvalidateLayout(true)
+
+    return self
 end
 
 ---
@@ -273,8 +279,10 @@ end
 function PANEL:SetPadding(padding)
     self.padding = padding
 
-    self.navAreaScrollGrid:SetSpaceY(padding)
-    self.navAreaScrollGrid:DockPadding(0, padding, 0, padding)
+    --self.navAreaScrollGrid:SetSpaceY(padding)
+    --self.navAreaScrollGrid:DockPadding(0, padding, 0, padding)
+
+    return self
 end
 
 ---

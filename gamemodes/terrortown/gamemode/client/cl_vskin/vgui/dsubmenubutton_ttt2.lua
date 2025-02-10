@@ -65,7 +65,9 @@ end
 -- @param Material badge
 -- @realm client
 function PANEL:SetIconBadge(badge)
-    self.contents.iconBadge = badge
+    --self.contents.iconBadge = badge
+
+    return self
 end
 
 ---
@@ -79,7 +81,9 @@ end
 -- @param number size
 -- @realm client
 function PANEL:SetIconBadgeSize(size)
-    self.contents.iconBadgeSize = size
+    --self.contents.iconBadgeSize = size
+
+    return self
 end
 
 ---
