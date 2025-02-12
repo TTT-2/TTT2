@@ -105,15 +105,15 @@ function ENT:Initialize()
     end
 
     if not self:GetRadiusInner() then
-        self:SetRadiusInner(750)
+        self:SetRadiusInner(GetConVar("ttt2_c4_radius_inner") or 500)
     end
 
     if not self:GetRadius() then
-        self:SetRadius(1500)
+        self:SetRadius(GetConVar("ttt2_c4_radius") or 600)
     end
 
     if not self:GetDmg() then
-        self:SetDmg(200)
+        self:SetDmg(200 * (weapons.GetStored("weapon_ttt_c4").damageScaling or 1))
     end
 end
 
