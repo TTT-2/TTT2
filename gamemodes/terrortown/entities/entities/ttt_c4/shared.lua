@@ -105,11 +105,11 @@ function ENT:Initialize()
     end
 
     if not self:GetRadiusInner() then
-        self:SetRadiusInner(GetConVar("ttt2_c4_radius_inner") or 500)
+        self:SetRadiusInner(GetConVar("ttt2_c4_radius_inner"):GetInt() or 500)
     end
 
     if not self:GetRadius() then
-        self:SetRadius(GetConVar("ttt2_c4_radius") or 600)
+        self:SetRadius(GetConVar("ttt2_c4_radius"):GetInt() or 600)
     end
 
     if not self:GetDmg() then
