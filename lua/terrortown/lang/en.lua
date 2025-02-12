@@ -2807,3 +2807,7 @@ L.radio_desc = [[
 Plays sounds to distract or deceive.
 
 Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
+
+-- 2025-02-02
+L.tooltip_plyroles_over_time = "{number}. {rolename} ({teamname})"
+L.binding_panel_bracket = "[{binding}]"

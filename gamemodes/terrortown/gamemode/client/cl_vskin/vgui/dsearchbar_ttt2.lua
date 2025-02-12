@@ -12,7 +12,7 @@ local font = "DermaTTT2Text"
 AccessorFunc(PANEL, "heightMult", "HeightMult")
 
 ---
--- @accessor bool
+-- @accessor boolean
 -- @realm client
 AccessorFunc(PANEL, "isOnFocus", "IsOnFocus")
 
@@ -164,4 +164,4 @@ function PANEL:Clear()
     return self.textEntry:Clear()
 end
 
-derma.DefineControl("DSearchBarTTT2", "", PANEL, "DPanelTTT2")
+derma.DefineControl("DSearchBarTTT2", "", PANEL, "TTT2:DPanel")
