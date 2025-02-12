@@ -372,12 +372,12 @@ function HELPSCRN:ShowSubmenu(menuClass)
         :SetPos(widthNav, 0)
         :DockPadding(self.padding, self.padding, self.padding, self.padding)
         :Dock(TOP)
-    --:SetColorShift(30)
+        :SetColorShift(30)
 
     -- MAKE SEPARATE SUBMENULIST ON THE NAVAREA WITH A CONTENT AREA
-    local submenuList = vgui.Create("DSubmenuListTTT2", navArea)
+    local submenuList = vgui.Create("TTT2:DSubmenuList", navArea)
         :Dock(FILL)
-        :SetPadding(self.padding)
+        :SetSpacing(self.padding)
         :SetBasemenuClass(menuClass, contentArea)
         :SetSearchBarPlaceholderText(menuClass.searchBarPlaceholderText)
 

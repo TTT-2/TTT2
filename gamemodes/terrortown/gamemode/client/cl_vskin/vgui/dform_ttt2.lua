@@ -219,11 +219,11 @@ function PANEL:MakeTextEntry(data)
     right:SetHeightMult(1)
 
     right.OnGetFocus = function(slf)
-        util.getHighestPanelParent(self):SetKeyboardInputEnabled(true)
+        util.GetHighestPanelParent(self):SetKeyboardInputEnabled(true)
     end
 
     right.OnLoseFocus = function(slf)
-        util.getHighestPanelParent(self):SetKeyboardInputEnabled(false)
+        util.GetHighestPanelParent(self):SetKeyboardInputEnabled(false)
     end
 
     -- Set default if possible even if the convar could still overwrite it

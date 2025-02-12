@@ -714,7 +714,7 @@ if CLIENT then
     ---
     -- Checks recursively the parents until none is found and the highest parent is returned
     -- @ignore
-    function util.getHighestPanelParent(panel)
+    function util.GetHighestPanelParent(panel)
         local parent = panel
         local checkParent = panel:GetParent()
 

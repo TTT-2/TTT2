@@ -1,6 +1,6 @@
 ---
 -- @class PANEL
--- @section DSubmenuListTTT2
+-- @section TTT2:DSubmenuList
 
 local PANEL = {}
 
@@ -12,53 +12,55 @@ local heightNavButton = 50
 function PANEL:Init()
     DBase("TTT2:DPanel").Init(self)
 
-    print("initializing", self)
-
     -- Make navArea scrollable
     self.navAreaScroll = vgui.Create("DScrollPanelTTT2", self)
-    self.navAreaScroll:SetVerticalScrollbarEnabled(true)
-    self.navAreaScroll:Dock(BOTTOM)
+        :SetVerticalScrollbarEnabled(true)
+        :Dock(BOTTOM)
+        :On("VScroll", function(slf, scrollOffset)
+            -- origScrollOnVScroll(pnl, scrollOffset) --TODO
 
-    local origScrollOnVScroll = self.navAreaScroll.OnVScroll
-    self.navAreaScroll.OnVScroll = function(pnl, scrollOffset)
-        origScrollOnVScroll(pnl, scrollOffset)
-
-        if self.scrollTracker then
-            local x, y = self.scrollTracker:GetPos()
-            y = math.max(y + scrollOffset, 0)
-            self.searchBar:SetPos(x, y)
-        end
-    end
+            if self.searchTrackerPanel then
+                local x, y = self.searchTrackerPanel:GetPos()
+                y = math.max(y + scrollOffset, 0)
+                self.searchBar:SetPos(x, y)
+            end
+        end)
 
     -- Split nav area into a grid layout
-    self.navAreaScrollGrid = vgui.Create("DIconLayout", self.navAreaScroll)
-    self.navAreaScrollGrid:Dock(FILL)
+    self.navAreaScrollGrid = vgui.Create("DIconLayout", self.navAreaScroll):Dock(FILL)
 
-    self.scrollTracker = nil
+    -- By default there is no search tracker panel. It is used to differentiate between panels
+    -- that should be fixed on top and panels that are searched.
+    self.searchTrackerPanel = nil
 
     -- Get the frame to be able to enable keyboardinput on searchbar focus
-    self.frame = util.getHighestPanelParent(self)
+    self.frame = util.GetHighestPanelParent(self)
 end
 
 ---
--- This function sets the size of the searchBar.
--- @param number widthBar
--- @param number heightBar
+-- This function sets the size of the search bar.
+-- @param number width The width of the search bar
+-- @param number height The height of the search bar
+-- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetSearchBarSize(widthBar, heightBar)
+function PANEL:SetSearchBarSize(width, height)
     if not self.searchBar then
-        return
+        return self
     end
 
-    self.searchBar:SetSize(widthBar, heightBar)
-    if self.scrollTracker then
-        self.scrollTracker:SetSize(widthBar, heightBar)
+    self.searchBar:SetSize(width, height)
+
+    if self.searchTrackerPanel then
+        self.searchTrackerPanel:SetSize(width, height)
     end
+
+    return self
 end
 
 ---
 -- Sets the search bar's placeholder text.
 -- @param string placeholder The placeholder text.
+-- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:SetSearchBarPlaceholderText(placeholder)
     if not placeholder or not self.searchBar then
@@ -66,6 +68,7 @@ function PANEL:SetSearchBarPlaceholderText(placeholder)
     end
 
     self.searchBar:SetPlaceholderText(placeholder)
+
     if self.searchBar:GetValue() == "" then
         self.searchBar:SetCurrentPlaceholderText(placeholder)
     end
@@ -74,8 +77,9 @@ function PANEL:SetSearchBarPlaceholderText(placeholder)
 end
 
 ---
--- This function enables or disables the searchBar.
--- @param boolean active
+-- This function enables or disables the search bar.
+-- @param boolean active The new state, set to true to enable the search bar
+-- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:EnableSearchBar(active)
     if not active then
@@ -84,34 +88,33 @@ function PANEL:EnableSearchBar(active)
             self.searchBar = nil
         end
 
-        return
+        return self
     end
 
     -- Add searchbar on top
-    local searchBar = vgui.Create("DSearchBarTTT2", self)
-    searchBar:SetUpdateOnType(true)
-    searchBar:SetHeightMult(1)
-    searchBar:SetPos(0, heightNavHeader)
+    self.searchBar = vgui.Create("DSearchBarTTT2", self)
+        :SetUpdateOnType(true)
+        :SetHeightMult(1)
+        :SetPos(0, heightNavHeader)
+        :On("ValueChange", function(slf, searchText)
+            self:ResetSubmenuList()
+            self:ExtendSubmenuList(self.basemenuClass:GetVisibleNonSearchedSubmenus())
+            self:AddSearchTracker()
 
-    searchBar.OnValueChange = function(slf, searchText)
-        self:ResetSubmenuList()
-        self:ExtendSubmenuList(self.basemenuClass:GetVisibleNonSearchedSubmenus())
-        self:AddSearchTracker()
-        local index = self.navAreaScrollGrid:ChildCount()
-        self:ExtendSubmenuList(self.basemenuClass:GetMatchingSubmenus(searchText))
-        self:SelectFirst(index)
-        self:InvalidateLayout(true)
-    end
+            local index = self.navAreaScrollGrid:ChildCount()
 
-    searchBar.OnGetFocus = function(slf)
-        self.frame:SetKeyboardInputEnabled(true)
-    end
+            self:ExtendSubmenuList(self.basemenuClass:GetMatchingSubmenus(searchText))
+            self:SelectFirst(index)
+            self:InvalidateLayout(true)
+        end)
+        :On("GetFocus", function(slf)
+            self.frame:SetKeyboardInputEnabled(true)
+        end)
+        :On("LoseFocus", function(slf)
+            self.frame:SetKeyboardInputEnabled(false)
+        end)
 
-    searchBar.OnLoseFocus = function(slf)
-        self.frame:SetKeyboardInputEnabled(false)
-    end
-
-    self.searchBar = searchBar
+    return self
 end
 
 ---
@@ -120,7 +123,7 @@ end
 -- @return panel
 -- @realm client
 function PANEL:AddSubmenuButton(submenuClass)
-    local settingsButton = self.navAreaScrollGrid:Add("TTT2:DSubmenuButton")
+    return self.navAreaScrollGrid:Add("TTT2:DSubmenuButton")
     settingsButton
         :SetText(submenuClass.title or submenuClass.type)
         :SetIcon(submenuClass.icon, not submenuClass.iconFullSize, not submenuClass.iconFullSize)
@@ -132,11 +135,12 @@ function PANEL:AddSubmenuButton(submenuClass)
             HELPSCRN:BuildContentArea()
 
             -- handle the set/unset of active buttons for the draw process
-            if self.lastActive and self.lastActive.SetActive then
+            if self.lastActive and isfunction(self.lastActive.SetActive) then
                 self.lastActive:SetToggle(false)
             end
 
             slf:SetToggle(true)
+
             self.lastActive = slf
         end)
 
@@ -145,16 +149,20 @@ end
 
 ---
 -- Resets the submenu list, clearing both the nav buttons and associated content area.
+-- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:ResetSubmenuList()
     self.navAreaScrollGrid:Clear()
     self.contentArea:Clear()
-    self.scrollTracker = nil
+    self.searchTrackerPanel = nil
+
+    return self
 end
 
 ---
 -- This function generates the list of the submenus which are shown in the given contentArea.
 -- @param menuClasses submenuClasses
+-- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:GenerateSubmenuList(submenuClasses)
     self:ResetSubmenuList()
@@ -163,25 +171,28 @@ function PANEL:GenerateSubmenuList(submenuClasses)
 
     -- Last refresh sizes depending on number of submenus added
     self:InvalidateLayout(true)
+
+    return self
 end
 
 ---
 -- Acts like PANEL:GenerateSubmenuList, but does not clear content area or scroll grid.
 -- @note This function does NOT invalidate layout.
--- @param menuClasses submenuClasses
+-- @param menuClasses submenuClasses A table of the submenu classes
+-- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:ExtendSubmenuList(submenuClasses)
     for i = 1, #submenuClasses do
-        local submenuClass = submenuClasses[i]
-        self:AddSubmenuButton(submenuClass)
+        self:AddSubmenuButton(submenuClasses[i])
     end
 
-    --self:InvalidateLayout(true)
+    return self
 end
 
 ---
 -- Selects the first submenu added to this list.
--- @param index The index to select the first item at or after. This index is 0-based.
+-- @param index The index to select the first item at or after. This index is 0-based
+-- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:SelectFirst(index)
     if not index then
@@ -190,72 +201,75 @@ function PANEL:SelectFirst(index)
 
     for i = index, self.navAreaScrollGrid:ChildCount() do
         local child = self.navAreaScrollGrid:GetChild(i)
-        if child and child.DoClick then
+
+        if child and isfunction(child.DoClick) then
             child:DoClick()
-            return
+
+            return self
         end
     end
 
-    -- If a non-zero index was specified, we don't want to present the unpopulated message, because we're doing a search.
-    -- In that case, we want to display a message that there were no results.
+    -- If a non-zero index was specified, we don't want to present the unpopulated message,
+    -- because we're doing a search. In that case, we want to display a message that there
+    -- were no results.
     if index ~= 0 then
         local msgLabel = vgui.Create("TTT2:DLabel", self.contentArea)
-        msgLabel:SetText("label_menu_search_no_items")
-        msgLabel:SetFont("DermaTTT2Title")
-        msgLabel:Dock(FILL)
+            :SetText("label_menu_search_no_items")
+            :SetFont("DermaTTT2Title")
+            :Dock(FILL) 
 
-        local dummyPnl = vgui.Create("TTT2:DPanel", self.contentArea)
-        dummyPnl:Dock(LEFT)
+        local dummyPnl = vgui.Create("TTT2:DPanel", self.contentArea):Dock(LEFT)
 
-        return
+        return self
     end
 
     -- make sure the last active gets cleared in this case
-    if self.lastActive and self.lastActive.SetActive then
+    if self.lastActive and isfunction(self.lastActive.SetActive) then
         self.lastActive:SetActive(false)
     end
 
     -- no content, fill the content area appropriately
-    local labelNoContent = vgui.Create("TTT2:DLabel", self.contentArea)
-    local widthContent = self.contentArea:GetSize()
-
-    labelNoContent:SetText("label_menu_not_populated")
-    labelNoContent:SetSize(widthContent - 40, 50)
-    labelNoContent:SetFont("DermaTTT2Title")
-    labelNoContent:SetPos(20, 0)
+    vgui.Create("TTT2:DLabel", self.contentArea)
+        :SetText("label_menu_not_populated")
+        :SetSize(self.contentArea:GetSize() - 40, 50)
+        :SetFont("DermaTTT2Title")
+        :SetPos(20, 0)
 
     return self
 end
 
 ---
--- Adds the search tracker element to the scroll view. Elements added after the search tracker will be searched for.
+-- Adds the search tracker element to the scroll view. Elements added after the search
+-- tracker will be searched for.
+-- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:AddSearchTracker()
-    if self.scrollTracker then
+    if self.searchTrackerPanel then
         ErrorNoHaltWithStack(
-            "ERROR: DSubMenuListTTT2:AddSearchTracker() called multiple times without resetting!"
+            "ERROR: TTT2:DSubmenuList:AddSearchTracker() called multiple times without resetting!"
         )
-        return
+
+        return self
     end
 
     if not self.searchBar then
         self:EnableSearchBar(true)
     end
-    local tracker = self.navAreaScrollGrid:Add("Panel")
 
-    tracker.PerformLayout = function(panel)
+    self.searchTrackerPanel = self.navAreaScrollGrid:Add("Panel") -- todo: TTT2:DPanel?
+
+    self.searchTrackerPanel.PerformLayout = function(panel)
         panel:SetSize(self.searchBar:GetSize())
     end
-
-    self.scrollTracker = tracker
 
     return self
 end
 
 ---
 -- This function sets the submenus which are shown in the given contentArea.
--- @param menuClasses submenuClasses
--- @param panel contenArea
+-- @param menuClasses basemenuClass The base menu class 
+-- @param panel contentArea The contentArea panel
+-- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:SetBasemenuClass(basemenuClass, contentArea)
     self.basemenuClass = basemenuClass
@@ -263,38 +277,34 @@ function PANEL:SetBasemenuClass(basemenuClass, contentArea)
 
     self:ResetSubmenuList()
     self:ExtendSubmenuList(self.basemenuClass:GetVisibleNonSearchedSubmenus())
+
     if self.basemenuClass:HasSearchbar() then
         self:AddSearchTracker()
     end
+
     self:ExtendSubmenuList(self.basemenuClass:GetVisibleSubmenus())
     self:SelectFirst()
+
     self:InvalidateLayout(true)
 
     return self
 end
 
 ---
--- @param number padding
+-- Sets thew spacing between and around the sub menu items.
+-- @param number spacing The spacing
+-- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetPadding(padding)
-    self.padding = padding
-
-    --self.navAreaScrollGrid:SetSpaceY(padding)
-    --self.navAreaScrollGrid:DockPadding(0, padding, 0, padding)
+function PANEL:SetSpacing(spacing)
+    self.navAreaScrollGrid:SetSpaceY(spacing)
+    self.navAreaScrollGrid:DockPadding(0, spacing, 0, spacing)
 
     return self
 end
 
 ---
--- @return number
--- @realm client
-function PANEL:GetPadding()
-    return self.padding
-end
-
----
 -- @ignore
-function PANEL:PerformLayout()
+function PANEL:OnRebuildLayout(w, h)
     -- First invalidate Parent to get current correct docking size
     self:InvalidateParent(true)
 
@@ -309,12 +319,16 @@ function PANEL:PerformLayout()
 end
 
 ---
--- @return boolean
+-- Clears the submenu list.
+-- @return boolean Returns true if clearing was a success, false if failed
 -- @realm client
 function PANEL:Clear()
-    local cleared = self.searchBar:Clear()
-
-    return tobool(cleared and self.navAreaScroll:Clear())
+    return tobool(self.searchBar:Clear() and self.navAreaScroll:Clear())
 end
 
-derma.DefineControl("DSubmenuListTTT2", "", PANEL, "TTT2:DPanel")
+derma.DefineControl(
+    "TTT2:DSubmenuList",
+    "A very specific panel that handles the submenu list",
+    PANEL,
+    "TTT2:DPanel"
+)

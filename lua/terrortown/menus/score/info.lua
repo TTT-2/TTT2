@@ -100,10 +100,9 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
     -- FILL THE COLUMNS
     for numColumn = 1, 3 do
         teamInfoBox[numColumn] = playerCoumns:Add("TTT2:DPanel")
-        teamInfoBox
-            [numColumn]
+        teamInfoBox[numColumn]
             :SetSize(widthColumn, maxHeightColumn)
-            --:SetColorShift(30)
+            :SetColorShift(30)
             :EnableCornerRadius(true)
 
         local teamPlayersList = columnData[numColumn]
@@ -129,7 +128,7 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                         + amountPly * sizes.heightRow
                         + (amountPly + 1) * sizes.paddingSmall
                 )
-                --:SetColorShift(15)
+                :SetColorShift(15)
                 :EnableCornerRadius(true)
 
             local teamPlayerBox = vgui.Create("DIconLayout", teamBox)
@@ -181,10 +180,8 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                 local plyNameBox = plyRow:Add("TTT2:DPanel")
                 plyNameBox
                     :SetSize(widthName, sizes.heightRow)
-                    --:SetColorShift(15)
-                    :SetText(
-                        ply.nick .. ((showDeath and not ply.alive) and " (†)" or "")
-                    )
+                    :SetColorShift(15)
+                    :SetText(ply.nick .. ((showDeath and not ply.alive) and " (†)" or ""))
                     :SetHorizontalTextAlign(TEXT_ALIGN_LEFT)
                     :SetIcon(roles.GetByIndex(ply.role).iconMaterial)
                     :EnableCornerRadius(true)
