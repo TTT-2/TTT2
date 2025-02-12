@@ -3,6 +3,7 @@
 All notable changes to TTT2 will be documented here. Inspired by [keep a changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
+- Added convar option to make incendiary grenades light bodies on fire (by @milkwxter)
 
 ### Changed
 - Updated Russian and English localization files (by @Satton2)
