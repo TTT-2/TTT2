@@ -38,7 +38,7 @@ function SWEP:GetGrenadeName()
 end
 
 -- create convar for igniting bodies
-CreateConVar("ttt2_incendiary_grenade_ignite_bodies", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+CreateConVar("ttt2_incendiary_grenade_ignite_bodies", 0, { FCVAR_ARCHIVE, FCVAR_NOTIFY })
 
 if CLIENT then
     function SWEP:AddToSettingsMenu(parent)

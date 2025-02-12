@@ -155,9 +155,8 @@ if SERVER then
                 -- set nearby bodies on fire so people cant search them
                 if GetConVar("ttt2_incendiary_grenade_ignite_bodies"):GetBool() then
                     for _, nearbyEnt in pairs(ents.FindInSphere(self:GetPos(), self.hurt_radius)) do
-                        if nearbyEnt:GetClass() == "prop_ragdoll" then
-                            nearbyEnt:Ignite(5)
-                        end
+                        if nearbyEnt:GetClass() ~= "prop_ragdoll" then continue end
+                        nearbyEnt:Ignite(5)
                     end
                 end
 
