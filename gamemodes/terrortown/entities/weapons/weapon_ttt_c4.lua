@@ -22,6 +22,37 @@ if CLIENT then
 
     SWEP.Icon = "vgui/ttt/icon_c4"
     SWEP.IconLetter = "I"
+else
+    ---
+    -- @realm server
+    local c4_radius = CreateConVar(
+        "ttt2_c4_radius",
+        "600",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Defines the damage radius of C4 explosions"
+    )
+
+    ---
+    -- @realm server
+    local c4_inner_radius = CreateConVar(
+        "ttt2_c4_radius_inner",
+        "500",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        "Defines the instant kill radius of C4 explosions"
+    )
+
+    hook.Add("TTT2SyncGlobals", "TTT2SyncC4Globals", function()
+        SetGlobalInt(c4_radius:GetName(), c4_radius:GetInt())
+        SetGlobalInt(c4_inner_radius:GetName(), c4_inner_radius:GetInt())
+    end)
+
+    cvars.AddChangeCallback(c4_radius:GetName(), function(name, old, new)
+        SetGlobalInt(c4_radius:GetName(), tonumber(new))
+    end, c4_radius:GetName())
+
+    cvars.AddChangeCallback(c4_inner_radius:GetName(), function(name, old, new)
+        SetGlobalInt(c4_inner_radius:GetName(), tonumber(new))
+    end, c4_inner_radius:GetName())
 end
 
 SWEP.Base = "weapon_tttbase"
@@ -97,5 +128,35 @@ if CLIENT then
         self:AddTTT2HUDHelp("c4_help_primary", "c4_help_secondary")
 
         return BaseClass.Initialize(self)
+    end
+
+    ---
+    -- @ignore
+    function SWEP:AddToSettingsMenu(parent)
+        local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
+
+        form:MakeHelp({
+            label = "help_c4_radius",
+        })
+
+        form:MakeSlider({
+            serverConvar = "ttt2_c4_radius",
+            label = "label_c4_radius",
+            min = 0,
+            max = 2000,
+            decimal = 0,
+        })
+
+        form:MakeHelp({
+            label = "help_c4_radius_inner",
+        })
+
+        form:MakeSlider({
+            serverConvar = "ttt2_c4_radius_inner",
+            label = "label_c4_radius_inner",
+            min = 0,
+            max = 2000,
+            decimal = 0,
+        })
     end
 end
