@@ -2807,3 +2807,6 @@ L.radio_desc = [[
 Plays sounds to distract or deceive.
 
 Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
+
+-- 2025-02-12
+L.label_incendiary_grenade_ignite_bodies = "Enable incendiary grenades to ignite bodies"

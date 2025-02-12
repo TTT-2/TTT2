@@ -36,3 +36,17 @@ SWEP.Spawnable = true
 function SWEP:GetGrenadeName()
     return "ttt_firegrenade_proj"
 end
+
+-- create convar for igniting bodies
+CreateConVar("ttt2_incendiary_grenade_ignite_bodies", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+
+if CLIENT then
+    function SWEP:AddToSettingsMenu(parent)
+        local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
+
+        form:MakeCheckBox({
+            label = "label_incendiary_grenade_ignite_bodies",
+            serverConvar = "ttt2_incendiary_grenade_ignite_bodies",
+        })
+    end
+end
