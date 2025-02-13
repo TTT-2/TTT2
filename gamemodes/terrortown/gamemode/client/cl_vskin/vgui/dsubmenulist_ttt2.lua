@@ -123,7 +123,7 @@ end
 -- @return panel
 -- @realm client
 function PANEL:AddSubmenuButton(submenuClass)
-    return self.navAreaScrollGrid:Add("TTT2:DSubmenuButton")
+    local settingsButton = self.navAreaScrollGrid:Add("TTT2:DSubmenuButton")
     settingsButton
         :SetText(submenuClass.title or submenuClass.type)
         :SetIcon(submenuClass.icon, not submenuClass.iconFullSize, not submenuClass.iconFullSize)
@@ -216,7 +216,7 @@ function PANEL:SelectFirst(index)
         local msgLabel = vgui.Create("TTT2:DLabel", self.contentArea)
             :SetText("label_menu_search_no_items")
             :SetFont("DermaTTT2Title")
-            :Dock(FILL) 
+            :Dock(FILL)
 
         local dummyPnl = vgui.Create("TTT2:DPanel", self.contentArea):Dock(LEFT)
 
@@ -267,7 +267,7 @@ end
 
 ---
 -- This function sets the submenus which are shown in the given contentArea.
--- @param menuClasses basemenuClass The base menu class 
+-- @param menuClasses basemenuClass The base menu class
 -- @param panel contentArea The contentArea panel
 -- @return Panel Returns the panel itself
 -- @realm client

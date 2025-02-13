@@ -203,6 +203,8 @@ function GM:Initialize()
 
     tips.Initialize()
 
+    derma.InitializeElements()
+
     ---
     -- @realm shared
     hook.Run("TTT2FinishedLoading")
@@ -375,6 +377,8 @@ function GM:OnReloaded()
         "enable_dynamic_fov",
         GetConVar("ttt2_enable_dynamic_fov"):GetBool()
     )
+
+    derma.InitializeElements()
 
     -- notify the server that the client finished reloading
     net.Start("TTT2FinishedReloading")
