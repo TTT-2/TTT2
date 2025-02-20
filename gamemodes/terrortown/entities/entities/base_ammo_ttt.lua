@@ -135,7 +135,7 @@ function ENT:Touch(ply)
     local ammo = ply:GetAmmoCount(self.AmmoType)
 
     -- need clipmax info and room for at least 1/4th
-    if self.AmmoMax < ammo + math.ceil(self.AmmoAmount * 0.25) then
+    if self.AmmoMax < ammo then
         return
     end
 
@@ -143,14 +143,22 @@ function ENT:Touch(ply)
 
     ply:GiveAmmo(given, self.AmmoType)
 
-    self.AmmoAmount = self.AmmoAmount - given
+    self:AdjustAmmo(self.AmmoAmount - given)
+end
 
-    if self.AmmoAmount > 0 and math.ceil(self.AmmoEntMax * 0.25) <= self.AmmoAmount then
+---
+-- This entity function is called when the stored ammo is changed.
+-- @param number amr The new stored ammo amount
+-- @realm shared
+function ENT:AdjustAmmo(amr)
+    if amr <= 0 then
+        self.tickRemoval = true
+        self:Remove()
         return
     end
 
-    self.tickRemoval = true
-    self:Remove()
+    self.AmmoAmount = amr
+    self:SetModelScale((amr / self.AmmoEntMax) * 0.5 + 0.5)
 end
 
 if SERVER then

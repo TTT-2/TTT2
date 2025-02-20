@@ -1483,7 +1483,7 @@ function plymeta:DropAmmo(wep, useClip, amt)
         return false
     end
     amt = hook_data[1]
-    if amt < 1 or amt <= wep.Primary.ClipSize * 0.25 then
+    if amt < 1 then
         LANG.Msg(self, useClip and "drop_no_ammo" or "drop_no_reserve", nil, MSG_MSTACK_WARN)
 
         return false
@@ -1507,7 +1507,7 @@ function plymeta:DropAmmo(wep, useClip, amt)
         phys:ApplyForceOffset(VectorRand(), vector_origin)
     end
 
-    box.AmmoAmount = amt
+    box:AdjustAmmo(amt)
 
     timer.Simple(2, function()
         if not IsValid(box) then
