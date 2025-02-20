@@ -25,8 +25,6 @@ function derma.InitializeElements()
         end
     )
 
-    PrintTable(basePanels)
-
     classbuilder.BuildFromFolder(
         "terrortown/derma/core/",
         CLIENT_FILE,
@@ -36,18 +34,31 @@ function derma.InitializeElements()
             local dermaInfo = table.Copy(panel.derma)
             panel.derma = nil
 
+            -- key value table to fast access modules
+            panel._modules = {}
+
             -- PANELS CAN INHERIT FROM SHARED MODULES
-            for i = 1, #(panel.modules or {}) do
-                local baseModule = basePanels[panel.modules[i]]
+            for i = 1, #(panel.implements or {}) do
+                local moduleName = panel.implements[i]
+                local baseModule = basePanels[moduleName]
 
                 if not baseModule then
                     continue
                 end
 
+                panel._modules[moduleName] = true
+
                 table.DeepInherit(panel, baseModule)
             end
 
-            panel.modules = nil
+            panel.implements = nil
+
+            -- derma.DefineControl adds an Init() function if none is set instead of inheriting
+            -- from the parent, therefore we manually call the parent Init() if not set
+            panel.Init = panel.Init
+                or function(slf)
+                    DBase(dermaInfo.baseClassName).Init(slf)
+                end
 
             derma.DefineControl(
                 dermaInfo.className,

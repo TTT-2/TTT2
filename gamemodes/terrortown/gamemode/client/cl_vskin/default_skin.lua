@@ -1633,7 +1633,7 @@ function SKIN:PaintSearchbar(panel, w, h)
     drawBox(leftPad, h - sizes.border - bottomPad, w - widthPad, sizes.border, colorBar)
 
     -- If not focussed draw placeholder text
-    if panel:GetIsOnFocus() then
+    if panel:IsOnFocus() then
         return
     end
 

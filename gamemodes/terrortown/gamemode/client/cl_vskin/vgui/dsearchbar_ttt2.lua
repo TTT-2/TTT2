@@ -9,28 +9,31 @@ local font = "DermaTTT2Text"
 ---
 -- @accessor number
 -- @realm client
-AccessorFunc(PANEL, "heightMult", "HeightMult")
+AccessorFunc(PANEL, "m_HeightMult", "HeightMult", FORCE_NUMBER, true)
 
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "isOnFocus", "IsOnFocus")
+AccessorFunc(PANEL, "m_bIsOnFocus", "OnFocus", FORCE_BOOL_IS, true)
 
 ---
 -- @accessor string
 -- @realm client
-AccessorFunc(PANEL, "placeholderText", "PlaceholderText")
+AccessorFunc(PANEL, "m_PlaceholderText", "PlaceholderText", FORCE_STRING, true)
 
 ---
 -- @accessor string
 -- @realm client
-AccessorFunc(PANEL, "curPlaceholderText", "CurrentPlaceholderText")
+AccessorFunc(PANEL, "m_CurrentPlaceholderText", "CurrentPlaceholderText", FORCE_STRING, true)
+
+-- todo: combine with dtextentry?
 
 ---
 -- @ignore
 function PANEL:Init()
-    local textEntry = vgui.Create("DTextEntry", self)
-    local textColor = util.GetActiveColor(
+    local textEntry = vgui.Create("DTextEntryTTT2", self)
+
+    local textColor = util.GetActiveColor( -- todo move to correct hook
         util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25)
     )
 
