@@ -582,11 +582,68 @@ end
 -- @param number value The value in hammer units
 -- @return number The converted value in meters
 -- @realm shared
+-- @deprecated util.InchesToMeters should be used instead
 function util.HammerUnitsToMeters(value)
-    return value * 19.05 / 1000
+    return util.InchesToMeters(value)
+end
+
+---
+-- Converts inches to meters.
+-- @param number value The value in inches
+-- @return number The converted value in meters
+-- @realm shared
+function util.InchesToMeters(value)
+    return value * 0.0254
+end
+
+---
+-- Converts inches to yards.
+-- @param number value The value in inches
+-- @return number The converted value in yards
+-- @realm shared
+function util.InchesToYards(value)
+    return value / 36
+end
+
+---
+-- Converts inches to feet.
+-- @param number value The value in inches
+-- @return number The converted value in feet
+-- @realm shared
+function util.InchesToFeet(value)
+    return value / 12
 end
 
 if CLIENT then
+    ---
+    -- @realm client
+    local cvDistanceUnit = CreateConVar(
+        "ttt2_distance_unit",
+        "1",
+        FCVAR_ARCHIVE,
+        "Preferred unit of length (0 = inches, 1 = meters, 2 = yards, 3 = feet)"
+    )
+
+    ---
+    -- Produces a @{string} out of a length value based on the user's preferred unit of length.
+    -- @param number value The length value in inches
+    -- @param number decimals The decimal places to round to
+    -- @return number The converted value in feet
+    -- @realm shared
+    function util.DistanceToString(value, decimals)
+        local unit = cvDistanceUnit:GetInt()
+
+        if unit == 1 then -- meters
+            return math.Round(util.InchesToMeters(value), decimals) .. "m"
+        elseif unit == 2 then -- yards
+            return math.Round(util.InchesToYards(value), decimals) .. "yd"
+        elseif unit == 3 then -- feet
+            return math.Round(util.InchesToFeet(value), decimals) .. "ft"
+        end
+
+        return tostring(math.Round(value)) -- inches
+    end
+
     local colorsHealth = {
         healthy = Color(0, 255, 0, 255),
         hurt = Color(170, 230, 10, 255),
