@@ -9,7 +9,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 - Updated Russian and English localization files (by @Satton2)
-- Ammo can now always be taken out of Ammo Boxes regardless of weapon clip size (by @MrXonte)
+- Ammo Boxes do not despawn below 25% capacity after picking up ammo from them (by @MrXonte)
 
 ## [v0.14.2b](https://github.com/TTT-2/TTT2/tree/v0.14.2b) (2025-02-02)
 
