@@ -146,8 +146,12 @@ function ENT:Touch(ply)
     self:AdjustAmmo(self.AmmoAmount - given)
 end
 
+---
+-- This entity function is called when the stored ammo is changed.
+-- @param number amr The new stored ammo amount
+-- @realm shared
 function ENT:AdjustAmmo(amr)
-    if amr == 0 then
+    if amr <= 0 then
         self.tickRemoval = true
         self:Remove()
         return
