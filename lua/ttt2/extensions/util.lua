@@ -624,6 +624,9 @@ if CLIENT then
         "Preferred unit of length (0 = inches, 1 = meters, 2 = yards, 3 = feet)"
     )
 
+    local ParT = LANG.GetParamTranslation
+    local paramsLength = {}
+
     ---
     -- Produces a @{string} out of a length value based on the user's preferred unit of length.
     -- @param number value The length value in inches
@@ -633,15 +636,21 @@ if CLIENT then
     function util.DistanceToString(value, decimals)
         local unit = cvDistanceUnit:GetInt()
 
-        if unit == 1 then -- meters
-            return math.Round(util.InchesToMeters(value), decimals) .. "m"
-        elseif unit == 2 then -- yards
-            return math.Round(util.InchesToYards(value), decimals) .. "yd"
-        elseif unit == 3 then -- feet
-            return math.Round(util.InchesToFeet(value), decimals) .. "ft"
+        if unit == 1 then
+            paramsLength.length = math.Round(util.InchesToMeters(value), decimals)
+
+            return ParT("length_in_meters", paramsLength)
+        elseif unit == 2 then
+            paramsLength.length = math.Round(util.InchesToYards(value), decimals)
+
+            return ParT("length_in_yards", paramsLength)
+        elseif unit == 3 then
+            paramsLength.length = math.Round(util.InchesToFeet(value), decimals)
+
+            return ParT("length_in_feet", paramsLength)
         end
 
-        return tostring(math.Round(value)) -- inches
+        return tostring(math.Round(value))
     end
 
     local colorsHealth = {
