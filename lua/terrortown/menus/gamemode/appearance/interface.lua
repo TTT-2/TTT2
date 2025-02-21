@@ -37,9 +37,9 @@ function CLGAMEMODESUBMENU:Populate(parent)
         convar = "ttt2_distance_unit",
         choices = {
             { title = TryT("choice_distance_unit_0"), value = 0 },
-            { title = TryT("choice_distance_unit_0"), value = 1 },
-            { title = TryT("choice_distance_unit_0"), value = 2 },
-            { title = TryT("choice_distance_unit_0"), value = 3 },
+            { title = TryT("choice_distance_unit_1"), value = 1 },
+            { title = TryT("choice_distance_unit_2"), value = 2 },
+            { title = TryT("choice_distance_unit_3"), value = 3 },
         },
     })
 
