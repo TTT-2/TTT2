@@ -2799,3 +2799,9 @@ L.label_hud_show_team_name = "Rol adının yanında takım adını göstermeyi e
 L.length_in_meters = "{length}m"
 --L.length_in_yards = "{length}yd"
 --L.length_in_feet = "{length}ft"
+
+--L.label_distance_unit = "Preferred unit of length for distance displays"
+--L.choice_distance_unit_0 = "Inches"
+--L.choice_distance_unit_1 = "Meters"
+--L.choice_distance_unit_2 = "Yards"
+--L.choice_distance_unit_3 = "Feet"
