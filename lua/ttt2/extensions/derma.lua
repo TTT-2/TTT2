@@ -40,7 +40,7 @@ function derma.InitializeElements()
             -- PANELS CAN INHERIT FROM SHARED MODULES
             for i = 1, #(panel.implements or {}) do
                 local moduleName = panel.implements[i]
-                local baseModule = basePanels[moduleName]
+                local baseModule = table.FullCopy(basePanels[moduleName])
 
                 if not baseModule then
                     continue

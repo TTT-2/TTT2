@@ -543,6 +543,7 @@ COLOR_GOLD = Color(255, 215, 30)
 
 -- include independent extensions
 include("ttt2/extensions/debug.lua")
+include("ttt2/extensions/table.lua")
 
 -- include independent libraries (other extensions might require them)
 include("ttt2/libraries/pon.lua")
@@ -555,7 +556,6 @@ include("ttt2/extensions/player.lua")
 include("ttt2/extensions/net.lua")
 include("ttt2/extensions/sql.lua")
 include("ttt2/extensions/string.lua")
-include("ttt2/extensions/table.lua")
 include("ttt2/extensions/util.lua")
 include("ttt2/extensions/surface.lua")
 include("ttt2/extensions/draw.lua")

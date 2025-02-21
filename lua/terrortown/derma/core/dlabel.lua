@@ -25,7 +25,7 @@
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bIsMenuComponent", "IsMenu", FORCE_BOOL) -- ??? needed in TTT2:DComboBox?
+AccessorFunc(DPANEL, "m_bIsMenuComponent", "IsMenu", FORCE_BOOL) -- ??? needed in TTT2:DComboBox?
 
 DPANEL.derma = {
     className = "TTT2:DLabel",
@@ -74,7 +74,7 @@ function DPANEL:Initialize()
 end
 
 -- @ignore
-function METAPANEL:OnVSkinUpdate()
+function DPANEL:OnVSkinUpdate()
     local colorBackground = self:GetColor() or self:GetParentColor() or vskin.GetBackgroundColor()
     local colorText = util.GetDefaultColor(colorBackground)
     local colorOutline = self:GetOutlineColor() or colorText

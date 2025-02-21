@@ -7,13 +7,6 @@
 -- @realm client
 AccessorFunc(METAPANEL, "m_PaintHookName", "PaintHookName", FORCE_STRING, true)
 
--- data attached to the panel is put in its own scope
-METAPANEL._eventListeners = {}
-METAPANEL._attached = {}
-METAPANEL._vskinColor = {}
-METAPANEL._vskinDimension = {}
-METAPANEL._tooltip = {}
-
 ---
 -- Is called on initialization of the panel.
 -- @note vgui.Register does not support inheritance for the Init function, therefore
@@ -21,6 +14,13 @@ METAPANEL._tooltip = {}
 -- @hook
 -- @realm client
 function METAPANEL:Init()
+    -- data attached to the panel is put in its own scope
+    self._eventListeners = {}
+    self._attached = {}
+    self._vskinColor = {}
+    self._vskinDimension = {}
+    self._tooltip = {}
+
     -- enable the panel
     self:SetEnabled(true)
 
