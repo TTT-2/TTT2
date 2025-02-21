@@ -2070,11 +2070,11 @@ L.flaregun_help_primary = "Körper/Entität verbrennen"
 
 -- 2023-12-14
 L.marker_vision_owner = "Besitzer: {owner}"
-L.marker_vision_distance = "Distanz: {distance}m"
-L.marker_vision_distance_collapsed = "{distance}m"
+L.marker_vision_distance = "Distanz: {distance}"
+L.marker_vision_distance_collapsed = "{distance}"
 
 L.c4_marker_vision_time = "Explosionszeit: {time}"
-L.c4_marker_vision_collapsed = "{time} / {distance}m"
+L.c4_marker_vision_collapsed = "{time} / {distance}"
 
 L.c4_marker_vision_safe_zone = "Bombensicherheitszone"
 L.c4_marker_vision_damage_zone = "Bombenschadenszone"
@@ -2801,3 +2801,8 @@ L.label_voice_activation_mode_toggle_enabled = "Umschalten (Aktiviert zum Start)
 --Plays sounds to distract or deceive.
 --
 --Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
+
+-- 2025-02-21
+L.length_in_meters = "{length}m"
+--L.length_in_yards = "{length}yd"
+--L.length_in_feet = "{length}ft"

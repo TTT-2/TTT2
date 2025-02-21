@@ -2074,11 +2074,11 @@ L.flaregun_help_primary = "엔티티/시체 태우기"
 
 -- 2023-12-14
 L.marker_vision_owner = "소유자: {owner}"
-L.marker_vision_distance = "거리: {distance}m"
-L.marker_vision_distance_collapsed = "{distance}m"
+L.marker_vision_distance = "거리: {distance}"
+L.marker_vision_distance_collapsed = "{distance}"
 
 L.c4_marker_vision_time = "폭파 시간: {time}"
-L.c4_marker_vision_collapsed = "{time} / {distance}m"
+L.c4_marker_vision_collapsed = "{time} / {distance}"
 
 L.c4_marker_vision_safe_zone = "C4 안전 구역"
 L.c4_marker_vision_damage_zone = "C4 데미지 구역"
@@ -2804,3 +2804,8 @@ L.label_crosshair_size_gap = "크로스헤어 공간 배율"
 --Plays sounds to distract or deceive.
 --
 --Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
+
+-- 2025-02-21
+L.length_in_meters = "{length}m"
+--L.length_in_yards = "{length}yd"
+--L.length_in_feet = "{length}ft"

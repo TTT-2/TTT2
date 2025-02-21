@@ -2070,11 +2070,11 @@ L.flaregun_help_primary = "Brûler un corps/une entité"
 
 -- 2023-12-14
 L.marker_vision_owner = "Propriétaire : {owner}"
-L.marker_vision_distance = "Distance : {distance}m"
-L.marker_vision_distance_collapsed = "{distance}m"
+L.marker_vision_distance = "Distance : {distance}"
+L.marker_vision_distance_collapsed = "{distance}"
 
 L.c4_marker_vision_time = "Temps avant détonation : {time}"
-L.c4_marker_vision_collapsed = "{time} / {distance}m"
+L.c4_marker_vision_collapsed = "{time} / {distance}"
 
 L.c4_marker_vision_safe_zone = "Zone hors de portée du C4"
 L.c4_marker_vision_damage_zone = "Zone de dégâts du C4"
@@ -2801,3 +2801,8 @@ L.vehicle_enter = "Appuyez sur [{usekey}] pour entrer dans le véhicule"
 --Plays sounds to distract or deceive.
 --
 --Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
+
+-- 2025-02-21
+L.length_in_meters = "{length}m"
+--L.length_in_yards = "{length}yd"
+--L.length_in_feet = "{length}ft"
