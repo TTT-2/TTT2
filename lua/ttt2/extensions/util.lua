@@ -632,7 +632,7 @@ if CLIENT then
     -- @param number value The length value in inches
     -- @param number decimals The decimal places to round to
     -- @return number The converted value in feet
-    -- @realm shared
+    -- @realm client
     function util.DistanceToString(value, decimals)
         local unit = cvDistanceUnit:GetInt()
 
