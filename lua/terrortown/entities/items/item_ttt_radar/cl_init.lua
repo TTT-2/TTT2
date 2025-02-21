@@ -119,9 +119,7 @@ local function DrawTarget(tgt, size, offset, no_shrink)
 
     -- Drawing full size?
     if sz == size then
-        local text = util.DistanceToString(
-            LocalPlayer():EyePos():Distance(tgt.pos), 0
-        )
+        local text = util.DistanceToString(LocalPlayer():EyePos():Distance(tgt.pos), 0)
         local w, h = surface.GetTextSize(text)
 
         -- Show range to target
