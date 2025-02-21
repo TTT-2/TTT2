@@ -576,9 +576,8 @@ if CLIENT then
                 local vectorToPos = targetPos - scannerPos
                 local angleToPos = vectorToPos:Angle()
                 local arrowRotation = angleToPos.yaw - EyeAngles().yaw
-                local distance = util.DistanceToString(
-                    LocalPlayer():EyePos():Distance(targetPos), 0
-                )
+                local distance =
+                    util.DistanceToString(LocalPlayer():EyePos():Distance(targetPos), 0)
 
                 surface.SetDrawColor(96, 255, 96, 255)
                 surface.SetMaterial(dna_screen_arrow)
