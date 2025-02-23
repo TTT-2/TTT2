@@ -25,7 +25,7 @@ if CLIENT then
 else
     ---
     -- @realm server
-    local c4_radius = CreateConVar(
+    CreateConVar(
         "ttt2_c4_radius",
         "600",
         { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED },
@@ -34,7 +34,7 @@ else
 
     ---
     -- @realm server
-    local c4_inner_radius = CreateConVar(
+    CreateConVar(
         "ttt2_c4_radius_inner",
         "500",
         { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED },
