@@ -624,7 +624,6 @@ if CLIENT then
         "Preferred unit of length (0 = inches, 1 = meters, 2 = yards, 3 = feet)"
     )
 
-    local ParT = LANG.GetParamTranslation
     local paramsLength = {}
 
     ---
@@ -639,15 +638,15 @@ if CLIENT then
         if unit == 1 then
             paramsLength.length = math.Round(util.InchesToMeters(value), decimals)
 
-            return ParT("length_in_meters", paramsLength)
+            return LANG.GetParamTranslation("length_in_meters", paramsLength)
         elseif unit == 2 then
             paramsLength.length = math.Round(util.InchesToYards(value), decimals)
 
-            return ParT("length_in_yards", paramsLength)
+            return LANG.GetParamTranslation("length_in_yards", paramsLength)
         elseif unit == 3 then
             paramsLength.length = math.Round(util.InchesToFeet(value), decimals)
 
-            return ParT("length_in_feet", paramsLength)
+            return LANG.GetParamTranslation("length_in_feet", paramsLength)
         end
 
         return tostring(math.Round(value))
