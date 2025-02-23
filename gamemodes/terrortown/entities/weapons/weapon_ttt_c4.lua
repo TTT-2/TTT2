@@ -22,25 +22,25 @@ if CLIENT then
 
     SWEP.Icon = "vgui/ttt/icon_c4"
     SWEP.IconLetter = "I"
-else
-    ---
-    -- @realm server
-    CreateConVar(
-        "ttt2_c4_radius",
-        "600",
-        { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED },
-        "Defines the damage radius of C4 explosions"
-    )
-
-    ---
-    -- @realm server
-    CreateConVar(
-        "ttt2_c4_radius_inner",
-        "500",
-        { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED },
-        "Defines the kill radius of C4 explosions"
-    )
 end
+
+---
+-- @realm shared
+CreateConVar(
+    "ttt2_c4_radius",
+    "600",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED },
+    "Defines the damage radius of C4 explosions"
+)
+
+---
+-- @realm shared
+CreateConVar(
+    "ttt2_c4_radius_inner",
+    "500",
+    { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED },
+    "Defines the kill radius of C4 explosions"
+)
 
 SWEP.Base = "weapon_tttbase"
 
