@@ -20,11 +20,6 @@ function derma.InitializeElements()
         CLIENT_FILE,
         "METAPANEL",
         function(panel, path, name)
-            -- an internal setup function that initializes the panel
-            if isfunction(panel.InternalSetup) then
-                panel:InternalSetup()
-            end
-
             basePanels[name] = panel
             panel.name = nil
         end
@@ -42,6 +37,9 @@ function derma.InitializeElements()
             -- key value table to fast access modules
             panel._modules = {}
 
+            -- each module can have an init function, store them as well
+            panel._moduleInit = {}
+
             -- PANELS CAN INHERIT FROM SHARED MODULES
             for i = 1, #(panel.implements or {}) do
                 local moduleName = panel.implements[i]
@@ -52,6 +50,8 @@ function derma.InitializeElements()
                 end
 
                 panel._modules[moduleName] = true
+                panel._moduleInit[#panel._moduleInit + 1] = panel.InternalSetup
+                panel.InternalSetup = nil
 
                 table.DeepInherit(panel, baseModule)
             end
@@ -60,10 +60,26 @@ function derma.InitializeElements()
 
             -- derma.DefineControl adds an Init() function if none is set instead of inheriting
             -- from the parent, therefore we manually call the parent Init() if not set
-            panel.Init = panel.Init
-                or function(slf)
+            local oldInit = panel.Init
+
+            panel.Init = function(slf)
+                for i = 1, #(slf._moduleInit or {}) do
+                    slf._moduleInit[i](slf)
+                end
+
+                slf._moduleInit = nil
+
+                local baseClass = DBase(dermaInfo.baseClassName)
+
+                -- calling the base class this way only works for lua defined panels, not engine defined
+                if istable(baseClass) and isfunction(baseClass.Init) then
                     DBase(dermaInfo.baseClassName).Init(slf)
                 end
+
+                if isfunction(oldInit) then
+                    oldInit(slf)
+                end
+            end
 
             derma.DefineControl(
                 dermaInfo.className,

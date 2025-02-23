@@ -10,6 +10,13 @@ AccessorFunc(METAPANEL, "m_PaintHookName", "PaintHookName", FORCE_STRING, true)
 ---
 -- @ignore
 function METAPANEL:InternalSetup()
+    -- data attached to the panel is put in its own scope
+    self._eventListeners = {}
+    self._attached = {}
+    self._vskinColor = {}
+    self._vskinDimension = {}
+    self._tooltip = {}
+
     -- some basic engine defined functions of panels have to be extended to
     -- support method chaining
     local _SetSize = self.SetSize
@@ -83,13 +90,6 @@ end
 -- @hook
 -- @realm client
 function METAPANEL:Init()
-    -- data attached to the panel is put in its own scope
-    self._eventListeners = {}
-    self._attached = {}
-    self._vskinColor = {}
-    self._vskinDimension = {}
-    self._tooltip = {}
-
     -- enable the panel
     self:SetEnabled(true)
 

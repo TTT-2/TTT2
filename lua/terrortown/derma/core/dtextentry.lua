@@ -68,6 +68,9 @@ function DPANEL:Initialize()
     self:SetNumeric(false)
     self:SetAllowNonAsciiCharacters(true)
 
+    self:SetEditable(true)
+    self:SetEnabled(true)
+
     self:SetCursor("beam")
 
     -- set visual defaults
@@ -116,13 +119,20 @@ function DPANEL:PrePaint(w, h)
     if text and text ~= "" then
         return false -- prevents normal content from being drawn
     end
+
+    return true
+end
+
+function DPANEL:OnMousePressed(mouseCode)
+    self:RequestFocus() -- Forces keyboard focus
+    --self:OnGetFocus() -- Triggers default DTextEntry focus behavior
 end
 
 ---
 -- @ignore
 function DPANEL:PostPaint(w, h)
     local colorText = self:GetVSkinColor("text")
-    local colorHighlight = vskin.GetHighlightColor()
+    local colorHighlight = vskin.GetAccentColor()
 
     -- a hacky workaround to render the tabbing preview
     -- todo: cache color
@@ -153,6 +163,9 @@ end
 function DPANEL:SetEditable(state)
     self:SetKeyboardInputEnabled(state)
     self:SetMouseInputEnabled(state)
+
+    self:GetParent():SetKeyboardInputEnabled(state)
+    self:GetParent():SetMouseInputEnabled(state)
 
     return self
 end
@@ -224,7 +237,7 @@ end
 -- @param string strValue The new value that should be set
 -- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetValue(strValue)
+function DPANEL:SetValue(strValue)
     if self:IsEditing() then
         return
     end
@@ -249,6 +262,8 @@ end
 function DPANEL:OnKeyCodeTyped(keyCode)
     self:TriggerOnWithBase("KeyCode", keyCode)
 
+    print("key code typed")
+
     if keyCode == KEY_ENTER and not self:IsMultiline() and self:IsEnterAllowed() then
         self:FocusNext()
 
@@ -267,8 +282,6 @@ function DPANEL:OnKeyCodeTyped(keyCode)
     if self:IsTabbingEnabled() then
         self.m_CommonBase = self:GetAutoComplete()
     end
-
-    return false
 end
 
 ---
@@ -280,10 +293,10 @@ end
 -- @realm client
 function DPANEL:AllowInput(strValue)
     if self:IsNumeric() then
-        return string.find(strAllowedNumericCharacters, strValue, 1, true) ~= nil
+        return string.find(strAllowedNumericCharacters, strValue, 1, true) == nil
     end
 
-    return true
+    return false
 end
 
 ---
