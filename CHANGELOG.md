@@ -5,6 +5,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ## Unreleased
 
 ### Added
+
 - Added option to select preferred unit of length for distance displays (by @wgetJane)
 
 ### Changed
