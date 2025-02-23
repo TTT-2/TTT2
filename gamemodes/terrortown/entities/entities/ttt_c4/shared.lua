@@ -843,7 +843,7 @@ else -- CLIENT
         local nick = IsValid(owner) and owner:Nick() or "---"
 
         local time = util.SimpleTime(ent:GetExplodeTime() - CurTime(), "%02i:%02i")
-        local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
+        local distance = util.DistanceToString(mvData:GetEntityDistance(), 1)
 
         mvData:EnableText()
 

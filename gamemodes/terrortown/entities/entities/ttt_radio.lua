@@ -352,7 +352,7 @@ if CLIENT then
         local originator = ent:GetOriginator()
         local nick = IsValid(originator) and originator:Nick() or "---"
 
-        local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
+        local distance = util.DistanceToString(mvData:GetEntityDistance(), 1)
 
         mvData:EnableText()
 

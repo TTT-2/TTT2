@@ -252,7 +252,7 @@ if CLIENT then
         local owner = ent:GetOriginator()
         local nick = IsValid(owner) and owner:Nick() or "---"
 
-        local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
+        local distance = util.DistanceToString(mvData:GetEntityDistance(), 1)
 
         mvData:EnableText()
 

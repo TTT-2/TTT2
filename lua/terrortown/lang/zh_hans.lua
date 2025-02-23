@@ -2070,11 +2070,11 @@ L.flaregun_help_primary = "焚烧尸体/实体"
 
 -- 2023-12-14
 L.marker_vision_owner = "拥有者: {owner}"
-L.marker_vision_distance = "距离: {distance}米"
-L.marker_vision_distance_collapsed = "{distance}米"
+L.marker_vision_distance = "距离: {distance}"
+L.marker_vision_distance_collapsed = "{distance}"
 
 L.c4_marker_vision_time = "爆炸时间: {time}"
-L.c4_marker_vision_collapsed = "{time} / {distance}米"
+L.c4_marker_vision_collapsed = "{time} / {distance}"
 
 L.c4_marker_vision_safe_zone = "炸弹安全区"
 L.c4_marker_vision_damage_zone = "炸弹伤害区"
@@ -2801,3 +2801,14 @@ L.label_player_role = "选择角色"
 --Plays sounds to distract or deceive.
 --
 --Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
+
+-- 2025-02-21
+L.length_in_meters = "{length}米"
+--L.length_in_yards = "{length}yd"
+--L.length_in_feet = "{length}ft"
+
+--L.label_distance_unit = "Preferred unit of length for distance displays"
+--L.choice_distance_unit_0 = "Inches"
+--L.choice_distance_unit_1 = "Meters"
+--L.choice_distance_unit_2 = "Yards"
+--L.choice_distance_unit_3 = "Feet"

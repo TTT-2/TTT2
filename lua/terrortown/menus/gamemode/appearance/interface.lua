@@ -1,5 +1,7 @@
 --- @ignore
 
+local TryT = LANG.TryTranslation
+
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
 CLGAMEMODESUBMENU.priority = 92
@@ -28,6 +30,17 @@ function CLGAMEMODESUBMENU:Populate(parent)
     form:MakeCheckBox({
         label = "label_HUD_enable_description",
         convar = "ttt2_hud_enable_description",
+    })
+
+    form:MakeComboBox({
+        label = "label_distance_unit",
+        convar = "ttt2_distance_unit",
+        choices = {
+            { title = TryT("choice_distance_unit_0"), value = 0 },
+            { title = TryT("choice_distance_unit_1"), value = 1 },
+            { title = TryT("choice_distance_unit_2"), value = 2 },
+            { title = TryT("choice_distance_unit_3"), value = 3 },
+        },
     })
 
     local form2 = vgui.CreateTTT2Form(parent, "header_interface_keys")
