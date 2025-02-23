@@ -3,11 +3,6 @@
 -- @section TTT2:DPanel/Text
 
 ---
--- @accessor string
--- @realm client
-AccessorFunc(METAPANEL, "m_FontName", "Font", nil, true)
-
----
 -- @accessor number
 -- @realm client
 AccessorFunc(METAPANEL, "m_nTextAlign", "TextAlign", FORCE_NUMBER, true)
@@ -28,6 +23,43 @@ AccessorFunc(METAPANEL, "m_TranslatedDescription", "TranslatedDescription", FORC
 AccessorFunc(METAPANEL, "m_TranslatedDescriptionLines", "TranslatedDescriptionLines", nil, true)
 
 ---
+-- @ignore
+function METAPANEL:InternalSetup()
+    self.SetTextInternal = self.SetText
+    self.GetTextInternal = self.GetText
+
+    ---
+    -- Sets the text to a panel.
+    -- @param string The text of a panel, can be a language identifier
+    -- @param[opt] table params Translation params that should be added to the text
+    -- @param[default=false] boolean translateParams Should the parameters be translated as well
+    -- @param[default=false] boolean isShadowed Should the text be rendered with a shadow
+    -- @return Panel Returns the panel itself
+    -- @realm client
+    self.SetText = function(slf, text, params, translateParams, isShadowed)
+        slf.m_Text = text
+        slf.m_TextParams = params
+        slf.m_bTranslateTextParams = translateParams
+        slf.m_bTextShadow = isShadowed
+
+        slf:InvalidateLayout() -- rebuild in next frame
+
+        return slf
+    end
+
+    ---
+    -- Gets the text set to the panel.
+    -- @return string Rerturns the attached text
+    -- @realm client
+    self.GetText = function(slf)
+        return slf.m_Text or ""
+    end
+
+    -- removes any default text so that the label base doesn't render anything
+    self:SetTextInternal("")
+end
+
+---
 -- Sets the font of the panel.
 -- @param string fontName The name of the font
 -- @return Panel Returns the panel itself
@@ -39,6 +71,14 @@ function METAPANEL:SetFont(fontName)
     self:InvalidateLayout() -- rebuild in next frame
 
     return self
+end
+
+---
+-- Returns the name of the font.
+-- @return string The name of the font
+-- @realm client
+function METAPANEL:GetFont()
+    return self.m_FontName
 end
 
 ---
@@ -75,33 +115,6 @@ function METAPANEL:SetTextAlign(horizontal, vertical)
     self:InvalidateLayout() -- rebuild in next frame
 
     return self
-end
-
----
--- Sets the text to a panel.
--- @param string The text of a panel, can be a language identifier
--- @param[opt] table params Translation params that should be added to the text
--- @param[default=false] boolean translateParams Should the parameters be translated as well
--- @param[default=false] boolean isShadowed Should the text be rendered with a shadow
--- @return Panel Returns the panel itself
--- @realm client
-function METAPANEL:SetText(text, params, translateParams, isShadowed)
-    self.m_Text = text
-    self.m_TextParams = params
-    self.m_bTranslateTextParams = translateParams
-    self.m_bTextShadow = isShadowed
-
-    self:InvalidateLayout() -- rebuild in next frame
-
-    return self
-end
-
----
--- Gets the text set to the panel.
--- @return string Rerturns the attached text
--- @realm client
-function METAPANEL:GetText()
-    return self.m_Text or ""
 end
 
 ---

@@ -8,30 +8,8 @@
 AccessorFunc(METAPANEL, "m_PaintHookName", "PaintHookName", FORCE_STRING, true)
 
 ---
--- Is called on initialization of the panel.
--- @note vgui.Register does not support inheritance for the Init function, therefore
--- this function always has to be set with a call of its base.
--- @hook
--- @realm client
-function METAPANEL:Init()
-    -- data attached to the panel is put in its own scope
-    self._eventListeners = {}
-    self._attached = {}
-    self._vskinColor = {}
-    self._vskinDimension = {}
-    self._tooltip = {}
-
-    -- enable the panel
-    self:SetEnabled(true)
-
-    -- disable keyboard and mouse input
-    self:SetMouseInputEnabled(false)
-    self:SetKeyboardInputEnabled(false)
-    self:SetDoubleClickingEnabled(false)
-
-    -- turn off the engine drawing
-    self:SetPaintBackgroundEnabled(false)
-
+-- @ignore
+function METAPANEL:InternalSetup()
     -- some basic engine defined functions of panels have to be extended to
     -- support method chaining
     local _SetSize = self.SetSize
@@ -96,6 +74,32 @@ function METAPANEL:Init()
 
         return slf
     end
+end
+
+---
+-- Is called on initialization of the panel.
+-- @note vgui.Register does not support inheritance for the Init function, therefore
+-- this function always has to be set with a call of its base.
+-- @hook
+-- @realm client
+function METAPANEL:Init()
+    -- data attached to the panel is put in its own scope
+    self._eventListeners = {}
+    self._attached = {}
+    self._vskinColor = {}
+    self._vskinDimension = {}
+    self._tooltip = {}
+
+    -- enable the panel
+    self:SetEnabled(true)
+
+    -- disable keyboard and mouse input
+    self:SetMouseInputEnabled(false)
+    self:SetKeyboardInputEnabled(false)
+    self:SetDoubleClickingEnabled(false)
+
+    -- turn off the engine drawing
+    self:SetPaintBackgroundEnabled(false)
 
     self:Initialize()
 end
@@ -347,39 +351,71 @@ function METAPANEL:GetIndentationMargin()
     return 10 + self.primary:GetIndentationMargin()
 end
 
+-- A hook that is called before the panel is painted.
+-- @note This hook will not run if the panel is completely off the screen, and will still run if
+-- any parts of the panel are still on screen.
+-- @param number w The panel's width
+-- @param number h The panel's height
+-- @return boolean Return false if the content of the box should be drawn
+-- @hook
+-- @realm client
+function METAPANEL:PrePaint(w, h)
+    return true
+end
+
+---
+-- A hook that is called after the panel was painted.
+-- @note This hook will not run if the panel is completely off the screen, and will still run if
+-- any parts of the panel are still on screen.
+-- @param number w The panel's width
+-- @param number h The panel's height
+-- @hook
+-- @realm client
+function METAPANEL:PostPaint(w, h) end
+
 ---
 -- Called every frame to paint the element.
+-- @ref https://wiki.facepunch.com/gmod/PANEL:Paint
 -- @note This hook will not run if the panel is completely off the screen, and will still run if
 -- any parts of the panel are still on screen.
 -- @note You should probably not overwrite this hook unless you know what you do.
 -- @param number w The panel's width
 -- @param number h The panel's height
 -- @return boolean Returning true prevents the background from being drawn
+-- @hook
 -- @realm client
 function METAPANEL:Paint(w, h)
+    local paintContent = self:PrePaint(w, h)
+
     if self:HasPaintHookName() then
         derma.SkinHook("Paint", "Pre" .. self:GetPaintHookName(), self, w, h)
     end
 
-    if self:GetPaintBackground() then
+    if self:HasModule("box") and self:GetPaintBackground() then
         derma.SkinHook("Paint", "ColoredBox", self, w, h)
     end
 
-    if self:HasText() then
-        derma.SkinHook("Paint", "Text", self, w, h)
-    end
+    if paintContent then
+        if self:HasModule("text") then
+            if self:HasText() then
+                derma.SkinHook("Paint", "Text", self, w, h)
+            end
 
-    if self:HasDescription() then
-        derma.SkinHook("Paint", "Description", self, w, h)
-    end
+            if self:HasDescription() then
+                derma.SkinHook("Paint", "Description", self, w, h)
+            end
+        end
 
-    if self:HasIcon() then
-        derma.SkinHook("Paint", "Icon", self, w, h)
+        if self:HasModule("icon") and self:HasIcon() then
+            derma.SkinHook("Paint", "Icon", self, w, h)
+        end
     end
 
     if self:HasPaintHookName() then
         derma.SkinHook("Paint", "Post" .. self:GetPaintHookName(), self, w, h)
     end
+
+    self:PostPaint(w, h)
 
     return true
 end

@@ -20,6 +20,11 @@ function derma.InitializeElements()
         CLIENT_FILE,
         "METAPANEL",
         function(panel, path, name)
+            -- an internal setup function that initializes the panel
+            if isfunction(panel.InternalSetup) then
+                panel:InternalSetup()
+            end
+
             basePanels[name] = panel
             panel.name = nil
         end
