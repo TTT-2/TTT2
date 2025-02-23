@@ -28,7 +28,7 @@ else
     local c4_radius = CreateConVar(
         "ttt2_c4_radius",
         "600",
-        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED },
         "Defines the damage radius of C4 explosions"
     )
 
@@ -37,22 +37,9 @@ else
     local c4_inner_radius = CreateConVar(
         "ttt2_c4_radius_inner",
         "500",
-        { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED },
         "Defines the kill radius of C4 explosions"
     )
-
-    hook.Add("TTT2SyncGlobals", "TTT2SyncC4Globals", function()
-        SetGlobalInt(c4_radius:GetName(), c4_radius:GetInt())
-        SetGlobalInt(c4_inner_radius:GetName(), c4_inner_radius:GetInt())
-    end)
-
-    cvars.AddChangeCallback(c4_radius:GetName(), function(name, old, new)
-        SetGlobalInt(c4_radius:GetName(), tonumber(new))
-    end, c4_radius:GetName())
-
-    cvars.AddChangeCallback(c4_inner_radius:GetName(), function(name, old, new)
-        SetGlobalInt(c4_inner_radius:GetName(), tonumber(new))
-    end, c4_inner_radius:GetName())
 end
 
 SWEP.Base = "weapon_tttbase"
