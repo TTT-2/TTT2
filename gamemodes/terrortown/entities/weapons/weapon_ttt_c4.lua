@@ -22,6 +22,24 @@ if CLIENT then
 
     SWEP.Icon = "vgui/ttt/icon_c4"
     SWEP.IconLetter = "I"
+else
+    ---
+    -- @realm server
+    CreateConVar(
+        "ttt2_c4_radius",
+        "600",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED },
+        "Defines the damage radius of C4 explosions"
+    )
+
+    ---
+    -- @realm server
+    CreateConVar(
+        "ttt2_c4_radius_inner",
+        "500",
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED },
+        "Defines the kill radius of C4 explosions"
+    )
 end
 
 SWEP.Base = "weapon_tttbase"
@@ -97,5 +115,31 @@ if CLIENT then
         self:AddTTT2HUDHelp("c4_help_primary", "c4_help_secondary")
 
         return BaseClass.Initialize(self)
+    end
+
+    ---
+    -- @ignore
+    function SWEP:AddToSettingsMenu(parent)
+        local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
+
+        form:MakeHelp({
+            label = "help_c4_radius",
+        })
+
+        form:MakeSlider({
+            serverConvar = "ttt2_c4_radius_inner",
+            label = "label_c4_radius_inner",
+            min = 0,
+            max = 2000,
+            decimal = 0,
+        })
+
+        form:MakeSlider({
+            serverConvar = "ttt2_c4_radius",
+            label = "label_c4_radius",
+            min = 0,
+            max = 2000,
+            decimal = 0,
+        })
     end
 end
