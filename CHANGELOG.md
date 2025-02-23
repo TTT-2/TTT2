@@ -6,8 +6,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
-- Added C4 cvars for adjusting the range & falloff of C4 explosions
-  - C4 explosions will now also respect the weapon's configured damage scaling (by @Spanospy)
+- Added C4 cvars for adjusting the range & falloff of C4 explosions (by @Spanospy)
+  - C4 explosions will now also respect the weapon's configured damage scaling
 
 ### Changed
 - Updated Russian and English localization files (by @Satton2)
