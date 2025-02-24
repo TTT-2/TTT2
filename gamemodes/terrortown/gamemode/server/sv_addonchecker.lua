@@ -207,6 +207,10 @@ addonChecker.curatedList = {
         reason = "This addon doesn't use the TTT base correctly and also causes sound and broken playermodel issues.",
         type = ADDON_INCOMPATIBLE,
     },
+    ["2795122660"] = { -- TTT Weapon Rework by wget
+        reason = "This addon messes with some core TTT(2) functions, creating issues like corpses being recognized as 'fake' even though they are not.",
+        type = ADDON_INCOMPATIBLE,
+    },
     ["456247192"] = { -- TTT Coffee-Cup Hunt by Niandra!
         alternative = "2150924507",
         reason = "Addon is broken and doesn't do anything.",
