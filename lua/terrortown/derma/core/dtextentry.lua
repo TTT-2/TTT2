@@ -88,6 +88,11 @@ function DPANEL:Initialize()
     self:SetTooltipOpeningDelay(0)
     self:SetTooltipFont("DermaTTT2Text")
     self:SetTooltipArrowSize(8)
+
+    -- there is a hook implimented in base gmod that handles focus losing:
+    -- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/lua/vgui/dtextentry.lua#L410-L429
+    -- we set this flag to enable that hook
+    self.m_bLoseFocusOnClickAway = true
 end
 
 ---
@@ -123,11 +128,6 @@ function DPANEL:PrePaint(w, h)
     return true
 end
 
-function DPANEL:OnMousePressed(mouseCode)
-    self:RequestFocus() -- Forces keyboard focus
-    --self:OnGetFocus() -- Triggers default DTextEntry focus behavior
-end
-
 ---
 -- @ignore
 function DPANEL:PostPaint(w, h)
@@ -138,10 +138,13 @@ function DPANEL:PostPaint(w, h)
     -- todo: cache color
     if self:IsTabbingEnabled() and self.m_CommonBase then
         local typedText = self:GetTextInternal()
+        local cursorPos = self:GetCaretPos()
 
         self:SetTextInternal(self.m_CommonBase)
-        self:DrawTextEntryText(util.GetChangedColor(colorText, 80), colorHighlight, colorText)
+        self:SetCaretPos(cursorPos)
+        self:DrawTextEntryText(util.GetChangedColor(colorText, 120), colorHighlight, colorText)
         self:SetTextInternal(typedText)
+        self:SetCaretPos(cursorPos)
     end
 
     self:DrawTextEntryText(colorText, colorHighlight, colorText)
@@ -197,7 +200,7 @@ function DPANEL:GetAutoComplete()
 
     local currentText = self:GetTextInternal()
 
-    if currentText or currentText ~= "" then
+    if not currentText or currentText == "" then
         return
     end
 
@@ -213,10 +216,12 @@ function DPANEL:GetAutoComplete()
         candidates[#candidates + 1] = self._autoCompleteList[i]
     end
 
-    if #candidates == 1 then
+    if #candidates == 0 then
+        return
+    elseif #candidates == 1 then
         return candidates[1]
     else
-        GetCommonBase(candidates, string.len(currentText))
+        return GetCommonBase(candidates, string.len(currentText))
     end
 end
 
@@ -245,7 +250,7 @@ function DPANEL:SetValue(strValue)
     local caretPos = self:GetCaretPos()
 
     self:SetTextInternal(strValue)
-    self:TriggerOnWithBase("TextChanged", strValue)
+    self:TriggerOnWithBase("ValueChanged", strValue)
 
     self:SetCaretPos(caretPos)
 
@@ -262,8 +267,6 @@ end
 function DPANEL:OnKeyCodeTyped(keyCode)
     self:TriggerOnWithBase("KeyCode", keyCode)
 
-    print("key code typed")
-
     if keyCode == KEY_ENTER and not self:IsMultiline() and self:IsEnterAllowed() then
         self:FocusNext()
 
@@ -273,15 +276,71 @@ function DPANEL:OnKeyCodeTyped(keyCode)
 
         if textComplete then
             self:SetTextInternal(textComplete)
+            self:SetCaretPos(string.len(textComplete))
 
-            self:TriggerOnWithBase("TextChanged", textComplete)
+            self:TriggerOnWithBase("ValueChanged", textComplete)
+
+            return true
         end
     end
+end
+
+function DPANEL:OnTextChanged()
+    local currentText = self:GetTextInternal()
+
+    self:TriggerOnWithBase("ValueChanged", currentText)
 
     -- always show a highlight of possible matches
-    if self:IsTabbingEnabled() then
-        self.m_CommonBase = self:GetAutoComplete()
+    if not self:IsTabbingEnabled() then
+        return
     end
+
+    self.m_CommonBase = self:GetAutoComplete()
+
+    -- remove the common base in cases where it should not exist
+    if not currentText or currentText == "" or currentText == self.m_CommonBase then
+        self.m_CommonBase = nil
+    end
+end
+
+---
+-- Called after a key was pressed on the focused panel.
+-- @param number keyCode The key code of the key pressed
+-- @hook
+-- @realm client
+function DPANEL:OnKeyCode(keyCode) end
+
+---
+-- Called after the value of the textpanel changed.
+-- @param string newValue The new content of the panel
+-- @hook
+-- @realm client
+function DPANEL:OnValueChanged(newValue) end
+
+---
+-- @ignore
+function DPANEL:OnDepressed()
+    self:TriggerOnWithBase("GetFocus")
+end
+
+---
+-- Hook that is called when the panel is focused by clicking on it.
+-- @hook
+-- @realm client
+function DPANEL:OnGetFocus()
+    -- cache the panel's original keyboard state
+    self.isKeyBoardEnabled = self:IsKeyboardInputEnabled()
+
+    util.GetHighestPanelParent(self):SetKeyboardInputEnabled(true)
+end
+
+---
+-- Hook that is called when the panel loses focus.
+-- @hook
+-- @realm client
+function DPANEL:OnLoseFocus()
+    -- reset the original keyboard interaction state
+    util.GetHighestPanelParent(self):SetKeyboardInputEnabled(self.isKeyBoardEnabled or false)
 end
 
 ---
