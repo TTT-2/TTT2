@@ -4,8 +4,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added option to select preferred unit of length for distance displays (by @wgetJane)
+
 ### Changed
 - Updated Russian and English localization files (by @Satton2)
+- Updated the list of troublesome addons used by the addonchecker
 
 ## [v0.14.2b](https://github.com/TTT-2/TTT2/tree/v0.14.2b) (2025-02-02)
 
