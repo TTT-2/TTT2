@@ -35,6 +35,8 @@ AccessorFunc(DPANEL, "m_bEnableTabbing", "TabbingEnabled", FORCE_BOOL_IS)
 
 AccessorFunc(DPANEL, "m_bNumeric", "Numeric", FORCE_BOOL_IS)
 
+AccessorFunc(DPANEL, "m_bFocused", "Focused", FORCE_BOOL_IS)
+
 DPANEL.derma = {
     className = "TTT2:DTextEntry",
     description = "The default TTT3 Text box",
@@ -81,6 +83,8 @@ function DPANEL:Initialize()
     self:SetTextAlign(TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
     self:SetVerticalAlignment(false)
     self:SetPadding(8)
+    self:EnableCornerRadius(true)
+    self:SetText("type...")
 
     -- set the defaults for the tooltip
     self:SetTooltipFixedPosition(nil)
@@ -97,11 +101,47 @@ end
 
 ---
 -- @ignore
--- TODO
 function DPANEL:OnVSkinUpdate()
-    local colorBackground = self:GetColor() or self:GetParentColor() or vskin.GetBackgroundColor()
-    local colorText = util.GetDefaultColor(colorBackground)
-    local colorOutline = self:GetOutlineColor() or colorText
+    local colorBackground, colorText, colorOutline
+
+    -- PANEL DISABLED
+    if not self:IsEnabled() then
+        local colorDefault = util.GetDefaultColor(vskin.GetBackgroundColor())
+        local colorAccentDisabled = util.GetChangedColor(colorDefault, 150)
+
+        colorBackground = util.GetChangedColor(colorAccentDisabled, 120)
+        colorText = ColorAlpha(util.GetDefaultColor(colorAccentDisabled), 220)
+        colorOutline = util.ColorDarken(colorAccentDisabled, 50)
+
+    -- PANEL IS PRESSED
+    elseif self:IsDepressed() or self:IsSelected() or self:GetToggle() or self:IsFocused() then
+        colorBackground = util.GetActiveColor(
+            self:GetColor() or util.GetChangedColor(vskin.GetBackgroundColor(), 15)
+        )
+        colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 110)
+        colorOutline = util.GetActiveColor(
+            self:GetOutlineColor() or util.GetChangedColor(vskin.GetBackgroundColor(), 150)
+        )
+
+    -- PANEL IS HOVERED
+    elseif self:IsHovered() then
+        colorBackground = util.GetHoverColor(
+            self:GetColor() or util.GetChangedColor(vskin.GetBackgroundColor(), 15)
+        )
+        colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 80)
+        colorOutline = util.GetHoverColor(
+            self:GetOutlineColor() or util.GetChangedColor(vskin.GetBackgroundColor(), 150)
+        )
+
+    -- NORMAL COLORS
+    else
+        colorBackground = self:GetColor() or util.GetChangedColor(vskin.GetBackgroundColor(), 15)
+        colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 75)
+        colorOutline = self:GetOutlineColor()
+            or util.GetChangedColor(vskin.GetBackgroundColor(), 150)
+    end
+
+    local textTyped = util.GetChangedColor(util.GetDefaultColor(colorBackground), 35)
 
     self:ApplyVSkinColor("background", colorBackground)
     self:ApplyVSkinColor("text", colorText)
@@ -109,6 +149,10 @@ function DPANEL:OnVSkinUpdate()
     self:ApplyVSkinColor("icon", colorText)
     self:ApplyVSkinColor("outline", colorOutline)
     self:ApplyVSkinColor("flash", colorText)
+
+    self:ApplyVSkinColor("text_typed", textTyped)
+    self:ApplyVSkinColor("text_suggestion", ColorAlpha(textTyped, 120))
+    self:ApplyVSkinColor("text_selection", vskin.GetAccentColor())
 end
 
 --
@@ -131,8 +175,8 @@ end
 ---
 -- @ignore
 function DPANEL:PostPaint(w, h)
-    local colorText = self:GetVSkinColor("text")
-    local colorHighlight = vskin.GetAccentColor()
+    local colorText = self:GetVSkinColor("text_typed")
+    local colorHighlight = self:GetVSkinColor("text_selection")
 
     -- a hacky workaround to render the tabbing preview
     -- todo: cache color
@@ -145,7 +189,7 @@ function DPANEL:PostPaint(w, h)
         -- the autocpmplete preview would always be rendered at position 0.
         self:SetTextInternal(self.m_CommonBase)
         self:SetCaretPos(cursorPos)
-        self:DrawTextEntryText(util.GetChangedColor(colorText, 120), colorHighlight, colorText)
+        self:DrawTextEntryText(self:GetVSkinColor("text_suggestion"), colorHighlight, colorText)
         self:SetTextInternal(typedText)
         self:SetCaretPos(cursorPos)
     end
@@ -282,9 +326,9 @@ function DPANEL:OnKeyCodeTyped(keyCode)
             self:SetCaretPos(string.len(textComplete))
 
             self:TriggerOnWithBase("ValueChanged", textComplete)
-
-            return true
         end
+
+        return true
     end
 end
 
@@ -341,6 +385,8 @@ function DPANEL:OnGetFocus()
     self.isKeyBoardEnabled = self:IsKeyboardInputEnabled()
 
     util.GetHighestPanelParent(self):SetKeyboardInputEnabled(true)
+
+    self:SetFocused(true)
 end
 
 ---
@@ -350,6 +396,9 @@ end
 function DPANEL:OnLoseFocus()
     -- reset the original keyboard interaction state
     util.GetHighestPanelParent(self):SetKeyboardInputEnabled(self.isKeyBoardEnabled or false)
+
+    self:SetFocused(false)
+    self:InvalidateLayout()
 end
 
 ---

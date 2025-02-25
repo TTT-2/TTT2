@@ -154,7 +154,7 @@ end
 -- @return boolean True if drop shadow is enabled
 -- @realm client
 function METAPANEL:HasTextShadow()
-    return self.m_bTextShadow or DRAW_SHADOW_ENABLED
+    return self.m_bTextShadow or DRAW_SHADOW_DISABLED
 end
 
 ---
