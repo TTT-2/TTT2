@@ -140,6 +140,9 @@ function DPANEL:PostPaint(w, h)
         local typedText = self:GetTextInternal()
         local cursorPos = self:GetCaretPos()
 
+        -- note: setting the text resets the cursor position. Therefore it is reset here.
+        -- It is done twice so only one cursor is rendered in the end, otherwise the cursor from
+        -- the autocpmplete preview would always be rendered at position 0.
         self:SetTextInternal(self.m_CommonBase)
         self:SetCaretPos(cursorPos)
         self:DrawTextEntryText(util.GetChangedColor(colorText, 120), colorHighlight, colorText)
@@ -285,7 +288,13 @@ function DPANEL:OnKeyCodeTyped(keyCode)
     end
 end
 
-function DPANEL:OnTextChanged()
+---
+-- Engine hook that is called when the content of the element has changed.
+-- @ref https://wiki.facepunch.com/gmod/DTextEntry:OnTextChanged
+-- @param boolean noMenuRemoval Determines whether to remove the autocomplete menu (false) or not (true)
+-- @hook
+-- @realm client
+function DPANEL:OnTextChanged(noMenuRemoval)
     local currentText = self:GetTextInternal()
 
     self:TriggerOnWithBase("ValueChanged", currentText)
