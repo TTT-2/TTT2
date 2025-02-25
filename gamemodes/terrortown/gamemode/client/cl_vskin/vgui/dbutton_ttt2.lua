@@ -1,6 +1,6 @@
 ---
 -- @class PANEL
--- @section DButtonTTT2
+-- @section TTT2:DButton
 
 local PANEL = {}
 
@@ -9,84 +9,127 @@ local soundClick = Sound("common/talk.wav")
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bBorder", "DrawBorder", FORCE_BOOL)
+AccessorFunc(PANEL, "m_bIgnoreCallbackEnabledVar", "IgnoreCallbackEnabledVar", FORCE_BOOL)
 
 ---
--- @accessor bool
+-- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "ignoreCallbackEnabledVar", "IgnoreCallbackEnabledVar", FORCE_BOOL)
+AccessorFunc(PANEL, "m_bDisplayInverted", "Inverted", FORCE_BOOL_IS, true)
 
 ---
 -- @ignore
 function PANEL:Init()
-    self:SetContentAlignment(5)
+    DBase("TTT2:DPanel").Init(self)
 
-    self:SetTall(22)
+    -- enable mouse and keyboard input to interact with button
     self:SetMouseInputEnabled(true)
     self:SetKeyboardInputEnabled(true)
 
+    -- set the cursor to show the user they can interact
     self:SetCursor("hand")
+
+    -- set visual defaults
     self:SetFont("DermaTTT2Button")
-    -- remove label and overwrite function
-    self:SetText("")
-    self.SetText = function(slf, text)
-        slf.data.text = text
+end
+
+---
+-- @ignore
+function PANEL:OnVSkinUpdate()
+    local colorBackground, colorText, colorOutline
+
+    -- PANEL DISABLED
+    if not self:IsEnabled() then
+        local colorDefault = util.GetDefaultColor(vskin.GetBackgroundColor())
+        local colorAccentDisabled = util.GetChangedColor(colorDefault, 150)
+
+        colorBackground = util.GetChangedColor(colorAccentDisabled, 120)
+        colorText = ColorAlpha(util.GetDefaultColor(colorAccentDisabled), 220)
+        colorOutline = util.ColorDarken(colorAccentDisabled, 50)
+
+    -- PANEL IS PRESSED
+    elseif self:IsDepressed() or self:IsSelected() or self:GetToggle() then
+        colorBackground = util.GetActiveColor(self:GetColor() or vskin.GetAccentColor())
+        colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 35)
+        colorOutline = util.GetActiveColor(self:GetOutlineColor() or vskin.GetDarkAccentColor())
+
+    -- PANEL IS HOVERED
+    elseif self:IsHovered() then
+        colorBackground = util.GetHoverColor(self:GetColor() or vskin.GetAccentColor())
+        colorText = util.GetDefaultColor(colorBackground)
+        colorOutline = util.GetHoverColor(self:GetOutlineColor() or vskin.GetDarkAccentColor())
+
+    -- NORMAL COLORS
+    else
+        colorBackground = self:GetColor() or vskin.GetAccentColor()
+        colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 25)
+        colorOutline = self:GetOutlineColor() or vskin.GetDarkAccentColor()
     end
 
-    self.data = {}
-
-    -- hack a sound into the DoClick function after it is initialized
-    timer.Simple(0, function()
-        if not IsValid(self) then
-            return
-        end
-
-        local oldClick = self.DoClick
-        local oldRightClick = self.DoRightClick
-
-        self.DoClick = function(slf)
-            sound.ConditionalPlay(soundClick, SOUND_TYPE_BUTTONS)
-
-            oldClick(slf)
-        end
-
-        self.DoRightClick = function(slf)
-            sound.ConditionalPlay(soundClick, SOUND_TYPE_BUTTONS)
-
-            oldRightClick(slf)
-        end
-    end)
+    self:ApplyVSkinColor("background", colorBackground)
+    self:ApplyVSkinColor("text", colorText)
+    self:ApplyVSkinColor("description", colorText)
+    self:ApplyVSkinColor("icon", colorText)
+    self:ApplyVSkinColor("outline", colorOutline)
+    self:ApplyVSkinColor("flash", colorText)
 end
 
 ---
--- This is only used temporarily to keep old variables without breaking the style of "no enable to disable" checkboxes
--- @param bool invert
--- @realm client
-function PANEL:SetInverted(invert)
-    self.inverted = invert
+-- @ignore
+function PANEL:OnRebuildLayout(w, h)
+    DBase("TTT2:DPanel").OnRebuildLayout(self, w, h)
+
+    -- if the panel is depressed, the text and icon should be shifted by one pixel
+    if self:IsDepressed() or self:IsSelected() or self:GetToggle() then
+        if self:HasIcon() then
+            self:ApplyVSkinDimension("posIconY", self:GetVSkinDimension("posIconY") + 1)
+        end
+
+        if self:HasText() then
+            self:ApplyVSkinDimension("posTextY", self:GetVSkinDimension("posTextY") + 1)
+        end
+
+        if self:HasDescription() then
+            local posY = self:GetVSkinDimension("posTableDescriptionY")
+
+            for i = 1, #posY do
+                posY[i] = posY[i] + 1
+            end
+
+            self:ApplyVSkinDimension("posTableDescriptionY", posY)
+        end
+    end
 end
 
 ---
--- @param string cvar
+-- Attaches a client side convar to this button, its state also
+-- reflects on the state of the button.
+-- @param string cvar The convar name
+-- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetConVar(cvar)
+function PANEL:AttachConVar(cvar)
     if not ConVarExists(cvar or "") then
-        return
+        return self
     end
 
     self.convar = GetConVar(cvar)
 
     self:SetDefaultValue(tobool(self.convar:GetDefault()))
     self:SetValue(self.convar:GetBool())
+
+    return self
 end
 
 local callbackEnabledVarTracker = 0
+
 ---
--- @param string cvar
+-- Attaches a server side convar to this button, its state also
+-- reflects on the state of the button.
+-- @param string cvar The convar name
+-- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetServerConVar(cvar)
+function PANEL:AttachServerConVar(cvar)
     if not cvar or cvar == "" then
-        return
+        return self
     end
 
     self.serverConVar = cvar
@@ -105,10 +148,11 @@ function PANEL:SetServerConVar(cvar)
 
     local callback = function(conVarName, oldValue, newValue)
         if not IsValid(self) then
-            -- We need to remove the callback in a timer, because otherwise the ConVar change callback code
-            -- will throw an error while looping over the callbacks.
-            -- This happens, because the callback is removed from the same table that is iterated over.
-            -- Thus, the table size changes while iterating over it and leads to a nil callback as the last entry.
+            -- We need to remove the callback in a timer, because otherwise the ConVar change
+            -- callback code will throw an error while looping over the callbacks.
+            -- This happens, because the callback is removed from the same table that is
+            -- iterated over. Thus, the table size changes while iterating over it and leads to
+            -- a nil callback as the last entry.
             timer.Simple(0, function()
                 cvars.RemoveChangeCallback(conVarName, myIdentifierString)
             end)
@@ -120,14 +164,19 @@ function PANEL:SetServerConVar(cvar)
     end
 
     cvars.AddChangeCallback(cvar, callback, myIdentifierString)
+
+    return self
 end
 
 ---
--- @param table databaseInfo containing {name, itemName, key}
+-- Attaches a database object to this button, its state also
+-- reflects on the state of the button.
+-- @param table databaseInfo DatabaseInfo object containing {name, itemName, key}
+-- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetDatabase(databaseInfo)
+function PANEL:AttachDatabase(databaseInfo)
     if not istable(databaseInfo) then
-        return
+        return self
     end
 
     local name = databaseInfo.name
@@ -163,25 +212,33 @@ function PANEL:SetDatabase(databaseInfo)
     end
 
     database.AddChangeCallback(name, itemName, key, OnDatabaseChangeCallback, myIdentifierString)
+
+    return self
 end
 
 ---
--- @param any val
--- @param boolean ignoreCallbackEnabledVar To avoid endless loops, separated setting of convars and UI values
+-- Sets the value attached to a button. This can be controlled by convars, or manually.
+-- @param boolean val The value that should be set
+-- @param boolean ignoreCallbackEnabledVar To avoid endless loops, separated setting of
+-- convars and UI values
+-- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:SetValue(val, ignoreCallbackEnabledVar)
     self:SetIgnoreCallbackEnabledVar(ignoreCallbackEnabledVar)
 
-    if self.inverted then
+    if self:GetInverted() then
         val = not val
     end
 
     self.value = val
 
-    self:OnChange(self.value)
+    self:TriggerOnWithBase("Change", self.value)
+
+    return self
 end
 
 ---
+-- Returns the value of the panel that can be assigned by database or convar.
 -- @return boolean Returns the value of the button if there is one
 -- assigned. It can be assigned by attaching convars or database values.
 -- @realm client
@@ -190,7 +247,10 @@ function PANEL:GetValue()
 end
 
 ---
--- @param boolean value
+-- Sets the default value. If it is set, it can be used to reset the value
+-- to its default.
+-- @param boolean value The default value
+-- @return Panel Returns the panel itself
 -- @realm client
 function PANEL:SetDefaultValue(value)
     if isbool(value) then
@@ -198,25 +258,37 @@ function PANEL:SetDefaultValue(value)
         -- as it is inverted when the default button is pressed
 
         self.default = value
-
-        noDefault = false
     else
         self.default = nil
     end
+
+    self:TriggerOnWithBase("DefaultChanged", self.default)
+
+    return self
 end
 
 ---
+-- Returns true if this panel has a default value assigned.
+-- @return boolean True if a default value is assigned
+-- @realm client
+function PANEL:HasDefaultValue()
+    return self.default ~= nil
+end
+
+---
+-- Returns the default value assigned to the panel.
 -- @return boolean defaultValue, if unset returns false
 -- @realm client
 function PANEL:GetDefaultValue()
-    return tobool(self.default)
+    return self.default or false
 end
 
 ---
+-- TODO this has to be refactored - this shouldn't be split into two functions
 -- @param any val
 -- @realm client
 function PANEL:ValueChanged(val)
-    if self.inverted then
+    if self:IsInverted() then
         val = not val
     end
 
@@ -254,118 +326,47 @@ function PANEL:OnChange(val) end
 -- @realm client
 function PANEL:OnDefaultChange(val) end
 
----
--- @return string
--- @realm client
-function PANEL:GetText()
-    return self.data.text
-end
+-- TODO END
 
 ---
--- @param table params
+-- Adds a new console command to be called when the button is clicked.
+-- @param string command The command name
+-- @param string arguments The parameters as a string
+-- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetTextParams(params)
-    self.data.params = params
+function PANEL:AddConsoleCommand(command, arguments)
+    self:On("LeftClick", function()
+        RunConsoleCommand(command, arguments)
+    end)
+
+    return self
 end
 
----
--- @return table
--- @realm client
-function PANEL:GetTextParams()
-    return self.data.params
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:HasTextParams()
-    return self.data.params ~= nil
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:IsDown()
-    return self.Depressed
-end
+-- SET DEFAULT HOOK BEHAVIOUR --
 
 ---
 -- @ignore
-function PANEL:Paint(w, h)
-    derma.SkinHook("Paint", "ButtonTTT2", self, w, h)
-
-    return false
+function PANEL:OnLeftClickInternal()
+    sound.ConditionalPlay(soundClick, SOUND_TYPE_BUTTONS)
 end
 
 ---
--- @param string strName
--- @param string strArgs
--- @realm client
-function PANEL:SetConsoleCommand(strName, strArgs)
-    self.DoClick = function(slf, val)
-        RunConsoleCommand(strName, strArgs)
-    end
-end
-
----
--- @param Color color
--- @realm client
-function PANEL:SetColor(color)
-    self.data.color = color
-end
-
----
--- @return Color|nil
--- @realm client
-function PANEL:GetColor()
-    return self.data.color
-end
-
----
--- @param Material icon
--- @param[default=false] boolean is_shadowed
--- @param[default=32] number size
--- @realm client
-function PANEL:SetIcon(icon, is_shadowed, size)
-    self.data.icon = icon
-    self.data.icon_shadow = is_shadowed or false
-    self.data.icon_size = size or 32
-end
-
----
--- @return Material|nil
--- @realm client
-function PANEL:GetIcon()
-    return self.data.icon
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:HasIcon()
-    return self.data.icon ~= nil
-end
-
----
--- @return boolean|nil
--- @realm client
-function PANEL:IsIconShadowed()
-    return self.data.icon_shadow
-end
-
----
--- @return number|nil
--- @realm client
-function PANEL:GetIconSize()
-    return self.data.icon_size
-end
-
----
+-- I'm not sure why I have to do this - this isn't necessary for other functions
 -- @ignore
-function PANEL:SizeToContents()
-    local w, h = self:GetContentSize()
-
-    self:SetSize(w + 8, h + 4)
+function PANEL:OnMousePressed(mouseCode)
+    DBase("TTT2:DLabel").OnMousePressed(self, mouseCode)
 end
 
-derma.DefineControl("DButtonTTT2", "A standard Button", PANEL, "DLabelTTT2")
+---
+-- I'm not sure why I have to do this - this isn't necessary for other functions
+-- @ignore
+function PANEL:OnMouseReleased(mouseCode)
+    DBase("TTT2:DLabel").OnMouseReleased(self, mouseCode)
+end
+
+derma.DefineControl(
+    "TTT2:DButton",
+    "The standard button used in TTT2 with convar and database support",
+    PANEL,
+    "TTT2:DPanel"
+)

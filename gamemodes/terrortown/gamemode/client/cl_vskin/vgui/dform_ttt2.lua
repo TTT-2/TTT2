@@ -121,7 +121,7 @@ function PANEL:Rebuild() end
 -- FUNCTIONS TO POPULATE THE FORM
 
 local function MakeButton(parent)
-    local button = vgui.Create("DButtonTTT2", parent)
+    local button = vgui.Create("TTT2:DButton", parent)
 
     button:SetText("button_default")
     button:SetSize(32, 32)
@@ -189,7 +189,7 @@ end
 -- @return Panel The created textentry
 -- @realm client
 function PANEL:MakeTextEntry(data)
-    local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -219,11 +219,11 @@ function PANEL:MakeTextEntry(data)
     right:SetHeightMult(1)
 
     right.OnGetFocus = function(slf)
-        util.getHighestPanelParent(self):SetKeyboardInputEnabled(true)
+        util.GetHighestPanelParent(self):SetKeyboardInputEnabled(true)
     end
 
     right.OnLoseFocus = function(slf)
-        util.getHighestPanelParent(self):SetKeyboardInputEnabled(false)
+        util.GetHighestPanelParent(self):SetKeyboardInputEnabled(false)
     end
 
     -- Set default if possible even if the convar could still overwrite it
@@ -340,7 +340,7 @@ end
 -- @return Panel The created slider
 -- @realm client
 function PANEL:MakeSlider(data)
-    local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -426,7 +426,7 @@ end
 -- @return Panel The created slider
 -- @realm client
 function PANEL:MakeButton(data)
-    local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -436,7 +436,7 @@ function PANEL:MakeButton(data)
         return true
     end
 
-    local right = vgui.Create("DButtonTTT2", self)
+    local right = vgui.Create("TTT2:DButton", self)
 
     right:SetText(data.buttonLabel)
 
@@ -481,7 +481,7 @@ end
 -- @return Panel The created label
 -- @realm client
 function PANEL:MakeComboBox(data)
-    local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -584,7 +584,7 @@ end
 -- @return Panel The created label
 -- @realm client
 function PANEL:MakeBinder(data)
-    local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -669,32 +669,7 @@ end
 -- @return Panel The created helpbox
 -- @realm client
 function PANEL:MakeHelp(data)
-    local left = vgui.Create("DLabelTTT2", self)
-
-    left:SetText(data.label)
-    left:SetTextParams(data.params)
-    left:SetContentAlignment(7)
-    left:SetAutoStretchVertical(true)
-
-    left.paddingX = 10
-    left.paddingY = 5
-
-    left.Paint = function(slf, w, h)
-        derma.SkinHook("Paint", "HelpLabelTTT2", slf, w, h)
-
-        return true
-    end
-
-    -- make sure the height is based on the amount of text inside
-    left.PerformLayout = function(slf, w, h)
-        local textTranslated =
-            LANG.GetParamTranslation(slf:GetText(), LANG.TryTranslation(slf:GetTextParams()))
-
-        local textWrapped = draw.GetWrappedText(textTranslated, w - 2 * slf.paddingX, slf:GetFont())
-        local _, heightText = draw.GetTextSize("", slf:GetFont())
-
-        slf:SetSize(w, heightText * #textWrapped + 2 * slf.paddingY)
-    end
+    local left = vgui.Create("TTT2:DHelpbox", self):SetText(data.label):SetTextParams(data.params)
 
     self:AddItem(left, nil)
 
@@ -706,7 +681,7 @@ function PANEL:MakeHelp(data)
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
     end
 
-    left:InvalidateLayout(true)
+    left:InvalidateLayout(true) --todo needed?
 
     return left
 end
@@ -717,8 +692,8 @@ end
 -- @return Panel The created label
 -- @realm client
 function PANEL:MakeColorMixer(data)
-    local left = vgui.Create("DLabelTTT2", self)
-    local right = vgui.Create("DPanel", self)
+    local left = vgui.Create("TTT2:DLabel", self)
+    local right = vgui.Create("TTT2:DPanel", self)
 
     left:SetTall(data.height or 240)
     right:SetTall(data.height or 240)
@@ -780,7 +755,7 @@ end
 -- @return Panel The created panel
 -- @realm client
 function PANEL:MakePanel()
-    local panel = vgui.Create("DPanelTTT2", self)
+    local panel = vgui.Create("TTT2:DPanel", self)
 
     self:AddItem(panel)
 
