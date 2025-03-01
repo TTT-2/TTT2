@@ -7,8 +7,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added option to select preferred unit of length for distance displays (by @wgetJane)
+- Added a new hook `TTT2AvoidLastWords` to allow blocking last word messages on a per-message basis (by @vertiKarl)
 
 ### Changed
+
 - Updated Russian and English localization files (by @Satton2)
 - Updated the list of troublesome addons used by the addonchecker
 
@@ -17,6 +19,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed new outlines' `OUTLINE_MODE_VISIBLE` and `OUTLINE_MODE_BOTH`
+- Fixed ConVar `ttt_lastwords_chatprint` not being respected if player dies by fall damage (by @vertiKarl)
 
 ## [v0.14.1b](https://github.com/TTT-2/TTT2/tree/v0.14.1b) (2025-02-01)
 
@@ -58,7 +61,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed `markerVision`'s registry table being able to contain duplicate obsolete entries, thus fixing potential syncing issues with markers (by @TW1STaL1CKY)
 - Fixed issue in new Ammo dropping that could cause an error when dropping for modified weapon bases. (by @MrXonte)
 - Fixed C4 not showing the correct inflictor when the player is killed (by @TimGoll)
-- Fixed M16 Ironsight misalignment (by @SvveetMavis) 
+- Fixed M16 Ironsight misalignment (by @SvveetMavis)
 - Fixed outline interactions with certain weapon scopes (by @WardenPotato)
 - Fixed outlines not rendering uniformly (by @WardenPotato)
 
