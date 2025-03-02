@@ -482,6 +482,8 @@ local function deathrec(ply, cmd, args)
     end
 
     -- check ConVar and also test if anyone blocks the message
+    ---
+    -- @realm server
     if ttt_lastwords:GetBool() and hook.Run("TTT2AvoidLastWords", ply, words) ~= false then
         LastWordsMsg(ply, words)
     end
