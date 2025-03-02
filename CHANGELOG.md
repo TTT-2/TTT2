@@ -17,6 +17,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed new outlines' `OUTLINE_MODE_VISIBLE` and `OUTLINE_MODE_BOTH`
+- Fixed Hud errors when picking up items or weapons with no viable icon (by @NickCloudAT)
 
 ## [v0.14.1b](https://github.com/TTT-2/TTT2/tree/v0.14.1b) (2025-02-01)
 
