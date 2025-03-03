@@ -14,12 +14,15 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated Russian and English localization files (by @Satton2)
 - Updated the list of troublesome addons used by the addonchecker
 
+### Fixed
+- Fixed ConVar `ttt_lastwords_chatprint` not being respected if player dies by fall damage (by @vertiKarl)
+
 ## [v0.14.2b](https://github.com/TTT-2/TTT2/tree/v0.14.2b) (2025-02-02)
 
 ### Fixed
 
 - Fixed new outlines' `OUTLINE_MODE_VISIBLE` and `OUTLINE_MODE_BOTH`
-- Fixed ConVar `ttt_lastwords_chatprint` not being respected if player dies by fall damage (by @vertiKarl)
+- Fixed Hud errors when picking up items or weapons with no viable icon (by @NickCloudAT)
 
 ## [v0.14.1b](https://github.com/TTT-2/TTT2/tree/v0.14.1b) (2025-02-01)
 
