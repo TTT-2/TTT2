@@ -481,7 +481,10 @@ local function deathrec(ply, cmd, args)
         return
     end
 
-    if ttt_lastwords:GetBool() or ply.death_type == KILL_FALL then
+    -- check ConVar and also test if anyone blocks the message
+    ---
+    -- @realm server
+    if ttt_lastwords:GetBool() and hook.Run("TTT2AvoidLastWords", ply, words) ~= false then
         LastWordsMsg(ply, words)
     end
 
@@ -582,3 +585,12 @@ function GM:TTT2AvoidTeamChat(sender, team, msg) end
 -- @hook
 -- @realm server
 function GM:TTT2AvoidGeneralChat(sender, msg) end
+
+---
+-- Cancelable hook to block the last words chat message.
+-- @param Player sender The player that sends the message.
+-- @param string words The message that is about to be sent
+-- @return nil|boolean Return false to block message
+-- @hook
+-- @realm server
+function GM:TTT2AvoidLastWords(sender, words) end
