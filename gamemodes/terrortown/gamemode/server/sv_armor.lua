@@ -64,7 +64,7 @@ ARMOR.cv = {
     -- @realm server
     item_armor_block_headshots = CreateConVar(
         "ttt_item_armor_block_headshots",
-        0,
+        1,
         { FCVAR_NOTIFY, FCVAR_ARCHIVE }
     ),
 
@@ -72,6 +72,14 @@ ARMOR.cv = {
     -- @realm server
     item_armor_block_blastdmg = CreateConVar(
         "ttt_item_armor_block_blastdmg",
+        0,
+        { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+    ),
+
+    ---
+    -- @realm server
+    item_armor_block_clubdmg = CreateConVar(
+        "ttt_item_armor_block_clubdmg",
         0,
         { FCVAR_NOTIFY, FCVAR_ARCHIVE }
     ),
@@ -160,10 +168,15 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
         return
     end
 
+    -- handle if crowbar damage should be ignored by the armor
+    if dmginfo:IsDamageType(DMG_CLUB) and not self.cv.item_armor_block_clubdmg:GetBool() then
+        return
+    end
+
     -- fallback for players who prefer the vanilla armor
     if not self.cv.armor_dynamic:GetBool() then
-        -- classic armor only shields from bullet/crowbar damage
-        if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_CLUB) then
+        -- classic armor only shields from bullet damage
+        if dmginfo:IsDamageType(DMG_BULLET) then
             dmginfo:ScaleDamage(0.7)
         end
 
