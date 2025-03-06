@@ -2818,3 +2818,6 @@ L.choice_distance_unit_0 = "Inches"
 L.choice_distance_unit_1 = "Meters"
 L.choice_distance_unit_2 = "Yards"
 L.choice_distance_unit_3 = "Feet"
+
+-- 2025-03-06
+L.label_armor_block_clubdmg = "Enable armor blocking crowbar damage"
