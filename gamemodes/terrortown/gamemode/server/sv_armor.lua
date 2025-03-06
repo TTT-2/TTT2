@@ -205,6 +205,19 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 end
 
 ---
+-- Handles the @{ARMOR} of a @{Player}, called by @{GM:PlayerTakeDamage}
+-- @param Player ply The @{Player} taking damage
+-- @param Entity infl The inflictor
+-- @param Player|Entity att The attacker
+-- @param number amount Amount of damage
+-- @param CTakeDamageInfo dmginfo Damage info
+-- @realm server
+-- @hook
+function GM:TTT2ArmorHandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
+    return ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
+end
+
+---
 -- @class Player
 
 ---
