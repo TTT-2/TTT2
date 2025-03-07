@@ -235,7 +235,6 @@ end
 -- @param Sound snd
 -- @realm shared
 function ENT:PlaySound(snd)
-    local pos = self:GetPos()
     local slf = self
 
     if simplesounds[snd] then
