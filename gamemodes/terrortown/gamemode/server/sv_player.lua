@@ -1486,9 +1486,11 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
             dmginfo:ScaleDamage(att:GetDamageFactor())
         end
 
+        --
         -- before the karma is calculated, but after all other damage hooks / damage change is processed,
         -- the armor system should come into place (GM functions are called last)
-        ARMOR:HandlePlayerTakeDamage(ent, infl, att, amount, dmginfo)
+        -- @realm server
+        hook.Run("TTT2ArmorHandlePlayerTakeDamage", ent, infl, att, amount, dmginfo)
 
         if ent ~= att then
             -- process the effects of the damage on karma
