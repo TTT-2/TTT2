@@ -7,6 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added option to select preferred unit of length for distance displays (by @wgetJane)
+- Fixed players sometimes being revealed as dead when they chat/voicechat right as they die (Facepunch/garrysmod/pull/2229, by @wgetJane)
 
 ### Changed
 - Updated Russian and English localization files (by @Satton2)
