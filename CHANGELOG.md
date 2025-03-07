@@ -7,6 +7,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added option to select preferred unit of length for distance displays (by @wgetJane)
+- Added `GM:TTT2ArmorHandlePlayerTakeDamage` hook for modifying/overriding armor behavior (by @wgetJane)
+- Added server option for body armor to protect against crowbar damage (by @wgetJane)
+- Changed option for body armor to protect against headshot damage by default (by @wgetJane)
+- Fix classic armour protecting against crowbar damage (by @wgetJane)
 
 ### Changed
 - Updated Russian and English localization files (by @Satton2)
