@@ -105,15 +105,15 @@ function ENT:Initialize()
     end
 
     if not self:GetRadiusInner() then
-        self:SetRadiusInner(750)
+        self:SetRadiusInner(GetConVar("ttt2_c4_radius_inner"):GetInt() or 500)
     end
 
     if not self:GetRadius() then
-        self:SetRadius(1500)
+        self:SetRadius(GetConVar("ttt2_c4_radius"):GetInt() or 600)
     end
 
     if not self:GetDmg() then
-        self:SetDmg(200)
+        self:SetDmg(200 * (weapons.GetStored("weapon_ttt_c4").damageScaling or 1))
     end
 end
 
@@ -222,9 +222,7 @@ function ENT:Explode(tr)
         util.Effect("Explosion", effect, true, true)
         util.Effect("HelicopterMegaBomb", effect, true, true)
 
-        timer.Simple(0.1, function()
-            sound.Play(c4boom, pos, 100, 100)
-        end)
+        self:BroadcastSound(c4boom, 100)
 
         -- extra push
         local phexp = ents.Create("env_physexplosion")
@@ -351,7 +349,7 @@ function ENT:Think()
         end
 
         if SERVER then
-            sound.Play(soundBeep, self:GetPos(), amp, 100)
+            self:BroadcastSound(soundBeep, amp)
         end
 
         local btime = (etime - CurTime()) / 30
