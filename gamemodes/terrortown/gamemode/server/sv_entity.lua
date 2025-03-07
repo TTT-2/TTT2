@@ -109,3 +109,42 @@ function entmeta:IsUsableEntity(requiredCaps)
 
     return false
 end
+
+---
+-- Some sounds are important enough that they shouldn't be affected by CPASAttenuationFilter
+-- @param string snd The name of the sound to be played
+-- @param[default=75] number lvl A modifier for the distance this sound will reach, see SNDLVL enum
+-- @param[default=100] number pitch The pitch applied to the sound, from 0 to 255
+-- @param[default=1] number vol The volume, from 0 to 1
+-- @param[default=CHAN_AUTO] number channel The sound channel, see CHAN enum
+-- @param[default=0] number flags The flags of the sound, see SND enum
+-- @param[default=0] number dsp The DSP preset for this sound
+-- @ref https://wiki.facepunch.com/gmod/Entity:EmitSound
+-- @realm server
+function entmeta:BroadcastSound(snd, lvl, pitch, vol, channel, flags, dsp)
+    lvl = lvl or 75
+
+    local rf = RecipientFilter()
+
+    if lvl == 0 then
+        rf:AddAllPlayers()
+    else
+        -- Overriding the PAS filter means this will no longer check if players
+        -- are within audible range before sending them the sound message.
+        -- Instead, we reimplement this check in lua.
+        local pos = self:GetPos()
+
+        local attenuation = lvl > 50 and 20.0 / (lvl - 50) or 4.0
+        local maxAudible = math.min(2500, 2000 / attenuation)
+
+        for _, ply in player.Iterator() do
+            if (ply:EyePos() - pos):Length() > maxAudible then
+                continue
+            end
+
+            rf:AddPlayer(ply)
+        end
+    end
+
+    self:EmitSound(snd, lvl, pitch, vol, channel, flags, dsp, rf)
+end
