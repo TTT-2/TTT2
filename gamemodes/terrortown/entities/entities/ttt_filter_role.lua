@@ -44,8 +44,7 @@ function ENT:PassesFilter(caller, activator)
 
     ---
     -- @realm server
-    local role, team =
-        hook.Run("TTT2ModifyLogicRoleCheck", activator, self, activator, caller, "")
+    local role, team = hook.Run("TTT2ModifyLogicRoleCheck", activator, self, activator, caller, "")
     local activatorRole = roles.GetByIndex(role, roles.INNOCENT):GetBaseRole()
     local activatorTeam = (gameloop.GetRoundState() == ROUND_PREP) and TEAM_INNOCENT or team
 
