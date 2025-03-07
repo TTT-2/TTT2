@@ -11,6 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 - Updated Russian and English localization files (by @Satton2)
 - Updated the list of troublesome addons used by the addonchecker
+- Allow workshop addons to pack rearm scripts (Facepunch/garrysmod/pull/2139, by @figardo)
 
 ### Fixed
 
