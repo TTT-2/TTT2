@@ -138,7 +138,9 @@ function entmeta:BroadcastSound(snd, lvl, pitch, vol, channel, flags, dsp)
         local maxAudible = math.min(2500, 2000 / attenuation)
 
         for _, ply in player.Iterator() do
-            if (ply:EyePos() - pos):Length() > maxAudible then continue end
+            if (ply:EyePos() - pos):Length() > maxAudible then
+                continue
+            end
 
             rf:AddPlayer(ply)
         end
