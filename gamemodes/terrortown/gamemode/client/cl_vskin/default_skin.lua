@@ -664,6 +664,13 @@ function SKIN:PaintButtonTTT2(panel, w, h)
     drawBox(0, 0, w, h, colorBox)
     drawBox(0, h - sizes.border, w, sizes.border, colorLine)
 
+    local holdProgress = panel:GetHoldProgress()
+
+    if panel:HasHoldTime() and holdProgress > 0 then
+        drawBox(0, 0, w * holdProgress, h, colors.accentActive)
+        drawBox(0, h - sizes.border, w * holdProgress, sizes.border, colors.accentDarkActive)
+    end
+
     local translatedText = ""
     if panel:HasTextParams() then
         translatedText = string.upper(ParT(panel:GetText(), panel:GetTextParams()))
@@ -2379,6 +2386,10 @@ function SKIN:PaintPlayerGraphTTT2(panel, w, h)
             )
         end
     end
+end
+
+function SKIN:PaintSelectionPanelTTT2(panel, w, h)
+    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.handle)
 end
 
 -- REGISTER DERMA SKIN
