@@ -7,7 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added option to select preferred unit of length for distance displays (by @wgetJane)
-- Added `GM:TTTLastWordsMsg` hook from base TTT (Facepunch/garrysmod#2227, by @wgetJane)
+- Added `GM:TTTLastWordsMsg` hook from base TTT (Facepunch/garrysmod/pull/2227, by @wgetJane)
 
 ### Changed
 - Updated Russian and English localization files (by @Satton2)
