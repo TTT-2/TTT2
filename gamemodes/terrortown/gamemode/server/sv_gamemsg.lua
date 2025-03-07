@@ -426,10 +426,16 @@ local function LastWordsMsg(ply, words)
     -- add optional context relating to death type
     local context = LastWordContext[ply.death_type] or ""
 
-    net.Start("TTT_LastWordsMsg")
-    net.WritePlayer(ply)
-    net.WriteString(words .. (final and "" or "--") .. context)
-    net.Broadcast()
+    local lastWordsStr = words .. (final and "" or "--") .. context
+
+    ---
+    -- @realm server
+    if hook.Run("TTTLastWordsMsg", ply, lastWordsStr, words) ~= true then
+        net.Start("TTT_LastWordsMsg")
+        net.WritePlayer(ply)
+        net.WriteString(lastWordsStr)
+        net.Broadcast()
+    end
 end
 
 local function deathrec(ply, cmd, args)
