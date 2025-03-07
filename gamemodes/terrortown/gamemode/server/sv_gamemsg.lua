@@ -559,6 +559,16 @@ concommand.Add("_ttt_radio_send", ttt_radio_send)
 function GM:TTTPlayerRadioCommand(ply, msgName, msgTarget) end
 
 ---
+-- Called when a player tries to speak their last words on death
+-- @param Player ply The player that is sending their last words
+-- @param string msg The last words that is about to be sent
+-- @param string msgOriginal The original unmodified message
+-- @return[default=nil] boolean Return true to block last words
+-- @hook
+-- @realm server
+function GM:TTTLastWordsMsg(ply, msg, msgOriginal) end
+
+---
 -- Whether or not the @{Player} can receive the chat message.
 -- @param Player reader The @{Player} who can receive chat
 -- @param Player sender The @{Player} who sends the text message
