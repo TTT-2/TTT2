@@ -7,6 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added option to select preferred unit of length for distance displays (by @wgetJane)
+- Port new TTT entity ttt_filter_role to TTT2 (Facepunch/garrysmod/pull/2225 by @figardo, ported by @wgetJane)
 
 ### Changed
 - Updated Russian and English localization files (by @Satton2)
