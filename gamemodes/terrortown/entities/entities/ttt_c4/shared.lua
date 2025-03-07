@@ -222,9 +222,7 @@ function ENT:Explode(tr)
         util.Effect("Explosion", effect, true, true)
         util.Effect("HelicopterMegaBomb", effect, true, true)
 
-        timer.Simple(0.1, function()
-            sound.Play(c4boom, pos, 100, 100)
-        end)
+        self:BroadcastSound(c4boom, 100)
 
         -- extra push
         local phexp = ents.Create("env_physexplosion")
@@ -351,7 +349,7 @@ function ENT:Think()
         end
 
         if SERVER then
-            sound.Play(soundBeep, self:GetPos(), amp, 100)
+            self:BroadcastSound(soundBeep, amp)
         end
 
         local btime = (etime - CurTime()) / 30
