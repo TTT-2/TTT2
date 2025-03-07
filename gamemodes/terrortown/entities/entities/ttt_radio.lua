@@ -226,7 +226,7 @@ function ENT:PlayDelayedSound(snd, ampl, last)
         snd = table.Random(snd)
     end
 
-    sound.Play(snd, self:GetPos(), ampl)
+    self:BroadcastSound(snd, ampl)
 
     self.Playing = not last
 end
@@ -235,11 +235,10 @@ end
 -- @param Sound snd
 -- @realm shared
 function ENT:PlaySound(snd)
-    local pos = self:GetPos()
     local slf = self
 
     if simplesounds[snd] then
-        sound.Play(table.Random(simplesounds[snd]), pos)
+        self:BroadcastSound(table.Random(simplesounds[snd]))
     elseif gunsounds[snd] then
         local gunsound = gunsounds[snd]
         local times = math.random(gunsound.times[1], gunsound.times[2])
@@ -352,7 +351,7 @@ if CLIENT then
         local originator = ent:GetOriginator()
         local nick = IsValid(originator) and originator:Nick() or "---"
 
-        local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
+        local distance = util.DistanceToString(mvData:GetEntityDistance(), 1)
 
         mvData:EnableText()
 

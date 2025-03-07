@@ -2078,11 +2078,11 @@ L.flaregun_help_primary = "Сжечь тело/объект"
 
 -- 2023-12-14
 L.marker_vision_owner = "Владелец: {owner}."
-L.marker_vision_distance = "Расстояние: {distance} м."
-L.marker_vision_distance_collapsed = "{distance} м."
+L.marker_vision_distance = "Расстояние: {distance}."
+L.marker_vision_distance_collapsed = "{distance}."
 
 L.c4_marker_vision_time = "Время до взрыва: {time}."
-L.c4_marker_vision_collapsed = "{time} / {distance} м."
+L.c4_marker_vision_collapsed = "{time} / {distance}."
 
 L.c4_marker_vision_safe_zone = "Безопасная зона от бомбы."
 L.c4_marker_vision_damage_zone = "Зона урона от бомбы."
@@ -2809,3 +2809,14 @@ L.radio_desc = [[
 Воспроизводит звуки для отвлечения или обмана.
 
 Поместите его где-нибудь, а затем используйте удалённо, выбирая звуки для воспроизведения.]]
+
+-- 2025-02-21
+L.length_in_meters = "{length} м"
+--L.length_in_yards = "{length}yd"
+--L.length_in_feet = "{length}ft"
+
+--L.label_distance_unit = "Preferred unit of length for distance displays"
+--L.choice_distance_unit_0 = "Inches"
+--L.choice_distance_unit_1 = "Meters"
+--L.choice_distance_unit_2 = "Yards"
+--L.choice_distance_unit_3 = "Feet"

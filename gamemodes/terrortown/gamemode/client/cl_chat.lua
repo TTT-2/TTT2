@@ -55,6 +55,24 @@ local function TTT_RoleChat()
 end
 net.Receive("TTT_RoleChat", TTT_RoleChat)
 
+--
+-- Returns the color for the given entity's team.
+-- @param Entity ent The @{Entity}
+-- @hook
+-- @realm client
+-- @ref https://wiki.facepunch.com/gmod/GM:GetTeamColor
+-- @local
+function GM:GetTeamColor(ent)
+    -- don't reveal that a player has died when they happen to chat or voicechat at the moment of death
+    if ent:IsPlayer() and ent:IsSpec() and ScoreGroup(ent) == GROUP_NOTFOUND then
+        --
+        -- @realm client
+        return hook.Run("GetTeamNumColor", TEAM_TERROR)
+    end
+
+    return BaseClass.GetTeamColor(self, ent)
+end
+
 ---
 -- Called when a message is printed to the chat box. Note, that this isn't
 -- working with @{Player} messages even though there are arguments for it.<br />

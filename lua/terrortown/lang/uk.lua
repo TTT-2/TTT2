@@ -2076,11 +2076,11 @@ L.search_eyes = "Використовуючи свої навички детек
 
 -- 2023-12-14
 --L.marker_vision_owner = "Owner: {owner}"
---L.marker_vision_distance = "Distance: {distance}m"
---L.marker_vision_distance_collapsed = "{distance}m"
+--L.marker_vision_distance = "Distance: {distance}"
+--L.marker_vision_distance_collapsed = "{distance}"
 
 --L.c4_marker_vision_time = "Detonation time: {time}"
---L.c4_marker_vision_collapsed = "{time} / {distance}m"
+--L.c4_marker_vision_collapsed = "{time} / {distance}"
 
 --L.c4_marker_vision_safe_zone = "Bomb safe zone"
 --L.c4_marker_vision_damage_zone = "Bomb damage zone"
@@ -2807,3 +2807,14 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --Plays sounds to distract or deceive.
 --
 --Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
+
+-- 2025-02-21
+--L.length_in_meters = "{length}m"
+--L.length_in_yards = "{length}yd"
+--L.length_in_feet = "{length}ft"
+
+--L.label_distance_unit = "Preferred unit of length for distance displays"
+--L.choice_distance_unit_0 = "Inches"
+--L.choice_distance_unit_1 = "Meters"
+--L.choice_distance_unit_2 = "Yards"
+--L.choice_distance_unit_3 = "Feet"
