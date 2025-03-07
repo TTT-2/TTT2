@@ -2808,6 +2808,17 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --
 --Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
 
+-- 2025-02-13
+--L.help_c4_radius = [[
+--C4 uses two different zones to calculate the damage of its explosion:
+--
+--Players within the "kill zone" will receive the full damage of the devastating explosion.
+--
+--Players within the "damage zone" (and outside the "kill zone") will receive a percentage of the damage based on their position between the borders of both zones.]]
+
+--L.label_c4_radius_inner = "C4 Kill Zone radius"
+--L.label_c4_radius = "C4 Damage Zone radius"
+
 -- 2025-02-21
 --L.length_in_meters = "{length}m"
 --L.length_in_yards = "{length}yd"
