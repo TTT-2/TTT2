@@ -6,6 +6,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Added C4 cvars for adjusting the range & falloff of C4 explosions (by @Spanospy)
+  - C4 explosions will now also respect the weapon's configured damage scaling
 - Added option to select preferred unit of length for distance displays (by @wgetJane)
 - Port new TTT entity ttt_filter_role to TTT2 (Facepunch/garrysmod/pull/2225 by @figardo, ported by @wgetJane)
 
