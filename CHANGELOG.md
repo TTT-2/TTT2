@@ -12,6 +12,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated Russian and English localization files (by @Satton2)
 - Updated the list of troublesome addons used by the addonchecker
 
+### Fixed
+
+- Fixed players sometimes being revealed as dead when they chat/voicechat right as they die (Facepunch/garrysmod/pull/2229, by @wgetJane)
+
 ## [v0.14.2b](https://github.com/TTT-2/TTT2/tree/v0.14.2b) (2025-02-02)
 
 ### Fixed
