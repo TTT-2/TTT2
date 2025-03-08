@@ -55,17 +55,13 @@ ttt_include("cl_vskin__vgui__dimagecheckbox")
 ttt_include("cl_vskin__vgui__droleimage")
 ttt_include("cl_vskin__vgui__dmenubutton")
 ttt_include("cl_vskin__vgui__dsubmenubutton")
-ttt_include("cl_vskin__vgui__dnavpanel")
-ttt_include("cl_vskin__vgui__dcontentpanel")
 ttt_include("cl_vskin__vgui__dshopcard")
 ttt_include("cl_vskin__vgui__dcombocard")
-ttt_include("cl_vskin__vgui__dbuttonpanel")
 ttt_include("cl_vskin__vgui__dcategoryheader")
 ttt_include("cl_vskin__vgui__dcategorycollapse")
 ttt_include("cl_vskin__vgui__dform")
 ttt_include("cl_vskin__vgui__dbutton")
 ttt_include("cl_vskin__vgui__dbinder")
-ttt_include("cl_vskin__vgui__dlabel")
 ttt_include("cl_vskin__vgui__dcombobox")
 ttt_include("cl_vskin__vgui__dcheckboxlabel")
 ttt_include("cl_vskin__vgui__dnumslider")
@@ -73,8 +69,6 @@ ttt_include("cl_vskin__vgui__dtextentry")
 ttt_include("cl_vskin__vgui__dbinderpanel")
 ttt_include("cl_vskin__vgui__dscrollpanel")
 ttt_include("cl_vskin__vgui__dvscrollbar")
-ttt_include("cl_vskin__vgui__dcoloredbox")
-ttt_include("cl_vskin__vgui__dcoloredtextbox")
 ttt_include("cl_vskin__vgui__dtooltip")
 ttt_include("cl_vskin__vgui__deventbox")
 ttt_include("cl_vskin__vgui__ddragbase")
@@ -87,6 +81,7 @@ ttt_include("cl_vskin__vgui__dsubmenulist")
 ttt_include("cl_vskin__vgui__dweaponpreview")
 ttt_include("cl_vskin__vgui__dpippanel")
 ttt_include("cl_vskin__vgui__dplayergraph")
+ttt_include("cl_vskin__vgui__dhelpbox")
 
 ttt_include("cl_changes")
 ttt_include("cl_network_sync")
@@ -206,6 +201,8 @@ function GM:Initialize()
     keyhelp.InitializeBasicKeys()
 
     tips.Initialize()
+
+    derma.InitializeElements()
 
     ---
     -- @realm shared
@@ -379,6 +376,8 @@ function GM:OnReloaded()
         "enable_dynamic_fov",
         GetConVar("ttt2_enable_dynamic_fov"):GetBool()
     )
+
+    derma.InitializeElements()
 
     -- notify the server that the client finished reloading
     net.Start("TTT2FinishedReloading")

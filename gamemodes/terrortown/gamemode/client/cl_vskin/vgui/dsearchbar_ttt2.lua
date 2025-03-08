@@ -9,28 +9,31 @@ local font = "DermaTTT2Text"
 ---
 -- @accessor number
 -- @realm client
-AccessorFunc(PANEL, "heightMult", "HeightMult")
+AccessorFunc(PANEL, "m_HeightMult", "HeightMult", FORCE_NUMBER, true)
 
 ---
--- @accessor bool
+-- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "isOnFocus", "IsOnFocus")
-
----
--- @accessor string
--- @realm client
-AccessorFunc(PANEL, "placeholderText", "PlaceholderText")
+AccessorFunc(PANEL, "m_bIsOnFocus", "OnFocus", FORCE_BOOL_IS, true)
 
 ---
 -- @accessor string
 -- @realm client
-AccessorFunc(PANEL, "curPlaceholderText", "CurrentPlaceholderText")
+AccessorFunc(PANEL, "m_PlaceholderText", "PlaceholderText", FORCE_STRING, true)
+
+---
+-- @accessor string
+-- @realm client
+AccessorFunc(PANEL, "m_CurrentPlaceholderText", "CurrentPlaceholderText", FORCE_STRING, true)
+
+-- todo: combine with dtextentry?
 
 ---
 -- @ignore
 function PANEL:Init()
-    local textEntry = vgui.Create("DTextEntry", self)
-    local textColor = util.GetActiveColor(
+    local textEntry = vgui.Create("DTextEntryTTT2", self)
+
+    local textColor = util.GetActiveColor( -- todo move to correct hook
         util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25)
     )
 
@@ -164,4 +167,4 @@ function PANEL:Clear()
     return self.textEntry:Clear()
 end
 
-derma.DefineControl("DSearchBarTTT2", "", PANEL, "DPanelTTT2")
+derma.DefineControl("DSearchBarTTT2", "", PANEL, "TTT2:DPanel")

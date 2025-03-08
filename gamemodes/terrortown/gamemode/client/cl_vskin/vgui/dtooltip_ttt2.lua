@@ -163,4 +163,4 @@ function PANEL:GetFont()
     return self.targetPanel:GetTooltipFont() or "Default"
 end
 
-derma.DefineControl("DTooltipTTT2", "", PANEL, "DLabel")
+derma.DefineControl("DTooltipTTT2", "", PANEL, "TTT2:DLabel")

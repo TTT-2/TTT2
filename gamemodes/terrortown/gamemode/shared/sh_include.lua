@@ -97,11 +97,8 @@ TTTFiles = {
         file = "cl_vskin/vgui/dsubmenubutton_ttt2.lua",
         on = "client",
     },
-    cl_vskin__vgui__dnavpanel = { file = "cl_vskin/vgui/dnavpanel_ttt2.lua", on = "client" },
-    cl_vskin__vgui__dcontentpanel = { file = "cl_vskin/vgui/dcontentpanel_ttt2.lua", on = "client" },
     cl_vskin__vgui__dshopcard = { file = "cl_vskin/vgui/dshopcard_ttt2.lua", on = "client" },
     cl_vskin__vgui__dcombocard = { file = "cl_vskin/vgui/dcombocard_ttt2.lua", on = "client" },
-    cl_vskin__vgui__dbuttonpanel = { file = "cl_vskin/vgui/dbuttonpanel_ttt2.lua", on = "client" },
     cl_vskin__vgui__dcategoryheader = {
         file = "cl_vskin/vgui/dcategoryheader_ttt2.lua",
         on = "client",
@@ -113,7 +110,6 @@ TTTFiles = {
     cl_vskin__vgui__dform = { file = "cl_vskin/vgui/dform_ttt2.lua", on = "client" },
     cl_vskin__vgui__dbutton = { file = "cl_vskin/vgui/dbutton_ttt2.lua", on = "client" },
     cl_vskin__vgui__dbinder = { file = "cl_vskin/vgui/dbinder_ttt2.lua", on = "client" },
-    cl_vskin__vgui__dlabel = { file = "cl_vskin/vgui/dlabel_ttt2.lua", on = "client" },
     cl_vskin__vgui__dcombobox = { file = "cl_vskin/vgui/dcombobox_ttt2.lua", on = "client" },
     cl_vskin__vgui__dcheckboxlabel = {
         file = "cl_vskin/vgui/dcheckboxlabel_ttt2.lua",
@@ -124,11 +120,6 @@ TTTFiles = {
     cl_vskin__vgui__dbinderpanel = { file = "cl_vskin/vgui/dbinderpanel_ttt2.lua", on = "client" },
     cl_vskin__vgui__dscrollpanel = { file = "cl_vskin/vgui/dscrollpanel_ttt2.lua", on = "client" },
     cl_vskin__vgui__dvscrollbar = { file = "cl_vskin/vgui/dvscrollbar_ttt2.lua", on = "client" },
-    cl_vskin__vgui__dcoloredbox = { file = "cl_vskin/vgui/dcoloredbox_ttt2.lua", on = "client" },
-    cl_vskin__vgui__dcoloredtextbox = {
-        file = "cl_vskin/vgui/dcoloredtextbox_ttt2.lua",
-        on = "client",
-    },
     cl_vskin__vgui__dtooltip = { file = "cl_vskin/vgui/dtooltip_ttt2.lua", on = "client" },
     cl_vskin__vgui__deventbox = { file = "cl_vskin/vgui/deventbox_ttt2.lua", on = "client" },
     cl_vskin__vgui__ddragbase = { file = "cl_vskin/vgui/ddragbase_ttt2.lua", on = "client" },
@@ -150,6 +141,7 @@ TTTFiles = {
     },
     cl_vskin__vgui__dpippanel = { file = "cl_vskin/vgui/dpippanel_ttt2.lua", on = "client" },
     cl_vskin__vgui__dplayergraph = { file = "cl_vskin/vgui/dplayergraph_ttt2.lua", on = "client" },
+    cl_vskin__vgui__dhelpbox = { file = "cl_vskin/vgui/dhelpbox_ttt2.lua", on = "client" },
 }
 
 if SERVER then

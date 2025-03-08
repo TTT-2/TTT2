@@ -209,4 +209,4 @@ function PANEL:GetTextParams()
     return self.params
 end
 
-derma.DefineControl("DCheckBoxLabelTTT2", "", PANEL, "DButtonTTT2")
+derma.DefineControl("DCheckBoxLabelTTT2", "", PANEL, "TTT2:DButton")
