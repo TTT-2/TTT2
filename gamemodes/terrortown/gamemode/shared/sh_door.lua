@@ -110,12 +110,17 @@ function entmeta:DoorAutoCloses()
 end
 
 ---
--- Retuens if a door is destructible.
+-- Returns if a door is destructible.
 -- @return boolean If a door is destructible
 -- @realm shared
 function entmeta:DoorIsDestructible()
     if not self:IsDoor() then
         return
+    end
+
+    -- might be a little hacky
+    if self:Health() > 0 and self:GetMaxHealth() > 0 and (self:GetInternalVariable("m_takedamage") or 2) > 1 then
+        return true
     end
 
     return self:GetNWBool("ttt2_door_is_destructable", false)
@@ -138,7 +143,7 @@ end
 -- @return number The synced health
 -- @realm shared
 function entmeta:GetFastSyncedHealth()
-    return math.max(0, self:GetNWInt("fast_sync_health", 100))
+    return math.max(0, self:GetNWInt("fast_sync_health", self:Health()))
 end
 
 if SERVER then

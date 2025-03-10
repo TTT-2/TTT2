@@ -1320,6 +1320,18 @@ function GM:EntityTakeDamage(ent, dmginfo)
 end
 
 ---
+-- Called after an entity receives a damage event, after passing damage filters, etc.
+-- @param Entity ent The @{Entity} taking damage
+-- @param CTakeDamageInfo dmginfo Damage info
+-- @param boolean wasDamageTaken Whether the entity actually took the damage
+-- @hook
+-- @realm server
+-- @ref https://wiki.facepunch.com/gmod/GM:PostEntityTakeDamage
+function GM:PostEntityTakeDamage(ent, dmginfo, wasDamageTaken)
+    door.PostHandleDamage(ent, dmginfo, wasDamageTaken)
+end
+
+---
 -- Called by @{GM:EntityTakeDamage}
 -- @param Entity ent The @{Entity} taking damage
 -- @param Entity infl the inflictor

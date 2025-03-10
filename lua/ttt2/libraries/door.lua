@@ -365,7 +365,7 @@ if SERVER then
         if door.IsValidNormal(cls) then
             return ent:HasSpawnFlags(SF_PROP_DOOR_START_BREAKABLE)
         elseif door.IsValidSpecial(cls) then
-            return false
+            return (ent:GetInternalVariable("m_takedamage") or 0) > 1
         end
 
         return false
@@ -454,6 +454,11 @@ if SERVER then
             return
         end
 
+        -- skip if engine already handles damage
+        if (ent:GetInternalVariable("m_takedamage") or 0) > 1 then
+            return
+        end
+
         local damage = math.max(0, dmginfo:GetDamage())
         local health = ent:Health() - damage
 
@@ -473,7 +478,21 @@ if SERVER then
         end
 
         ent:SetHealth(health)
-        ent:SetNWInt("fast_sync_health", health)
+    end
+
+    ---
+    -- Called in @{GM:PostEntityTakeDamage}.
+    -- @param Entity ent The entity that is damaged
+    -- @param CTakeDamageInfo dmginfo The damage info object
+    -- @param boolean wasDamageTaken Whether the entity actually took the damage
+    -- @internal
+    -- @realm server
+    function door.PostHandleDamage(ent, dmginfo, wasDamageTaken)
+        if not ent:DoorIsDestructible() then
+            return
+        end
+
+        ent:SetNWInt("fast_sync_health", ent:Health())
     end
 
     ---
