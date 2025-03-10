@@ -108,7 +108,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
         end
 
         net.Start("TTT2PlayerUseEntity")
-        net.WriteBool(useEnt ~= nil)
+        --net.WriteBool(useEnt ~= nil)
         net.WriteEntity(useEnt)
         net.WriteBool(isRemote)
         net.SendToServer()

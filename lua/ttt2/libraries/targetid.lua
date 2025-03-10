@@ -144,7 +144,11 @@ function targetid.FindEntityAlongView(pos, dir, filter)
             end
 
             local _, _, frac = util.IntersectRayWithOBB(
-                pos, rayDelta, e:GetPos(), e:GetAngles(), e:GetCollisionBounds()
+                pos,
+                rayDelta,
+                e:GetPos(),
+                e:GetAngles(),
+                e:GetCollisionBounds()
             )
 
             if not frac then

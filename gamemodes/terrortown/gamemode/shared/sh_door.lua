@@ -119,7 +119,11 @@ function entmeta:DoorIsDestructible()
     end
 
     -- might be a little hacky
-    if self:Health() > 0 and self:GetMaxHealth() > 0 and (self:GetInternalVariable("m_takedamage") or 2) > 1 then
+    if
+        self:Health() > 0
+        and self:GetMaxHealth() > 0
+        and (self:GetInternalVariable("m_takedamage") or 2) > 1
+    then
         return true
     end
 
