@@ -667,6 +667,11 @@ function targetid.HUDDrawTargetIDButtons(tData)
         return
     end
 
+    -- button is supposed to be invisible
+    if ent:GetNoDraw() or ent:GetRenderMode() == RENDERMODE_NONE then
+        return
+    end
+
     if not ent:IsButton() then
         ent = ent:GetMoveParent()
 
@@ -706,6 +711,11 @@ function targetid.HUDDrawTargetIDDoors(tData)
     local ent = tData:GetEntity()
 
     if not IsValid(client) or not client:IsTerror() or not IsValid(ent) then
+        return
+    end
+
+    -- door is supposed to be invisible
+    if ent:GetNoDraw() or ent:GetRenderMode() == RENDERMODE_NONE then
         return
     end
 
