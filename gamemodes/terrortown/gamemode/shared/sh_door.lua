@@ -45,7 +45,7 @@ function entmeta:IsDoorLocked()
         return
     end
 
-    return self:GetNWBool("ttt2_door_locked", false)
+    return self:GetNW2Bool("ttt2_door_locked", false)
 end
 
 ---
@@ -57,7 +57,7 @@ function entmeta:IsDoorForceclosed()
         return
     end
 
-    return self:GetNWBool("ttt2_door_forceclosed", false)
+    return self:GetNW2Bool("ttt2_door_forceclosed", false)
 end
 
 ---
@@ -70,7 +70,7 @@ function entmeta:UseOpensDoor()
         return
     end
 
-    return self:GetNWBool("ttt2_door_player_use", false)
+    return self:GetNW2Bool("ttt2_door_player_use", false)
 end
 
 ---
@@ -82,7 +82,7 @@ function entmeta:TouchOpensDoor()
         return
     end
 
-    return self:GetNWBool("ttt2_door_player_touch", false)
+    return self:GetNW2Bool("ttt2_door_player_touch", false)
 end
 
 ---
@@ -106,7 +106,7 @@ function entmeta:DoorAutoCloses()
         return
     end
 
-    return self:GetNWBool("ttt2_door_auto_close", false)
+    return self:GetNW2Bool("ttt2_door_auto_close", false)
 end
 
 ---
@@ -123,7 +123,7 @@ function entmeta:DoorIsDestructible()
         return true
     end
 
-    return self:GetNWBool("ttt2_door_is_destructable", false)
+    return self:GetNW2Bool("ttt2_door_is_destructable", false)
 end
 
 ---
@@ -135,7 +135,7 @@ function entmeta:IsDoorOpen()
         return
     end
 
-    return self:GetNWBool("ttt2_door_open", false)
+    return self:GetNW2Bool("ttt2_door_open", false)
 end
 
 ---
@@ -143,7 +143,7 @@ end
 -- @return number The synced health
 -- @realm shared
 function entmeta:GetFastSyncedHealth()
-    return math.max(0, self:GetNWInt("fast_sync_health", self:Health()))
+    return math.max(0, self:GetNW2Int("fast_sync_health", self:Health()))
 end
 
 if SERVER then
@@ -264,7 +264,7 @@ if SERVER then
     function entmeta:SetDoorCanTouchOpen(state, surpressPair)
         door.SetPlayerCanTouch(self, state)
 
-        self:SetNWBool("ttt2_door_player_touch", door.PlayerCanTouch(self))
+        self:SetNW2Bool("ttt2_door_player_touch", door.PlayerCanTouch(self))
 
         -- if the door is grouped as a pair, call the other one as well
         if not surpressPair and IsValid(self.otherPairDoor) then
@@ -280,7 +280,7 @@ if SERVER then
     function entmeta:SetDoorCanUseOpen(state, surpressPair)
         door.SetPlayerCanUse(self, state)
 
-        self:SetNWBool("ttt2_door_player_use", door.PlayerCanUse(self))
+        self:SetNW2Bool("ttt2_door_player_use", door.PlayerCanUse(self))
 
         -- if the door is grouped as a pair, call the other one as well
         if not surpressPair and IsValid(self.otherPairDoor) then
@@ -296,7 +296,7 @@ if SERVER then
     function entmeta:SetDoorAutoCloses(state, surpressPair)
         door.SetAutoClose(self, state)
 
-        self:SetNWBool("ttt2_door_auto_close", door.AutoCloses(self))
+        self:SetNW2Bool("ttt2_door_auto_close", door.AutoCloses(self))
 
         -- if the door is grouped as a pair, call the other one as well
         if not surpressPair and IsValid(self.otherPairDoor) then
@@ -314,12 +314,12 @@ if SERVER then
             return
         end
 
-        self:SetNWBool("ttt2_door_is_destructable", state)
+        self:SetNW2Bool("ttt2_door_is_destructable", state)
 
         if self:Health() == 0 then
             self:SetHealth(cvDoorHealth:GetInt())
 
-            self:SetNWInt("fast_sync_health", self:Health())
+            self:SetNW2Int("fast_sync_health", self:Health())
         end
 
         -- if the door is grouped as a pair, call the other one as well

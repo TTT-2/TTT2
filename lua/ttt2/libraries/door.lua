@@ -182,14 +182,14 @@ if SERVER then
 
             doors[#doors + 1] = ent
 
-            ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
-            ent:SetNWBool("ttt2_door_forceclosed", ent:GetInternalVariable("forceclosed") or false)
-            ent:SetNWBool("ttt2_door_open", door.IsOpen(ent) or false)
+            ent:SetNW2Bool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
+            ent:SetNW2Bool("ttt2_door_forceclosed", ent:GetInternalVariable("forceclosed") or false)
+            ent:SetNW2Bool("ttt2_door_open", door.IsOpen(ent) or false)
 
-            ent:SetNWBool("ttt2_door_player_use", door.PlayerCanUse(ent))
-            ent:SetNWBool("ttt2_door_player_touch", door.PlayerCanTouch(ent))
-            ent:SetNWBool("ttt2_door_auto_close", door.AutoCloses(ent))
-            ent:SetNWBool("ttt2_door_is_destructable", door.IsDestructible(ent))
+            ent:SetNW2Bool("ttt2_door_player_use", door.PlayerCanUse(ent))
+            ent:SetNW2Bool("ttt2_door_player_touch", door.PlayerCanTouch(ent))
+            ent:SetNW2Bool("ttt2_door_auto_close", door.AutoCloses(ent))
+            ent:SetNW2Bool("ttt2_door_is_destructable", door.IsDestructible(ent))
 
             entityOutputs.RegisterMapEntityOutput(ent, "OnOpen", "TTT2DoorOpens")
             entityOutputs.RegisterMapEntityOutput(ent, "OnClose", "TTT2DoorCloses")
@@ -492,7 +492,7 @@ if SERVER then
             return
         end
 
-        ent:SetNWInt("fast_sync_health", ent:Health())
+        ent:SetNW2Int("fast_sync_health", ent:Health())
     end
 
     ---
@@ -596,7 +596,7 @@ if SERVER then
 
             -- we expect the door to be locked now, but we check the real state after a short
             -- amount of time to be sure
-            ent:SetNWBool("ttt2_door_locked", true)
+            ent:SetNW2Bool("ttt2_door_locked", true)
 
             -- check if the assumed state was correct
             timer.Create("ttt2_recheck_door_lock_" .. ent:EntIndex(), 1, 1, function()
@@ -604,7 +604,7 @@ if SERVER then
                     return
                 end
 
-                ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
+                ent:SetNW2Bool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
             end)
         elseif name == "unlock" then
             ---
@@ -617,7 +617,7 @@ if SERVER then
 
             -- we expect the door to be unlocked now, but we check the real state after a short
             -- amount of time to be sure
-            ent:SetNWBool("ttt2_door_locked", false)
+            ent:SetNW2Bool("ttt2_door_locked", false)
 
             -- check if the assumed state was correct
             timer.Create("ttt2_recheck_door_unlock_" .. ent:EntIndex(), 1, 1, function()
@@ -625,7 +625,7 @@ if SERVER then
                     return
                 end
 
-                ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
+                ent:SetNW2Bool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
             end)
         elseif name == "use" and ent:IsDoorOpen() then
             -- do not stack closing time if door closes automatically
@@ -676,7 +676,7 @@ if SERVER then
             return
         end
 
-        doorEntity:SetNWBool("ttt2_door_open", true)
+        doorEntity:SetNW2Bool("ttt2_door_open", true)
     end
 
     ---
@@ -690,7 +690,7 @@ if SERVER then
             return
         end
 
-        doorEntity:SetNWBool("ttt2_door_open", true)
+        doorEntity:SetNW2Bool("ttt2_door_open", true)
     end
 
     ---
@@ -704,7 +704,7 @@ if SERVER then
             return
         end
 
-        doorEntity:SetNWBool("ttt2_door_open", false)
+        doorEntity:SetNW2Bool("ttt2_door_open", false)
     end
 
     ---
@@ -718,7 +718,7 @@ if SERVER then
             return
         end
 
-        doorEntity:SetNWBool("ttt2_door_open", false)
+        doorEntity:SetNW2Bool("ttt2_door_open", false)
     end
 
     ---
