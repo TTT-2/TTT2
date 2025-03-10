@@ -663,13 +663,19 @@ function targetid.HUDDrawTargetIDButtons(tData)
     local client = LocalPlayer()
     local ent = tData:GetEntity()
 
-    if
-        not IsValid(client)
-        or not client:IsTerror()
-        or not IsValid(ent)
-        or not ent:IsButton()
-        or tData:GetEntityDistance() > 100
-    then
+    if not IsValid(client) or not client:IsTerror() or not IsValid(ent) then
+        return
+    end
+
+    if not ent:IsButton() then
+        ent = ent:GetMoveParent()
+
+        if not IsValid(ent) or not ent:IsButton() then
+            return
+        end
+    end
+
+    if tData:GetEntityDistance() > 100 then
         return
     end
 
@@ -699,14 +705,19 @@ function targetid.HUDDrawTargetIDDoors(tData)
     local client = LocalPlayer()
     local ent = tData:GetEntity()
 
-    if
-        not IsValid(client)
-        or not client:IsTerror()
-        or not IsValid(ent)
-        or not ent:IsDoor()
-        or not ent:PlayerCanOpenDoor()
-        or tData:GetEntityDistance() > 90
-    then
+    if not IsValid(client) or not client:IsTerror() or not IsValid(ent) then
+        return
+    end
+
+    if not ent:IsDoor() then
+        ent = ent:GetMoveParent()
+
+        if not IsValid(ent) or not ent:IsDoor() then
+            return
+        end
+    end
+
+    if not ent:PlayerCanOpenDoor() or tData:GetEntityDistance() > 90 then
         return
     end
 
