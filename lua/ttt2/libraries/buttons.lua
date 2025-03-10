@@ -31,9 +31,6 @@ if SERVER then
             for j = 1, #buttonsTable do
                 local foundButton = buttonsTable[j]
 
-                foundButton:SetNotSolid(false)
-                foundButton:SetSolid(SOLID_BSP)
-
                 foundButton:SetNWInt("button_class", i)
             end
         end

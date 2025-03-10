@@ -69,6 +69,8 @@ function targetid.Initialize()
     }
 end
 
+local PLAYER_USE_RADIUS = 80
+
 ---
 -- This function handles finding Entities by casting a ray from a point in a direction, filtering out certain entities
 -- Use this in combination with the hook @GM:TTTModifyTargetedEntity to create your own Remote Camera with TargetIDs.
@@ -82,9 +84,8 @@ end
 -- @realm client
 function targetid.FindEntityAlongView(pos, dir, filter)
     local client = LocalPlayer()
-    local endpos = dir
 
-    endpos:Mul(MAX_TRACE_LENGTH)
+    local endpos = dir * MAX_TRACE_LENGTH
     endpos:Add(pos)
 
     if entspawnscript.IsEditing(client) then
@@ -108,15 +109,56 @@ function targetid.FindEntityAlongView(pos, dir, filter)
         return ent, pos:Distance(ent:GetPos())
     end
 
-    local trace = util.TraceLine({
+    local tracedata = {
         start = pos,
         endpos = endpos,
-        mask = MASK_ALL,
         filter = filter,
-    })
+    }
+
+    local trace = util.TraceLine(tracedata)
+
+    -- if nothing is hit, check again with a different mask
+    -- this will hit any solid buttons
+    if not IsValid(trace.Entity) then
+        tracedata.mask = bit.bor(MASK_SOLID, CONTENTS_DEBRIS, CONTENTS_PLAYERCLIP)
+
+        trace = util.TraceLine(tracedata)
+    end
 
     -- this is the entity the player is looking at right now
     local ent = trace.Entity
+    local distance = trace.StartPos:Distance(trace.HitPos)
+
+    -- if nothing is hit, try to look for non-solid buttons
+    if not IsValid(ent) then
+        --local buttons = ents.FindInCone(pos, dir, PLAYER_USE_RADIUS, 0.8)
+        local buttons = ents.FindByClass("class C_BaseEntity")
+
+        local rayDelta = dir * PLAYER_USE_RADIUS
+
+        for i = 1, #buttons do
+            local e = buttons[i]
+
+            if e:IsSolid() or not e:IsButton() then
+                continue
+            end
+
+            local _, _, frac = util.IntersectRayWithOBB(
+                pos, rayDelta, e:GetPos(), e:GetAngles(), e:GetCollisionBounds()
+            )
+
+            if not frac then
+                continue
+            end
+
+            local dist = frac * PLAYER_USE_RADIUS
+
+            if dist < distance then
+                distance = dist
+                ent = e
+            end
+        end
+    end
 
     -- if a vehicle, we identify the driver instead
     if IsValid(ent) and ent:IsVehicle() then
@@ -127,7 +169,7 @@ function targetid.FindEntityAlongView(pos, dir, filter)
         end
     end
 
-    return ent, trace.StartPos:Distance(trace.HitPos)
+    return ent, distance
 end
 
 ---
