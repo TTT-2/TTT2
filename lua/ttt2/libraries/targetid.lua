@@ -132,7 +132,7 @@ function targetid.FindEntityAlongView(pos, dir, filter)
     -- if nothing is hit, try to look for non-solid buttons
     if not IsValid(ent) then
         --local buttons = ents.FindInCone(pos, dir, PLAYER_USE_RADIUS, 0.8)
-        local buttons = ents.FindByClass("class C_BaseEntity")
+        local buttons = ents.FindInSphere(pos, PLAYER_USE_RADIUS)
 
         local rayDelta = dir * PLAYER_USE_RADIUS
 
