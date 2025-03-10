@@ -5,7 +5,6 @@
 
 local string = string
 local player = player
-local net = net
 local hook = hook
 local util = util
 local timer = timer
@@ -260,7 +259,7 @@ if CLIENT then
 
             door_list.doors = doors
         end
-        
+
         return door_list.doors
     end
 
