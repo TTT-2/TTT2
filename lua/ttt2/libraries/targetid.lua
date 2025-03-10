@@ -676,6 +676,7 @@ function targetid.HUDDrawTargetIDButtons(tData)
         return
     end
 
+    -- check if parent is button (for prop models parented to buttons and such)
     if not ent:IsButton() then
         ent = ent:GetMoveParent()
 
@@ -723,6 +724,7 @@ function targetid.HUDDrawTargetIDDoors(tData)
         return
     end
 
+    -- check if parent is door (for doors with breakable glass and such)
     if not ent:IsDoor() then
         ent = ent:GetMoveParent()
 
