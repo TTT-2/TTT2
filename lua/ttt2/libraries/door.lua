@@ -238,15 +238,19 @@ function door.IsValidSpecial(cls)
     return valid_doors.special[cls] or false
 end
 
----
--- Returns all valid door entities found on a map
--- @return table A table of door entities
--- @realm shared
-function door.GetAll()
-    return door_list.doors or {}
-end
-
-if CLIENT then
+if SERVER then
+    ---
+    -- Returns all valid door entities found on a map
+    -- @return table A table of door entities
+    -- @realm server
+    function door.GetAll()
+        return door_list.doors or {}
+    end
+else
+    ---
+    -- Returns all valid door entities found on a map
+    -- @return table A table of door entities
+    -- @realm client
     function door.GetAll()
         if not door_list.doors then
             local doors = {}
