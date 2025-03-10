@@ -14,8 +14,6 @@ local Angle = Angle
 
 if SERVER then
     AddCSLuaFile()
-
-    util.AddNetworkString("TTT2SyncDoorEntities")
 end
 
 ---
@@ -58,9 +56,7 @@ SF_FUNC_DOOR_SILENT_GENERAL = 4096
 
 door = door or {}
 
-local door_list = {
-    doors = {},
-}
+local door_list = {}
 
 local valid_doors = {
     special = {
@@ -214,35 +210,7 @@ if SERVER then
         ---
         -- @realm server
         hook.Run("TTT2PostDoorSetup", doors)
-
-        local amountDoors = #doors
-
-        net.Start("TTT2SyncDoorEntities")
-        net.WriteUInt(amountDoors, 16)
-
-        -- sync door list with clients
-        for i = 1, amountDoors do
-            net.WriteEntity(doors[i])
-        end
-
-        net.Broadcast()
     end
-else -- CLIENT
-    net.Receive("TTT2SyncDoorEntities", function()
-        local amount = net.ReadUInt(16)
-
-        local doors = {}
-
-        for i = 1, amount do
-            doors[i] = net.ReadEntity()
-        end
-
-        door_list.doors = doors
-
-        ---
-        -- @realm client
-        hook.Run("TTT2PostDoorSetup", doors)
-    end)
 end
 
 ---
@@ -276,7 +244,34 @@ end
 -- @return table A table of door entities
 -- @realm shared
 function door.GetAll()
-    return door_list.doors
+    return door_list.doors or {}
+end
+
+if CLIENT then
+    function door.GetAll()
+        if not door_list.doors then
+            local doors = {}
+
+            for _, ent in ents.Iterator() do
+                if IsValid(ent) and ent:IsDoor() then
+                    doors[#doors + 1] = ent
+                end
+            end
+
+            door_list.doors = doors
+        end
+        
+        return door_list.doors
+    end
+
+    local function InvalidateDoorCache(ent)
+        if ent.IsDoor and ent:IsDoor() then
+            door_list.doors = nil
+        end
+    end
+
+    hook.Add("OnEntityCreated", "TTT2InvalidateDoorCache", InvalidateDoorCache)
+    hook.Add("EntityRemoved", "TTT2InvalidateDoorCache", InvalidateDoorCache)
 end
 
 if SERVER then
