@@ -37,13 +37,10 @@ local materialDestructible = Material("vgui/ttt/tid/tid_destructible")
 local materialDNATargetID = Material("vgui/ttt/dnascanner/dna_hud")
 local materialFire = Material("vgui/ttt/tid/tid_onfire")
 
-local cv_ttt_identify_body_woconfirm
+local cv_ttt_identify_body_woconfirm = CORPSE and CORPSE.cv.identify_body_woconfirm
 
 hook.Add("Initialize", "TTT2TargetID", function()
-    -- Change check if your terrortown folder is named something different
-    if engine.ActiveGamemode():lower() == "terrortown" and TTT2 and istable(CORPSE) then
-        cv_ttt_identify_body_woconfirm = CORPSE.cv.identify_body_woconfirm
-    end
+    cv_ttt_identify_body_woconfirm = CORPSE.cv.identify_body_woconfirm
 end)
 
 ---

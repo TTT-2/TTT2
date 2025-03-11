@@ -162,21 +162,13 @@ local tEntitiesToCheck = {
     "prop_ragdoll",
 }
 
-local bTTT
-local tIdentifyEntities
-local corpseConfig
+local tIdentifyEntities = {
+    prop_ragdoll = true,
+}
+local corpseConfig = CORPSE and CORPSE.cv
 
 hook.Add("Initialize", "TTT2GSCrazyPhysics", function()
-    -- Change check if your terrortown folder is named something different
-    bTTT = engine.ActiveGamemode():lower() == "terrortown" and TTT2 and istable(CORPSE)
-    if bTTT then
-        -- Add entity classes you want identified
-        tIdentifyEntities = {
-            prop_ragdoll = true,
-        }
-
-        corpseConfig = CORPSE.cv
-    end
+    corpseConfig = CORPSE.cv
 end)
 
 util.AddNetworkString("GS_CrazyPhysics_Defuse")
@@ -407,7 +399,7 @@ hook.Add("Think", "GS_CrazyPhysics", function()
 
                 pEntity:Remove()
 
-                if bTTT and tIdentifyEntities[sClass] then
+                if tIdentifyEntities[sClass] then
                     IdentifyCorpse(pEntity)
                 end
 
