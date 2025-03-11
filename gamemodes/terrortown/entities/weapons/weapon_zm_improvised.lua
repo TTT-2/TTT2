@@ -108,7 +108,7 @@ function SWEP:OpenEnt(hitEnt)
                 hitEnt:Fire("Unlock", nil, 0)
             end
 
-            if unlock or hitEnt:HasSpawnFlags(256) then
+            if unlock or hitEnt:HasSpawnFlags(256) then -- SF_DOOR_PUSE
                 if openable == OPEN_ROT then
                     hitEnt:Fire("OpenAwayFrom", self:GetOwner(), 0)
                 end
