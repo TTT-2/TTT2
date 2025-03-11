@@ -29,6 +29,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Fixed brush doors on certain maps not being usable
   - Fixed certain doors on certain maps being forcibly usable when they shouldn't be
   - Fixed func_rotating being forcibly usable
+  - Fixed vehicles not being usable
   - Removed forced button solidity
   - Improved targetID trace detection for doors and buttons
   - Allow brush doors to be detected as destructible for targetID
