@@ -362,7 +362,7 @@ if SERVER then
 
         -- build list of people this player killed, but only if convar is enabled
         sceneData.killEntityIDList = {}
-        if CORPSE.cv.confirm_killlist:GetBool() then
+        if cv_ttt2_confirm_killlist:GetBool() then
             local ragKills = rag.kills or {}
 
             for i = 1, #ragKills do
