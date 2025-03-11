@@ -577,7 +577,7 @@ local function EntityContinuousUse(ent, ply)
         end
 
         -- make sure the entity is still in a good position
-        local distance = ply:GetShootPos():Distance(ent:GetPos())
+        local distance = ply:GetShootPos():Distance(ent:WorldSpaceCenter())
 
         if distance > 100 + ent:BoundingRadius() then
             return
@@ -612,7 +612,7 @@ net.Receive("TTT2PlayerUseEntity", function(len, ply)
 
     -- Check if the use interaction is possible
     -- Add the bounding radius to compensate for center position
-    local distance = ply:GetShootPos():Distance(ent:GetPos())
+    local distance = ply:GetShootPos():Distance(ent:WorldSpaceCenter())
     if distance > 100 + ent:BoundingRadius() then
         return
     end
