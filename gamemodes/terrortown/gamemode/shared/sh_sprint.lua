@@ -59,8 +59,7 @@ function SPRINT:PlayerWantsToSprint(ply)
     local inMovement
 
     if self.convars.forwards_only:GetBool() then
-        inMovement = ply:KeyDown(IN_FORWARD)
-            and not ply:KeyDown(IN_BACK)
+        inMovement = ply:KeyDown(IN_FORWARD) and not ply:KeyDown(IN_BACK)
     else
         inMovement = ply:KeyDown(IN_FORWARD)
             or ply:KeyDown(IN_BACK)
