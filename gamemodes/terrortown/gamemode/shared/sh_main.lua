@@ -548,13 +548,6 @@ function GM:InitFallbackShops() end
 -- @realm shared
 function GM:LoadedFallbackShops() end
 
----
--- Called right after all doors are initialized on the map.
--- @param table doorsTable A table with the newly registered door entities
--- @hook
--- @realm shared
-function GM:TTT2PostDoorSetup(doorsTable) end
-
 -- Called after all roles were loaded, @{ROLE:Preinitialize} and @{ROLE:Initialize} were called
 -- and their convars were set up.
 -- @hook
