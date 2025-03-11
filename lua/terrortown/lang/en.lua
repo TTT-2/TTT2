@@ -1609,7 +1609,7 @@ Haste mode balances the game by increasing the round time with every dead player
 If haste mode is enabled, the fixed round time is ignored.]]
 L.help_round_limit = "After one of the set limit conditions is met, a map change is triggered."
 L.help_armor_balancing = "The following values can be used to balance the armor."
-L.help_item_armor_classic = "If classic armor mode is enabled, only the previous settings matter. Classic armor mode means that a player can only buy armor once in a round, and that this armor blocks 30% of the incoming bullet and crowbar damage until they die."
+L.help_item_armor_classic = "If classic armor mode is enabled, only the previous settings matter. Classic armor mode means that a player can only buy armor once in a round, and that this armor blocks 30% of the incoming bullet damage until they die."
 L.help_item_armor_dynamic = [[
 Dynamic armor is the TTT2 approach to make armor more interesting. The amount of armor that can be bought is now unlimited, and the armor value stacks. Getting damaged decreases the armor value. The armor value per bought armor item is set in the 'Equipment Settings' of said item.
 
@@ -2833,3 +2833,6 @@ L.choice_distance_unit_0 = "Inches"
 L.choice_distance_unit_1 = "Meters"
 L.choice_distance_unit_2 = "Yards"
 L.choice_distance_unit_3 = "Feet"
+
+-- 2025-03-06
+L.label_armor_block_clubdmg = "Enable armor blocking crowbar damage"

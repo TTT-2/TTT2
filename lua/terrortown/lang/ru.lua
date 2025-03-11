@@ -2810,6 +2810,17 @@ L.radio_desc = [[
 
 Поместите его где-нибудь, а затем используйте удалённо, выбирая звуки для воспроизведения.]]
 
+-- 2025-02-13
+--L.help_c4_radius = [[
+--C4 uses two different zones to calculate the damage of its explosion:
+--
+--Players within the "kill zone" will receive the full damage of the devastating explosion.
+--
+--Players within the "damage zone" (and outside the "kill zone") will receive a percentage of the damage based on their position between the borders of both zones.]]
+
+--L.label_c4_radius_inner = "C4 Kill Zone radius"
+--L.label_c4_radius = "C4 Damage Zone radius"
+
 -- 2025-02-21
 L.length_in_meters = "{length} м"
 --L.length_in_yards = "{length}yd"
@@ -2820,3 +2831,6 @@ L.length_in_meters = "{length} м"
 --L.choice_distance_unit_1 = "Meters"
 --L.choice_distance_unit_2 = "Yards"
 --L.choice_distance_unit_3 = "Feet"
+
+-- 2025-03-06
+--L.label_armor_block_clubdmg = "Enable armor blocking crowbar damage"
