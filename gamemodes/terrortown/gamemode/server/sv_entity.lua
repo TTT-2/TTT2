@@ -111,13 +111,6 @@ function entmeta:IsUsableEntity(requiredCaps)
 end
 
 ---
--- @return boolean
--- @realm server
-function entmeta:IsSpecialUsableEntity()
-    return self:IsWeapon() or self.player_ragdoll or self.CanUseKey
-end
-
----
 -- Some sounds are important enough that they shouldn't be affected by CPASAttenuationFilter
 -- @param string snd The name of the sound to be played
 -- @param[default=75] number lvl A modifier for the distance this sound will reach, see SNDLVL enum
