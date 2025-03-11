@@ -343,18 +343,30 @@ end
 -- Triggered when the @{Player} presses use on an object.
 -- Continuously runs until USE is released but will not activate other Entities
 -- until the USE key is released; dependent on activation type of the @{Entity}.
--- @note TTT2 blocks all gmod internal use and only checks this for addons
 -- @param Player ply The @{Player} pressing the "use" key.
 -- @param Entity ent The entity which the @{Player} is looking at / activating USE on.
--- @param bool overrideDoPlayerUse This is used to override the default outcome of the check
 -- @return boolean Return false if the @{Player} is not allowed to USE the entity.
 -- Do not return true if using a hook, otherwise other mods may not get a chance to block a @{Player}'s use.
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerUse
 -- @local
-function GM:PlayerUse(ply, ent, overrideDoPlayerUse)
-    return overrideDoPlayerUse or false
+function GM:PlayerUse(ply, ent)
+    if not ply:IsTerror() then
+        return false
+    end
+
+    if
+        ent:IsButton()
+        ---
+        -- @realm server
+        and hook.Run("TTT2OnButtonUse", ply, ent, ent:GetInternalVariable("m_toggle_state"))
+            == false
+    then
+        return false
+    end
+
+    return true
 end
 
 ---
@@ -514,11 +526,8 @@ end
 
 local function EntityContinuousUse(ent, ply)
     ---
-    -- Enable addons to allow handling PlayerUse
-    -- Otherwise default to old IsTerror Check
     -- @realm server
-    -- stylua: ignore
-    if hook.Run("PlayerUse", ply, ent, ply:IsTerror()) then
+    if hook.Run("PlayerUse", ply, ent) then
         ent:Use(ply, ply)
     end
 
@@ -568,7 +577,7 @@ local function EntityContinuousUse(ent, ply)
         end
 
         -- make sure the entity is still in a good position
-        local distance = ply:GetShootPos():Distance(ent:GetPos())
+        local distance = ply:GetShootPos():Distance(ent:WorldSpaceCenter())
 
         if distance > 100 + ent:BoundingRadius() then
             return
@@ -586,15 +595,10 @@ end
 -- @realm server
 -- @internal
 net.Receive("TTT2PlayerUseEntity", function(len, ply)
-    local hasEnt = net.ReadBool()
     local ent = net.ReadEntity()
     local isRemote = net.ReadBool()
 
-    if not hasEnt or not ent:IsUsableEntity() then
-        ent = ply:GetUseEntity()
-    end
-
-    if not IsValid(ent) then
+    if not (IsValid(ent) and ent:IsSpecialUsableEntity()) then
         return
     end
 
@@ -608,18 +612,8 @@ net.Receive("TTT2PlayerUseEntity", function(len, ply)
 
     -- Check if the use interaction is possible
     -- Add the bounding radius to compensate for center position
-    local distance = ply:GetShootPos():Distance(ent:GetPos())
+    local distance = ply:GetShootPos():Distance(ent:WorldSpaceCenter())
     if distance > 100 + ent:BoundingRadius() then
-        return
-    end
-
-    if
-        ent:IsButton()
-        ---
-        -- @realm server
-        and hook.Run("TTT2OnButtonUse", ply, ent, ent:GetInternalVariable("m_toggle_state"))
-            == false
-    then
         return
     end
 
@@ -1322,6 +1316,18 @@ function GM:EntityTakeDamage(ent, dmginfo)
 
         dmginfo:SetDamage(0)
     end
+end
+
+---
+-- Called after an entity receives a damage event, after passing damage filters, etc.
+-- @param Entity ent The @{Entity} taking damage
+-- @param CTakeDamageInfo dmginfo Damage info
+-- @param boolean wasDamageTaken Whether the entity actually took the damage
+-- @hook
+-- @realm server
+-- @ref https://wiki.facepunch.com/gmod/GM:PostEntityTakeDamage
+function GM:PostEntityTakeDamage(ent, dmginfo, wasDamageTaken)
+    door.PostHandleDamage(ent, dmginfo, wasDamageTaken)
 end
 
 ---

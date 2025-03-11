@@ -40,3 +40,15 @@ end
 function entmeta:IsButton()
     return self:IsDefaultButton() or self:IsRotatingButton()
 end
+
+---
+-- @return boolean
+-- @realm server
+function entmeta:IsSpecialUsableEntity()
+    return self:IsWeapon()
+        or self.player_ragdoll
+        or self:IsPlayerRagdoll()
+        or self.CanUseKey
+        or self.ClientUse
+        or self.RemoteUse
+end

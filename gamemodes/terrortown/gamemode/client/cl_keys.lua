@@ -75,7 +75,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
             return TBHUD:UseFocused()
         end
 
-        -- Find out if a marker is focussed otherwise check normal use
+        -- Find out if a marker is focused otherwise check normal use
         local isClientOnly = false
         local useEnt = markerVision.GetFocusedEntity()
         local isRemote = IsValid(useEnt)
@@ -104,14 +104,17 @@ function GM:PlayerBindPress(ply, bindName, pressed)
 
         -- If returned true by ClientUse or RemoteUse, then dont call Use and UseOverride or RemoteUse serverside
         if isClientOnly then
-            return
+            return true
         end
 
-        net.Start("TTT2PlayerUseEntity")
-        net.WriteBool(useEnt ~= nil)
-        net.WriteEntity(useEnt)
-        net.WriteBool(isRemote)
-        net.SendToServer()
+        if IsValid(useEnt) and useEnt:IsSpecialUsableEntity() then
+            net.Start("TTT2PlayerUseEntity")
+            net.WriteEntity(useEnt)
+            net.WriteBool(isRemote)
+            net.SendToServer()
+
+            return true
+        end
     elseif string.sub(bindName, 1, 4) == "slot" and pressed then
         local idx = tonumber(string.sub(bindName, 5, -1)) or 1
 
