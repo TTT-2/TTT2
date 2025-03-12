@@ -5,7 +5,6 @@
 
 local string = string
 local player = player
-local net = net
 local hook = hook
 local util = util
 local timer = timer
@@ -14,8 +13,6 @@ local Angle = Angle
 
 if SERVER then
     AddCSLuaFile()
-
-    util.AddNetworkString("TTT2SyncDoorEntities")
 end
 
 ---
@@ -58,9 +55,7 @@ SF_FUNC_DOOR_SILENT_GENERAL = 4096
 
 door = door or {}
 
-local door_list = {
-    doors = {},
-}
+local door_list = {}
 
 local valid_doors = {
     special = {
@@ -182,14 +177,14 @@ if SERVER then
 
             doors[#doors + 1] = ent
 
-            ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
-            ent:SetNWBool("ttt2_door_forceclosed", ent:GetInternalVariable("forceclosed") or false)
-            ent:SetNWBool("ttt2_door_open", door.IsOpen(ent) or false)
+            ent:SetNW2Bool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
+            ent:SetNW2Bool("ttt2_door_forceclosed", ent:GetInternalVariable("forceclosed") or false)
+            ent:SetNW2Bool("ttt2_door_open", door.IsOpen(ent) or false)
 
-            ent:SetNWBool("ttt2_door_player_use", door.PlayerCanUse(ent))
-            ent:SetNWBool("ttt2_door_player_touch", door.PlayerCanTouch(ent))
-            ent:SetNWBool("ttt2_door_auto_close", door.AutoCloses(ent))
-            ent:SetNWBool("ttt2_door_is_destructable", door.IsDestructible(ent))
+            ent:SetNW2Bool("ttt2_door_player_use", door.PlayerCanUse(ent))
+            ent:SetNW2Bool("ttt2_door_player_touch", door.PlayerCanTouch(ent))
+            ent:SetNW2Bool("ttt2_door_auto_close", door.AutoCloses(ent))
+            ent:SetNW2Bool("ttt2_door_is_destructable", door.IsDestructible(ent))
 
             entityOutputs.RegisterMapEntityOutput(ent, "OnOpen", "TTT2DoorOpens")
             entityOutputs.RegisterMapEntityOutput(ent, "OnClose", "TTT2DoorCloses")
@@ -214,35 +209,7 @@ if SERVER then
         ---
         -- @realm server
         hook.Run("TTT2PostDoorSetup", doors)
-
-        local amountDoors = #doors
-
-        net.Start("TTT2SyncDoorEntities")
-        net.WriteUInt(amountDoors, 16)
-
-        -- sync door list with clients
-        for i = 1, amountDoors do
-            net.WriteEntity(doors[i])
-        end
-
-        net.Broadcast()
     end
-else -- CLIENT
-    net.Receive("TTT2SyncDoorEntities", function()
-        local amount = net.ReadUInt(16)
-
-        local doors = {}
-
-        for i = 1, amount do
-            doors[i] = net.ReadEntity()
-        end
-
-        door_list.doors = doors
-
-        ---
-        -- @realm client
-        hook.Run("TTT2PostDoorSetup", doors)
-    end)
 end
 
 ---
@@ -271,12 +238,43 @@ function door.IsValidSpecial(cls)
     return valid_doors.special[cls] or false
 end
 
----
--- Returns all valid door entities found on a map
--- @return table A table of door entities
--- @realm shared
-function door.GetAll()
-    return door_list.doors
+if SERVER then
+    ---
+    -- Returns all valid door entities found on a map
+    -- @return table A table of door entities
+    -- @realm server
+    function door.GetAll()
+        return door_list.doors or {}
+    end
+else
+    ---
+    -- Returns all valid door entities found on a map
+    -- @return table A table of door entities
+    -- @realm client
+    function door.GetAll()
+        if not door_list.doors then
+            local doors = {}
+
+            for _, ent in ents.Iterator() do
+                if IsValid(ent) and ent:IsDoor() then
+                    doors[#doors + 1] = ent
+                end
+            end
+
+            door_list.doors = doors
+        end
+
+        return door_list.doors
+    end
+
+    local function InvalidateDoorCache(ent)
+        if ent.IsDoor and ent:IsDoor() then
+            door_list.doors = nil
+        end
+    end
+
+    hook.Add("OnEntityCreated", "TTT2InvalidateDoorCache", InvalidateDoorCache)
+    hook.Add("EntityRemoved", "TTT2InvalidateDoorCache", InvalidateDoorCache)
 end
 
 if SERVER then
@@ -365,7 +363,7 @@ if SERVER then
         if door.IsValidNormal(cls) then
             return ent:HasSpawnFlags(SF_PROP_DOOR_START_BREAKABLE)
         elseif door.IsValidSpecial(cls) then
-            return false
+            return (ent:GetInternalVariable("m_takedamage") or 0) > 1
         end
 
         return false
@@ -454,6 +452,11 @@ if SERVER then
             return
         end
 
+        -- skip if engine already handles damage
+        if (ent:GetInternalVariable("m_takedamage") or 0) > 1 then
+            return
+        end
+
         local damage = math.max(0, dmginfo:GetDamage())
         local health = ent:Health() - damage
 
@@ -473,7 +476,21 @@ if SERVER then
         end
 
         ent:SetHealth(health)
-        ent:SetNWInt("fast_sync_health", health)
+    end
+
+    ---
+    -- Called in @{GM:PostEntityTakeDamage}.
+    -- @param Entity ent The entity that is damaged
+    -- @param CTakeDamageInfo dmginfo The damage info object
+    -- @param boolean wasDamageTaken Whether the entity actually took the damage
+    -- @internal
+    -- @realm server
+    function door.PostHandleDamage(ent, dmginfo, wasDamageTaken)
+        if not ent:DoorIsDestructible() then
+            return
+        end
+
+        ent:SetNW2Int("fast_sync_health", ent:Health())
     end
 
     ---
@@ -577,7 +594,7 @@ if SERVER then
 
             -- we expect the door to be locked now, but we check the real state after a short
             -- amount of time to be sure
-            ent:SetNWBool("ttt2_door_locked", true)
+            ent:SetNW2Bool("ttt2_door_locked", true)
 
             -- check if the assumed state was correct
             timer.Create("ttt2_recheck_door_lock_" .. ent:EntIndex(), 1, 1, function()
@@ -585,7 +602,7 @@ if SERVER then
                     return
                 end
 
-                ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
+                ent:SetNW2Bool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
             end)
         elseif name == "unlock" then
             ---
@@ -598,7 +615,7 @@ if SERVER then
 
             -- we expect the door to be unlocked now, but we check the real state after a short
             -- amount of time to be sure
-            ent:SetNWBool("ttt2_door_locked", false)
+            ent:SetNW2Bool("ttt2_door_locked", false)
 
             -- check if the assumed state was correct
             timer.Create("ttt2_recheck_door_unlock_" .. ent:EntIndex(), 1, 1, function()
@@ -606,7 +623,7 @@ if SERVER then
                     return
                 end
 
-                ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
+                ent:SetNW2Bool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
             end)
         elseif name == "use" and ent:IsDoorOpen() then
             -- do not stack closing time if door closes automatically
@@ -657,7 +674,7 @@ if SERVER then
             return
         end
 
-        doorEntity:SetNWBool("ttt2_door_open", true)
+        doorEntity:SetNW2Bool("ttt2_door_open", true)
     end
 
     ---
@@ -671,7 +688,7 @@ if SERVER then
             return
         end
 
-        doorEntity:SetNWBool("ttt2_door_open", true)
+        doorEntity:SetNW2Bool("ttt2_door_open", true)
     end
 
     ---
@@ -685,7 +702,7 @@ if SERVER then
             return
         end
 
-        doorEntity:SetNWBool("ttt2_door_open", false)
+        doorEntity:SetNW2Bool("ttt2_door_open", false)
     end
 
     ---
@@ -699,7 +716,7 @@ if SERVER then
             return
         end
 
-        doorEntity:SetNWBool("ttt2_door_open", false)
+        doorEntity:SetNW2Bool("ttt2_door_open", false)
     end
 
     ---

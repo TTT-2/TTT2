@@ -85,7 +85,7 @@ local pmnc_tbl = {
 }
 
 local function OpenableEnt(ent)
-    return pmnc_tbl[ent:GetClass()] or OPEN_NO
+    return ent:GetName() ~= "" and pmnc_tbl[ent:GetClass()] or OPEN_NO
 end
 
 local function CrowbarCanUnlock(t)
@@ -108,7 +108,7 @@ function SWEP:OpenEnt(hitEnt)
                 hitEnt:Fire("Unlock", nil, 0)
             end
 
-            if unlock or hitEnt:HasSpawnFlags(SF_NPC_LONG_RANGE) then -- Long Visibility/Shoot
+            if unlock or hitEnt:HasSpawnFlags(256) then -- SF_DOOR_PUSE
                 if openable == OPEN_ROT then
                     hitEnt:Fire("OpenAwayFrom", self:GetOwner(), 0)
                 end

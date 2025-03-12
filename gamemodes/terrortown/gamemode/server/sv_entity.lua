@@ -90,7 +90,7 @@ function entmeta:IsUsableEntity(requiredCaps)
 
     -- special case: TTT specific lua based use interactions
     -- when we're looking for specifically the lua use
-    if self:IsWeapon() or self.player_ragdoll or (self:IsScripted() and self.CanUseKey) then
+    if self:IsSpecialUsableEntity() then
         return true
     end
 
