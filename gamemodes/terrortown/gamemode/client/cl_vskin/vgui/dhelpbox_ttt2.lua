@@ -11,7 +11,7 @@ function PANEL:Init()
 
     self:SetTextAlign(TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
     self:SetPadding(10, 5)
-    self:SetBorder(4, 0, 0, 0)
+    self:SetOutline(4, 0, 0, 0)
     self:FitToContentY(true)
 end
 

@@ -15,11 +15,6 @@ AccessorFunc(METAPANEL, "m_bIsToggle", "IsToggle", FORCE_BOOL, true)
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(METAPANEL, "m_bToggle", "Toggle", FORCE_BOOL)
-
----
--- @accessor boolean
--- @realm client
 AccessorFunc(METAPANEL, "m_bDepressed", "Depressed", FORCE_BOOL_IS)
 
 ---
@@ -726,6 +721,24 @@ function METAPANEL:OnDoubleClick() end
 -- @hook
 -- @realm client
 function METAPANEL:OnDoubleClickInternal() end
+
+---
+-- Sets the toggle state of the panel.
+-- @param boolean state The new toggle state
+-- @realm client
+function METAPANEL:SetToggle(state)
+    self.m_bToggle = state
+
+    self:InvalidateLayout()
+end
+
+---
+-- Returns the current toggle state of the panel.
+-- @return boolean The toggle state
+-- @realm client
+function METAPANEL:GetToggle()
+    return self.m_bToggle or false
+end
 
 ---
 -- Toggles the state of the panel.

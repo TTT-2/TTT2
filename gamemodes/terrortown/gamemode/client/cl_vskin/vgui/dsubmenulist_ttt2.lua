@@ -130,18 +130,19 @@ function PANEL:AddSubmenuButton(submenuClass)
         :SetIconBadge(submenuClass.iconBadge)
         :SetIconBadgeSize(submenuClass.iconBadgeSize)
         :SetTooltip(submenuClass.tooltip)
-        :On("LeftClick", function(slf)
+        :On("LeftClick", function()
             HELPSCRN:SetupContentArea(self.contentArea, submenuClass)
             HELPSCRN:BuildContentArea()
 
             -- handle the set/unset of active buttons for the draw process
-            if self.lastActive and isfunction(self.lastActive.SetActive) then
+            if self.lastActive and isfunction(self.lastActive.SetToggle) then
                 self.lastActive:SetToggle(false)
             end
 
-            slf:SetToggle(true)
+            -- force set to true, so users are unable to disable a selected button
+            settingsButton:SetToggle(true)
 
-            self.lastActive = slf
+            self.lastActive = settingsButton
         end)
 
     return settingsButton
@@ -202,8 +203,8 @@ function PANEL:SelectFirst(index)
     for i = index, self.navAreaScrollGrid:ChildCount() do
         local child = self.navAreaScrollGrid:GetChild(i)
 
-        if child and isfunction(child.DoClick) then
-            child:DoClick()
+        if child then
+            child:TriggerOnWithBase("LeftClick")
 
             return self
         end
@@ -224,8 +225,8 @@ function PANEL:SelectFirst(index)
     end
 
     -- make sure the last active gets cleared in this case
-    if self.lastActive and isfunction(self.lastActive.SetActive) then
-        self.lastActive:SetActive(false)
+    if self.lastActive and isfunction(self.lastActive.SetToggle) then
+        self.lastActive:SetToggle(false)
     end
 
     -- no content, fill the content area appropriately

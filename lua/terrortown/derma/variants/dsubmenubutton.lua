@@ -13,8 +13,8 @@ local heightNavButton = 50
 ---
 -- @ignore
 function DPANEL:Init()
-    -- enable toggling when selecting
-    self:SetIsToggle(true)
+    -- toggle is disabled and set manually on click
+    self:SetIsToggle(false)
     self:SetToggle(false)
 
     -- set visual defaults

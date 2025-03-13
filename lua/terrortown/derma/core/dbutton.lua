@@ -81,7 +81,7 @@ function DPANEL:OnRebuildLayout(w, h)
     DBase("TTT2:DPanel").OnRebuildLayout(self, w, h)
 
     -- if the panel is depressed, the text and icon should be shifted by one pixel
-    if self:IsDepressed() or self:IsSelected() or self:GetToggle() then
+    if self:IsDepressed() then
         if self:HasIcon() then
             self:ApplyVSkinDimension("posIconY", self:GetVSkinDimension("posIconY") + 1)
         end
