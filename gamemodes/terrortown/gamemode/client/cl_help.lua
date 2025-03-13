@@ -359,8 +359,8 @@ function HELPSCRN:ShowSubmenu(menuClass)
     self.currentMenuId = menuClass.type
 
     -- BUILD GENERAL BOX STRUCTURE
-    local navArea = vgui
-        .Create("TTT2:DPanel", frame)
+    local navArea = vgui.Create("TTT2:DPanel", frame)
+    navArea
         :SetWide(widthNav)
         :SetPos(0, 0)
         :DockPadding(0, 0, 1, 0) -- todo still needed with new outline?

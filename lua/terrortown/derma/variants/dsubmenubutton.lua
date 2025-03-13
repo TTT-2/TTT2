@@ -1,34 +1,42 @@
 ---
 -- @class PANEL
--- @section DSubmenuButtonTTT2
+-- @section TTT2:DSubmenuButton
 
-local PANEL = {}
+DPANEL.derma = {
+    className = "TTT2:DSubmenuButton",
+    description = "A spin on TTT2's button that has some extra features for the submenu list",
+    baseClassName = "TTT2:DButton",
+}
+
+local heightNavButton = 50
 
 ---
 -- @ignore
-function PANEL:Init()
-    DBase("TTT2:DButton").Init(self)
-
+function DPANEL:Init()
     -- enable toggling when selecting
     self:SetIsToggle(true)
     self:SetToggle(false)
 
     -- set visual defaults
     self:SetTextAlign(TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-
-    -- paint hook name is set so that the post hook can be
-    -- used to render badge
-    self:SetPaintHookName("SubmenuButton")
-
-    -- TODO maybe somthing for perform layout:
-    --settingsButton.PerformLayout = function(panel)
-    --    panel:SetSize(panel:GetParent():GetWide(), heightNavButton)
-    --end
+    self:SetFont("DermaTTT2SubMenuButtonTitle")
+    self:SetOutline(vskin.GetBorderSize(), 0, 0, 0)
+    self:SetPadding(18 + vskin.GetBorderSize(), 0)
 end
 
 ---
 -- @ignore
-function PANEL:OnVSkinUpdate()
+function DPANEL:OnRebuildLayout(w, h)
+    self:SetSize(self:GetParent():GetWide(), heightNavButton)
+
+    DBase("TTT2:DButton").OnRebuildLayout(self, w, h)
+end
+
+---
+-- @ignore
+function DPANEL:OnVSkinUpdate()
+    local parentColor = self:GetParentVSkinColor() or vskin.GetBackgroundColor()
+
     local colorBackground, colorText, colorIcon, colorOutline
 
     -- PANEL DISABLED
@@ -36,21 +44,34 @@ function PANEL:OnVSkinUpdate()
 
     -- PANEL IS PRESSED
     if self:IsDepressed() or self:IsSelected() or self:GetToggle() then
-        colorBackground =
-            util.GetAlphaColor(self:GetColor() or util.GetActiveColor(vskin.GetAccentColor()), 50)
+        colorBackground = util.GetMergedColor(
+            self:GetColor() or util.GetActiveColor(vskin.GetAccentColor()),
+            parentColor,
+            50
+        )
         colorText =
             util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(colorBackground), 25))
         colorIcon = util.GetActiveColor(util.GetChangedColor(COLOR_WHITE, 32))
         colorOutline = self:GetOutlineColor() or util.GetActiveColor(vskin.GetAccentColor())
 
-    -- PANEL IS HOVERED or NORMAL COLORS
-    else
-        colorBackground =
-            util.GetAlphaColor(self:GetColor() or util.GetHoverColor(vskin.GetAccentColor()), 50)
+    -- PANEL IS HOVERED
+    elseif self:IsHovered() then
+        colorBackground = util.GetMergedColor(
+            self:GetColor() or util.GetHoverColor(vskin.GetAccentColor()),
+            parentColor,
+            50
+        )
         colorText =
             util.GetHoverColor(util.GetChangedColor(util.GetDefaultColor(colorBackground), 75))
         colorIcon = util.GetHoverColor(util.GetChangedColor(COLOR_WHITE, 48))
         colorOutline = self:GetOutlineColor() or util.GetHoverColor(vskin.GetAccentColor())
+
+    -- NORMAL COLORS
+    else
+        colorBackground = self:GetColor() or self:GetParentColor() or vskin.GetBackgroundColor()
+        colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 75)
+        colorIcon = util.GetHoverColor(util.GetChangedColor(COLOR_WHITE, 32))
+        colorOutline = colorBackground
     end
 
     self:ApplyVSkinColor("background", colorBackground)
@@ -64,7 +85,7 @@ end
 ---
 -- @param Material badge
 -- @realm client
-function PANEL:SetIconBadge(badge)
+function DPANEL:SetIconBadge(badge)
     --self.contents.iconBadge = badge
 
     return self
@@ -73,14 +94,14 @@ end
 ---
 -- @return Material|nil
 -- @realm client
-function PANEL:GetIconBadge()
+function DPANEL:GetIconBadge()
     return self.contents.iconBadge
 end
 
 ---
 -- @param number size
 -- @realm client
-function PANEL:SetIconBadgeSize(size)
+function DPANEL:SetIconBadgeSize(size)
     --self.contents.iconBadgeSize = size
 
     return self
@@ -89,13 +110,6 @@ end
 ---
 -- @return number
 -- @realm client
-function PANEL:GetIconBadgeSize()
+function DPANEL:GetIconBadgeSize()
     return self.contents.iconBadgeSize
 end
-
-derma.DefineControl(
-    "TTT2:DSubmenuButton",
-    "A spin on TTT2's button that has some extra features for the submenu list",
-    PANEL,
-    "TTT2:DButton"
-)

@@ -48,6 +48,21 @@ function METAPANEL:GetParentColor()
 end
 
 ---
+-- Returns the vskin background color of the parent panel if the parent exists and
+-- has a vskin background color defined.
+-- @return Color|nil Returns the color or nil
+-- @realm client
+function METAPANEL:GetParentVSkinColor()
+    local parent = self:GetParent()
+
+    if not IsValid(parent) or not isfunction(parent.GetColor) then
+        return
+    end
+
+    return parent:GetVSkinColor("background")
+end
+
+---
 -- Called after a color is applied to the color cache. Can be used to modify these colors
 -- in a post processing step.
 -- @param string identifier The name of the color

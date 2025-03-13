@@ -94,8 +94,8 @@ function METAPANEL:Init()
     self:SetEnabled(true)
 
     -- disable keyboard and mouse input
-    self:SetMouseInputEnabled(false)
-    self:SetKeyboardInputEnabled(false)
+    --self:SetMouseInputEnabled(false)
+    -- self:SetKeyboardInputEnabled(false)
     self:SetDoubleClickingEnabled(false)
 
     -- turn off the engine drawing

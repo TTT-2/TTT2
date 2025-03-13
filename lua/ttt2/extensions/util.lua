@@ -316,18 +316,26 @@ function util.GetActiveColor(color)
 end
 
 ---
--- Sets the alpha value if it is not nil. Similar to @{ColorAlpha} but tolerates
--- alpha set to nil in which case it returns an unchanged color.
+-- Merges two colors to return a new solid color that consists out of these two.
 -- @param Color color The original color
--- @param[opt] number alpha The alpha value (0..255) of the new color
+-- @param Color color The background color
+-- @param number alpha The alpha value (0..255) of the new color
 -- @return Color The color based on the original color
 -- @realm shared
-function util.GetAlphaColor(color, alpha)
-    if not alpha then
+function util.GetMergedColor(color, colorBackground, alpha)
+    if not colorBackground then
         return color
     end
 
-    return ColorAlpha(color, alpha)
+    local mulColor = alpha / 255
+    local mulBgColor = (255 - alpha) / 255
+
+    return Color(
+        colorBackground.r * mulBgColor + color.r * mulColor,
+        colorBackground.g * mulBgColor + color.g * mulColor,
+        colorBackground.b * mulBgColor + color.b * mulColor,
+        255
+    )
 end
 
 local function DoBleed(ent)
