@@ -2834,3 +2834,7 @@ L.length_in_meters = "{length} м"
 
 -- 2025-03-06
 --L.label_armor_block_clubdmg = "Enable armor blocking crowbar damage"
+
+-- 2025-03-10
+--L.label_sprint_stamina_cooldown = "Stamina cooldown time"
+--L.label_sprint_stamina_forwards_only = "Disallow sprinting backwards or laterally"

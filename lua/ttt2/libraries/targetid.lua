@@ -37,13 +37,10 @@ local materialDestructible = Material("vgui/ttt/tid/tid_destructible")
 local materialDNATargetID = Material("vgui/ttt/dnascanner/dna_hud")
 local materialFire = Material("vgui/ttt/tid/tid_onfire")
 
-local cv_ttt_identify_body_woconfirm
+local cv_ttt_identify_body_woconfirm = CORPSE and CORPSE.cv.identify_body_woconfirm
 
 hook.Add("Initialize", "TTT2TargetID", function()
-    -- Change check if your terrortown folder is named something different
-    if engine.ActiveGamemode():lower() == "terrortown" and TTT2 and istable(CORPSE) then
-        cv_ttt_identify_body_woconfirm = CORPSE.cv.identify_body_woconfirm
-    end
+    cv_ttt_identify_body_woconfirm = CORPSE.cv.identify_body_woconfirm
 end)
 
 ---
@@ -69,6 +66,8 @@ function targetid.Initialize()
     }
 end
 
+local PLAYER_USE_RADIUS = 80
+
 ---
 -- This function handles finding Entities by casting a ray from a point in a direction, filtering out certain entities
 -- Use this in combination with the hook @GM:TTTModifyTargetedEntity to create your own Remote Camera with TargetIDs.
@@ -82,9 +81,8 @@ end
 -- @realm client
 function targetid.FindEntityAlongView(pos, dir, filter)
     local client = LocalPlayer()
-    local endpos = dir
 
-    endpos:Mul(MAX_TRACE_LENGTH)
+    local endpos = dir * MAX_TRACE_LENGTH
     endpos:Add(pos)
 
     if entspawnscript.IsEditing(client) then
@@ -108,15 +106,60 @@ function targetid.FindEntityAlongView(pos, dir, filter)
         return ent, pos:Distance(ent:GetPos())
     end
 
-    local trace = util.TraceLine({
+    local tracedata = {
         start = pos,
         endpos = endpos,
-        mask = MASK_ALL,
         filter = filter,
-    })
+    }
+
+    local trace = util.TraceLine(tracedata)
+
+    -- if nothing is hit, check again with a different mask
+    -- this will hit any solid buttons
+    if not IsValid(trace.Entity) then
+        tracedata.mask = bit.bor(MASK_SOLID, CONTENTS_DEBRIS, CONTENTS_PLAYERCLIP)
+
+        trace = util.TraceLine(tracedata)
+    end
 
     -- this is the entity the player is looking at right now
     local ent = trace.Entity
+    local distance = trace.StartPos:Distance(trace.HitPos)
+
+    -- if nothing is hit, try to look for non-solid buttons
+    if not IsValid(ent) then
+        --local buttons = ents.FindInCone(pos, dir, PLAYER_USE_RADIUS, 0.8)
+        local buttons = ents.FindInSphere(pos, PLAYER_USE_RADIUS)
+
+        local rayDelta = dir * PLAYER_USE_RADIUS
+
+        for i = 1, #buttons do
+            local e = buttons[i]
+
+            if e:IsSolid() or not e:IsButton() then
+                continue
+            end
+
+            local _, _, frac = util.IntersectRayWithOBB(
+                pos,
+                rayDelta,
+                e:GetPos(),
+                e:GetAngles(),
+                e:GetCollisionBounds()
+            )
+
+            if not frac then
+                continue
+            end
+
+            local dist = frac * PLAYER_USE_RADIUS
+
+            if dist < distance then
+                distance = dist
+                ent = e
+            end
+        end
+    end
 
     -- if a vehicle, we identify the driver instead
     if IsValid(ent) and ent:IsVehicle() then
@@ -127,7 +170,7 @@ function targetid.FindEntityAlongView(pos, dir, filter)
         end
     end
 
-    return ent, trace.StartPos:Distance(trace.HitPos)
+    return ent, distance
 end
 
 ---
@@ -621,13 +664,25 @@ function targetid.HUDDrawTargetIDButtons(tData)
     local client = LocalPlayer()
     local ent = tData:GetEntity()
 
-    if
-        not IsValid(client)
-        or not client:IsTerror()
-        or not IsValid(ent)
-        or not ent:IsButton()
-        or tData:GetEntityDistance() > 100
-    then
+    if not IsValid(client) or not client:IsTerror() or not IsValid(ent) then
+        return
+    end
+
+    -- button is supposed to be invisible
+    if ent:GetNoDraw() or ent:GetRenderMode() == RENDERMODE_NONE then
+        return
+    end
+
+    -- check if parent is button (for prop models parented to buttons and such)
+    if not ent:IsButton() then
+        ent = ent:GetMoveParent()
+
+        if not IsValid(ent) or not ent:IsButton() then
+            return
+        end
+    end
+
+    if tData:GetEntityDistance() > 100 then
         return
     end
 
@@ -657,14 +712,25 @@ function targetid.HUDDrawTargetIDDoors(tData)
     local client = LocalPlayer()
     local ent = tData:GetEntity()
 
-    if
-        not IsValid(client)
-        or not client:IsTerror()
-        or not IsValid(ent)
-        or not ent:IsDoor()
-        or not ent:PlayerCanOpenDoor()
-        or tData:GetEntityDistance() > 90
-    then
+    if not IsValid(client) or not client:IsTerror() or not IsValid(ent) then
+        return
+    end
+
+    -- door is supposed to be invisible
+    if ent:GetNoDraw() or ent:GetRenderMode() == RENDERMODE_NONE then
+        return
+    end
+
+    -- check if parent is door (for doors with breakable glass and such)
+    if not ent:IsDoor() then
+        ent = ent:GetMoveParent()
+
+        if not IsValid(ent) or not ent:IsDoor() then
+            return
+        end
+    end
+
+    if not ent:PlayerCanOpenDoor() or tData:GetEntityDistance() > 90 then
         return
     end
 

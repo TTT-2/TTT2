@@ -1007,3 +1007,10 @@ function GM:TTT2PreEndRound(result, duration)
     -- send the clients the round log, players will be shown the report
     events.StreamToClients()
 end
+
+---
+-- Called right after all doors are initialized on the map.
+-- @param table doorsTable A table with the newly registered door entities
+-- @hook
+-- @realm server
+function GM:TTT2PostDoorSetup(doorsTable) end

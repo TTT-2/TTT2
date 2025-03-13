@@ -13,6 +13,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added server option for body armor to protect against crowbar damage (by @wgetJane)
 - Added `GM:TTTLastWordsMsg` hook from base TTT (Facepunch/garrysmod/pull/2227, by @wgetJane)
 - Port new TTT entity ttt_filter_role to TTT2 (Facepunch/garrysmod/pull/2225 by @figardo, ported by @wgetJane)
+- Added 2 new sprint settings (by @wgetJane)
+  - Stamina cooldown time before stamina begins regenerating after sprinting, 0.8 seconds by default
+  - Option to require forward key to be held to sprint, enabled by default
 
 ### Changed
 
@@ -25,6 +28,19 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed classic armour protecting against crowbar damage (by @wgetJane)
 - Fixed C4/Radio sounds not playing outside of PAS (Facepunch/garrysmod/pull/2203, by @figardo)
 - Fixed players sometimes being revealed as dead when they chat/voicechat right as they die (Facepunch/garrysmod/pull/2229, by @wgetJane)
+- Fixed various bugs related to using doors and buttons, to match base TTT behavior (by @wgetJane)
+  - Fixed brush doors on certain maps not being usable
+  - Fixed certain doors on certain maps being forcibly usable when they shouldn't be
+  - Fixed func_rotating being forcibly usable
+  - Fixed vehicles not being usable
+  - Removed forced button solidity
+  - Improved targetID trace detection for doors and buttons
+  - Allow brush doors to be detected as destructible for targetID
+  - Use NW2Vars instead of NWVars for door variables for more efficient networking
+  - Fixed clientside door.GetAll() to return a more updated list of doors
+  - Removed clientside TTT2PostDoorSetup hook
+  - Changed crowbar unlocking behavior to match base TTT
+- Fixed lua errors after autorefresh (by @wgetJane)
 
 ## [v0.14.2b](https://github.com/TTT-2/TTT2/tree/v0.14.2b) (2025-02-02)
 
