@@ -20,6 +20,10 @@ function PANEL:Init()
     self.DropButton:SetMouseInputEnabled(false)
     self.DropButton.ComboBox = self
 
+    self.GetDisabled = function(slf) -- TODO: this is hacky to use builtin rendering function
+        return not slf:IsEnabled()
+    end
+
     self.DropButton.Paint = function(panel, w, h)
         derma.SkinHook("Paint", "ComboDownArrow", panel, w, h)
     end
