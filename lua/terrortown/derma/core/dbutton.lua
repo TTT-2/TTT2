@@ -2,25 +2,27 @@
 -- @class PANEL
 -- @section TTT2:DButton
 
-local PANEL = {}
+DPANEL.derma = {
+    className = "TTT2:DButton",
+    description = "The standard button used in TTT2 with convar and database support",
+    baseClassName = "TTT2:DPanel",
+}
 
 local soundClick = Sound("common/talk.wav")
 
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bIgnoreCallbackEnabledVar", "IgnoreCallbackEnabledVar", FORCE_BOOL)
+AccessorFunc(DPANEL, "m_bIgnoreCallbackEnabledVar", "IgnoreCallbackEnabledVar", FORCE_BOOL)
 
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bDisplayInverted", "Inverted", FORCE_BOOL_IS, true)
+AccessorFunc(DPANEL, "m_bDisplayInverted", "Inverted", FORCE_BOOL_IS, true)
 
 ---
 -- @ignore
-function PANEL:Init()
-    DBase("TTT2:DPanel").Init(self)
-
+function DPANEL:Init()
     -- enable mouse and keyboard input to interact with button
     self:SetMouseInputEnabled(true)
     self:SetKeyboardInputEnabled(true)
@@ -34,7 +36,7 @@ end
 
 ---
 -- @ignore
-function PANEL:OnVSkinUpdate()
+function DPANEL:OnVSkinUpdate()
     local colorBackground, colorText, colorOutline
 
     -- PANEL DISABLED
@@ -75,7 +77,7 @@ end
 
 ---
 -- @ignore
-function PANEL:OnRebuildLayout(w, h)
+function DPANEL:OnRebuildLayout(w, h)
     DBase("TTT2:DPanel").OnRebuildLayout(self, w, h)
 
     -- if the panel is depressed, the text and icon should be shifted by one pixel
@@ -106,7 +108,7 @@ end
 -- @param string cvar The convar name
 -- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:AttachConVar(cvar)
+function DPANEL:AttachConVar(cvar)
     if not ConVarExists(cvar or "") then
         return self
     end
@@ -127,7 +129,7 @@ local callbackEnabledVarTracker = 0
 -- @param string cvar The convar name
 -- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:AttachServerConVar(cvar)
+function DPANEL:AttachServerConVar(cvar)
     if not cvar or cvar == "" then
         return self
     end
@@ -174,7 +176,7 @@ end
 -- @param table databaseInfo DatabaseInfo object containing {name, itemName, key}
 -- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:AttachDatabase(databaseInfo)
+function DPANEL:AttachDatabase(databaseInfo)
     if not istable(databaseInfo) then
         return self
     end
@@ -223,7 +225,7 @@ end
 -- convars and UI values
 -- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetValue(val, ignoreCallbackEnabledVar)
+function DPANEL:SetValue(val, ignoreCallbackEnabledVar)
     self:SetIgnoreCallbackEnabledVar(ignoreCallbackEnabledVar)
 
     if self:GetInverted() then
@@ -242,7 +244,7 @@ end
 -- @return boolean Returns the value of the button if there is one
 -- assigned. It can be assigned by attaching convars or database values.
 -- @realm client
-function PANEL:GetValue()
+function DPANEL:GetValue()
     return self.value or false
 end
 
@@ -252,7 +254,7 @@ end
 -- @param boolean value The default value
 -- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:SetDefaultValue(value)
+function DPANEL:SetDefaultValue(value)
     if isbool(value) then
         -- note: even when it is inverted, the default is not inverted here
         -- as it is inverted when the default button is pressed
@@ -271,7 +273,7 @@ end
 -- Returns true if this panel has a default value assigned.
 -- @return boolean True if a default value is assigned
 -- @realm client
-function PANEL:HasDefaultValue()
+function DPANEL:HasDefaultValue()
     return self.default ~= nil
 end
 
@@ -279,7 +281,7 @@ end
 -- Returns the default value assigned to the panel.
 -- @return boolean defaultValue, if unset returns false
 -- @realm client
-function PANEL:GetDefaultValue()
+function DPANEL:GetDefaultValue()
     return self.default or false
 end
 
@@ -287,7 +289,7 @@ end
 -- TODO this has to be refactored - this shouldn't be split into two functions
 -- @param any val
 -- @realm client
-function PANEL:ValueChanged(val)
+function DPANEL:ValueChanged(val)
     if self:IsInverted() then
         val = not val
     end
@@ -314,17 +316,17 @@ end
 -- overwrites the base function with an empty function
 -- @param any val
 -- @realm client
-function PANEL:OnValueChanged(val) end
+function DPANEL:OnValueChanged(val) end
 
 ---
 -- @param any val
 -- @realm client
-function PANEL:OnChange(val) end
+function DPANEL:OnChange(val) end
 
 ---
 -- @param any val
 -- @realm client
-function PANEL:OnDefaultChange(val) end
+function DPANEL:OnDefaultChange(val) end
 
 -- TODO END
 
@@ -334,7 +336,7 @@ function PANEL:OnDefaultChange(val) end
 -- @param string arguments The parameters as a string
 -- @return Panel Returns the panel itself
 -- @realm client
-function PANEL:AddConsoleCommand(command, arguments)
+function DPANEL:AddConsoleCommand(command, arguments)
     self:On("LeftClick", function()
         RunConsoleCommand(command, arguments)
     end)
@@ -346,27 +348,20 @@ end
 
 ---
 -- @ignore
-function PANEL:OnLeftClickInternal()
+function DPANEL:OnLeftClickInternal()
     sound.ConditionalPlay(soundClick, SOUND_TYPE_BUTTONS)
 end
 
 ---
 -- I'm not sure why I have to do this - this isn't necessary for other functions
 -- @ignore
-function PANEL:OnMousePressed(mouseCode)
+function DPANEL:OnMousePressed(mouseCode)
     DBase("TTT2:DLabel").OnMousePressed(self, mouseCode)
 end
 
 ---
 -- I'm not sure why I have to do this - this isn't necessary for other functions
 -- @ignore
-function PANEL:OnMouseReleased(mouseCode)
+function DPANEL:OnMouseReleased(mouseCode)
     DBase("TTT2:DLabel").OnMouseReleased(self, mouseCode)
 end
-
-derma.DefineControl(
-    "TTT2:DButton",
-    "The standard button used in TTT2 with convar and database support",
-    PANEL,
-    "TTT2:DPanel"
-)

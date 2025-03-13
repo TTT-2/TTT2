@@ -323,7 +323,7 @@ end
 -- @param function fn The callback function
 -- @realm client
 function PANEL:RegisterBackFunction(fn)
-    self.btnBack.DoClick = fn
+    self.btnBack:On("LeftClick", fn)
 end
 
 ---

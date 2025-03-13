@@ -14,20 +14,20 @@ function PANEL:Init()
 
     -- Make navArea scrollable
     self.navAreaScroll = vgui.Create("DScrollPanelTTT2", self)
-        :SetVerticalScrollbarEnabled(true)
-        :Dock(BOTTOM)
-        :On("VScroll", function(slf, scrollOffset)
-            -- origScrollOnVScroll(pnl, scrollOffset) --TODO
+    self.navAreaScroll:SetVerticalScrollbarEnabled(true) --TODO return self
+    self.navAreaScroll:Dock(BOTTOM):On("VScroll", function(slf, scrollOffset)
+        -- origScrollOnVScroll(pnl, scrollOffset) --TODO
 
-            if self.searchTrackerPanel then
-                local x, y = self.searchTrackerPanel:GetPos()
-                y = math.max(y + scrollOffset, 0)
-                self.searchBar:SetPos(x, y)
-            end
-        end)
+        if self.searchTrackerPanel then
+            local x, y = self.searchTrackerPanel:GetPos()
+            y = math.max(y + scrollOffset, 0)
+            self.searchBar:SetPos(x, y)
+        end
+    end)
 
     -- Split nav area into a grid layout
-    self.navAreaScrollGrid = vgui.Create("DIconLayout", self.navAreaScroll):Dock(FILL)
+    self.navAreaScrollGrid = vgui.Create("DIconLayout", self.navAreaScroll) --TODO method chaining
+    self.navAreaScrollGrid:Dock(FILL)
 
     -- By default there is no search tracker panel. It is used to differentiate between panels
     -- that should be fixed on top and panels that are searched.

@@ -108,7 +108,6 @@ TTTFiles = {
         on = "client",
     },
     cl_vskin__vgui__dform = { file = "cl_vskin/vgui/dform_ttt2.lua", on = "client" },
-    cl_vskin__vgui__dbutton = { file = "cl_vskin/vgui/dbutton_ttt2.lua", on = "client" },
     cl_vskin__vgui__dbinder = { file = "cl_vskin/vgui/dbinder_ttt2.lua", on = "client" },
     cl_vskin__vgui__dcombobox = { file = "cl_vskin/vgui/dcombobox_ttt2.lua", on = "client" },
     cl_vskin__vgui__dcheckboxlabel = {
