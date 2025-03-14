@@ -21,6 +21,8 @@ function DPANEL:Init()
     self:SetTextAlign(TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
     self:SetFont("DermaTTT2SubMenuButtonTitle")
     self:SetOutline(vskin.GetBorderSize(), 0, 0, 0)
+    self:SetTextCapitalized(false)
+    self:EnableCornerRadius(false)
     self:SetPadding(18 + vskin.GetBorderSize(), 0)
 end
 

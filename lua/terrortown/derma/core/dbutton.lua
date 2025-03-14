@@ -32,6 +32,9 @@ function DPANEL:Init()
 
     -- set visual defaults
     self:SetFont("DermaTTT2Button")
+    self:SetTextCapitalized(true)
+    self:EnableCornerRadius(true)
+    self:SetOutline(0, 0, 0, vskin.GetBorderSize())
 end
 
 ---

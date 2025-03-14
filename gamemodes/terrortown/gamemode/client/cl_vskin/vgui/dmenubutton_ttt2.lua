@@ -12,6 +12,8 @@ function PANEL:Init()
     self:SetFont("DermaTTT2MenuButtonTitle")
     self:SetDescriptionFont("DermaTTT2MenuButtonDescription")
     self:SetOutline(1)
+    self:SetTextCapitalized(false)
+    self:EnableCornerRadius(false)
     self:SetPadding(15)
     self:SetTextAlign(TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 end

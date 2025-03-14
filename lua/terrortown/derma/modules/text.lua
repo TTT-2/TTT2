@@ -8,14 +8,9 @@
 AccessorFunc(METAPANEL, "m_nTextAlign", "TextAlign", FORCE_NUMBER, true)
 
 ---
--- @accessor string
+-- @accessor number
 -- @realm client
-AccessorFunc(METAPANEL, "m_TranslatedText", "TranslatedText", FORCE_STRING, true)
-
----
--- @accessor string
--- @realm client
-AccessorFunc(METAPANEL, "m_TranslatedDescription", "TranslatedDescription", FORCE_STRING, true)
+AccessorFunc(METAPANEL, "m_bTextCapitalized", "TextCapitalized", FORCE_BOOL_IS, true)
 
 ---
 -- @accessor table
@@ -261,4 +256,50 @@ function METAPANEL:GetTranslatedKeyBindingKey()
         "binding_panel_bracket",
         { binding = string.upper(LANG.TryTranslation(key)) }
     )
+end
+
+---
+-- Sets the translated description to the panel.
+-- @param string description The translated description string
+-- @return Panel Returns the panel itself
+-- @realm client
+function METAPANEL:SetTranslatedDescription(description)
+    if self:IsTextCapitalized() then
+        self.m_TranslatedDescription = string.upper(description)
+    else
+        self.m_TranslatedDescription = description
+    end
+
+    return self
+end
+
+---
+-- Returns the translated description stored on the panel.
+-- @return string The translated description
+-- @realm client
+function METAPANEL:GetTranslatedDescription()
+    return self.m_TranslatedDescription
+end
+
+---
+-- Sets the translated text to the panel.
+-- @param string text The translated text string
+-- @return Panel Returns the panel itself
+-- @realm client
+function METAPANEL:SetTranslatedText(text)
+    if self:IsTextCapitalized() then
+        self.m_TranslatedText = string.upper(text)
+    else
+        self.m_TranslatedText = text
+    end
+
+    return self
+end
+
+---
+-- Returns the translated text stored on the panel.
+-- @return string The translated text
+-- @realm client
+function METAPANEL:GetTranslatedText()
+    return self.m_TranslatedText
 end
