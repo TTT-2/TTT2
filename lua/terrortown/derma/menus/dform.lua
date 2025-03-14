@@ -186,7 +186,7 @@ end
 -- @param table data The data for the textentry
 -- @note Structure of data = {
 -- label, default, convar, serverConVar, initial, function OnChange(value),
--- master = { function AddSlave(self, slave) }
+-- master = { function AddFollower(self, slave) }
 -- }
 -- @return Panel The created textentry
 -- @realm client
@@ -248,19 +248,21 @@ function DPANEL:MakeTextEntry(data)
 
     self:AddItem(left, right, reset, toggle, run)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        data.master:AddSlave(left)
-        data.master:AddSlave(right)
-        data.master:AddSlave(reset)
+    local primary = data.primary or data.master
+
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        primary:AddFollower(left)
+        primary:AddFollower(right)
+        primary:AddFollower(reset)
 
         if IsValid(toggle) then
-            toggle:SetPrimary(data.primary or data.master)
-            data.master:AddSlave(toggle)
+            toggle:SetPrimary(primary)
+            primary:AddFollower(toggle)
         end
 
         if IsValid(run) then
-            run:SetPrimary(data.primary or data.master)
-            data.master:AddSlave(run)
+            run:SetPrimary(primary)
+            primary:AddFollower(run)
         end
     end
 
@@ -313,21 +315,23 @@ function DPANEL:MakeCheckBox(data)
 
     self:AddItem(left, nil, reset, toggle, run)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        left:SetPrimary(data.primary or data.master)
-        reset:SetPrimary(data.primary or data.master)
+    local primary = data.primary or data.master
 
-        data.master:AddSlave(left)
-        data.master:AddSlave(reset)
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        left:SetPrimary(primary)
+        reset:SetPrimary(primary)
+
+        primary:AddFollower(left)
+        primary:AddFollower(reset)
 
         if IsValid(toggle) then
-            toggle:SetPrimary(data.primary or data.master)
-            data.master:AddSlave(toggle)
+            toggle:SetPrimary(primary)
+            primary:AddFollower(toggle)
         end
 
         if IsValid(run) then
-            run:SetPrimary(data.primary or data.master)
-            data.master:AddSlave(run)
+            run:SetPrimary(primary)
+            primary:AddFollower(run)
         end
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
@@ -397,23 +401,25 @@ function DPANEL:MakeSlider(data)
 
     self:AddItem(left, right, reset, toggle, run)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        data.master:AddSlave(left)
-        data.master:AddSlave(right)
-        data.master:AddSlave(reset)
+    local primary = data.primary or data.master
 
-        left:SetPrimary(data.primary or data.master)
-        right:SetPrimary(data.primary or data.master)
-        reset:SetPrimary(data.primary or data.master)
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        primary:AddFollower(left)
+        primary:AddFollower(right)
+        primary:AddFollower(reset)
+
+        left:SetPrimary(primary)
+        right:SetPrimary(primary)
+        reset:SetPrimary(primary)
 
         if IsValid(toggle) then
-            toggle:SetPrimary(data.primary or data.master)
-            data.master:AddSlave(toggle)
+            toggle:SetPrimary(primary)
+            primary:AddFollower(toggle)
         end
 
         if IsValid(run) then
-            run:SetPrimary(data.primary or data.master)
-            data.master:AddSlave(run)
+            run:SetPrimary(primary)
+            primary:AddFollower(run)
         end
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
@@ -457,12 +463,14 @@ function DPANEL:MakeButton(data)
 
     self:AddItem(left, right)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        data.master:AddSlave(left)
-        data.master:AddSlave(right)
+    local primary = data.primary or data.master
 
-        left:SetPrimary(data.primary or data.master)
-        right:SetPrimary(data.primary or data.master)
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        primary:AddFollower(left)
+        primary:AddFollower(right)
+
+        left:SetPrimary(primary)
+        right:SetPrimary(primary)
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
     end
@@ -476,7 +484,7 @@ end
 -- @note Structure of data = {
 -- label, default, choices = { [1] = {title, value, select, icon, additionalData}, [2] = ...},
 -- conVar, serverConVar, selectId or selectTitle or selectValue,
--- function OnChange(value, additionalData, dropDownPanel), master = { function AddSlave(self, slave) }
+-- function OnChange(value, additionalData, dropDownPanel), master = { function AddFollower(self, slave) }
 -- }
 -- @note If ConVars are used the values are always strings, so make sure, that you used strings for values, when setting up choices
 -- @return Panel The created combobox
@@ -554,23 +562,25 @@ function DPANEL:MakeComboBox(data)
 
     self:AddItem(left, right, reset, toggle, run)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        data.master:AddSlave(left)
-        data.master:AddSlave(right)
-        data.master:AddSlave(reset)
+    local primary = data.primary or data.master
 
-        left:SetPrimary(data.primary or data.master)
-        right:SetPrimary(data.primary or data.master)
-        reset:SetPrimary(data.primary or data.master)
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        primaryr:AddFollower(left)
+        primary:AddFollower(right)
+        primary:AddFollower(reset)
+
+        left:SetPrimary(primary)
+        right:SetPrimary(primary)
+        reset:SetPrimary(primary)
 
         if IsValid(toggle) then
-            toggle:SetPrimary(data.primary or data.master)
-            data.master:AddSlave(toggle)
+            toggle:SetPrimary(primary)
+            primary:AddFollower(toggle)
         end
 
         if IsValid(run) then
-            run:SetPrimary(data.primary or data.master)
-            data.master:AddSlave(run)
+            run:SetPrimary(primary)
+            primary:AddFollower(run)
         end
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
@@ -640,23 +650,25 @@ function DPANEL:MakeBinder(data)
 
     self:AddItem(left, right, reset, toggle, run)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        data.master:AddSlave(left)
-        data.master:AddSlave(right)
-        data.master:AddSlave(reset)
+    local primary = data.primary or data.master
 
-        left:SetPrimary(data.primary or data.master)
-        right:SetPrimary(data.primary or data.master)
-        reset:SetPrimary(data.primary or data.master)
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        primary:AddFollower(left)
+        primary:AddFollower(right)
+        primary:AddFollower(reset)
+
+        left:SetPrimary(primary)
+        right:SetPrimary(primary)
+        reset:SetPrimary(primary)
 
         if IsValid(toggle) then
-            toggle:SetPrimary(data.primary or data.master)
-            data.master:AddSlave(toggle)
+            toggle:SetPrimary(primary)
+            primary:AddFollower(toggle)
         end
 
         if IsValid(run) then
-            run:SetPrimary(data.primary or data.master)
-            data.master:AddSlave(run)
+            run:SetPrimary(primary)
+            primary:AddFollower(run)
         end
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
@@ -675,10 +687,12 @@ function DPANEL:MakeHelp(data)
 
     self:AddItem(left, nil)
 
-    if IsValid(data.primary or data.master) and isfunction(data.master.AddSlave) then
-        data.master:AddSlave(left)
+    local primary = data.primary or data.master
 
-        left:SetPrimary(data.primary or data.master)
+    if IsValid(primary) and isfunction(data.master.AddFollower) then
+        data.master:AddFollower(left)
+
+        left:SetPrimary(primary)
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
     end
@@ -745,9 +759,9 @@ function DPANEL:MakeColorMixer(data)
 
     self:AddItem(left, right)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        data.master:AddSlave(left)
-        data.master:AddSlave(right)
+    if IsValid(data.master) and isfunction(data.master.AddFollower) then
+        data.master:AddFollower(left)
+        data.master:AddFollower(right)
     end
 
     return right, left
