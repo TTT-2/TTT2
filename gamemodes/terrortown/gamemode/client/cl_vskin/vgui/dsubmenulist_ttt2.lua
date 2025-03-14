@@ -92,11 +92,9 @@ function PANEL:EnableSearchBar(active)
     end
 
     -- Add searchbar on top
-    self.searchBar = vgui.Create("DSearchBarTTT2", self)
-        :SetUpdateOnType(true)
-        :SetHeightMult(1)
+    self.searchBar = vgui.Create("TTT2:DSearchBar", self)
         :SetPos(0, heightNavHeader)
-        :On("ValueChange", function(slf, searchText)
+        :On("ValueChanged", function(searchText)
             self:ResetSubmenuList()
             self:ExtendSubmenuList(self.basemenuClass:GetVisibleNonSearchedSubmenus())
             self:AddSearchTracker()
@@ -106,12 +104,6 @@ function PANEL:EnableSearchBar(active)
             self:ExtendSubmenuList(self.basemenuClass:GetMatchingSubmenus(searchText))
             self:SelectFirst(index)
             self:InvalidateLayout(true)
-        end)
-        :On("GetFocus", function(slf)
-            self.frame:SetKeyboardInputEnabled(true)
-        end)
-        :On("LoseFocus", function(slf)
-            self.frame:SetKeyboardInputEnabled(false)
         end)
 
     return self
@@ -144,6 +136,9 @@ function PANEL:AddSubmenuButton(submenuClass)
 
             self.lastActive = settingsButton
         end)
+
+    -- make it so that it can be autocompleted on tab
+    self.searchBar:RegisterAutoCompleteEntry(submenuClass.title or submenuClass.type)
 
     return settingsButton
 end
@@ -203,7 +198,7 @@ function PANEL:SelectFirst(index)
     for i = index, self.navAreaScrollGrid:ChildCount() do
         local child = self.navAreaScrollGrid:GetChild(i)
 
-        if child then
+        if child and child:GetName() == "TTT2:DSubmenuButton" then
             child:TriggerOnWithBase("LeftClick")
 
             return self

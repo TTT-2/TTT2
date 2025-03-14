@@ -97,6 +97,10 @@ function DPANEL:Initialize()
     -- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/lua/vgui/dtextentry.lua#L410-L429
     -- we set this flag to enable that hook
     self.m_bLoseFocusOnClickAway = true
+
+    -- even though the placeholder text is generic text, we should have a
+    -- nice sonding alias function name
+    self.SetPlaceholderText = self.SetText
 end
 
 ---
@@ -114,7 +118,7 @@ function DPANEL:OnVSkinUpdate()
         colorOutline = util.ColorDarken(colorAccentDisabled, 50)
 
     -- PANEL IS PRESSED
-    elseif self:IsDepressed() or self:IsSelected() or self:GetToggle() or self:IsFocused() then
+    elseif self:IsDepressed() or self:IsSelected() or self:IsFocused() then
         colorBackground = util.GetActiveColor(
             self:GetColor() or util.GetChangedColor(vskin.GetBackgroundColor(), 15)
         )
@@ -221,6 +225,11 @@ function DPANEL:SetEditable(state)
 end
 
 local function GetCommonBase(list, start)
+    -- make sure to not search indefinitely if multiple identical entries exist
+    if start == string.len(list[1]) then
+        return list[1]
+    end
+
     local needle = string.sub(list[1], 1, start)
 
     for i = 1, #list do
@@ -236,7 +245,7 @@ end
 
 ---
 -- Searches for a string in the cadidates list for auto completion. If only one element
--- is found, it returns the whole cadindate. If multiple are found, the common base is
+-- is found, it returns the whole candindate. If multiple are found, the common base is
 -- returned.
 -- @return nil|string nil if nothing was found, a string otherwise
 -- @realm client
@@ -278,6 +287,13 @@ end
 -- @return Panel Returns the panel itself
 -- @realm client
 function DPANEL:RegisterAutoCompleteEntry(text)
+    -- make sure this value does not already exist in the list
+    for i = 1, #self._autoCompleteList do
+        if text == self._autoCompleteList[i] then
+            return self
+        end
+    end
+
     self._autoCompleteList[#self._autoCompleteList + 1] = text
 
     return self

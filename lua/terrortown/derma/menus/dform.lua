@@ -297,9 +297,9 @@ function DPANEL:MakeCheckBox(data)
 
     -- Set default if possible even if the convar could still overwrite it
     left:SetDefaultValue(data.default)
-    left:SetConVar(data.convar)
-    left:SetServerConVar(data.serverConvar)
-    left:SetDatabase(data.database)
+    --left:SetConVar(data.convar) --TODO!
+    --left:SetServerConVar(data.serverConvar)
+    --left:SetDatabase(data.database)
 
     left:SetTall(32)
 
@@ -565,7 +565,7 @@ function DPANEL:MakeComboBox(data)
     local primary = data.primary or data.master
 
     if IsValid(primary) and isfunction(primary.AddFollower) then
-        primaryr:AddFollower(left)
+        primary:AddFollower(left)
         primary:AddFollower(right)
         primary:AddFollower(reset)
 
