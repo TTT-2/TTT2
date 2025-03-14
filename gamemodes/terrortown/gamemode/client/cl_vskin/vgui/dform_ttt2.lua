@@ -669,7 +669,7 @@ end
 -- @return Panel The created helpbox
 -- @realm client
 function PANEL:MakeHelp(data)
-    local left = vgui.Create("TTT2:DHelpbox", self):SetText(data.label, data.params)
+    local left = vgui.Create("TTT2:DHelpbox", self):SetDescription(data.label, data.params)
 
     self:AddItem(left, nil)
 
