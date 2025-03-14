@@ -103,7 +103,6 @@ TTTFiles = {
         file = "cl_vskin/vgui/dcategorycollapse_ttt2.lua",
         on = "client",
     },
-    cl_vskin__vgui__dform = { file = "cl_vskin/vgui/dform_ttt2.lua", on = "client" },
     cl_vskin__vgui__dbinder = { file = "cl_vskin/vgui/dbinder_ttt2.lua", on = "client" },
     cl_vskin__vgui__dcombobox = { file = "cl_vskin/vgui/dcombobox_ttt2.lua", on = "client" },
     cl_vskin__vgui__dcheckboxlabel = {
@@ -136,7 +135,6 @@ TTTFiles = {
     },
     cl_vskin__vgui__dpippanel = { file = "cl_vskin/vgui/dpippanel_ttt2.lua", on = "client" },
     cl_vskin__vgui__dplayergraph = { file = "cl_vskin/vgui/dplayergraph_ttt2.lua", on = "client" },
-    cl_vskin__vgui__dhelpbox = { file = "cl_vskin/vgui/dhelpbox_ttt2.lua", on = "client" },
 }
 
 if SERVER then

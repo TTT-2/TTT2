@@ -10,6 +10,8 @@ if SERVER then
 
     fileloader.LoadFolder("terrortown/derma/core/", false, CLIENT_FILE)
     fileloader.LoadFolder("terrortown/derma/variants/", false, CLIENT_FILE)
+    fileloader.LoadFolder("terrortown/derma/menus/", false, CLIENT_FILE)
+    fileloader.LoadFolder("terrortown/derma/menus/elements/", false, CLIENT_FILE)
 
     return
 end
@@ -56,12 +58,8 @@ local function BuildPanel(panel, path, name)
 
         slf._moduleInit = nil
 
-        local baseClass = DBase(dermaInfo.baseClassName)
-
-        -- calling the base class this way only works for lua defined panels, not engine defined
-        if istable(baseClass) and isfunction(baseClass.Init) then
-            DBase(dermaInfo.baseClassName).Init(slf)
-        end
+        -- we don't have to call the init of the base class here, GMod already does this:
+        -- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/lua/includes/extensions/client/panel/scriptedpanels.lua#L23-L52
 
         if isfunction(oldInit) then
             oldInit(slf)
@@ -84,4 +82,11 @@ function derma.InitializeElements()
 
     classbuilder.BuildFromFolder("terrortown/derma/core/", CLIENT_FILE, "DPANEL", BuildPanel)
     classbuilder.BuildFromFolder("terrortown/derma/variants/", CLIENT_FILE, "DPANEL", BuildPanel)
+    classbuilder.BuildFromFolder("terrortown/derma/menus/", CLIENT_FILE, "DPANEL", BuildPanel)
+    classbuilder.BuildFromFolder(
+        "terrortown/derma/menus/elements/",
+        CLIENT_FILE,
+        "DPANEL",
+        BuildPanel
+    )
 end
