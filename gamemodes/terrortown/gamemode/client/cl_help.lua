@@ -327,7 +327,7 @@ function HELPSCRN:BuildContentArea()
         local buttonArea = vgui.Create("TTT2:DPanel", parent)
             :SetSize(width2, heightButtonPanel)
             :Dock(BOTTOM)
-            :SetOutline(0, 0, 0, 1)
+            :SetOutline(0, 1, 0, 0)
 
         self.submenuClass:PopulateButtonPanel(buttonArea)
     end

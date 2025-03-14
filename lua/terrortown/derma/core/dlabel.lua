@@ -75,7 +75,9 @@ end
 
 -- @ignore
 function DPANEL:OnVSkinUpdate()
-    local colorBackground = self:GetColor() or self:GetParentColor() or vskin.GetBackgroundColor()
+    local colorBackground = self:GetColor()
+        or self:GetParentVSkinColor()
+        or vskin.GetBackgroundColor()
     local colorText = util.GetDefaultColor(colorBackground)
     local colorOutline = self:GetOutlineColor() or colorText
 

@@ -68,7 +68,9 @@ function DPANEL:OnVSkinUpdate()
 
     -- NORMAL COLORS
     else
-        colorBackground = self:GetColor() or self:GetParentColor() or vskin.GetBackgroundColor()
+        colorBackground = self:GetColor()
+            or self:GetParentVSkinColor()
+            or vskin.GetBackgroundColor()
         colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 75)
         colorIcon = util.GetHoverColor(util.GetChangedColor(COLOR_WHITE, 32))
         colorOutline = colorBackground

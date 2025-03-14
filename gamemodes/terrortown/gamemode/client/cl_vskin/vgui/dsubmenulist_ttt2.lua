@@ -69,10 +69,6 @@ function PANEL:SetSearchBarPlaceholderText(placeholder)
 
     self.searchBar:SetPlaceholderText(placeholder)
 
-    if self.searchBar:GetValue() == "" then
-        self.searchBar:SetCurrentPlaceholderText(placeholder)
-    end
-
     return self
 end
 
