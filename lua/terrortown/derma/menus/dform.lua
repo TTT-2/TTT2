@@ -254,12 +254,12 @@ function DPANEL:MakeTextEntry(data)
         data.master:AddSlave(reset)
 
         if IsValid(toggle) then
-            toggle:SetMaster(data.master)
+            toggle:SetPrimary(data.primary or data.master)
             data.master:AddSlave(toggle)
         end
 
         if IsValid(run) then
-            run:SetMaster(data.master)
+            run:SetPrimary(data.primary or data.master)
             data.master:AddSlave(run)
         end
     end
@@ -314,19 +314,19 @@ function DPANEL:MakeCheckBox(data)
     self:AddItem(left, nil, reset, toggle, run)
 
     if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        left:SetMaster(data.master)
-        reset:SetMaster(data.master)
+        left:SetPrimary(data.primary or data.master)
+        reset:SetPrimary(data.primary or data.master)
 
         data.master:AddSlave(left)
         data.master:AddSlave(reset)
 
         if IsValid(toggle) then
-            toggle:SetMaster(data.master)
+            toggle:SetPrimary(data.primary or data.master)
             data.master:AddSlave(toggle)
         end
 
         if IsValid(run) then
-            run:SetMaster(data.master)
+            run:SetPrimary(data.primary or data.master)
             data.master:AddSlave(run)
         end
 
@@ -402,17 +402,17 @@ function DPANEL:MakeSlider(data)
         data.master:AddSlave(right)
         data.master:AddSlave(reset)
 
-        left:SetMaster(data.master)
-        right:SetMaster(data.master)
-        reset:SetMaster(data.master)
+        left:SetPrimary(data.primary or data.master)
+        right:SetPrimary(data.primary or data.master)
+        reset:SetPrimary(data.primary or data.master)
 
         if IsValid(toggle) then
-            toggle:SetMaster(data.master)
+            toggle:SetPrimary(data.primary or data.master)
             data.master:AddSlave(toggle)
         end
 
         if IsValid(run) then
-            run:SetMaster(data.master)
+            run:SetPrimary(data.primary or data.master)
             data.master:AddSlave(run)
         end
 
@@ -461,8 +461,8 @@ function DPANEL:MakeButton(data)
         data.master:AddSlave(left)
         data.master:AddSlave(right)
 
-        left:SetMaster(data.master)
-        right:SetMaster(data.master)
+        left:SetPrimary(data.primary or data.master)
+        right:SetPrimary(data.primary or data.master)
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
     end
@@ -559,17 +559,17 @@ function DPANEL:MakeComboBox(data)
         data.master:AddSlave(right)
         data.master:AddSlave(reset)
 
-        left:SetMaster(data.master)
-        right:SetMaster(data.master)
-        reset:SetMaster(data.master)
+        left:SetPrimary(data.primary or data.master)
+        right:SetPrimary(data.primary or data.master)
+        reset:SetPrimary(data.primary or data.master)
 
         if IsValid(toggle) then
-            toggle:SetMaster(data.master)
+            toggle:SetPrimary(data.primary or data.master)
             data.master:AddSlave(toggle)
         end
 
         if IsValid(run) then
-            run:SetMaster(data.master)
+            run:SetPrimary(data.primary or data.master)
             data.master:AddSlave(run)
         end
 
@@ -645,17 +645,17 @@ function DPANEL:MakeBinder(data)
         data.master:AddSlave(right)
         data.master:AddSlave(reset)
 
-        left:SetMaster(data.master)
-        right:SetMaster(data.master)
-        reset:SetMaster(data.master)
+        left:SetPrimary(data.primary or data.master)
+        right:SetPrimary(data.primary or data.master)
+        reset:SetPrimary(data.primary or data.master)
 
         if IsValid(toggle) then
-            toggle:SetMaster(data.master)
+            toggle:SetPrimary(data.primary or data.master)
             data.master:AddSlave(toggle)
         end
 
         if IsValid(run) then
-            run:SetMaster(data.master)
+            run:SetPrimary(data.primary or data.master)
             data.master:AddSlave(run)
         end
 
@@ -675,10 +675,10 @@ function DPANEL:MakeHelp(data)
 
     self:AddItem(left, nil)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
+    if IsValid(data.primary or data.master) and isfunction(data.master.AddSlave) then
         data.master:AddSlave(left)
 
-        left:SetMaster(data.master)
+        left:SetPrimary(data.primary or data.master)
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
     end
