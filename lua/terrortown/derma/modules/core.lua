@@ -15,7 +15,6 @@ function METAPANEL:InternalSetup()
     self._attached = {}
     self._vskinColor = {}
     self._vskinDimension = {}
-    self._tooltip = {}
 
     -- some basic engine defined functions of panels have to be extended to
     -- support method chaining
@@ -81,35 +80,15 @@ function METAPANEL:InternalSetup()
 
         return slf
     end
-end
-
----
--- Is called on initialization of the panel.
--- @note vgui.Register does not support inheritance for the Init function, therefore
--- this function always has to be set with a call of its base.
--- @hook
--- @realm client
-function METAPANEL:Init()
-    -- enable the panel
-    self:SetEnabled(true)
-
-    -- disable keyboard and mouse input
-    --self:SetMouseInputEnabled(false)
-    -- self:SetKeyboardInputEnabled(false)
-    self:SetDoubleClickingEnabled(false)
 
     -- turn off the engine drawing
     self:SetPaintBackgroundEnabled(false)
 
-    self:Initialize()
-end
+    self:SetDoubleClickingEnabled(false)
 
----
--- Initialize function that is called on init of the panel. Is called in @{PANEL:Init}
--- to simplify overwriting of this init function.
--- @hook
--- @realm client
-function METAPANEL:Initialize() end
+    -- enable the panel
+    self:SetEnabled(true)
+end
 
 -- SPECIAL FUNCTIONS TO HANDLE HOOKS AND EXTENDED FEATURES --
 

@@ -39,7 +39,7 @@ local function BuildPanel(panel, path, name)
         end
 
         panel._modules[moduleName] = true
-        panel._moduleInit[#panel._moduleInit + 1] = panel.InternalSetup
+        panel._moduleInit[#panel._moduleInit + 1] = baseModule.InternalSetup
         panel.InternalSetup = nil
 
         table.DeepInherit(panel, baseModule)

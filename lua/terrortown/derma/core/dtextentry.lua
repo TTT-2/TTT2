@@ -62,7 +62,7 @@ DPANEL.implements = {
 
 ---
 -- @ignore
-function DPANEL:Initialize()
+function DPANEL:Init()
     self._autoCompleteList = {}
 
     self:SetEnterAllowed(true)

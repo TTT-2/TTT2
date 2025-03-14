@@ -3,6 +3,13 @@
 -- @section TTT2:DPanel/Tooltip
 
 ---
+-- @ignore
+function METAPANEL:InternalSetup()
+    -- data attached to the panel is put in its own scope
+    self._tooltip = {}
+end
+
+---
 -- @param string text
 -- @return Panel Returns the panel itself
 -- @realm client
@@ -53,7 +60,7 @@ end
 -- @return number, number
 -- @realm client
 function METAPANEL:GetTooltipFixedPosition()
-    return self._tooltip.fixedPosition.x, self._tooltip.fixedPosition.y
+    return self._tooltip.fixedPosition.x or 0, self._tooltip.fixedPosition.y or 0
 end
 
 ---
@@ -61,6 +68,8 @@ end
 -- @realm client
 function METAPANEL:HasTooltipFixedPosition()
     return self._tooltip.fixedPosition ~= nil
+        and self._tooltip.fixedPosition.x ~= nil
+        and self._tooltip.fixedPosition.y ~= nil
 end
 
 ---
@@ -105,7 +114,7 @@ end
 -- @return number
 -- @realm client
 function METAPANEL:GetTooltipOpeningDelay()
-    return self._tooltip.delay
+    return self._tooltip.delay or 0
 end
 
 ---
@@ -124,7 +133,7 @@ end
 -- @return number
 -- @realm client
 function METAPANEL:GetTooltipArrowSize()
-    return self._tooltip.sizeArrow
+    return self._tooltip.sizeArrow or 8
 end
 
 ---

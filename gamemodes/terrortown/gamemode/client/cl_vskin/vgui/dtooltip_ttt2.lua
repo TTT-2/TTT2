@@ -7,7 +7,6 @@ local PANEL = {}
 ---
 -- @ignore
 function PANEL:Init()
-    self:SetText("")
     self:SetDrawOnTop(true)
 
     self.deleteContentsOnClose = false
@@ -163,4 +162,4 @@ function PANEL:GetFont()
     return self.targetPanel:GetTooltipFont() or "Default"
 end
 
-derma.DefineControl("DTooltipTTT2", "", PANEL, "TTT2:DLabel")
+derma.DefineControl("TTT2:DTooltip", "", PANEL, "TTT2:DLabel")

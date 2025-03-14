@@ -51,7 +51,7 @@ DPANEL.implements = {
 }
 
 -- @ignore
-function DPANEL:Initialize()
+function DPANEL:Init()
     -- disable toggling and set state to false
     self:SetIsToggle(false)
     self:SetToggle(false)
