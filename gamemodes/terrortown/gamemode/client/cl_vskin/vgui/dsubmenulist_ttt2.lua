@@ -138,7 +138,9 @@ function PANEL:AddSubmenuButton(submenuClass)
         end)
 
     -- make it so that it can be autocompleted on tab
-    self.searchBar:RegisterAutoCompleteEntry(submenuClass.title or submenuClass.type)
+    if IsValid(self.searchBar) then
+        self.searchBar:RegisterAutoCompleteEntry(submenuClass.title or submenuClass.type)
+    end
 
     return settingsButton
 end
