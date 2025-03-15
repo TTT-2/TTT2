@@ -16,7 +16,7 @@ function PANEL:Init()
     self.Button.OnChange = function(_, val)
         self:ValueChanged(val)
 
-        -- enable / disable slaves on change
+        -- enable / disable followers on change
         self:UpdateFollowers(val)
     end
 
@@ -31,7 +31,7 @@ function PANEL:Init()
 
         slf.Button:SetEnabled(enabled)
 
-        -- make sure sub-slaves are updated as well
+        -- make sure sub-followers are updated as well
         if not enabled then
             slf:UpdateFollowers(false)
         else
@@ -41,7 +41,7 @@ function PANEL:Init()
 
     self:SetFont("DermaTTT2Text")
 
-    -- store slaves in here to be updates on change of this value
+    -- store followers in here to be updates on change of this value
     self.followers = {}
 end
 

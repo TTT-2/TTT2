@@ -187,7 +187,7 @@ function CLSCORE:CreatePanel()
             self:SaveLog()
         end)
 
-    -- Button SAVE
+    -- Button CLOSE
     vgui.Create("TTT2:DButton", buttonArea)
         :SetSize(self.sizes.widthButton, self.sizes.heightButton)
         :SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)

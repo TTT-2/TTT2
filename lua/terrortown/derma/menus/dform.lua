@@ -186,7 +186,7 @@ end
 -- @param table data The data for the textentry
 -- @note Structure of data = {
 -- label, default, convar, serverConVar, initial, function OnChange(value),
--- master = { function AddFollower(self, slave) }
+-- master = { function AddFollower(self, follower) }
 -- }
 -- @return Panel The created textentry
 -- @realm client
@@ -484,7 +484,7 @@ end
 -- @note Structure of data = {
 -- label, default, choices = { [1] = {title, value, select, icon, additionalData}, [2] = ...},
 -- conVar, serverConVar, selectId or selectTitle or selectValue,
--- function OnChange(value, additionalData, dropDownPanel), master = { function AddFollower(self, slave) }
+-- function OnChange(value, additionalData, dropDownPanel), master = { function AddFollower(self, follower) }
 -- }
 -- @note If ConVars are used the values are always strings, so make sure, that you used strings for values, when setting up choices
 -- @return Panel The created combobox
@@ -689,8 +689,8 @@ function DPANEL:MakeHelp(data)
 
     local primary = data.primary or data.master
 
-    if IsValid(primary) and isfunction(data.master.AddFollower) then
-        data.master:AddFollower(left)
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        primary:AddFollower(left)
 
         left:SetPrimary(primary)
 
@@ -759,9 +759,11 @@ function DPANEL:MakeColorMixer(data)
 
     self:AddItem(left, right)
 
-    if IsValid(data.master) and isfunction(data.master.AddFollower) then
-        data.master:AddFollower(left)
-        data.master:AddFollower(right)
+    local primary = data.primary or data.master
+
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        primary:AddFollower(left)
+        primary:AddFollower(right)
     end
 
     return right, left
