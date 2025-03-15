@@ -161,7 +161,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
     local currentHUDName = HUDManager.GetHUD()
     local currentHUD = huds.GetStored(currentHUDName)
 
-    local buttonReset = vgui.Create("DButtonTTT2", parent)
+    local buttonReset = vgui.Create("TTT2:DButton", parent)
 
     buttonReset:SetText("button_reset")
     buttonReset:SetSize(100, 45)
@@ -176,7 +176,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
     end
     buttonReset:SetEnabled(not currentHUD.disableHUDEditor)
 
-    local buttonEditor = vgui.Create("DButtonTTT2", parent)
+    local buttonEditor = vgui.Create("TTT2:DButton", parent)
 
     buttonEditor:SetText("button_hud_editor")
     buttonEditor:SetSize(175, 45)
