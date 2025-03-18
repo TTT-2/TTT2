@@ -4,6 +4,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.14.3b](https://github.com/TTT-2/TTT2/tree/v0.14.3b) (2025-03-18)
+
 ### Added
 
 - Added C4 cvars for adjusting the range & falloff of C4 explosions (by @Spanospy)
@@ -41,13 +43,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removed clientside TTT2PostDoorSetup hook
   - Changed crowbar unlocking behavior to match base TTT
 - Fixed lua errors after autorefresh (by @wgetJane)
+- Fixed Hud errors when picking up items or weapons with no viable icon (by @NickCloudAT)
 
 ## [v0.14.2b](https://github.com/TTT-2/TTT2/tree/v0.14.2b) (2025-02-02)
 
 ### Fixed
 
 - Fixed new outlines' `OUTLINE_MODE_VISIBLE` and `OUTLINE_MODE_BOTH`
-- Fixed Hud errors when picking up items or weapons with no viable icon (by @NickCloudAT)
 
 ## [v0.14.1b](https://github.com/TTT-2/TTT2/tree/v0.14.1b) (2025-02-01)
 
@@ -89,7 +91,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed `markerVision`'s registry table being able to contain duplicate obsolete entries, thus fixing potential syncing issues with markers (by @TW1STaL1CKY)
 - Fixed issue in new Ammo dropping that could cause an error when dropping for modified weapon bases. (by @MrXonte)
 - Fixed C4 not showing the correct inflictor when the player is killed (by @TimGoll)
-- Fixed M16 Ironsight misalignment (by @SvveetMavis) 
+- Fixed M16 Ironsight misalignment (by @SvveetMavis)
 - Fixed outline interactions with certain weapon scopes (by @WardenPotato)
 - Fixed outlines not rendering uniformly (by @WardenPotato)
 
