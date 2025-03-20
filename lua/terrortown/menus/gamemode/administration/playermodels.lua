@@ -132,7 +132,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 end
 
 function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
-    local buttonReset = vgui.Create("DButtonTTT2", parent)
+    local buttonReset = vgui.Create("TTT2:DButton", parent)
 
     buttonReset:SetText("button_reset_models")
     buttonReset:SetSize(225, 45)

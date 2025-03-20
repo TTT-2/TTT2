@@ -543,9 +543,12 @@ COLOR_GOLD = Color(255, 215, 30)
 
 -- include independent extensions
 include("ttt2/extensions/debug.lua")
+include("ttt2/extensions/table.lua")
 
 -- include independent libraries (other extensions might require them)
 include("ttt2/libraries/pon.lua")
+include("ttt2/libraries/fileloader.lua")
+include("ttt2/libraries/classbuilder.lua")
 
 -- include extensions
 include("ttt2/extensions/math.lua")
@@ -553,7 +556,6 @@ include("ttt2/extensions/player.lua")
 include("ttt2/extensions/net.lua")
 include("ttt2/extensions/sql.lua")
 include("ttt2/extensions/string.lua")
-include("ttt2/extensions/table.lua")
 include("ttt2/extensions/util.lua")
 include("ttt2/extensions/surface.lua")
 include("ttt2/extensions/draw.lua")
@@ -562,6 +564,7 @@ include("ttt2/extensions/cvars.lua")
 include("ttt2/extensions/render.lua")
 include("ttt2/extensions/chat.lua")
 include("ttt2/extensions/sound.lua")
+include("ttt2/extensions/derma.lua")
 
 -- include libraries
 include("ttt2/libraries/admin.lua")
@@ -572,8 +575,6 @@ include("ttt2/libraries/huds.lua")
 include("ttt2/libraries/hudelements.lua")
 include("ttt2/libraries/items.lua")
 include("ttt2/libraries/bind.lua")
-include("ttt2/libraries/fileloader.lua")
-include("ttt2/libraries/classbuilder.lua")
 include("ttt2/libraries/fonts.lua")
 include("ttt2/libraries/appearance.lua")
 include("ttt2/libraries/drawsc.lua")
