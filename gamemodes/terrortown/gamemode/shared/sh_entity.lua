@@ -49,6 +49,5 @@ function entmeta:IsSpecialUsableEntity()
         or self.player_ragdoll
         or self:IsPlayerRagdoll()
         or self.CanUseKey
-        or self.ClientUse
         or self.RemoteUse
 end
