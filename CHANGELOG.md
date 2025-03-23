@@ -7,6 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed health station continuous use not working (by @wgetJane)
+- Fixed the shop search breaking when using certain special characters (by @NickCloudAT)
 
 ## [v0.14.3b](https://github.com/TTT-2/TTT2/tree/v0.14.3b) (2025-03-18)
 
