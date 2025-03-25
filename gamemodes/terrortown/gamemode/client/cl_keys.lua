@@ -107,7 +107,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
             return true
         end
 
-        if IsValid(useEnt) and useEnt:IsSpecialUsableEntity() then
+        if IsValid(useEnt) and (ply:IsSpec() or useEnt:IsSpecialUsableEntity()) then
             net.Start("TTT2PlayerUseEntity")
             net.WriteEntity(useEnt)
             net.WriteBool(isRemote)
