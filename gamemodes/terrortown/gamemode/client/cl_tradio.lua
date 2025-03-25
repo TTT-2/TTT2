@@ -73,9 +73,9 @@ function TRADIO:Toggle(radioEnt)
     self.menuFrame:SetKeyboardInputEnabled(false)
     self.menuFrame.OnKeyCodePressed = util.BasicKeyHandler
 
-    local contentBox = vgui.Create("DPanelTTT2", self.menuFrame)
-    contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
-    contentBox:Dock(TOP)
+    local contentBox = vgui.Create("TTT2:DPanel", self.menuFrame)
+        :SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+        :Dock(TOP)
 
     local buttonField = vgui.Create("DIconLayout", contentBox)
     buttonField:SetSpaceY(self.sizes.padding)
@@ -84,15 +84,16 @@ function TRADIO:Toggle(radioEnt)
     buttonField:Dock(TOP)
 
     for sound, translationName in pairs(sounds) do
-        local buttonReport = vgui.Create("DButtonTTT2", buttonField)
-        buttonReport:SetText(LANG.GetTranslation(translationName))
-        buttonReport:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-        buttonReport.DoClick = function(btn)
-            if not IsValid(self.radio) then
-                return
-            end
+        -- Button REPORT
+        vgui.Create("TTT2:DButton", buttonField)
+            :SetText(LANG.GetTranslation(translationName))
+            :SetSize(self.sizes.widthButton, self.sizes.heightButton)
+            :On("LeftClick", function()
+                if not IsValid(self.radio) then
+                    return
+                end
 
-            RunConsoleCommand("ttt_radio_play", self.entIndex, sound)
-        end
+                RunConsoleCommand("ttt_radio_play", self.entIndex, sound)
+            end)
     end
 end
