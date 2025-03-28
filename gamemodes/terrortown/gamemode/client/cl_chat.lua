@@ -64,7 +64,12 @@ net.Receive("TTT_RoleChat", TTT_RoleChat)
 -- @local
 function GM:GetTeamColor(ent)
     -- don't reveal that a player has died when they happen to chat or voicechat at the moment of death
-    if ent:IsPlayer() and ent:IsSpec() and ScoreGroup(ent) == GROUP_NOTFOUND then
+    if
+        not LocalPlayer():IsSpec()
+        and ent:IsPlayer()
+        and ent:IsSpec()
+        and ScoreGroup(ent) == GROUP_NOTFOUND
+    then
         --
         -- @realm client
         return hook.Run("GetTeamNumColor", TEAM_TERROR)
