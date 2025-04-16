@@ -886,7 +886,7 @@ if CLIENT then
     -- @realm client
     hook.Add("PreDrawViewModel", "TTT2ViewModelHider", function(viewModel, ply, wep)
         -- safeguard for ghost viewmodels appearing from weapons held by other players
-        if wep != ply:GetActiveWeapon() then
+        if wep ~= ply:GetActiveWeapon() then
             return true
         end
 
