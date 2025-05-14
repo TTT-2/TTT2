@@ -11,6 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed propspec not working (by @wgetJane)
 - Fixed a regression in TTT voice chat team colors (see <https://github.com/Facepunch/garrysmod/commit/38b7394ced29ffe318213e580efa4b1090828ac7>)
 - Fixed ghost viewmodels briefly appearing from weapons held by other players (by @TW1STaL1CKY)
+- Fixed corpses not inheriting the bodygroups from the players model (by @NickCloudAT)
 
 ## [v0.14.3b](https://github.com/TTT-2/TTT2/tree/v0.14.3b) (2025-03-18)
 
