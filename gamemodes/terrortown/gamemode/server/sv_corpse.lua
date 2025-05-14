@@ -527,6 +527,11 @@ function CORPSE.Create(ply, attacker, dmginfo, realPlayerCorpse)
     rag:SetAngles(ply:GetAngles())
     rag:SetColor(ply:GetColor())
 
+    -- Also add bodygroups to the corpse
+    for k, v in pairs(ply:GetBodyGroups()) do
+        rag:SetBodygroup(v.id, ply:GetBodygroup(v.id))
+    end
+
     rag:Spawn()
     rag:Activate()
 
