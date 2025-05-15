@@ -330,5 +330,5 @@ derma.DefineControl(
     "DWeaponPreviewTTT2",
     "A box that renders a player with an equipped weapon",
     PANEL,
-    "DLabelTTT2"
+    "TTT2:DLabel"
 )
