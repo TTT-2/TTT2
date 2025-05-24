@@ -27,6 +27,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added 2 new sprint settings (by @wgetJane)
   - Stamina cooldown time before stamina begins regenerating after sprinting, 0.8 seconds by default
   - Option to require forward key to be held to sprint, enabled by default
+- Added option to enable/disable proximity voice chat for the team voice chat (by @NickCloudAT)
 
 ### Changed
 
