@@ -76,7 +76,10 @@ function ENT:Initialize()
             self.trail_lifetime,
             self.trail_texture
         )
-        self:DeleteOnRemove(self.trail)
+
+        if IsValid(self.trail) then
+            self:DeleteOnRemove(self.trail)
+        end
     end
 
     self.real_scale = self:GetFlameSize()
@@ -110,6 +113,7 @@ function ENT:Explode()
     if not IsValid(dmgowner) then
         dmgowner = self
     end
+
     util.BlastDamage(self, dmgowner, pos, 300, 40)
 end
 
@@ -143,11 +147,13 @@ if SERVER then
                 local dmg = DamageInfo()
                 dmg:SetDamageType(DMG_BURN)
                 dmg:SetDamage(self.hurt_base + math.random(-self.hurt_variance, self.hurt_variance))
+
                 if IsValid(self:GetDamageParent()) then
                     dmg:SetAttacker(self:GetDamageParent())
                 else
                     dmg:SetAttacker(self)
                 end
+
                 dmg:SetInflictor(self.firechild)
 
                 gameEffects.RadiusDamage(dmg, self:GetPos(), self.hurt_radius, self)
@@ -163,7 +169,7 @@ if SERVER then
                 self:SetDieTime(0)
             else
                 -- wait until we're still before creating a fire
-                if self:GetVelocity() == Vector(0, 0, 0) then
+                if self:GetVelocity() == vector_origin then
                     self:StartFire()
                 end
             end
@@ -184,14 +190,20 @@ function ENT:StartFire()
         self:GetDamageParent(),
         self
     )
-    self:DeleteOnRemove(self.firechild)
+
+    if IsValid(self.firechild) then
+        self:DeleteOnRemove(self.firechild)
+    end
 
     self:SetBurning(true)
 
     if self:GetImmobile() then
         self:SetMoveType(MOVETYPE_NONE)
-        local physobj = self:GetPhysicsObject()
-        physobj:EnableMotion(false)
+
+        local phys = self:GetPhysicsObject()
+        if IsValid(phys) then
+            phys:EnableMotion(false)
+        end
     end
 end
 
