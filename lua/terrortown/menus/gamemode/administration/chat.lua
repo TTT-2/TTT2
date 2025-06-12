@@ -87,6 +87,12 @@ function CLGAMEMODESUBMENU:Populate(parent)
         master = enbLocVoice,
     })
 
+    form3:MakeCheckBox({
+        serverConvar = "ttt_locational_voice_team",
+        label = "label_locational_voice_team",
+        master = enbLocVoice,
+    })
+
     local form4 = vgui.CreateTTT2Form(parent, "header_textchat")
 
     form4:MakeCheckBox({

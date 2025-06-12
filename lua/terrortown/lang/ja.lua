@@ -1659,6 +1659,7 @@ L.label_voice_drain_normal = "通常プレイヤーのボイスチャットの�
 L.label_voice_drain_admin = "管理者および確白役職のボイスチャットのバッテリーのチックあたりの減少値"
 L.label_voice_drain_recharge = "ボイスチャットをしていないティックあたりのリチャージ率"
 L.label_locational_voice = "生存者同士における近接ボイスチャットの有効"
+--L.label_locational_voice_team = "Enable proximity team voice chat for living players"
 L.label_locational_voice_prep = "準備フェーズにおける近接ボイスチャットの有効"
 L.label_locational_voice_range = "近接ボイスチャット範囲"
 L.label_armor_on_spawn = "全プレイヤーアーマー装着"
