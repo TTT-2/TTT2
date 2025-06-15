@@ -4,6 +4,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.14.4b](https://github.com/TTT-2/TTT2/tree/v0.14.4b) (2025-06-15)
+
 ### Fixed
 
 - Fixed health station continuous use not working (by @wgetJane)
