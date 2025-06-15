@@ -2360,6 +2360,26 @@ function CreateChanges()
         os.time({ year = 2025, month = 03, day = 18 })
     )
 
+    AddChange(
+        "TTT2 Base - v0.14.4b",
+        [[
+
+        <h2>Fixed</h2>
+        <ul>
+            <li>Fixed health station continuous use not working (by @wgetJane)</li>
+            <li>Fixed the shop search breaking when using certain special characters (by @NickCloudAT)</li>
+            <li>Fixed propspec not working (by @wgetJane)</li>
+            <li>Fixed a regression in TTT voice chat team colors (see <https://github.com/Facepunch/garrysmod/commit/39b7394ced29ffe318213e580efa4b1090828ac7>)</li>
+            <li>Fixed ghost viewmodels briefly appearing from weapons held by other players (by @TW2STaL1CKY)</li>
+            <li>Fixed corpses not inheriting the bodygroups from the players model (by @NickCloudAT)</li>
+            <li>Fixed edgecases where ttt_flame entities break when their extra entities fail to initialise (by @TW2STaL1CKY)</li>
+            <li>Fixed null physics object error for doors (by @mexikoedi)</li>
+        </ul>
+
+    ]],
+        os.time({ year = 2025, month = 06, day = 15 })
+    )
+
     ---
     -- run hook for other addons to add their changelog as well
     -- @realm client
