@@ -113,11 +113,13 @@ end
 ---
 -- @ignore
 function SWEP:FirePulse(force_fwd, force_up)
-    if not IsValid(self:GetOwner()) then
+    local owner = self:GetOwner()
+
+    if not IsValid(owner) then
         return
     end
 
-    self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+    owner:SetAnimation(PLAYER_ATTACK1)
 
     sound.Play(self.Primary.Sound, self:GetPos(), self.Primary.SoundLevel)
 
@@ -128,15 +130,14 @@ function SWEP:FirePulse(force_fwd, force_up)
 
     local bullet = {}
     bullet.Num = num
-    bullet.Src = self:GetOwner():GetShootPos()
-    bullet.Dir = self:GetOwner():GetAimVector()
+    bullet.Src = owner:GetShootPos()
+    bullet.Dir = owner:GetAimVector()
     bullet.Spread = Vector(cone, cone, 0)
     bullet.Tracer = 1
+    bullet.TracerName = "AirboatGunHeavyTracer"
     bullet.Force = force_fwd / 10
     bullet.Damage = 1
-    bullet.TracerName = "AirboatGunHeavyTracer"
 
-    local owner = self:GetOwner()
     local fwd = force_fwd / num
     local up = force_up / num
 
@@ -158,7 +159,7 @@ function SWEP:FirePulse(force_fwd, force_up)
         end
     end
 
-    self:GetOwner():FireBullets(bullet)
+    owner:FireBullets(bullet)
 end
 
 local CHARGE_FORCE_FWD_MIN = 300
@@ -229,17 +230,21 @@ end
 function SWEP:Think()
     BaseClass.Think(self)
 
-    if self.IsCharging and IsValid(self:GetOwner()) and self:GetOwner():IsTerror() then
-        -- on client this is prediction
-        if not self:GetOwner():KeyDown(IN_ATTACK2) then
-            self:ChargedAttack()
-            return true
-        end
+    if self.IsCharging then
+        local owner = self:GetOwner()
 
-        if SERVER and self:GetCharge() < 1 and self.NextCharge < CurTime() then
-            self:SetCharge(math.min(1, self:GetCharge() + CHARGE_AMOUNT))
+        if IsValid(owner) and owner:IsTerror() then
+            -- on client this is prediction
+            if not owner:KeyDown(IN_ATTACK2) then
+                self:ChargedAttack()
+                return true
+            end
 
-            self.NextCharge = CurTime() + CHARGE_DELAY
+            if SERVER and self:GetCharge() < 1 and self.NextCharge < CurTime() then
+                self:SetCharge(math.min(1, self:GetCharge() + CHARGE_AMOUNT))
+
+                self.NextCharge = CurTime() + CHARGE_DELAY
+            end
         end
     end
 end
