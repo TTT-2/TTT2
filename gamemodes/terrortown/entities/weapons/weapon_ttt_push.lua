@@ -127,6 +127,7 @@ function SWEP:FirePulse(force_fwd, force_up)
     local num = 6
 
     local bullet = {}
+    bullet.Inflictor = self
     bullet.Num = num
     bullet.Src = self:GetOwner():GetShootPos()
     bullet.Dir = self:GetOwner():GetAimVector()

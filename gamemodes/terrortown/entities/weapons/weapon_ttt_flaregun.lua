@@ -190,6 +190,7 @@ end
 function SWEP:ShootFlare()
     local cone = self.Primary.Cone
     local bullet = {}
+    bullet.Inflictor = self
     bullet.Num = 1
     bullet.Src = self:GetOwner():GetShootPos()
     bullet.Dir = self:GetOwner():GetAimVector()
