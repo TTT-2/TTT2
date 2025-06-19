@@ -14,8 +14,6 @@ ENT.isDestructible = true
 
 ENT.pickupWeaponClass = nil
 
-ENT.CanUseKey = true
-
 local soundDeny = Sound("HL2Player.UseDeny")
 
 ---
@@ -54,29 +52,6 @@ end
 function ENT:PlayerCanPickupWeapon(activator)
     return true
 end
-
-if CLIENT then
-    ---
-    -- Hook that is called if a player uses their use key while focusing on the entity.
-    -- Implement this to predict early if entity can be picked up
-    -- @return bool True to prevent pickup
-    -- @realm client
-    function ENT:ClientUse()
-        local client = LocalPlayer()
-
-        if not IsValid(client) or not client:IsTerror() or not self.pickupWeaponClass then
-            return true
-        end
-
-        if not self:PlayerCanPickupWeapon(client) then
-            LANG.Msg("pickup_fail", nil, MSG_MSTACK_WARN)
-
-            self:EmitSound(soundDeny)
-
-            return true
-        end
-    end
-end -- CLIENT
 
 if SERVER then
     local soundRumble = {
