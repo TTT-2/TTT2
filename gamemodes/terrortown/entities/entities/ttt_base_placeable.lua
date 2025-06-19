@@ -14,8 +14,6 @@ ENT.isDestructible = true
 
 ENT.pickupWeaponClass = nil
 
-ENT.CanUseKey = true
-
 local soundDeny = Sound("HL2Player.UseDeny")
 
 ---
@@ -56,10 +54,12 @@ function ENT:PlayerCanPickupWeapon(activator)
 end
 
 if CLIENT then
+    -- TODO: Remove? This is not really that efficient anyway
     ---
     -- Hook that is called if a player uses their use key while focusing on the entity.
     -- Implement this to predict early if entity can be picked up
-    -- @return bool True to prevent pickup
+    -- @note This is only called once. Continuous use is not supported here.
+    -- @return bool True to suppress the actual +use operation of the entity on the Server.
     -- @realm client
     function ENT:ClientUse()
         local client = LocalPlayer()

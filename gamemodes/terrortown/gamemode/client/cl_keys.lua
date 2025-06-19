@@ -43,6 +43,8 @@ function GM:PlayerBindPress(ply, bindName, pressed)
         return
     end
 
+    Dev(2, "[TTT2][Keys] PlayerBindPress: " .. bindName .. " pressed: " .. tostring(pressed))
+
     if bindName == "invnext" and pressed then
         if not ply:IsSpec() then
             WSWITCH:SelectNext()
@@ -64,6 +66,19 @@ function GM:PlayerBindPress(ply, bindName, pressed)
             return true
         end
     elseif bindName == "+use" and pressed then
+        -- Handle special spectator use override
+        if ply:IsSpec() then
+            net.Start("TTT2PlayerUseEntity")
+            net.WriteEntity(nil)
+            net.WriteString("spectator_use")
+            net.SendToServer()
+
+            Dev(1, "specuse use triggered")
+
+            -- Suppress the +use bind
+            return true
+        end
+
         -- Do old traitor button check
         if TBHUD:PlayerIsFocused() then
             if ply:KeyDown(IN_WALK) then
@@ -76,45 +91,73 @@ function GM:PlayerBindPress(ply, bindName, pressed)
         end
 
         -- Find out if a marker is focused otherwise check normal use
-        local isClientOnly = false
-        local useEnt = markerVision.GetFocusedEntity()
-        local isRemote = IsValid(useEnt)
-        if not isRemote then
-            local tr = util.TraceLine({
-                start = ply:GetShootPos(),
-                endpos = ply:GetShootPos() + ply:GetAimVector() * 100,
-                filter = ply,
-                mask = MASK_ALL,
-            })
+        local markerVisionFocusedEnt = markerVision.GetFocusedEntity()
 
-            useEnt = tr.Entity
-
-            if not tr.Hit or not IsValid(useEnt) then
-                useEnt = nil
-            end
-
-            if useEnt and isfunction(useEnt.ClientUse) then
-                isClientOnly = useEnt:ClientUse()
-            end
-        elseif isfunction(useEnt.RemoteUse) then
+        if IsValid(markerVisionFocusedEnt) and isfunction(markerVisionFocusedEnt.RemoteUse) then
             sound.ConditionalPlay(soundUse, SOUND_TYPE_INTERACT)
 
-            isClientOnly = useEnt:RemoteUse(ply)
-        end
+            local clientsideOnly = markerVisionFocusedEnt:RemoteUse()
 
-        -- If returned true by ClientUse or RemoteUse, then dont call Use and UseOverride or RemoteUse serverside
-        if isClientOnly then
+            if not clientsideOnly then
+                -- Call this on the server too.
+                -- This cannot be done on the server's Entity:Use hook etc., because we suppress the +use bind here to not trigger it
+                -- on other close by entities.
+
+                net.Start("TTT2PlayerUseEntity")
+                net.WriteEntity(markerVisionFocusedEnt)
+                net.WriteString("remote_use")
+                net.SendToServer()
+            end
+
+            Dev(1, "markervision use triggered")
+
+            -- Suppress the +use bind here, so it does not trigger the Entity:Use hook on other close by entities.
+            -- Suppressing means, that the server will not see this key as being pressed anymore, even if the client is still pressing it.
             return true
         end
 
-        if IsValid(useEnt) and (ply:IsSpec() or useEnt:IsSpecialUsableEntity()) then
+        -- This can sometimes deviate from the entity that the server actually uses.
+        -- But this is fine for now.
+        -- See https://github.com/Facepunch/garrysmod-issues/issues/5027
+        local clientUseEnt = ply:GetUseEntity()
+
+        if IsValid(clientUseEnt) and isfunction(clientUseEnt.ClientUse) then
+            -- This does not reliably block +use on entities. You should not rely on this to block +use on entities.
+            -- E.g. when pressing +use and running into an enity, the server will still call Entity:Use on that entity.
+            -- Because this function is not reevaluated, when the player is still pressing +use.
+            -- TODO: Maybe remove the clientsideOnly?
+            local clientsideOnly = clientUseEnt:ClientUse()
+
+            Dev(
+                2,
+                "client use triggered on "
+                    .. clientUseEnt:GetClass()
+                    .. " with clientsideOnly: "
+                    .. tostring(clientsideOnly)
+            )
+
+            if clientsideOnly then
+                -- Suppress the +use bind
+                return true
+            end
+        end
+
+        -- Handle special weapon pickup use override
+        local trace = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 100, ply)
+
+        if IsValid(trace.Entity) and trace.Entity:IsWeapon() then
             net.Start("TTT2PlayerUseEntity")
-            net.WriteEntity(useEnt)
-            net.WriteBool(isRemote)
+            net.WriteEntity(trace.Entity)
+            net.WriteString("weapon_pickup")
             net.SendToServer()
 
+            Dev(1, "weapon use triggered")
+
+            -- Suppress the +use bind
             return true
         end
+
+        -- Otherwise the +use is executed as usual, triggering the server-side Entity:Use function.
     elseif string.sub(bindName, 1, 4) == "slot" and pressed then
         local idx = tonumber(string.sub(bindName, 5, -1)) or 1
 

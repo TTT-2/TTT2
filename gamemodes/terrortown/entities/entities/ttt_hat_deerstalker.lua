@@ -11,8 +11,6 @@ ENT.PrintName = "hat_deerstalker_name"
 ENT.Model = Model("models/ttt/deerstalker.mdl")
 ENT.CanHavePrints = false
 
-ENT.CanUseKey = true
-
 ---
 -- @realm shared
 function ENT:SetupDataTables()
