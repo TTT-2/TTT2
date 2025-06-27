@@ -103,9 +103,10 @@ function markerVision.Remove(ent, identifier)
         marks.Remove({ ent })
     end
 
-    -- Restore the old value for UpdateTransmitState.
+    -- Restore the old value for UpdateTransmitState and clear ttt2MVTransmitOldFunc.
     ent.UpdateTransmitState = ent.ttt2MVTransmitOldFunc
     ent:AddEFlags(EFL_FORCE_CHECK_TRANSMIT)
+    ent.ttt2MVTransmitOldFunc = nil
 end
 
 local entmeta = assert(FindMetaTable("Entity"), "[TTT2] FAILED TO FIND ENTITY TABLE")
