@@ -88,5 +88,5 @@ derma.DefineControl(
     "DInfoItemTTT2",
     "An info box that can contain an icon, a header text and a description area",
     PANEL,
-    "DPanelTTT2"
+    "TTT2:DPanel"
 )

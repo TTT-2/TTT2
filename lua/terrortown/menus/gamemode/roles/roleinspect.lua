@@ -378,7 +378,7 @@ local function PopulateSubrolesStage(stage, form, stageData)
 
         local recBaseroleData = stageData.roles[baserole]
         if not recBaseroleData then
-            local lbl = vgui.Create("DLabelTTT2", baseroleForm)
+            local lbl = vgui.Create("TTT2:DLabel", baseroleForm)
             lbl:Dock(TOP)
             lbl:SetText("label_inspect_no_subroles")
             continue
@@ -524,10 +524,10 @@ function CLGAMEMODESUBMENU:Populate(parent)
         if #roleinspectTable == 0 then
             -- empty table, put in an appropriate message
 
-            local labelHolder = vgui.Create("DPanelTTT2", parent)
+            local labelHolder = vgui.Create("TTT2:DPanel", parent)
             labelHolder:Dock(TOP)
             labelHolder:DockMargin(20, 20, 20, 20)
-            local labelNoContent = vgui.Create("DLabelTTT2", labelHolder)
+            local labelNoContent = vgui.Create("TTT2:DLabel", labelHolder)
             labelNoContent:SetText("label_roleinspect_no_data")
             labelNoContent:SetFont("DermaTTT2Title")
             labelNoContent:Dock(FILL)
