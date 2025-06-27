@@ -43,6 +43,16 @@ function markerVision.Add(ent, identifier)
 
     markerVision.registry[#markerVision.registry + 1] = mvObject
 
+    -- Overwrite the entity's UpdateTransmitState function to TRANSMIT_ALWAYS.
+    -- This is necessary because otherwise the entity might get culled.
+    -- Before we overwrite the function, we save the old function to restore it later.
+    ent.ttt2MVTransmitOldFunc = ent.UpdateTransmitState
+
+    ent.UpdateTransmitState = function()
+        return TRANSMIT_ALWAYS
+    end
+    ent:AddEFlags(EFL_FORCE_CHECK_TRANSMIT)
+
     return mvObject
 end
 
@@ -92,6 +102,10 @@ function markerVision.Remove(ent, identifier)
     if CLIENT then
         marks.Remove({ ent })
     end
+
+    -- Restore the old value for UpdateTransmitState.
+    ent.UpdateTransmitState = ent.ttt2MVTransmitOldFunc
+    ent:AddEFlags(EFL_FORCE_CHECK_TRANSMIT)
 end
 
 local entmeta = assert(FindMetaTable("Entity"), "[TTT2] FAILED TO FIND ENTITY TABLE")
