@@ -7,6 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed guns not applying themselves as their damage inflictor (by @TW1STaL1CKY)
+- Fixed not being able to use entities through water and clip brushes (by @TW1STaL1CKY)
 
 ## [v0.14.4b](https://github.com/TTT-2/TTT2/tree/v0.14.4b) (2025-06-15)
 

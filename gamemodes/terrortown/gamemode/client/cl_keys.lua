@@ -80,11 +80,13 @@ function GM:PlayerBindPress(ply, bindName, pressed)
         local useEnt = markerVision.GetFocusedEntity()
         local isRemote = IsValid(useEnt)
         if not isRemote then
+            local shootPos = ply:GetShootPos()
+
             local tr = util.TraceLine({
-                start = ply:GetShootPos(),
-                endpos = ply:GetShootPos() + ply:GetAimVector() * 100,
+                start = shootPos,
+                endpos = shootPos + ply:GetAimVector() * 100,
                 filter = ply,
-                mask = MASK_ALL,
+                mask = bit.bor(MASK_SOLID, CONTENTS_DEBRIS),
             })
 
             useEnt = tr.Entity
