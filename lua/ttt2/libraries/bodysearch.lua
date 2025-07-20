@@ -1020,7 +1020,7 @@ if CLIENT then
 
         ---
         -- @realm client
-        hook.Run("TTTBodySearchPopulate", search, raw)
+        hook.Run("TTTBodySearchPopulate", search, raw, true)
 
         return search
     end
@@ -1211,9 +1211,10 @@ if CLIENT then
     -- This hook can be used to populate the body search panel.
     -- @param table search The search data table
     -- @param table raw The raw search data
+    -- @param boolean scoreboard Whether the hook is being called to popluate the scoreboard (legacy)
     -- @hook
     -- @realm client
-    function GM:TTTBodySearchPopulate(search, raw) end
+    function GM:TTTBodySearchPopulate(search, raw, scoreboard) end
 
     ---
     -- This hook can be used to modify the equipment info of a corpse.

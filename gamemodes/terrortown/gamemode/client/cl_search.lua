@@ -151,14 +151,19 @@ end
 -- @param string name A unique name to keep a reference to the item
 -- @param table data The data that is added to the element
 -- @param[opt] number height The height of the element
+-- @param[opt] number order The order id of the element in the list
 -- @return Panel The box element
 -- @realm client
-function SEARCHSCREEN:MakeInfoItem(parent, name, data, height)
+function SEARCHSCREEN:MakeInfoItem(parent, name, data, height, order)
     local box = vgui.Create("DInfoItemTTT2", parent)
     box:SetSize(self.sizes.widthContentBox, height or self.sizes.heightInfoItem)
     box:Dock(TOP)
     box:DockMargin(0, 0, 0, self.sizes.padding)
     box:SetData(data)
+
+    if isnumber(order) then
+        box:SetZPos(order)
+    end
 
     -- cache reference to box
     self.infoBoxes[name] = box
@@ -231,6 +236,8 @@ function SEARCHSCREEN:Show(data)
     local searchMode = bodysearch.GetInspectConfirmMode()
 
     -- POPULATE WITH SPECIAL INFORMATION
+    local specialItemOrder = -100
+
     if client:IsSpec() then
         -- a spectator can see all information, but not interact with the UI
         self:MakeInfoItem(contentAreaScroll, "sepc_search_info", {
@@ -247,7 +254,7 @@ function SEARCHSCREEN:Show(data)
                 },
             },
             colorBox = COLOR_SLATEGRAY,
-        }, 62)
+        }, 62, specialItemOrder)
     elseif searchMode == 0 and not bodysearch.IsConfirmed(data.ragOwner) then
         -- a detective can only be called AFTER a body was confirmed
         self:MakeInfoItem(contentAreaScroll, "policingrole_call_confirm", {
@@ -264,7 +271,7 @@ function SEARCHSCREEN:Show(data)
                 },
             },
             colorBox = roles.DETECTIVE.ltcolor,
-        }, 62)
+        }, 62, specialItemOrder)
     elseif
         bodysearch.CanReportBody(data.ragOwner)
         and not bodysearch.IsConfirmed(data.ragOwner)
@@ -284,11 +291,13 @@ function SEARCHSCREEN:Show(data)
                 },
             },
             colorBox = roles.DETECTIVE.ltcolor,
-        }, (searchMode == 1) and 62 or 78)
+        }, (searchMode == 1) and 62 or 78, specialItemOrder)
     end
 
     -- POPULATE WITH INFORMATION
-    for i = 1, #bodysearch.searchResultOrder do
+    local defaultItemsNum = #bodysearch.searchResultOrder
+
+    for i = 1, defaultItemsNum do
         local searchResultName = bodysearch.searchResultOrder[i]
         local searchResultData = bodysearch.GetContentFromData(searchResultName, data)
 
@@ -296,29 +305,31 @@ function SEARCHSCREEN:Show(data)
             continue
         end
 
-        self:MakeInfoItem(contentAreaScroll, searchResultName, searchResultData)
+        self:MakeInfoItem(contentAreaScroll, searchResultName, searchResultData, nil, i)
     end
 
     if playerDataKnown then
         -- additional information by other addons
         local searchAdd = {}
+        local customItemsIndex = 0
+
         ---
         -- @realm client
-        hook.Run("TTTBodySearchPopulate", searchAdd, data)
-        for _, v in pairs(searchAdd) do
-            if istable(v.text) then
-                self:MakeInfoItem(
-                    contentAreaScroll,
-                    Material(v.img),
-                    { title = v.title or "", text = v.text }
-                )
-            else
-                self:MakeInfoItem(
-                    contentAreaScroll,
-                    Material(v.img),
-                    { title = "", text = { { body = v.text } } }
-                )
-            end
+        hook.Run("TTTBodySearchPopulate", searchAdd, data, false)
+
+        for k, v in pairs(searchAdd) do
+            customItemsIndex = customItemsIndex + 1
+
+            local order = v.order or (defaultItemsNum + customItemsIndex)
+
+            self:MakeInfoItem(contentAreaScroll, k,
+                {
+                    iconMaterial = v.img and Material(v.img) or nil,
+                    iconText = isfunction(v.text_icon) and v.text_icon or nil,
+                    text = istable(v.text) and v.text or { title = { body = v.title }, text = { { body = v.text } } },
+                    colorBox = v.bg_color
+                },
+                v.height, order)
         end
     end
 
