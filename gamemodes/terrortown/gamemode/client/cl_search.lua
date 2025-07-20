@@ -325,8 +325,8 @@ function SEARCHSCREEN:Show(data)
             self:MakeInfoItem(contentAreaScroll, k, {
                 iconMaterial = v.img and Material(v.img) or nil,
                 iconText = isfunction(v.text_icon) and v.text_icon or nil,
-                text = istable(v.text) and v.text or
-                    { title = { body = v.title }, text = { { body = v.text } } },
+                text = istable(v.text) and v.text
+                    or { title = { body = v.title }, text = { { body = v.text } } },
                 colorBox = v.bg_color
             }, v.height, order)
         end
