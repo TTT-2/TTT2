@@ -4,6 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Changed
+
+- `GM:TTTModifyTargetedEntity` can now return a second value to modify the distance of a new target entity (by @TW1STaL1CKY)
+
 ### Fixed
 
 - Fixed guns not applying themselves as their damage inflictor (by @TW1STaL1CKY)
