@@ -6,12 +6,20 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
+- Made improvements to how data returned from the `GM:TTTBodySearchPopulate` hook is handled to make custom bodysearch entry creation better (by @TW1STaL1CKY)
+  - Added support for icon text (like the timer on the Death Time entry)
+  - Added support for specifying the ordering so custom entries can be placed between existing entries
+  - Added support for coloring the entry's background box
+  - Added support for specifying a custom height for an entry
+  - Gave `GM:TTTBodySearchPopulate` hook a new boolean argument named `scoreboard` which becomes true if the hook is being called to populate the bodysearch info on the scoreboard
 - `GM:TTTModifyTargetedEntity` can now return a second value to modify the distance of a new target entity (by @TW1STaL1CKY)
 
 ### Fixed
 
 - Fixed guns not applying themselves as their damage inflictor (by @TW1STaL1CKY)
 - Fixed not being able to use entities through water and clip brushes (by @TW1STaL1CKY)
+- Fixed `GM:TTTBodySearchPopulate` failing to create custom bodysearch entries properly (by @TW1STaL1CKY)
+- Fixed scoreboard breaking if a custom bodysearch entry has no icon (by @TW1STaL1CKY)
 
 ## [v0.14.4b](https://github.com/TTT-2/TTT2/tree/v0.14.4b) (2025-06-15)
 

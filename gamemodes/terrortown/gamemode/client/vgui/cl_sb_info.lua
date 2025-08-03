@@ -131,9 +131,6 @@ function PANEL:UpdatePlayerData()
             ic = vgui.Create("SimpleIconAvatar", self.List)
             ic:SetPlayer(info.ply)
             ic:SetAvatarSize(24)
-        elseif t == "dtime" then
-            ic = vgui.Create("SimpleIconLabelled", self.List)
-            ic:SetIconText(info.text_icon)
         elseif t == "role" then
             ic = vgui.Create("SimpleRoleIcon", self.List)
 
@@ -142,8 +139,19 @@ function PANEL:UpdatePlayerData()
             ic.Icon:SetRoleIconImage(icon)
 
             icon = "vgui/ttt/dynamic/icon_base"
+        elseif isfunction(info.text_icon) then
+            ic = vgui.Create("SimpleIconLabelled", self.List)
+            ic:SetIconText(info.text_icon())
+        elseif isstring(info.text_icon) then
+            ic = vgui.Create("SimpleIconLabelled", self.List)
+            ic:SetIconText(info.text_icon)
         else
             ic = vgui.Create("SimpleIcon", self.List)
+        end
+
+        -- Prevent the scoreboard from breaking if the search result has no icon
+        if not icon then
+            icon = "vgui/ttt/dynamic/icon_base"
         end
 
         ic:SetIconSize(64)
