@@ -296,11 +296,15 @@ function GM:HUDDrawTargetID()
 
     ---
     -- @realm client
-    local changedEnt = hook.Run("TTTModifyTargetedEntity", ent, distance)
+    local changedEnt, changedDistance = hook.Run("TTTModifyTargetedEntity", ent, distance)
 
     if changedEnt then
         unchangedEnt = ent
         ent = changedEnt
+
+        if isnumber(changedDistance) then
+            distance = changedDistance
+        end
     end
 
     -- make sure it is a valid entity
