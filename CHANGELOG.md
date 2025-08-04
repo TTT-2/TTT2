@@ -17,6 +17,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed guns not applying themselves as their damage inflictor (by @TW1STaL1CKY)
+- Fixed markerVision entities getting culled by the game if too far away (by @NickCloudAT)
 - Fixed not being able to use entities through water and clip brushes (by @TW1STaL1CKY)
 - Fixed `GM:TTTBodySearchPopulate` failing to create custom bodysearch entries properly (by @TW1STaL1CKY)
 - Fixed scoreboard breaking if a custom bodysearch entry has no icon (by @TW1STaL1CKY)
