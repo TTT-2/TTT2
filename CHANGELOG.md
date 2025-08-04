@@ -12,6 +12,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added support for coloring the entry's background box
   - Added support for specifying a custom height for an entry
   - Gave `GM:TTTBodySearchPopulate` hook a new boolean argument named `scoreboard` which becomes true if the hook is being called to populate the bodysearch info on the scoreboard
+- `GM:TTTModifyTargetedEntity` can now return a second value to modify the distance of a new target entity (by @TW1STaL1CKY)
 
 ### Fixed
 
