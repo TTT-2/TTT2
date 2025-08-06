@@ -21,6 +21,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed not being able to use entities through water and clip brushes (by @TW1STaL1CKY)
 - Fixed `GM:TTTBodySearchPopulate` failing to create custom bodysearch entries properly (by @TW1STaL1CKY)
 - Fixed scoreboard breaking if a custom bodysearch entry has no icon (by @TW1STaL1CKY)
+- remove CS:S check since the resources got integrated (excluding music and maps) (by @xopez)
 
 ## [v0.14.4b](https://github.com/TTT-2/TTT2/tree/v0.14.4b) (2025-06-15)
 
