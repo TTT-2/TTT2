@@ -294,12 +294,6 @@ function GM:Initialize()
         RunConsoleCommand("sv_alltalk", "0")
     end
 
-    if not IsMounted("cstrike") then
-        ErrorNoHalt(
-            "TTT2 WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n"
-        )
-    end
-
     ---
     -- @realm shared
     hook.Run("PostInitialize")
