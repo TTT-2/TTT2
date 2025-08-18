@@ -2380,6 +2380,37 @@ function CreateChanges()
         os.time({ year = 2025, month = 06, day = 15 })
     )
 
+    AddChange(
+        "TTT2 Base - v0.14.5b",
+        [[
+
+        <h2>Changed</h2>
+        <ul>
+            <li>Made improvements to how data returned from the <code>GM:TTTBodySearchPopulate</code> hook is handled to make custom bodysearch entry creation better (by @TW1STaL1CKY)</li>
+            <ul>
+                <li>Added support for icon text (like the timer on the Death Time entry)</li>
+                <li>Added support for specifying the ordering so custom entries can be placed between existing entries</li>
+                <li>Added support for coloring the entry's background box</li>
+                <li>Added support for specifying a custom height for an entry</li>
+                <li>Gave <code>GM:TTTBodySearchPopulate</code> hook a new boolean argument named <code>scoreboard</code> which becomes true if the hook is being called to populate the bodysearch info on the scoreboard</li>
+            </ul>
+            <li><code>GM:TTTModifyTargetedEntity</code> can now return a second value to modify the distance of a new target entity (by @TW1STaL1CKY)</li>
+        </ul>
+
+        <h2>Fixed</h2>
+        <ul>
+            <li>Fixed guns not applying themselves as their damage inflictor (by @TW1STaL1CKY)</li>
+            <li>Fixed markerVision entities getting culled by the game if too far away (by @NickCloudAT)</li>
+            <li>Fixed not being able to use entities through water and clip brushes (by @TW1STaL1CKY)</li>
+            <li>Fixed <code>GM:TTTBodySearchPopulate</code> failing to create custom bodysearch entries properly (by @TW1STaL1CKY)</li>
+            <li>Fixed scoreboard breaking if a custom bodysearch entry has no icon (by @TW1STaL1CKY)</li>
+            <li>remove CS:S check since the resources got integrated (excluding music and maps) (by @xopez)</li>
+        </ul>
+
+    ]],
+        os.time({ year = 2025, month = 08, day = 18 })
+    )
+
     ---
     -- run hook for other addons to add their changelog as well
     -- @realm client
