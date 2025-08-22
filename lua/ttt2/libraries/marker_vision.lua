@@ -106,7 +106,7 @@ function markerVision.Remove(ent, identifier)
     -- Restore the old value for UpdateTransmitState and clear ttt2MVTransmitOldFunc.
     if IsValid(ent) then
         ent.UpdateTransmitState = ent.ttt2MVTransmitOldFunc
-        ent:AddEFlags(EFL_FORCE_CHECK_TRANSMIT)
+        ent:RemoveEFlags(EFL_FORCE_CHECK_TRANSMIT)
         ent.ttt2MVTransmitOldFunc = nil
     end
 end
