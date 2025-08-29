@@ -398,11 +398,18 @@ if SERVER then
 
         if IsValid(ply) and ply:IsPlayer() then
             DamageLog(
-                string.format("TTT2Doors: The door with the index %s has been destroyed by %s.", self:EntIndex(), ply:Nick())
+                string.format(
+                    "TTT2Doors: The door with the index %s has been destroyed by %s.",
+                    self:EntIndex(),
+                    ply:Nick()
+                )
             )
         else
             DamageLog(
-                string.format("TTT2Doors: The door with the index %s has been destroyed.", self:EntIndex())
+                string.format(
+                    "TTT2Doors: The door with the index %s has been destroyed.",
+                    self:EntIndex()
+                )
             )
         end
 
