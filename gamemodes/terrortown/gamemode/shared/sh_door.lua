@@ -378,7 +378,7 @@ if SERVER then
             v:SetParent(doorProp)
             v:SetLocalPos(pos)
             v:SetLocalAngles(ang)
-		end
+        end
 
         door.HandleDestruction(self)
 
@@ -398,17 +398,11 @@ if SERVER then
 
         if IsValid(ply) and ply:IsPlayer() then
             DamageLog(
-                "TTT2Doors: The door with the index "
-                    .. self:EntIndex()
-                    .. " has been destroyed by "
-                    .. ply:Nick()
-                    .. "."
+                string.format("TTT2Doors: The door with the index %s has been destroyed by %s.", self:EntIndex(), ply:Nick())
             )
         else
             DamageLog(
-                "TTT2Doors: The door with the index "
-                    .. self:EntIndex()
-                    .. " has been destroyed."
+                string.format("TTT2Doors: The door with the index %s has been destroyed.", self:EntIndex())
             )
         end
 
