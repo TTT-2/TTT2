@@ -362,12 +362,29 @@ if SERVER then
         doorProp:SetCollisionGroup(COLLISION_GROUP_NONE)
         doorProp:SetMoveType(MOVETYPE_VPHYSICS)
         doorProp:SetSolid(SOLID_BBOX)
-        doorProp:SetPos(self:GetPos() + Vector(0, 0, 2))
+        doorProp:SetPos(self:GetPos() + vector_up)
         doorProp:SetAngles(self:GetAngles())
         doorProp:SetModel(self:GetModel())
         doorProp:SetSkin(self:GetSkin())
 
+        for k, v in ipairs(self:GetBodyGroups()) do --can this be ipairs instead?
+            doorProp:SetBodygroup(v.id, self:GetBodygroup(v.id))
+        end
+
+        -- if there are entities parented to the door, transfer them over
+        for k, v in ipairs(self:GetChildren()) do
+            local pos, ang = v:GetLocalPos(), v:GetLocalAngles()
+
+            v:SetParent(doorProp)
+            v:SetLocalPos(pos)
+            v:SetLocalAngles(ang)
+		end
+
         door.HandleDestruction(self)
+
+        -- hide away the real door while it is being opened and destroyed
+        self:SetNoDraw(true)
+        self:SetSolid(SOLID_NONE)
 
         -- disable the door move sound for the destruction
         self:SetKeyValue("soundmoveoverride", "")
@@ -378,6 +395,37 @@ if SERVER then
         -- set flag that this door is destroyed to prevent multiple prop spawns in case
         -- this function is called multiple times for the same door in the same tick
         self.isDestroyed = true
+
+        if IsValid(ply) and ply:IsPlayer() then
+            DamageLog(
+                "TTT2Doors: The door with the index "
+                    .. self:EntIndex()
+                    .. " has been destroyed by "
+                    .. ply:Nick()
+                    .. "."
+            )
+        else
+            DamageLog(
+                "TTT2Doors: The door with the index "
+                    .. self:EntIndex()
+                    .. " has been destroyed."
+            )
+        end
+
+        doorProp:Spawn()
+        doorProp:SetHealth(cvDoorPropHealth:GetInt())
+
+        doorProp.isDoorProp = true
+
+        local physObj = doorProp:GetPhysicsObject()
+
+        if IsValid(physObj) then
+            physObj:ApplyForceCenter(pushForce or vector_origin)
+        end
+
+        ---
+        -- @realm server
+        hook.Run("TTT2DoorDestroyed", doorProp, ply)
 
         -- if the door is grouped as a pair, call the other one as well
         if not surpressPair and IsValid(self.otherPairDoor) then
@@ -392,37 +440,6 @@ if SERVER then
             -- we have to kill the entity here instead of removing it because this way we
             -- have no problems with area portals (invisible rooms after door is destroyed)
             self:Fire("Kill", "", 0)
-
-            if IsValid(ply) and ply:IsPlayer() then
-                DamageLog(
-                    "TTT2Doors: The door with the index "
-                        .. self:EntIndex()
-                        .. " has been destroyed by "
-                        .. ply:Nick()
-                        .. "."
-                )
-            else
-                DamageLog(
-                    "TTT2Doors: The door with the index "
-                        .. self:EntIndex()
-                        .. " has been destroyed."
-                )
-            end
-
-            doorProp:Spawn()
-            doorProp:SetHealth(cvDoorPropHealth:GetInt())
-
-            doorProp.isDoorProp = true
-
-            local physObj = doorProp:GetPhysicsObject()
-
-            if IsValid(physObj) then
-                physObj:ApplyForceCenter(pushForce or Vector(0, 0, 0))
-            end
-
-            ---
-            -- @realm server
-            hook.Run("TTT2DoorDestroyed", doorProp, ply)
         end)
 
         return doorProp
