@@ -362,17 +362,20 @@ if SERVER then
         doorProp:SetCollisionGroup(COLLISION_GROUP_NONE)
         doorProp:SetMoveType(MOVETYPE_VPHYSICS)
         doorProp:SetSolid(SOLID_BBOX)
-        doorProp:SetPos(self:GetPos() + vector_up)
+        doorProp:SetPos(self:GetPos())
         doorProp:SetAngles(self:GetAngles())
         doorProp:SetModel(self:GetModel())
         doorProp:SetSkin(self:GetSkin())
 
-        for k, v in ipairs(self:GetBodyGroups()) do --can this be ipairs instead?
-            doorProp:SetBodygroup(v.id, self:GetBodygroup(v.id))
+        local bodygroups = self:GetBodyGroups()
+        for i = 1, #bodygroups do
+            doorProp:SetBodygroup(v.id, self:GetBodygroup(bodygroups[i].id))
         end
 
         -- if there are entities parented to the door, transfer them over
-        for k, v in ipairs(self:GetChildren()) do
+        local children = self:GetChildren()
+        for i = 1, #children do
+            local v = children[i]
             local pos, ang = v:GetLocalPos(), v:GetLocalAngles()
 
             v:SetParent(doorProp)
