@@ -369,18 +369,19 @@ if SERVER then
 
         local bodygroups = self:GetBodyGroups()
         for i = 1, #bodygroups do
-            doorProp:SetBodygroup(v.id, self:GetBodygroup(bodygroups[i].id))
+            local id = bodygroups[i].id
+            doorProp:SetBodygroup(id, self:GetBodygroup(id))
         end
 
         -- if there are entities parented to the door, transfer them over
         local children = self:GetChildren()
         for i = 1, #children do
-            local v = children[i]
-            local pos, ang = v:GetLocalPos(), v:GetLocalAngles()
+            local child = children[i]
+            local pos, ang = child:GetLocalPos(), child:GetLocalAngles()
 
-            v:SetParent(doorProp)
-            v:SetLocalPos(pos)
-            v:SetLocalAngles(ang)
+            child:SetParent(doorProp)
+            child:SetLocalPos(pos)
+            child:SetLocalAngles(ang)
         end
 
         door.HandleDestruction(self)
