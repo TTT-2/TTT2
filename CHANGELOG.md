@@ -4,6 +4,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Changed
+
+- Made improvements to door destruction (by @TW1STaL1CKY)
+  - Bodygroups from destroyed doors are now transferred to their physics prop
+  - Entities parented to destroyed doors are now transferred to their physics prop
+  - Door props are now spawned as soon as the door is destroyed (instead of a frame later)
+  - Reuse existing vector globals instead of creating new vectors
+
 ### Fixed
 
 - Fixed markerVision null entity error (by @mexikoedi)
