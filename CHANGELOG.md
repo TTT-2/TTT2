@@ -14,7 +14,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
-- Fixed markerVision null entity error (by @mexikoedi)
+- Fixed markerVision null entity errors (by @mexikoedi)
 
 ## [v0.14.5b](https://github.com/TTT-2/TTT2/tree/v0.14.5b) (2025-08-18)
 

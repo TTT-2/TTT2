@@ -46,12 +46,14 @@ function markerVision.Add(ent, identifier)
     -- Overwrite the entity's UpdateTransmitState function to TRANSMIT_ALWAYS.
     -- This is necessary because otherwise the entity might get culled.
     -- Before we overwrite the function, we save the old function to restore it later.
-    ent.ttt2MVTransmitOldFunc = ent.UpdateTransmitState
+    if IsValid(ent) then
+        ent.ttt2MVTransmitOldFunc = ent.UpdateTransmitState
 
-    ent.UpdateTransmitState = function()
-        return TRANSMIT_ALWAYS
+        ent.UpdateTransmitState = function()
+            return TRANSMIT_ALWAYS
+        end
+        ent:AddEFlags(EFL_FORCE_CHECK_TRANSMIT)
     end
-    ent:AddEFlags(EFL_FORCE_CHECK_TRANSMIT)
 
     return mvObject
 end
