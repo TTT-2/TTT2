@@ -22,6 +22,6 @@ Please follow the respective guidelines below to support a good experience for e
 - Make sure your issue is related to the ttt2 gamemode, other issues belong in their respective addon/role repositories.
 - For **bug reports** be sure to fill out the provided template.
 - For **feature requests** be as descriptive as possible.
-  - if you want to suggest a role or an addon please visit our [addon ideas repository](https://github.com/TTT-2/addon-ideas/issues) and open an issue there.
+  - if you want to suggest a role or an addon please visit our [discussion area](https://github.com/TTT-2/TTT2/discussions) and open a new discussion there.
 
 If you want to discuss this and other addons just [join our discord server](https://discord.gg/9njYXGY).
