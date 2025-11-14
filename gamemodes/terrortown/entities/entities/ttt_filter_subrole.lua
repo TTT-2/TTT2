@@ -1,6 +1,6 @@
 ---
 -- @class ENT
--- @section ttt_filter_role
+-- @section ttt_filter_subrole
 
 ENT.Type = "filter"
 ENT.Base = "base_filter"
