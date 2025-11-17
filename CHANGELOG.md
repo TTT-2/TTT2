@@ -11,10 +11,12 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Entities parented to destroyed doors are now transferred to their physics prop
   - Door props are now spawned as soon as the door is destroyed (instead of a frame later)
   - Reuse existing vector globals instead of creating new vectors
+- Added ttt_filter_subrole (by @mrxonte)
 
 ### Fixed
 
 - Fixed markerVision null entity errors (by @mexikoedi)
+- Fixed missing ttt_filter_role in ttt2.fgd (by @mrxonte)
 
 ## [v0.14.5b](https://github.com/TTT-2/TTT2/tree/v0.14.5b) (2025-08-18)
 
