@@ -38,6 +38,8 @@ L.win_showreport = "{num} saniye boyunca raunt raporuna bakalım."
 
 L.limit_round = "Raunt sınırına ulaşıldı. Bir sonraki harita yakında yüklenecek."
 L.limit_time = "Zaman sınırına ulaşıldı. Bir sonraki harita yakında yüklenecek."
+-- limit_left needed for some third-party addons which rely on this vanilla TTT string
+L.limit_left = "Harita değişmeden önce {num} raunt veya {time} dakika kaldı."
 L.limit_left_session_mode_1 = "Harita değişmeden önce {num} raunt veya {time} dakika kaldı."
 L.limit_left_session_mode_2 = "Harita değişmeden önce {time} dakika kaldı."
 L.limit_left_session_mode_3 = "Harita değişmeden önce {num} raunt kaldı."

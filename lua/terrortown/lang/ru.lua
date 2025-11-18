@@ -40,6 +40,8 @@ L.win_showreport = "Давайте посмотрим на результаты 
 
 L.limit_round = "Достигнут лимит раундов. Следующая карта скоро загрузится."
 L.limit_time = "Достигнут лимит времени. Следующая карта скоро загрузится."
+-- limit_left needed for some third-party addons which rely on this vanilla TTT string
+L.limit_left = "До смены карты осталось {num} раунд (а/ов) или {time} мин."
 L.limit_left_session_mode_1 = "До смены карты осталось {num} раунд (а/ов) или {time} мин."
 L.limit_left_session_mode_2 = "Осталось времени до смены карты: {time}."
 L.limit_left_session_mode_3 = "Осталось раундов до смены карты: {num}."
