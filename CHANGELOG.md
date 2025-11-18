@@ -17,6 +17,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Fixed markerVision null entity errors (by @mexikoedi)
 - Fixed missing ttt_filter_role in ttt2.fgd (by @mrxonte)
+- Fixed loading screen tips translation (by @mexikoedi)
 - Fixed missing `limit_left` translation (by @mexikoedi)
 
 ## [v0.14.5b](https://github.com/TTT-2/TTT2/tree/v0.14.5b) (2025-08-18)
