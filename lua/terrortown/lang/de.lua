@@ -38,6 +38,8 @@ L.win_showreport = "Schauen wir uns den Rundenbericht die nächste(n) {num} Seku
 
 L.limit_round = "Rundenlimit erreicht. Die nächste Map wird bald geladen."
 L.limit_time = "Zeitlimit erreicht. Die nächste Map wird bald geladen."
+-- limit_left needed for some third-party addons which rely on this vanilla TTT string
+L.limit_left = "{num} Runde(n) oder {time} Minute(n) verbleibend bis die Map gewechselt wird."
 L.limit_left_session_mode_1 = "{num} Runde(n) oder {time} Minute(n) verbleibend bis die Map gewechselt wird."
 L.limit_left_session_mode_2 = "{time} Minute(n) verbleibend bis die Map gewechselt wird."
 L.limit_left_session_mode_3 = "{num} Runde(n) verbleibend bis die Map gewechselt wird."

@@ -38,6 +38,8 @@ L.win_showreport = "Os resultados da rodada serão exibidos por {num} segundos."
 
 L.limit_round = "Limite de rodadas atingido. O próximo mapa mudará em breve."
 L.limit_time = "Tempo limite atingindo. O próximo mapa mudará em breve."
+-- limit_left needed for some third-party addons which rely on this vanilla TTT string
+L.limit_left = "Ainda há {num} rodada(s) ou {time} minutos restantes antes da troca de mapa."
 L.limit_left_session_mode_1 = "Ainda há {num} rodada(s) ou {time} minutos restantes antes da troca de mapa."
 --L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
 --L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
