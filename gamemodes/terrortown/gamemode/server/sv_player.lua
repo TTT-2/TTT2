@@ -1110,7 +1110,12 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 
         if IsValid(wep) then
             ---@cast wep -nil
-            local s = wep:GetHeadshotMultiplier(ply, dmginfo) or 2
+            local s = 2
+
+            -- only call GetHeadshotMultiplier if the weapon provides it
+            if isfunction(wep.GetHeadshotMultiplier) then
+                s = wep:GetHeadshotMultiplier(ply, dmginfo) or s
+            end
 
             dmginfo:ScaleDamage(s)
         end
