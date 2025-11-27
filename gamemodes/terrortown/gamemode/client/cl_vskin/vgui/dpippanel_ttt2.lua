@@ -238,4 +238,4 @@ function PANEL:PerformLayout()
     end
 end
 
-derma.DefineControl("DPiPPanelTTT2", "A panel-in-panel panel.", PANEL, "DPanelTTT2")
+derma.DefineControl("DPiPPanelTTT2", "A panel-in-panel panel.", PANEL, "TTT2:DPanel")
