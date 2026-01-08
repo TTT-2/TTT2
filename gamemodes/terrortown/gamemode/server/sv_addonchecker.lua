@@ -211,10 +211,6 @@ addonChecker.curatedList = {
         reason = "This addon messes with some core TTT(2) functions, creating issues like corpses being recognized as 'fake' even though they are not.",
         type = ADDON_INCOMPATIBLE,
     },
-    ["1595332211"] = { -- GmodAdminSuite by Methylenedioxymethamphetamine
-        reason = "Breaks the weapon pickup.",
-        type = ADDON_INCOMPATIBLE,
-    },
     ["456247192"] = { -- TTT Coffee-Cup Hunt by Niandra!
         alternative = "2150924507",
         reason = "Addon is broken and doesn't do anything.",
