@@ -39,17 +39,11 @@ local function OnSubmenuClassLoaded(class, path, name)
     class.base = class.base or "base_gamemodesubmenu"
 
     Dev(1, "Added TTT2 gamemode submenu file: ", path, name)
+
 end
 
 -- load submenu base from specific folder
-local submenuBase = classbuilder.BuildFromFolder(
-    "terrortown/menus/gamemode/base_gamemodemenu/",
-    CLIENT_FILE,
-    "CLGAMEMODESUBMENU", -- class scope
-    OnSubmenuClassLoaded, -- on class loaded
-    true, -- should inherit
-    ShouldInherit -- special inheritance check
-)
+local submenuBase
 
 -- callback function that is called once the menu class is loaded;
 -- also used to load submenus for this menu
@@ -103,30 +97,46 @@ local function LoadSubmenus(class, path, name)
     class:Initialize()
 end
 
-local menus = classbuilder.BuildFromFolder(
-    "terrortown/menus/gamemode/",
-    CLIENT_FILE,
-    "CLGAMEMODEMENU", -- class scope
-    OnMenuClassLoaded, -- on class loaded callback
-    true, -- should inherit
-    ShouldInherit, -- special inheritance check
-    nil, -- don't pass through additional classes
-    LoadSubmenus -- post inheritance callback
-)
+local function LoadAllMenus()
 
--- transfer mnus into indexed table and sort by priority
---local menusIndexed = {}
-menusIndexed = {}
+    submenuBase = classbuilder.BuildFromFolder(
+        "terrortown/menus/gamemode/base_gamemodemenu/",
+        CLIENT_FILE,
+        "CLGAMEMODESUBMENU", -- class scope
+        OnSubmenuClassLoaded, -- on class loaded
+        true, -- should inherit
+        ShouldInherit -- special inheritance check
+    )
 
-for _, menu in pairs(menus) do
-    if menu.type == "base_gamemodemenu" then
-        continue
+    local menus = classbuilder.BuildFromFolder(
+        "terrortown/menus/gamemode/",
+        CLIENT_FILE,
+        "CLGAMEMODEMENU", -- class scope
+        OnMenuClassLoaded, -- on class loaded callback
+        true, -- should inherit
+        ShouldInherit, -- special inheritance check
+        nil, -- don't pass through additional classes
+        LoadSubmenus -- post inheritance callback
+    )
+
+    -- transfer mnus into indexed table and sort by priority
+    --local menusIndexed = {}
+    menusIndexed = {}
+
+    for _, menu in pairs(menus) do
+        if menu.type == "base_gamemodemenu" then
+            continue
+        end
+
+        menusIndexed[#menusIndexed + 1] = menu
     end
 
-    menusIndexed[#menusIndexed + 1] = menu
+    table.SortByMember(menusIndexed, "priority")
+
 end
 
-table.SortByMember(menusIndexed, "priority")
+LoadAllMenus()
+hook.Add("OnReloaded", "TTT2HelpLoadMenus", LoadAllMenus)
 
 -- END load help menu classes
 
