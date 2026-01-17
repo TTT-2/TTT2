@@ -39,7 +39,6 @@ local function OnSubmenuClassLoaded(class, path, name)
     class.base = class.base or "base_gamemodesubmenu"
 
     Dev(1, "Added TTT2 gamemode submenu file: ", path, name)
-
 end
 
 -- load submenu base from specific folder
@@ -98,7 +97,6 @@ local function LoadSubmenus(class, path, name)
 end
 
 local function LoadAllMenus()
-
     submenuBase = classbuilder.BuildFromFolder(
         "terrortown/menus/gamemode/base_gamemodemenu/",
         CLIENT_FILE,
@@ -132,7 +130,6 @@ local function LoadAllMenus()
     end
 
     table.SortByMember(menusIndexed, "priority")
-
 end
 
 LoadAllMenus()
