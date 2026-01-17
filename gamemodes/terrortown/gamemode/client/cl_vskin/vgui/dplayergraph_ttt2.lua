@@ -70,7 +70,7 @@ function PANEL:AllowUserSort(allow)
 
     if allow then
         if not self.button then
-            self.button = vgui.Create("DButtonTTT2", self)
+            self.button = vgui.Create("TTT2:DButton", self)
             self.button.DoClick = function(slf)
                 -- cycle between the sort modes
                 local mode = self.sortMode + 1
@@ -266,4 +266,4 @@ function PANEL:Paint(w, h)
     return true
 end
 
-derma.DefineControl("DPlayerGraphTTT2", "", PANEL, "DPanelTTT2")
+derma.DefineControl("DPlayerGraphTTT2", "", PANEL, "TTT2:DPanel")

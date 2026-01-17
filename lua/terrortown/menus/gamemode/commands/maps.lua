@@ -45,7 +45,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 end
 
 function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
-    local buttonChange = vgui.Create("DButtonTTT2", parent)
+    local buttonChange = vgui.Create("TTT2:DButton", parent)
 
     buttonChange:SetText("button_change_map")
     buttonChange:SetSize(175, 45)

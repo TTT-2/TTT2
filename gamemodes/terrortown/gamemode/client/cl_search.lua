@@ -107,9 +107,7 @@ end
 -- Updates the UI if the player, that is inspected right now, was confirmed.
 -- @realm client
 function SEARCHSCREEN:UpdateUIWhenPlayerWasConfirmed()
-    self.buttonConfirm:SetEnabled(false)
-    self.buttonConfirm:SetText("search_confirmed")
-    self.buttonConfirm:SetIcon(nil)
+    self.buttonConfirm:SetEnabled(false):SetText("search_confirmed"):SetIcon(nil)
 
     if not LocalPlayer():IsSpec() then
         self.buttonReport:SetEnabled(true)
@@ -139,9 +137,7 @@ function SEARCHSCREEN:UpdateUIWhenCreditsWereTaken()
     end
 
     if not bodysearch.CanConfirmBody() then
-        self.buttonConfirm:SetText("search_confirm_forbidden")
-        self.buttonConfirm:SetEnabled(false)
-        self.buttonConfirm:SetIcon(nil)
+        self.buttonConfirm:SetText("search_confirm_forbidden"):SetEnabled(false):SetIcon(nil)
     end
 end
 
@@ -210,9 +206,9 @@ function SEARCHSCREEN:Show(data)
     local rd = roles.GetByIndex(data.subrole)
     local clientRoleData = client:GetSubRoleData()
 
-    local contentBox = vgui.Create("DPanelTTT2", frame)
-    contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
-    contentBox:Dock(TOP)
+    local contentBox = vgui.Create("TTT2:DPanel", frame)
+        :SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+        :Dock(TOP)
 
     local profileBox = vgui.Create("DProfilePanelTTT2", contentBox)
     profileBox:SetSize(self.sizes.widthProfileArea, self.sizes.heightMainArea)
@@ -333,18 +329,19 @@ function SEARCHSCREEN:Show(data)
     end
 
     -- BUTTONS
-    local buttonArea = vgui.Create("DButtonPanelTTT2", frame)
-    buttonArea:SetSize(self.sizes.width, self.sizes.heightBottomButtonPanel)
-    buttonArea:Dock(BOTTOM)
+    local buttonArea = vgui.Create("TTT2:DPanel", frame)
+        :SetSize(self.sizes.width, self.sizes.heightBottomButtonPanel)
+        :Dock(BOTTOM)
+        :SetOutline(0, 0, 0, 1)
 
-    local buttonReport = vgui.Create("DButtonTTT2", buttonArea)
-    buttonReport:SetText("search_call")
-    buttonReport:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-    buttonReport:SetPos(0, self.sizes.padding + 1)
-    buttonReport.DoClick = function(btn)
-        bodysearch.ClientReportsCorpse(data.rag)
-    end
-    buttonReport:SetIcon(roles.DETECTIVE.iconMaterial, true, 16)
+    local buttonReport = vgui.Create("TTT2:DButton", buttonArea)
+        :SetText("search_call")
+        :SetSize(self.sizes.widthButton, self.sizes.heightButton)
+        :SetPos(0, self.sizes.padding + 1)
+        :SetIcon(roles.DETECTIVE.iconMaterial, true, 16)
+        :On("Click", function()
+            bodysearch.ClientReportsCorpse(data.rag)
+        end)
 
     if not bodysearch.CanReportBody(data.ragOwner) then
         buttonReport:SetEnabled(false)
@@ -352,7 +349,7 @@ function SEARCHSCREEN:Show(data)
 
     local playerCanTakeCredits = bodysearch.CanTakeCredits(client, data.rag)
 
-    local buttonConfirm = vgui.Create("DButtonTTT2", buttonArea)
+    local buttonConfirm = vgui.Create("TTT2:DButton", buttonArea)
 
     if client:IsSpec() then
         local text = "search_confirm"
@@ -360,58 +357,52 @@ function SEARCHSCREEN:Show(data)
             text = "search_confirmed"
         end
 
-        buttonConfirm:SetEnabled(false)
-        buttonConfirm:SetText(text)
-        buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-        buttonConfirm:SetPos(
-            self.sizes.widthMainArea - self.sizes.widthButton,
-            self.sizes.padding + 1
-        )
+        buttonConfirm
+            :SetEnabled(false)
+            :SetText(text)
+            :SetSize(self.sizes.widthButton, self.sizes.heightButton)
+            :SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
     elseif bodysearch.IsConfirmed(data.ragOwner) then
-        buttonConfirm:SetText("search_confirmed")
-        buttonConfirm:SetEnabled(false)
-        buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-        buttonConfirm:SetPos(
-            self.sizes.widthMainArea - self.sizes.widthButton,
-            self.sizes.padding + 1
-        )
+        buttonConfirm
+            :SetText("search_confirmed")
+            :SetEnabled(false)
+            :SetSize(self.sizes.widthButton, self.sizes.heightButton)
+            :SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
     elseif not bodysearch.CanConfirmBody() then
         if playerCanTakeCredits then
-            buttonConfirm:SetText("search_take_credits")
-            buttonConfirm:SetTextParams({ credits = data.credits })
-            buttonConfirm:SetIcon(materialCredits)
-            buttonConfirm:SetSize(self.sizes.widthButtonTakeCredits, self.sizes.heightButton)
-            buttonConfirm:SetPos(
-                self.sizes.widthMainArea - self.sizes.widthButtonTakeCredits,
-                self.sizes.padding + 1
-            )
+            buttonConfirm
+                :SetText("search_take_credits")
+                :SetTextParams({ credits = data.credits })
+                :SetIcon(materialCredits)
+                :SetSize(self.sizes.widthButtonTakeCredits, self.sizes.heightButton)
+                :SetPos(
+                    self.sizes.widthMainArea - self.sizes.widthButtonTakeCredits,
+                    self.sizes.padding + 1
+                )
         else
-            buttonConfirm:SetText("search_confirm_forbidden")
-            buttonConfirm:SetEnabled(false)
-            buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-            buttonConfirm:SetPos(
-                self.sizes.widthMainArea - self.sizes.widthButton,
-                self.sizes.padding + 1
-            )
+            buttonConfirm
+                :SetText("search_confirm_forbidden")
+                :SetEnabled(false)
+                :SetSize(self.sizes.widthButton, self.sizes.heightButton)
+                :SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
         end
     elseif playerCanTakeCredits then
-        buttonConfirm:SetText("search_confirm_credits")
-        buttonConfirm:SetTextParams({ credits = data.credits })
-        buttonConfirm:SetSize(self.sizes.widthButtonCredits, self.sizes.heightButton)
-        buttonConfirm:SetPos(
-            self.sizes.widthMainArea - self.sizes.widthButtonCredits,
-            self.sizes.padding + 1
-        )
-        buttonConfirm:SetIcon(materialCredits)
+        buttonConfirm
+            :SetText("search_confirm_credits")
+            :SetTextParams({ credits = data.credits })
+            :SetSize(self.sizes.widthButtonCredits, self.sizes.heightButton)
+            :SetPos(
+                self.sizes.widthMainArea - self.sizes.widthButtonCredits,
+                self.sizes.padding + 1
+            )
+            :SetIcon(materialCredits)
     else
-        buttonConfirm:SetText("search_confirm")
-        buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-        buttonConfirm:SetPos(
-            self.sizes.widthMainArea - self.sizes.widthButton,
-            self.sizes.padding + 1
-        )
+        buttonConfirm
+            :SetText("search_confirm")
+            :SetSize(self.sizes.widthButton, self.sizes.heightButton)
+            :SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
     end
-    buttonConfirm.DoClick = function(btn)
+    buttonConfirm:On("LeftClick", function(btn)
         bodysearch.ClientConfirmsCorpse(
             data.rag,
             data.searchUID,
@@ -430,7 +421,7 @@ function SEARCHSCREEN:Show(data)
         if bodysearch.CanConfirmBody() then
             self:UpdateUIWhenPlayerWasConfirmed()
         end
-    end
+    end)
 
     -- cache button references for external interaction
     self.buttonReport = buttonReport

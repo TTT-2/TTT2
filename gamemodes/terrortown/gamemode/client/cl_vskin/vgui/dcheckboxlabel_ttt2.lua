@@ -16,8 +16,8 @@ function PANEL:Init()
     self.Button.OnChange = function(_, val)
         self:ValueChanged(val)
 
-        -- enable / disable slaves on change
-        self:UpdateSlaves(val)
+        -- enable / disable followers on change
+        self:UpdateFollowers(val)
     end
 
     self.OnChange = function(_, val)
@@ -31,26 +31,26 @@ function PANEL:Init()
 
         slf.Button:SetEnabled(enabled)
 
-        -- make sure sub-slaves are updated as well
+        -- make sure sub-followers are updated as well
         if not enabled then
-            slf:UpdateSlaves(false)
+            slf:UpdateFollowers(false)
         else
-            slf:UpdateSlaves(slf.Button:GetChecked())
+            slf:UpdateFollowers(slf.Button:GetChecked())
         end
     end
 
     self:SetFont("DermaTTT2Text")
 
-    -- store slaves in here to be updates on change of this value
-    self.slaves = {}
+    -- store followers in here to be updates on change of this value
+    self.followers = {}
 end
 
 ---
 -- @param boolean val
 -- @realm client
-function PANEL:UpdateSlaves(val)
-    for i = 1, #self.slaves do
-        self.slaves[i]:SetEnabled(val)
+function PANEL:UpdateFollowers(val)
+    for i = 1, #self.followers do
+        self.followers[i]:SetEnabled(val)
     end
 end
 
@@ -132,16 +132,16 @@ function PANEL:GetResetButton()
 end
 
 ---
--- @param Panel slave
+-- @param Panel follower
 -- @realm client
-function PANEL:AddSlave(slave)
-    if not IsValid(slave) then
+function PANEL:AddFollower(follower)
+    if not IsValid(follower) then
         return
     end
 
-    self.slaves[#self.slaves + 1] = slave
+    self.followers[#self.followers + 1] = follower
 
-    slave:SetEnabled(self.Button:GetChecked())
+    follower:SetEnabled(self.Button:GetChecked())
 end
 
 ---
@@ -209,4 +209,4 @@ function PANEL:GetTextParams()
     return self.params
 end
 
-derma.DefineControl("DCheckBoxLabelTTT2", "", PANEL, "DButtonTTT2")
+derma.DefineControl("DCheckBoxLabelTTT2", "", PANEL, "TTT2:DButton")
