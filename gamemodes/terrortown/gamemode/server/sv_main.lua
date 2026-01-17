@@ -46,6 +46,7 @@ ttt_include("sh_player_ext")
 ttt_include("sh_player_custom")
 
 ttt_include("sv_player_ext")
+ttt_include("sv_player_custom")
 ttt_include("sv_player")
 
 ttt_include("sv_addonchecker")
@@ -69,18 +70,7 @@ local playerGetAll = player.GetAll
 
 ---
 -- @realm server
-local cvPreferMapModels =
-    CreateConVar("ttt2_prefer_map_models", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
-
----
--- @realm server
-local cvSelectModelPerRound =
-    CreateConVar("ttt2_select_model_per_round", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
-
----
--- @realm server
-local cvSelectUniqueModelPerPlayer =
-    CreateConVar("ttt2_select_unique_model_per_player", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
+local cvSelectModelPerRound
 
 ---
 -- @realm server
@@ -129,15 +119,6 @@ local map_switch_delay = CreateConVar(
     { FCVAR_NOTIFY, FCVAR_ARCHIVE },
     "Time that passes before the map is changed after the last round ends or the timer runs out",
     0
-)
-
----
--- @realm server
-CreateConVar(
-    "ttt_enforce_playermodel",
-    "1",
-    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
-    "Whether or not to enforce terrorist playermodels. Set to 0 for compatibility with Enhanced Playermodel Selector"
 )
 
 ---
@@ -925,10 +906,14 @@ function GM:TTT2PrePrepareRound(duration)
 
     -- sets the player model
     -- supports map models or random player models
-    if cvPreferMapModels:GetBool() and self.force_plymodel and self.force_plymodel ~= "" then
+    if
+        customization.cv.playermodels.useMap:GetBool()
+        and self.force_plymodel
+        and self.force_plymodel ~= ""
+    then
         self.playermodel = self.force_plymodel
-    elseif cvSelectModelPerRound:GetBool() then
-        if cvSelectUniqueModelPerPlayer:GetBool() then
+    elseif customization.cv.playermodels.perRound:GetBool() then
+        if customization.cv.playermodels.uniquePerPlayer:GetBool() then
             local plys = player.GetAll()
             for i = 1, #plys do
                 plys[i].defaultModel = playermodels.GetRandomPlayerModel()

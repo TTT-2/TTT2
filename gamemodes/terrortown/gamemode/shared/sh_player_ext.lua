@@ -194,7 +194,7 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
             hook.Run("PlayerLoadout", self, false)
 
             -- Don't update the model if oldSubrole is nil (player isn't already spawned, leading to an initialization error)
-            if oldSubrole and GetConVar("ttt_enforce_playermodel"):GetBool() then
+            if oldSubrole and customization.cv.playermodels.enforce:GetBool() then
                 -- update subroleModel
                 self:SetModel(self:GetSubRoleModel())
             end
