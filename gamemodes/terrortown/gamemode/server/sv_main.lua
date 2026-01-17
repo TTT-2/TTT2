@@ -409,10 +409,6 @@ function GM:InitPostEntity()
     -- initialize playermodel database
     playermodels.Initialize()
 
-    -- set the default random playermodel
-    self.playermodel = playermodels.GetRandomPlayerModel()
-    self.playercolor = COLOR_WHITE
-
     timer.Simple(0, function()
         addonChecker.Check()
     end)
@@ -682,10 +678,6 @@ function GM:OnReloaded()
 
     button.SetUp()
 
-    -- set the default random playermodel
-    self.playermodel = playermodels.GetRandomPlayerModel()
-    self.playercolor = COLOR_WHITE
-
     -- register synced player variables
     player.RegisterSettingOnServer("enable_dynamic_fov", "bool")
 
@@ -903,34 +895,6 @@ function GM:TTT2PrePrepareRound(duration)
     timer.Create("restartmute", 1, 1, function()
         MuteForRestart(false)
     end)
-
-    -- sets the player model
-    -- supports map models or random player models
-    if
-        customization.cv.playermodels.useMap:GetBool()
-        and self.force_plymodel
-        and self.force_plymodel ~= ""
-    then
-        self.playermodel = self.force_plymodel
-    elseif customization.cv.playermodels.perRound:GetBool() then
-        if customization.cv.playermodels.uniquePerPlayer:GetBool() then
-            local plys = player.GetAll()
-            for i = 1, #plys do
-                plys[i].defaultModel = playermodels.GetRandomPlayerModel()
-            end
-        else
-            local plys = player.GetAll()
-            for i = 1, #plys do
-                plys[i].defaultModel = nil
-            end
-
-            self.playermodel = playermodels.GetRandomPlayerModel()
-        end
-    end
-
-    ---
-    -- @realm server
-    self.playercolor = hook.Run("TTTPlayerColor", self.playermodel)
 end
 
 ---

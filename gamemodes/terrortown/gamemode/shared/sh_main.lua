@@ -365,17 +365,6 @@ local colormode =
 -- @hook
 -- @realm shared
 function GM:TTTPlayerColor(model)
-    local mode = colormode:GetInt()
-
-    if mode == 1 then
-        return ttt_playercolors.serious[math.random(ttt_playercolors_serious_count)]
-    elseif mode == 2 then
-        return ttt_playercolors.all[math.random(ttt_playercolors_all_count)]
-    elseif mode == 3 then
-        -- Full randomness
-        return Color(math.random(0, 255), math.random(0, 255), math.random(0, 255))
-    end
-
     -- No coloring
     return COLOR_WHITE
 end

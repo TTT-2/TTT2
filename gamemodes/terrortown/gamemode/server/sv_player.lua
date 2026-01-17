@@ -257,12 +257,6 @@ function GM:PlayerSetModel(ply)
     if not IsValid(ply) then
         return
     end
-
-    -- this will call the overwritten internal function to modify the model
-    ply:SetModel(ply.defaultModel or GAMEMODE.playermodel)
-
-    -- Always clear color state, may later be changed in TTTPlayerSetColor
-    ply:SetColor(COLOR_WHITE)
 end
 
 ---
@@ -270,18 +264,7 @@ end
 -- @param Player ply
 -- @hook
 -- @realm server
-function GM:TTTPlayerSetColor(ply)
-    local c = COLOR_WHITE
-
-    if GAMEMODE.playercolor then
-        -- If this player has a colorable model, always use the same color as all
-        -- other colorable players, so color will never be the factor that lets
-        -- you tell players apart.
-        c = GAMEMODE.playercolor
-    end
-
-    ply:SetPlayerColor(Vector(c.r / 255.0, c.g / 255.0, c.b / 255.0))
-end
+function GM:TTTPlayerSetColor(ply) end
 
 ---
 -- Determines if the @{Player} can kill themselves using the concommands "kill" or "explode".
