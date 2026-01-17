@@ -1082,7 +1082,7 @@ function plymeta:SetModel(mdlName)
     local mdl = mdlName or self:GetModel()
 
     if not checkModel(mdl) then
-        -- TODO: should this be a fallback model hook?
+        hook.Run("PlayerSetModel", self)
         mdl = self:GetModel()
 
         if not checkModel(mdl) then

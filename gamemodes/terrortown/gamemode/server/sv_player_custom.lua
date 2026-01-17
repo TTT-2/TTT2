@@ -119,6 +119,27 @@ function GM:TTTPlayerColor(model)
 end
 
 local plySelectedModels
+local plyUsedModels
+
+local function RandomUniqueModel()
+    plyUsedModels = plyUsedModels or {}
+    local pm = nil
+
+    -- select a playermodel which hasn't been used before
+    local i = #playermodels.GetSelectedModels() -- i means we only attempt at #playermodels times, before figuring there are no remaining options
+    while i > 0 and (not pm or plyUsedModels[pm]) do
+        pm = playermodels.GetRandomPlayerModel()
+        i = i - 1
+    end
+
+    if not pm or i == 0 then
+        -- we reached the iteration limit; likely all models are used, so start reusing
+        plyUsedModels = {}
+        return RandomUniqueModel()
+    end
+
+    return pm
+end
 
 ---
 -- Called to get the default player display information (model/color) for this map.
@@ -159,7 +180,7 @@ function GM:TTT2GetDefaultPlayerDisplayForRound()
                     continue
                 end
 
-                plySelectedModels[plys[i]] = playermodels.GetRandomPlayerModel()
+                plySelectedModels[plys[i]] = RandomUniqueModel()
             end
         end
     end
@@ -192,6 +213,9 @@ function GM:PlayerSetModel(ply)
         return
     end
 
+    -- We need to clear subrole models at some point; we'll do it here
+    ply:SetSubRoleModel(nil)
+
     local pm = plySelectedModels and plySelectedModels[ply]
 
     if
@@ -201,7 +225,7 @@ function GM:PlayerSetModel(ply)
     then
         -- plySelectedModels doesn't have this player's model, but a unique one was requested for
         -- each round. Compute it now.
-        pm = playermodels.GetRandomPlayerModel()
+        pm = RandomUniqueModel()
         plySelectedModels = plySelectedModels or {}
         plySelectedModels[ply] = pm
     end
