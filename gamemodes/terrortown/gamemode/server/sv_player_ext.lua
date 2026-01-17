@@ -621,14 +621,6 @@ end
 -- @return boolean Returns true if player is spawned
 -- @realm server
 function plymeta:SpawnForRound(deadOnly)
-    ---
-    -- @realm server
-    hook.Run("PlayerSetModel", self)
-
-    ---
-    -- @realm server
-    hook.Run("TTTPlayerSetColor", self)
-
     -- wrong alive status and not a willing spec who unforced after prep started
     -- (and will therefore be "alive")
     if deadOnly and self:Alive() and not self:IsSpec() then
@@ -1702,12 +1694,6 @@ local function SetPlayerReady(_, ply)
     map.SyncToClient(ply)
 
     gameloop.PlayerReady(ply)
-
-    -- if random models for all players are enabled, they should be set as soon
-    -- as the player connects
-    if GetConVar("ttt2_select_unique_model_per_player"):GetBool() then
-        ply.defaultModel = playermodels.GetRandomPlayerModel()
-    end
 
     ---
     -- @realm server
