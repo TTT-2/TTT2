@@ -27,6 +27,10 @@ end
 -- @return string|nil
 -- @realm client
 function PANEL:GetText()
+    if not self.data.text then
+        return
+    end
+
     return self.data.text.text
 end
 
@@ -34,6 +38,10 @@ end
 -- @return string
 -- @realm client
 function PANEL:GetTitle()
+    if not self.data.text then
+        return
+    end
+
     return self.data.text.title
 end
 
