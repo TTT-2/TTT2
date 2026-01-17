@@ -192,19 +192,6 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
             ---
             -- @realm server
             hook.Run("PlayerLoadout", self, false)
-
-            -- Don't update the model if oldSubrole is nil (player isn't already spawned, leading to an initialization error)
-            if oldSubrole and customization.cv.playermodels.enforce:GetBool() then
-                -- update subroleModel
-                self:SetModel(self:GetSubRoleModel())
-            end
-
-            -- Always clear color state, may later be changed in TTTPlayerSetColor
-            self:SetColor(COLOR_WHITE)
-
-            ---
-            -- @realm server
-            hook.Run("TTTPlayerSetColor", self)
         end
     end
 
@@ -1084,59 +1071,7 @@ local oldSetModel = plymeta.SetModel or plymeta.MetaBaseClass.SetModel
 -- @param string mdlName
 -- @note override to fix PS/ModelSelector/... issues
 -- @realm shared
-function plymeta:SetModel(mdlName)
-    local mdl
-
-    local curMdl = mdlName or self:GetModel()
-
-    if not checkModel(curMdl) then
-        curMdl = self.defaultModel
-
-        if not checkModel(curMdl) then
-            if not checkModel(GAMEMODE.playermodel) then
-                GAMEMODE.playermodel = GAMEMODE.force_plymodel
-
-                if not checkModel(GAMEMODE.playermodel) then
-                    GAMEMODE.playermodel = "models/player/phoenix.mdl"
-                end
-            end
-
-            curMdl = GAMEMODE.playermodel
-        end
-    end
-
-    local srMdl = self:GetSubRoleModel()
-    if srMdl then
-        mdl = srMdl
-
-        if curMdl ~= srMdl then
-            self.oldModel = curMdl
-        end
-    else
-        if self.oldModel then
-            mdl = self.oldModel
-            self.oldModel = nil
-        else
-            mdl = curMdl
-        end
-    end
-
-    -- last but not least, we fix this grey model "bug"
-    if not checkModel(mdl) then
-        mdl = "models/player/phoenix.mdl"
-    end
-
-    oldSetModel(self, Model(mdl))
-
-    if SERVER then
-        net.Start("TTT2SyncModel")
-        net.WriteString(mdl)
-        net.WriteEntity(self)
-        net.Broadcast()
-
-        self:SetupHands()
-    end
-end
+function plymeta:SetModel(mdlName) end
 
 hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
     local plys = player.GetAll()
