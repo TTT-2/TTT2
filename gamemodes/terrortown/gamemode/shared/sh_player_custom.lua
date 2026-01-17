@@ -1,3 +1,0 @@
----
--- logic for managing player customization
--- @realm shared
