@@ -43,7 +43,6 @@ ttt_include("sv_armor")
 ttt_include("sh_armor")
 
 ttt_include("sh_player_ext")
-ttt_include("sh_player_custom")
 
 ttt_include("sv_player_ext")
 ttt_include("sv_player_custom")
@@ -67,10 +66,6 @@ local timer = timer
 local util = util
 local hook = hook
 local playerGetAll = player.GetAll
-
----
--- @realm server
-local cvSelectModelPerRound
 
 ---
 -- @realm server
