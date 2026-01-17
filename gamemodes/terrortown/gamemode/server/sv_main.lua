@@ -409,6 +409,8 @@ function GM:InitPostEntity()
     -- initialize playermodel database
     playermodels.Initialize()
 
+    self.playermodel, self.playercolor = hook.Run("TTT2GetDefaultPlayerDisplay")
+
     timer.Simple(0, function()
         addonChecker.Check()
     end)
@@ -678,6 +680,8 @@ function GM:OnReloaded()
 
     button.SetUp()
 
+    self.playermodel, self.playercolor = hook.Run("TTT2GetDefaultPlayerDisplay")
+
     -- register synced player variables
     player.RegisterSettingOnServer("enable_dynamic_fov", "bool")
 
@@ -895,6 +899,9 @@ function GM:TTT2PrePrepareRound(duration)
     timer.Create("restartmute", 1, 1, function()
         MuteForRestart(false)
     end)
+
+    -- select new default playermodels for the round
+    self.playermodel, self.playercolor = hook.Run("TTT2GetDefaultPlayerDisplayForRound")
 end
 
 ---
