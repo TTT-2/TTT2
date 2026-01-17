@@ -192,6 +192,10 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
             ---
             -- @realm server
             hook.Run("PlayerLoadout", self, false)
+
+            ---
+            -- @realm server
+            hook.Run("TTT2UpdateSubrolePlayermodel", self, oldSubrole ~= nil)
         end
     end
 
@@ -1071,7 +1075,48 @@ local oldSetModel = plymeta.SetModel or plymeta.MetaBaseClass.SetModel
 -- @param string mdlName
 -- @note override to fix PS/ModelSelector/... issues
 -- @realm shared
-function plymeta:SetModel(mdlName) end
+function plymeta:SetModel(mdlName)
+    --Dev(1, "Player", self, ":SetModel", mdlName or "(nil)")
+    --ErrorNoHaltWithStack("^^ ply:SetModel")
+
+    local mdl = mdlName or self:GetModel()
+
+    if not checkModel(mdl) then
+        -- TODO: should this be a fallback model hook?
+        mdl = self:GetModel()
+
+        if not checkModel(mdl) then
+            -- TODO: this is in the original code; is it still actually needed?
+            if not checkModel(GAMEMODE.playermodel) then
+                GAMEMODE.playermodel = GAMEMODE.force_plymodel
+                if not checkModel(GAMEMODE.playermodel) then
+                    GAMEMODE.playermodel = "models/player/phoenix.mdl"
+                end
+            end
+
+            mdl = GAMEMODE.playermodel
+        end
+    end
+
+    -- TODO: original checked and enforced subrole model here. I don't think this is a good idea, so
+    -- that other addons can override the model selection here, so I'm ommitting it, but there's
+    -- probably a reason for it to exist.
+
+    if not checkModel(mdl) then
+        mdl = "models/player/phoenix.mdl"
+    end
+
+    oldSetModel(self, Model(mdl))
+
+    if SERVER then
+        net.Start("TTT2SyncModel")
+        net.WriteString(mdl)
+        net.WriteEntity(self)
+        net.Broadcast()
+
+        self:SetupHands()
+    end
+end
 
 hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
     local plys = player.GetAll()

@@ -621,14 +621,6 @@ end
 -- @return boolean Returns true if player is spawned
 -- @realm server
 function plymeta:SpawnForRound(deadOnly)
-    ---
-    -- @realm server
-    hook.Run("PlayerSetModel", self)
-
-    ---
-    -- @realm server
-    hook.Run("TTTPlayerSetColor", self)
-
     -- wrong alive status and not a willing spec who unforced after prep started
     -- (and will therefore be "alive")
     if deadOnly and self:Alive() and not self:IsSpec() then
