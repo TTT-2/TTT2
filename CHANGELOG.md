@@ -20,6 +20,12 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed loading screen tips translation (by @mexikoedi)
 - Fixed missing `limit_left` translation (by @mexikoedi)
 - Fixed `GetHeadshotMultiplier` nil value error (by @mexikoedi)
+- Fixed continuous use not working correctly with entities like health stations (by @saibotk)
+
+### Removed / Breaking Changes
+
+- Removed `IsSpecialUsableEntity` & `IsUsableEntity` functions on entities (by @saibotk)
+- Changed `ENT:ClientUse()`: Removed return value, now always blocks the default use handling (by @saibotk)
 
 ## [v0.14.5b](https://github.com/TTT-2/TTT2/tree/v0.14.5b) (2025-08-18)
 
