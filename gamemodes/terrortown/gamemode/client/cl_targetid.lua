@@ -197,7 +197,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
         local shouldDraw, material, color =
             hook.Run("TTT2ModifyOverheadIcon", ply, shouldDrawDefault)
 
-        if shouldDraw == false or not shouldDrawDefault then
+        if shouldDraw == false or (shouldDraw ~= true and not shouldDrawDefault) then
             continue
         end
 
