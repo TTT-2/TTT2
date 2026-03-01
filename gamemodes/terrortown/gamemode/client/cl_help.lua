@@ -151,26 +151,27 @@ HELPSCRN.padding = 5
 
 -- define sizes
 local width, height = 1100, 700
-local heightMainMenuButton = 120
+local heightMainMenuButton = 110
 
 local widthNav = 300
 local widthContent, heightContent = 800, 700
 local heightButtonPanel = 80
 local heightAdminSeperator = 50
+local sizeIcon = 64
 
 local function AddMenuButtons(menuTbl, parent, widthButton, heightButton)
     for i = 1, #menuTbl do
         local menuClass = menuTbl[i]
 
-        local settingsButton = parent:Add("DMenuButtonTTT2")
-        settingsButton:SetSize(widthButton, heightButton)
-        settingsButton:SetTitle(menuClass.title or menuClass.type)
-        settingsButton:SetDescription(menuClass.description)
-        settingsButton:SetImage(menuClass.icon)
-
-        settingsButton.DoClick = function(slf)
-            HELPSCRN:ShowSubmenu(menuClass)
-        end
+        local settingsButton = parent:Add("TTT2:DMainMenuButton")
+        settingsButton
+            :SetSize(widthButton, heightButton)
+            :SetText(menuClass.title or menuClass.type)
+            :SetDescription(menuClass.description)
+            :SetIcon(menuClass.icon, nil, nil, sizeIcon)
+            :On("LeftClick", function()
+                HELPSCRN:ShowSubmenu(menuClass)
+            end)
     end
 end
 
@@ -243,16 +244,12 @@ function HELPSCRN:ShowMainMenu()
         return
     end
 
-    local labelSpacer = dsettings:Add("DLabelTTT2")
-    labelSpacer.OwnLine = true
-    labelSpacer:SetText("label_menu_admin_spacer")
-    labelSpacer:SetSize(width - 2 * self.padding - scrollSize, heightAdminSeperator)
-    labelSpacer:SetFont("DermaTTT2TextLarge")
-    labelSpacer.Paint = function(slf, w, h)
-        derma.SkinHook("Paint", "LabelSpacerTTT2", slf, w, h)
-
-        return true
-    end
+    local labelSpacer = dsettings:Add("TTT2:DLabel")
+    labelSpacer
+        :SetSize(width - 2 * self.padding - scrollSize, heightAdminSeperator)
+        :SetFont("DermaTTT2TextLarge")
+        :SetText("label_menu_admin_spacer")
+        :SetPaintHookName("LabelSpacerTTT2")
 
     AddMenuButtons(menusAdmin, dsettings, widthMainMenuButton, heightMainMenuButton)
 end
@@ -334,9 +331,10 @@ function HELPSCRN:BuildContentArea()
 
     -- ADD BUTTON BOX AND BUTTONS
     if self.submenuClass:HasButtonPanel() then
-        local buttonArea = vgui.Create("DButtonPanelTTT2", parent)
-        buttonArea:SetSize(width2, heightButtonPanel)
-        buttonArea:Dock(BOTTOM)
+        local buttonArea = vgui.Create("TTT2:DPanel", parent)
+            :SetSize(width2, heightButtonPanel)
+            :Dock(BOTTOM)
+            :SetOutline(0, 1, 0, 0)
 
         self.submenuClass:PopulateButtonPanel(buttonArea)
     end
@@ -368,29 +366,27 @@ function HELPSCRN:ShowSubmenu(menuClass)
     self.currentMenuId = menuClass.type
 
     -- BUILD GENERAL BOX STRUCTURE
-    local navArea = vgui.Create("DNavPanelTTT2", frame)
-    navArea:SetWide(widthNav)
-    navArea:SetPos(0, 0)
-    navArea:DockPadding(0, 0, 1, 0)
-    navArea:Dock(LEFT)
+    local navArea = vgui.Create("TTT2:DPanel", frame)
+    navArea
+        :SetWide(widthNav)
+        :SetPos(0, 0)
+        :DockPadding(0, 0, 1, 0) -- todo still needed with new outline?
+        :Dock(LEFT)
+        :SetOutline(0, 0, 1, 0)
 
-    local contentArea = vgui.Create("DContentPanelTTT2", frame)
-    contentArea:SetSize(
-        widthContent,
-        heightContent - vskin.GetHeaderHeight() - vskin.GetBorderSize()
-    )
-    contentArea:SetPos(widthNav, 0)
-    contentArea:DockPadding(self.padding, self.padding, self.padding, self.padding)
-    contentArea:Dock(TOP)
+    local contentArea = vgui.Create("TTT2:DPanel", frame)
+        :SetSize(widthContent, heightContent - vskin.GetHeaderHeight() - vskin.GetBorderSize())
+        :SetPos(widthNav, 0)
+        :DockPadding(self.padding, self.padding, self.padding, self.padding)
+        :Dock(TOP)
+        :SetColorShift(30)
 
     -- MAKE SEPARATE SUBMENULIST ON THE NAVAREA WITH A CONTENT AREA
-    local submenuList = vgui.Create("DSubmenuListTTT2", navArea)
-    submenuList:Dock(FILL)
-    submenuList:SetPadding(self.padding)
-    submenuList:SetBasemenuClass(menuClass, contentArea)
-    if menuClass.searchBarPlaceholderText then
-        submenuList:SetSearchBarPlaceholderText(menuClass.searchBarPlaceholderText)
-    end
+    local submenuList = vgui.Create("TTT2:DSubmenuList", navArea)
+        :Dock(FILL)
+        :SetSpacing(self.padding)
+        :SetBasemenuClass(menuClass, contentArea)
+        :SetSearchBarPlaceholderText(menuClass.searchBarPlaceholderText)
 
     -- REFRESH SIZE OF SUBMENULIST FOR CORRECT SUBMENU DEPENDENT SIZE
     submenuList:InvalidateLayout(true)

@@ -1,25 +1,12 @@
 ---
 -- @class PANEL
--- @section DFormTTT2
+-- @section TTT2:DForm
 
-local PANEL = {}
-
-DEFINE_BASECLASS("DCollapsibleCategoryTTT2")
-
----
--- @accessor boolean
--- @realm client
-AccessorFunc(PANEL, "m_bSizeToContents", "AutoSize", FORCE_BOOL)
-
----
--- @accessor number
--- @realm client
-AccessorFunc(PANEL, "m_iSpacing", "Spacing")
-
----
--- @accessor number
--- @realm client
-AccessorFunc(PANEL, "m_Padding", "Padding")
+DPANEL.derma = {
+    className = "TTT2:DForm",
+    description = "The form element used in menus",
+    baseClassName = "DCollapsibleCategoryTTT2",
+}
 
 local materialReset = Material("vgui/ttt/vskin/icon_reset")
 local materialCheckmark = Material("vgui/ttt/vskin/icon_checkmark")
@@ -28,8 +15,23 @@ local materialRun = Material("vgui/ttt/vskin/icon_run")
 local materialDisable = Material("vgui/ttt/vskin/icon_disable")
 
 ---
+-- @accessor boolean
+-- @realm client
+AccessorFunc(DPANEL, "m_bSizeToContents", "AutoSize", FORCE_BOOL)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(DPANEL, "m_iSpacing", "Spacing")
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(DPANEL, "m_Padding", "Padding")
+
+---
 -- @ignore
-function PANEL:Init()
+function DPANEL:Init()
     self.items = {}
 
     self:SetSpacing(4)
@@ -44,13 +46,13 @@ end
 ---
 -- @param string name
 -- @realm client
-function PANEL:SetName(name)
+function DPANEL:SetName(name)
     self:SetLabel(name)
 end
 
 ---
 -- @realm client
-function PANEL:Clear()
+function DPANEL:Clear()
     for i = 1, #self.items do
         local item = self.items[i]
 
@@ -71,7 +73,7 @@ end
 -- @param Panel buttonToggle
 -- @param Panel buttonRun
 -- @realm client
-function PANEL:AddItem(left, right, buttonReset, buttonToggle, buttonRun)
+function DPANEL:AddItem(left, right, buttonReset, buttonToggle, buttonRun)
     self:InvalidateLayout()
 
     local panel = vgui.Create("DSizeToContents", self)
@@ -116,12 +118,12 @@ end
 ---
 -- overwrites the base function with an empty function
 -- @realm client
-function PANEL:Rebuild() end
+function DPANEL:Rebuild() end
 
 -- FUNCTIONS TO POPULATE THE FORM
 
 local function MakeButton(parent)
-    local button = vgui.Create("DButtonTTT2", parent)
+    local button = vgui.Create("TTT2:DButton", parent)
 
     button:SetText("button_default")
     button:SetSize(32, 32)
@@ -184,12 +186,12 @@ end
 -- @param table data The data for the textentry
 -- @note Structure of data = {
 -- label, default, convar, serverConVar, initial, function OnChange(value),
--- master = { function AddSlave(self, slave) }
+-- master = { function AddFollower(self, follower) }
 -- }
 -- @return Panel The created textentry
 -- @realm client
-function PANEL:MakeTextEntry(data)
-    local left = vgui.Create("DLabelTTT2", self)
+function DPANEL:MakeTextEntry(data)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -219,11 +221,11 @@ function PANEL:MakeTextEntry(data)
     right:SetHeightMult(1)
 
     right.OnGetFocus = function(slf)
-        util.getHighestPanelParent(self):SetKeyboardInputEnabled(true)
+        util.GetHighestPanelParent(self):SetKeyboardInputEnabled(true)
     end
 
     right.OnLoseFocus = function(slf)
-        util.getHighestPanelParent(self):SetKeyboardInputEnabled(false)
+        util.GetHighestPanelParent(self):SetKeyboardInputEnabled(false)
     end
 
     -- Set default if possible even if the convar could still overwrite it
@@ -246,19 +248,21 @@ function PANEL:MakeTextEntry(data)
 
     self:AddItem(left, right, reset, toggle, run)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        data.master:AddSlave(left)
-        data.master:AddSlave(right)
-        data.master:AddSlave(reset)
+    local primary = data.primary or data.master
+
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        primary:AddFollower(left)
+        primary:AddFollower(right)
+        primary:AddFollower(reset)
 
         if IsValid(toggle) then
-            toggle:SetMaster(data.master)
-            data.master:AddSlave(toggle)
+            toggle:SetPrimary(primary)
+            primary:AddFollower(toggle)
         end
 
         if IsValid(run) then
-            run:SetMaster(data.master)
-            data.master:AddSlave(run)
+            run:SetPrimary(primary)
+            primary:AddFollower(run)
         end
     end
 
@@ -270,7 +274,7 @@ end
 -- @param table data The data for the checkbox
 -- @return Panel The created checkbox
 -- @realm client
-function PANEL:MakeCheckBox(data)
+function DPANEL:MakeCheckBox(data)
     local left = vgui.Create("DCheckBoxLabelTTT2", self)
 
     local reset = MakeResetButton(self)
@@ -293,9 +297,9 @@ function PANEL:MakeCheckBox(data)
 
     -- Set default if possible even if the convar could still overwrite it
     left:SetDefaultValue(data.default)
-    left:SetConVar(data.convar)
-    left:SetServerConVar(data.serverConvar)
-    left:SetDatabase(data.database)
+    --left:SetConVar(data.convar) --TODO!
+    --left:SetServerConVar(data.serverConvar)
+    --left:SetDatabase(data.database)
 
     left:SetTall(32)
 
@@ -311,21 +315,23 @@ function PANEL:MakeCheckBox(data)
 
     self:AddItem(left, nil, reset, toggle, run)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        left:SetMaster(data.master)
-        reset:SetMaster(data.master)
+    local primary = data.primary or data.master
 
-        data.master:AddSlave(left)
-        data.master:AddSlave(reset)
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        left:SetPrimary(primary)
+        reset:SetPrimary(primary)
+
+        primary:AddFollower(left)
+        primary:AddFollower(reset)
 
         if IsValid(toggle) then
-            toggle:SetMaster(data.master)
-            data.master:AddSlave(toggle)
+            toggle:SetPrimary(primary)
+            primary:AddFollower(toggle)
         end
 
         if IsValid(run) then
-            run:SetMaster(data.master)
-            data.master:AddSlave(run)
+            run:SetPrimary(primary)
+            primary:AddFollower(run)
         end
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
@@ -339,8 +345,8 @@ end
 -- @param table data The data for the slider
 -- @return Panel The created slider
 -- @realm client
-function PANEL:MakeSlider(data)
-    local left = vgui.Create("DLabelTTT2", self)
+function DPANEL:MakeSlider(data)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -395,23 +401,25 @@ function PANEL:MakeSlider(data)
 
     self:AddItem(left, right, reset, toggle, run)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        data.master:AddSlave(left)
-        data.master:AddSlave(right)
-        data.master:AddSlave(reset)
+    local primary = data.primary or data.master
 
-        left:SetMaster(data.master)
-        right:SetMaster(data.master)
-        reset:SetMaster(data.master)
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        primary:AddFollower(left)
+        primary:AddFollower(right)
+        primary:AddFollower(reset)
+
+        left:SetPrimary(primary)
+        right:SetPrimary(primary)
+        reset:SetPrimary(primary)
 
         if IsValid(toggle) then
-            toggle:SetMaster(data.master)
-            data.master:AddSlave(toggle)
+            toggle:SetPrimary(primary)
+            primary:AddFollower(toggle)
         end
 
         if IsValid(run) then
-            run:SetMaster(data.master)
-            data.master:AddSlave(run)
+            run:SetPrimary(primary)
+            primary:AddFollower(run)
         end
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
@@ -425,8 +433,8 @@ end
 -- @param table data The data for the slider
 -- @return Panel The created slider
 -- @realm client
-function PANEL:MakeButton(data)
-    local left = vgui.Create("DLabelTTT2", self)
+function DPANEL:MakeButton(data)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -436,7 +444,7 @@ function PANEL:MakeButton(data)
         return true
     end
 
-    local right = vgui.Create("DButtonTTT2", self)
+    local right = vgui.Create("TTT2:DButton", self)
 
     right:SetText(data.buttonLabel)
 
@@ -455,12 +463,14 @@ function PANEL:MakeButton(data)
 
     self:AddItem(left, right)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        data.master:AddSlave(left)
-        data.master:AddSlave(right)
+    local primary = data.primary or data.master
 
-        left:SetMaster(data.master)
-        right:SetMaster(data.master)
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        primary:AddFollower(left)
+        primary:AddFollower(right)
+
+        left:SetPrimary(primary)
+        right:SetPrimary(primary)
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
     end
@@ -474,14 +484,14 @@ end
 -- @note Structure of data = {
 -- label, default, choices = { [1] = {title, value, select, icon, additionalData}, [2] = ...},
 -- conVar, serverConVar, selectId or selectTitle or selectValue,
--- function OnChange(value, additionalData, dropDownPanel), master = { function AddSlave(self, slave) }
+-- function OnChange(value, additionalData, dropDownPanel), master = { function AddFollower(self, follower) }
 -- }
 -- @note If ConVars are used the values are always strings, so make sure, that you used strings for values, when setting up choices
 -- @return Panel The created combobox
 -- @return Panel The created label
 -- @realm client
-function PANEL:MakeComboBox(data)
-    local left = vgui.Create("DLabelTTT2", self)
+function DPANEL:MakeComboBox(data)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -552,23 +562,25 @@ function PANEL:MakeComboBox(data)
 
     self:AddItem(left, right, reset, toggle, run)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        data.master:AddSlave(left)
-        data.master:AddSlave(right)
-        data.master:AddSlave(reset)
+    local primary = data.primary or data.master
 
-        left:SetMaster(data.master)
-        right:SetMaster(data.master)
-        reset:SetMaster(data.master)
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        primary:AddFollower(left)
+        primary:AddFollower(right)
+        primary:AddFollower(reset)
+
+        left:SetPrimary(primary)
+        right:SetPrimary(primary)
+        reset:SetPrimary(primary)
 
         if IsValid(toggle) then
-            toggle:SetMaster(data.master)
-            data.master:AddSlave(toggle)
+            toggle:SetPrimary(primary)
+            primary:AddFollower(toggle)
         end
 
         if IsValid(run) then
-            run:SetMaster(data.master)
-            data.master:AddSlave(run)
+            run:SetPrimary(primary)
+            primary:AddFollower(run)
         end
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
@@ -583,8 +595,8 @@ end
 -- @return Panel The created binder
 -- @return Panel The created label
 -- @realm client
-function PANEL:MakeBinder(data)
-    local left = vgui.Create("DLabelTTT2", self)
+function DPANEL:MakeBinder(data)
+    local left = vgui.Create("TTT2:DLabel", self)
 
     left:SetText(data.label)
 
@@ -638,23 +650,25 @@ function PANEL:MakeBinder(data)
 
     self:AddItem(left, right, reset, toggle, run)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        data.master:AddSlave(left)
-        data.master:AddSlave(right)
-        data.master:AddSlave(reset)
+    local primary = data.primary or data.master
 
-        left:SetMaster(data.master)
-        right:SetMaster(data.master)
-        reset:SetMaster(data.master)
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        primary:AddFollower(left)
+        primary:AddFollower(right)
+        primary:AddFollower(reset)
+
+        left:SetPrimary(primary)
+        right:SetPrimary(primary)
+        reset:SetPrimary(primary)
 
         if IsValid(toggle) then
-            toggle:SetMaster(data.master)
-            data.master:AddSlave(toggle)
+            toggle:SetPrimary(primary)
+            primary:AddFollower(toggle)
         end
 
         if IsValid(run) then
-            run:SetMaster(data.master)
-            data.master:AddSlave(run)
+            run:SetPrimary(primary)
+            primary:AddFollower(run)
         end
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
@@ -668,45 +682,22 @@ end
 -- @param table data The data for the helpbox
 -- @return Panel The created helpbox
 -- @realm client
-function PANEL:MakeHelp(data)
-    local left = vgui.Create("DLabelTTT2", self)
-
-    left:SetText(data.label)
-    left:SetTextParams(data.params)
-    left:SetContentAlignment(7)
-    left:SetAutoStretchVertical(true)
-
-    left.paddingX = 10
-    left.paddingY = 5
-
-    left.Paint = function(slf, w, h)
-        derma.SkinHook("Paint", "HelpLabelTTT2", slf, w, h)
-
-        return true
-    end
-
-    -- make sure the height is based on the amount of text inside
-    left.PerformLayout = function(slf, w, h)
-        local textTranslated =
-            LANG.GetParamTranslation(slf:GetText(), LANG.TryTranslation(slf:GetTextParams()))
-
-        local textWrapped = draw.GetWrappedText(textTranslated, w - 2 * slf.paddingX, slf:GetFont())
-        local _, heightText = draw.GetTextSize("", slf:GetFont())
-
-        slf:SetSize(w, heightText * #textWrapped + 2 * slf.paddingY)
-    end
+function DPANEL:MakeHelp(data)
+    local left = vgui.Create("TTT2:DHelpbox", self):SetDescription(data.label, data.params)
 
     self:AddItem(left, nil)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        data.master:AddSlave(left)
+    local primary = data.primary or data.master
 
-        left:SetMaster(data.master)
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        primary:AddFollower(left)
+
+        left:SetPrimary(primary)
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
     end
 
-    left:InvalidateLayout(true)
+    left:InvalidateLayout(true) --todo needed?
 
     return left
 end
@@ -716,9 +707,9 @@ end
 -- @return Panel The created colormixer
 -- @return Panel The created label
 -- @realm client
-function PANEL:MakeColorMixer(data)
-    local left = vgui.Create("DLabelTTT2", self)
-    local right = vgui.Create("DPanel", self)
+function DPANEL:MakeColorMixer(data)
+    local left = vgui.Create("TTT2:DLabel", self)
+    local right = vgui.Create("TTT2:DPanel", self)
 
     left:SetTall(data.height or 240)
     right:SetTall(data.height or 240)
@@ -768,9 +759,11 @@ function PANEL:MakeColorMixer(data)
 
     self:AddItem(left, right)
 
-    if IsValid(data.master) and isfunction(data.master.AddSlave) then
-        data.master:AddSlave(left)
-        data.master:AddSlave(right)
+    local primary = data.primary or data.master
+
+    if IsValid(primary) and isfunction(primary.AddFollower) then
+        primary:AddFollower(left)
+        primary:AddFollower(right)
     end
 
     return right, left
@@ -779,8 +772,8 @@ end
 -- Adds a panel to the form
 -- @return Panel The created panel
 -- @realm client
-function PANEL:MakePanel()
-    local panel = vgui.Create("DPanelTTT2", self)
+function DPANEL:MakePanel()
+    local panel = vgui.Create("TTT2:DPanel", self)
 
     self:AddItem(panel)
 
@@ -790,10 +783,10 @@ end
 ---
 -- Adds a new shop card to the form.
 -- @param table data The data for the card
--- @param PANEL base The base Panel (DIconLayout) where this card will be added
+-- @param Panel base The base Panel (DIconLayout) where this card will be added
 -- @return Panel The created card
 -- @realm client
-function PANEL:MakeShopCard(data, base)
+function DPANEL:MakeShopCard(data, base)
     local card = base:Add("DShopCardTTT2")
 
     card:SetSize(238, 78)
@@ -814,10 +807,10 @@ end
 -- Adds a new combo card to the form. A combo card is a card where only one
 -- can be selected at any time.
 -- @param table data The data for the card
--- @param PANEL base The base Panel (DIconLayout) where this card will be added
+-- @param Panel base The base Panel (DIconLayout) where this card will be added
 -- @return Panel The created card
 -- @realm client
-function PANEL:MakeComboCard(data, base)
+function DPANEL:MakeComboCard(data, base)
     local card = base:Add("DComboCardTTT2")
 
     -- todo smaller, higher - square?
@@ -840,10 +833,10 @@ end
 ---
 -- Adds a new image check box to the form.
 -- @param table data The data for the image check box
--- @param PANEL base The base Panel (DIconLayout) where this image check box will be added
+-- @param Panel base The base Panel (DIconLayout) where this image check box will be added
 -- @return Panel The created image check box
 -- @realm client
-function PANEL:MakeImageCheckBox(data, base)
+function DPANEL:MakeImageCheckBox(data, base)
     local box = base:Add("DImageCheckBoxTTT2")
 
     box:SetSize(238, 175)
@@ -878,7 +871,7 @@ end
 -- @param[default=10] number spacing The spacing between the elements
 -- @return Panel The created panel
 -- @realm client
-function PANEL:MakeIconLayout(spacing)
+function DPANEL:MakeIconLayout(spacing)
     local panel = vgui.Create("DIconLayout", self)
 
     panel:SetSpaceY(spacing or 10)
@@ -888,8 +881,6 @@ function PANEL:MakeIconLayout(spacing)
 
     return panel
 end
-
-derma.DefineControl("DFormTTT2", "", PANEL, "DCollapsibleCategoryTTT2")
 
 -- SIMPLE WRAPPER FUNCTION
 
@@ -901,7 +892,7 @@ derma.DefineControl("DFormTTT2", "", PANEL, "DCollapsibleCategoryTTT2")
 -- @return Panel The created collapsable form
 -- @realm client
 function vgui.CreateTTT2Form(parent, name)
-    local form = vgui.Create("DFormTTT2", parent, name)
+    local form = vgui.Create("TTT2:DForm", parent, name)
 
     form:SetName(name)
     form:Dock(TOP)
