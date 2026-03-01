@@ -233,11 +233,26 @@ end
 -- @param table keys the keys for the data @{table}
 -- @return boolean Whether the database table was created successfully
 -- @realm shared
--- @todo usage
+-- @deprecated
 function sql.CreateSqlTable(tableName, keys)
-    local result
-
-    if not sql.TableExists(tableName) then
+    Dev(
+        2,
+        "`sql.CreateSqlTable` is deprecated and should be handled by migrations.",
+        "This ran for table:",
+        tableName
+    )
+    if sql.TableExists(tableName) then
+        Dev(
+            2,
+            "The database table",
+            tableName,
+            "already exists.",
+            "Adding columns to an existing database table via `sql.CreateSqlTable` was removed."
+        )
+        -- We need to return true here to not break our current assumptions
+        -- in our current codebase (database library, roleselection, huds)
+        return true
+    else
         local str = "CREATE TABLE " .. sql.SQLStr(tableName) .. " (name TEXT PRIMARY KEY"
 
         for key, data in pairs(keys) do
@@ -246,39 +261,8 @@ function sql.CreateSqlTable(tableName, keys)
 
         str = str .. ")"
 
-        result = sql.Query(str)
-    else
-        local clmns = sql.Query("PRAGMA table_info(" .. sql.SQLStr(tableName) .. ")")
-
-        for key, data in pairs(keys) do
-            local exists = false
-
-            for i = 1, #clmns do
-                if clmns[i].name ~= key then
-                    continue
-                end
-
-                exists = true
-            end
-
-            if exists then
-                continue
-            end
-
-            local res = sql.ParseDataString(key, data)
-            if not res then
-                continue
-            end
-
-            local resArr = string.Explode(",", res)
-
-            for i = 1, #resArr do
-                sql.Query("ALTER TABLE " .. sql.SQLStr(tableName) .. " ADD " .. resArr[i])
-            end
-        end
+        return sql.Query(str) ~= false
     end
-
-    return result ~= false
 end
 
 ---
