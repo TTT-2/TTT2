@@ -118,7 +118,7 @@ if CLIENT then
             yPos,
             h,
             h,
-            draw.GetAvatarMaterial(ply:SteamID64(), "medium"),
+            playeravatar.GetMaterial(ply:SteamID64(), PLAYERAVATAR_SIZE.medium),
             255,
             COLOR_WHITE
         )
