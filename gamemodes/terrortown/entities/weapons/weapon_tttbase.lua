@@ -1673,8 +1673,13 @@ hook.Add("KeyRelease", "TTT2ResetIronSights", function(ply, key)
         return
     end
 
-    wep:SetIronsights(false)
-    wep:SetZoom(false)
+    if wep.SetIronsights then
+        wep:SetIronsights(false)
+    end
+
+    if wep.SetZoom then
+        wep:SetZoom(false)
+    end
 end)
 
 if CLIENT then
