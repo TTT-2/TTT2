@@ -28,6 +28,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed vFire explosions still killing players with `NoExplosionDamage` equipped (by @TW1STaL1CKY)
 - Fixed vFire explosions sometimes not damaging entities in the way they should, like explosive barrels (by @TW1STaL1CKY)
 - Fixed an issue where overhead icons from `TTT2ModifyOverheadIcon` were ignored when `shouldDrawDefault` was false (by @mexikoedi)
+- Fixed `SetIronsights` nil value error (by @mexikoedi)
 - Fixed thirdperson animations from third-party addons (by @mexikoedi)
 
 ### Removed / Breaking Changes
