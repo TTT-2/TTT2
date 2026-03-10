@@ -25,6 +25,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed vFire explosions sometimes not damaging entities in the way they should, like explosive barrels (by @TW1STaL1CKY)
 - Fixed an issue where overhead icons from `TTT2ModifyOverheadIcon` were ignored when `shouldDrawDefault` was false (by @mexikoedi)
 - Fixed pressing keys while being revived spamming your HUD with warnings (by @archrbx)
+- Fixed `SetIronsights` nil value error (by @mexikoedi)
 
 ### Removed / Breaking Changes
 
