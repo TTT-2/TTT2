@@ -4,6 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added `plymeta:HasExternalGestureActive()` to check if an external gesture is active (by @mexikoedi)
+
 ### Changed
 
 - Made improvements to door destruction (by @TW1STaL1CKY)
@@ -26,6 +30,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed an issue where overhead icons from `TTT2ModifyOverheadIcon` were ignored when `shouldDrawDefault` was false (by @mexikoedi)
 - Fixed pressing keys while being revived spamming your HUD with warnings (by @archrbx)
 - Fixed `SetIronsights` nil value error (by @mexikoedi)
+- Fixed thirdperson animations from third-party addons (by @mexikoedi)
 
 ### Removed / Breaking Changes
 
