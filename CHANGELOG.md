@@ -4,6 +4,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Karma health scaling (by @coookies369)
+  - Option to scale a player's max HP by their karma
+  - Lower karma values scale HP towards `ttt_karma_health_min`
+  - Option to disable karma damage scaling
+
 ### Changed
 
 - Made improvements to door destruction (by @TW1STaL1CKY)
