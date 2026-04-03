@@ -88,7 +88,7 @@ KARMA.cv = {
 
     ---
     -- @realm server
-    healthmin = CreateConVar("ttt_karma_health_min", "25", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
+    healthmin = CreateConVar("ttt_karma_health_min", "50", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 }
 
 local config = KARMA.cv
