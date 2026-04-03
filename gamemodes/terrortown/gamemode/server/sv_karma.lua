@@ -77,6 +77,18 @@ KARMA.cv = {
     ---
     -- @realm server
     bantime = CreateConVar("ttt_karma_low_ban_minutes", "60", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
+
+    ---
+    -- @realm server
+    damagescaling = CreateConVar("ttt_karma_damage_scaling", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
+
+    ---
+    -- @realm server
+    healthscaling = CreateConVar("ttt_karma_health_scaling", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
+
+    ---
+    -- @realm server
+    healthmin = CreateConVar("ttt_karma_health_min", "25", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 }
 
 local config = KARMA.cv
@@ -134,6 +146,38 @@ end
 -- @realm server
 function KARMA.IsEnabled()
     return GetGlobalBool("ttt_karma", false)
+end
+
+---
+-- Returns whether karma damage scaling is enabled
+-- @return boolean
+-- @realm server
+function KARMA.IsDamageScalingEnabled()
+    return config.damagescaling:GetBool()
+end
+
+---
+-- Returns whether karma health scaling is enabled
+-- @return boolean
+-- @realm server
+function KARMA.IsHealthScalingEnabled()
+    return config.healthscaling:GetBool()
+end
+
+---
+-- Returns the lowest a player's health can be reduced to due to poor karma
+-- @return number
+-- @realm server
+function KARMA.GetHealthMin()
+    return config.healthmin:GetInt()
+end
+
+---
+-- Returns the maximum allowed karma amount
+-- @return number
+-- @realm server
+function KARMA.GetKarmaMax()
+    return config.max:GetInt()
 end
 
 ---
@@ -620,9 +664,19 @@ function KARMA.NotifyPlayer(ply)
     local k = math.Round(ply:GetBaseKarma())
 
     if df > 0.99 then
-        LANG.Msg(ply, "karma_dmg_full", { amount = k })
+        if config.damagescaling:GetBool() then
+            LANG.Msg(ply, "karma_dmg_full", { amount = k })
+        end
+        if config.healthscaling:GetBool() then
+            LANG.Msg(ply, "karma_hp_full", { amount = k })
+        end
     else
-        LANG.Msg(ply, "karma_dmg_other", { amount = k, num = math.ceil((1 - df) * 100) })
+        if config.damagescaling:GetBool() then
+            LANG.Msg(ply, "karma_dmg_other", { amount = k, num = math.ceil((1 - df) * 100) })
+        end
+        if config.healthscaling:GetBool() then
+            LANG.Msg(ply, "karma_hp_other", { amount = k })
+        end
     end
 end
 

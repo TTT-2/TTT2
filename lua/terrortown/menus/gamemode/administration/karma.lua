@@ -17,6 +17,27 @@ function CLGAMEMODESUBMENU:Populate(parent)
         label = "label_karma",
     })
 
+    form:MakeCheckBox({
+        serverConvar = "ttt_karma_damage_scaling",
+        label = "label_karma_damage_scaling",
+        master = enbKma,
+    })
+
+    form:MakeCheckBox({
+        serverConvar = "ttt_karma_health_scaling",
+        label = "label_karma_health_scaling",
+        master = enbKma,
+    })
+
+    form:MakeSlider({
+        serverConvar = "ttt_karma_health_min",
+        label = "label_karma_health_min",
+        min = 0,
+        max = 100,
+        decimal = 0,
+        master = enbKma,
+    })
+
     form:MakeHelp({
         label = "help_karma_strict",
         master = enbKma,
