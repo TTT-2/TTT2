@@ -80,15 +80,15 @@ KARMA.cv = {
 
     ---
     -- @realm server
-    damagescaling = CreateConVar("ttt_karma_damage_scaling", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
+    damagescaling = CreateConVar("ttt2_karma_damage_scaling", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    healthscaling = CreateConVar("ttt_karma_health_scaling", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
+    healthscaling = CreateConVar("ttt2_karma_health_scaling", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 
     ---
     -- @realm server
-    healthmin = CreateConVar("ttt_karma_health_min", "50", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
+    healthmin = CreateConVar("ttt2_karma_health_min", "50", { FCVAR_NOTIFY, FCVAR_ARCHIVE }),
 }
 
 local config = KARMA.cv
