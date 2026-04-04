@@ -153,6 +153,13 @@ function GM:PlayerSpawn(ply)
 
     ply:SetupHands()
 
+    if KARMA.IsHealthScalingEnabled() then
+        local health = KARMA.GetHealthMin()
+        health = health + (100 - health) * (ply:GetBaseKarma() / KARMA.GetKarmaMax())
+        ply:SetMaxHealth(health)
+        ply:SetHealth(health)
+    end
+
     ply:SetLastSpawnPosition(ply:GetPos())
     ply:SetLastDeathPosition(nil)
 
@@ -1481,8 +1488,13 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
         and gameloop.GetRoundState() == ROUND_ACTIVE
         and math.floor(dmginfo:GetDamage()) > 0
     then
-        if KARMA.IsEnabled() and ent ~= att and not dmginfo:IsDamageType(DMG_SLASH) then
+        if
+            KARMA.IsEnabled()
+            and KARMA.IsDamageScalingEnabled()
+            and ent ~= att
             -- scale everything to karma damage factor except the knife, because it assumes a kill
+            and not dmginfo:IsDamageType(DMG_SLASH)
+        then
             dmginfo:ScaleDamage(att:GetDamageFactor())
         end
 
