@@ -2411,6 +2411,57 @@ function CreateChanges()
         os.time({ year = 2025, month = 08, day = 18 })
     )
 
+    AddChange(
+        "TTT2 Base - v0.14.6b",
+        [[
+
+        <h2>Added</h2>
+        <ul>
+            <li>Karma health scaling (by @coookies369)</li>
+            <ul>
+                <li>Option to scale a player's max HP by their karma</li>
+                <li>Lower karma values scale HP towards <code>ttt_karma_health_min</code></li>
+                <li>Option to disable karma damage scaling</li>
+            </ul>
+        </ul>
+
+        <h2>Changed</h2>
+        <ul>
+            <li>Made improvements to door destruction (by @TW1STaL1CKY)</li>
+            <ul>
+                <li>Bodygroups from destroyed doors are now transferred to their physics prop</li>
+                <li>Entities parented to destroyed doors are now transferred to their physics prop</li>
+                <li>Door props are now spawned as soon as the door is destroyed (instead of a frame later)</li>
+                <li>Reuse existing vector globals instead of creating new vectors</li>
+            </ul>
+            <li>Added <code>ttt_filter_subrole</code> (by @mrxonte)</li>
+        </ul>
+
+        <h2>Fixed</h2>
+        <ul>
+            <li>Fixed markerVision null entity errors (by @mexikoedi)</li>
+            <li>Fixed missing <code>ttt_filter_role</code> in <i>ttt2.fgd</i> (by @mrxonte)</li>
+            <li>Fixed loading screen tips translation (by @mexikoedi)</li>
+            <li>Fixed missing <code>limit_left</code> translation (by @mexikoedi)</li>
+            <li>Fixed <code>GetHeadshotMultiplier</code> nil value error (by @mexikoedi)</li>
+            <li>Fixed continuous use not working correctly with entities like health stations (by @saibotk)</li>
+            <li>Fixed vFire explosions still killing players with <code>NoExplosionDamage</code> equipped (by @TW1STaL1CKY)</li>
+            <li>Fixed vFire explosions sometimes not damaging entities in the way they should, like explosive barrels (by @TW1STaL1CKY)</li>
+            <li>Fixed an issue where overhead icons from <code>TTT2ModifyOverheadIcon</code> were ignored when <code>shouldDrawDefault</code> was false (by @mexikoedi)</li>
+            <li>Fixed pressing keys while being revived spamming your HUD with warnings (by @archrbx)</li>
+            <li>Fixed <code>SetIronsights</code> nil value error (by @mexikoedi)</li>
+        </ul>
+
+        <h2>Removed / Breaking Changes</h2>
+        <ul>
+            <li>Removed <code>IsSpecialUsableEntity</code> & <code>IsUsableEntity</code> functions on entities (by @saibotk)</li>
+            <li>Changed <code>ENT:ClientUse()</code>: Removed return value, now always blocks the default use handling (by @saibotk)</li>
+        </ul>
+
+    ]],
+        os.time({ year = 2026, month = 04, day = 06 })
+    )
+
     ---
     -- run hook for other addons to add their changelog as well
     -- @realm client
