@@ -57,7 +57,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
         master = enbKma,
     })
 
-    form:MakeCheckBox({
+    local enbHealth = form:MakeCheckBox({
         serverConvar = "ttt2_karma_health_scaling",
         label = "label_karma_health_scaling",
         master = enbKma,
@@ -69,7 +69,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
         min = 0,
         max = 100,
         decimal = 0,
-        master = enbKma,
+        master = enbHealth,
     })
 
     form:MakeHelp({
