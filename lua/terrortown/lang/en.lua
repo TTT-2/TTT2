@@ -52,7 +52,7 @@ L.credit_kill = "You have received {num} credit(s) for killing a {role}."
 L.karma_dmg_full = "Your Karma is {amount}, so you deal full damage this round!"
 L.karma_dmg_other = "Your Karma is {amount}. As a result all damage you deal is reduced by {num}%"
 L.karma_hp_full = "Your Karma is {amount}, so you get full HP this round!"
-L.karma_hp_other = "Your Karma is {amount}. As a result your maximum HP is reduced"
+L.karma_hp_other = "Your Karma is {amount}. As a result your maximum HP is reduced by {num} HP"
 
 -- Body identification messages
 L.body_found = "{finder} found the body of {victim}. {role}"
