@@ -155,10 +155,7 @@ function GM:PlayerSpawn(ply)
 
     if KARMA.IsHealthScalingEnabled() then
         local health = KARMA.GetHealthMin()
-        local df
-        if ply.GetDamageFactor then
-            df = ply:GetDamageFactor() or 1
-        end
+        local df = ply:GetDamageFactor() or 1
 
         health = health + (100 - health) * df
         ply:SetMaxHealth(health)
