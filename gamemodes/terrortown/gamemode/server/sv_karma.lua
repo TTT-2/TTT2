@@ -676,7 +676,11 @@ function KARMA.NotifyPlayer(ply)
             LANG.Msg(ply, "karma_dmg_other", { amount = k, num = math.ceil((1 - df) * 100) })
         end
         if config.healthscaling:GetBool() then
-            LANG.Msg(ply, "karma_hp_other", { amount = k, num = math.ceil(100 - (health + (100 - health) * df)) })
+            LANG.Msg(
+                ply,
+                "karma_hp_other",
+                { amount = k, num = math.ceil(100 - (health + (100 - health) * df)) }
+            )
         end
     end
 end
