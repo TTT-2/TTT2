@@ -51,6 +51,8 @@ L.credit_kill = "Zdobyłeś {num} kredyt(ów) za zabicie {role}."
 -- Karma
 L.karma_dmg_full = "Twoja karma to {amount}, dlatego w tej rundzie zadajesz pełne obrażenia!"
 L.karma_dmg_other = "Twoja karma to {amount}. Dlatego twoje obrażenia zostaną zredukowane o {num}%"
+--L.karma_hp_full = "Your Karma is {amount}, so you get full HP this round!"
+--L.karma_hp_other = "Your Karma is {amount}. As a result your maximum HP is reduced by {num} HP"
 
 -- Body identification messages
 L.body_found = "{finder} znalazł ciało {victim}. {role}"
@@ -1716,6 +1718,9 @@ L.none = "Brak Roli"
 --L.label_doors_prop_health = "Destructed door health"
 --L.label_minimum_players = "Minimum player amount to start round"
 --L.label_karma = "Enable Karma"
+--L.label_karma_damage_scaling = "Damage scaling"
+--L.label_karma_health_scaling = "Health scaling"
+--L.label_karma_health_min = "Minimum health"
 --L.label_karma_strict = "Enable strict Karma"
 --L.label_karma_starting = "Starting Karma"
 --L.label_karma_max = "Maximum Karma"
