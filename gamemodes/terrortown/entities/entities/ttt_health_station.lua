@@ -198,19 +198,6 @@ else
         walkkey = Key("+walk", "WALK"),
     }
 
-    ---
-    -- Hook that is called if a player uses their use key while focusing on the entity.
-    -- Early check if client can use the health station
-    -- @return bool True to prevent pickup
-    -- @realm client
-    function ENT:ClientUse()
-        local client = LocalPlayer()
-
-        if not IsValid(client) or not client:IsPlayer() or not client:IsActive() then
-            return true
-        end
-    end
-
     -- handle looking at healthstation
     hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDHealthStation", function(tData)
         local client = LocalPlayer()

@@ -2,14 +2,6 @@
 -- @ref https://wiki.facepunch.com/gmod/Entity
 -- @class Entity
 
--- Caps taken from here: https://github.com/ValveSoftware/source-sdk-2013/blob/55ed12f8d1eb6887d348be03aee5573d44177ffb/mp/src/game/shared/baseentity_shared.h#L21-L38
-FCAP_IMPULSE_USE = 16
-FCAP_CONTINUOUS_USE = 32
-FCAP_ONOFF_USE = 64
-FCAP_DIRECTIONAL_USE = 128
-FCAP_USE_ONGROUND = 256
-FCAP_USE_IN_RADIUS = 512
-
 local safeCollisionGroups = {
     [COLLISION_GROUP_WEAPON] = true,
 }
@@ -76,38 +68,6 @@ function entmeta:Spawn()
     end
 
     oldSpawn(self)
-end
-
----
--- Checks if the entity has any use functionality attached. This can be attached in the engine/via hammer or by
--- setting `.CanUseKey` to true. Player ragdolls and weapons always have use functionality attached.
--- @param[default=0] number requiredCaps Use caps that are required for this entity
--- @return boolean Returns true if the entity is usable by the player
--- @ref https://github.com/ValveSoftware/source-sdk-2013/blob/0d8dceea4310fde5706b3ce1c70609d72a38efdf/sp/src/game/server/player.cpp#L2766C71-L2781
--- @realm server
-function entmeta:IsUsableEntity(requiredCaps)
-    requiredCaps = requiredCaps or 0
-
-    -- special case: TTT specific lua based use interactions
-    -- when we're looking for specifically the lua use
-    if self:IsSpecialUsableEntity() then
-        return true
-    end
-
-    local caps = self:ObjectCaps()
-
-    if
-        bit.band(
-                caps,
-                bit.bor(FCAP_IMPULSE_USE, FCAP_CONTINUOUS_USE, FCAP_ONOFF_USE, FCAP_DIRECTIONAL_USE)
-            )
-            > 0
-        and bit.band(caps, requiredCaps) == requiredCaps
-    then
-        return true
-    end
-
-    return false
 end
 
 ---

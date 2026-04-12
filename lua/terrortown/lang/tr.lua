@@ -51,6 +51,8 @@ L.credit_kill = "Bir {role} öldürdüğünüz için {num} kredi aldınız."
 -- Karma
 L.karma_dmg_full = "Karman {amount}, bu yüzden bu raunt tam hasar veriyorsun!"
 L.karma_dmg_other = "Karman {amount}. Bu nedenle, verdiğiniz tüm hasar ​%{num}​ azaltıldı."
+--L.karma_hp_full = "Your Karma is {amount}, so you get full HP this round!"
+--L.karma_hp_other = "Your Karma is {amount}. As a result your maximum HP is reduced by {num} HP"
 
 -- Body identification messages
 L.body_found = "{finder}, {victim} adlı kişinin cesedini buldu. {role}"
@@ -1716,6 +1718,9 @@ L.label_doors_health = "Kapı sağlığı"
 L.label_doors_prop_health = "Yok edilen kapı sağlığı"
 L.label_minimum_players = "Raunda başlamak için minimum oyuncu miktarı"
 L.label_karma = "Karmayı Etkinleştir"
+--L.label_karma_damage_scaling = "Damage scaling"
+--L.label_karma_health_scaling = "Health scaling"
+--L.label_karma_health_min = "Minimum health"
 L.label_karma_strict = "Katı Karmayı etkinleştir"
 L.label_karma_starting = "Başlangıç Karması"
 L.label_karma_max = "Maksimum Karma"

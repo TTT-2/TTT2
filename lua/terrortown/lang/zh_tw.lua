@@ -51,6 +51,8 @@ L.credit_kill = "你殺死 {role} 獲得了 {num} 點信用點數。"
 -- Karma
 L.karma_dmg_full = "你的業值為 {amount}，因此本回合你擁有造成百分之百傷害的待遇！"
 L.karma_dmg_other = "你的業值為 {amount}，因此本回合你造成的傷害將減少 {num}%"
+--L.karma_hp_full = "Your Karma is {amount}, so you get full HP this round!"
+--L.karma_hp_other = "Your Karma is {amount}. As a result your maximum HP is reduced by {num} HP"
 
 -- Body identification messages
 L.body_found = "{finder} 發現了 {victim} 的屍體。 {role}"
@@ -1710,6 +1712,9 @@ L.label_doors_health = "門的生命值"
 L.label_doors_prop_health = "被破壞的門生命值"
 L.label_minimum_players = "開始遊戲的最低玩家數量"
 L.label_karma = "啟用人品值"
+--L.label_karma_damage_scaling = "Damage scaling"
+--L.label_karma_health_scaling = "Health scaling"
+--L.label_karma_health_min = "Minimum health"
 L.label_karma_strict = "啟用嚴格的人品值"
 L.label_karma_starting = "初始人品值"
 L.label_karma_max = "最大人品值"

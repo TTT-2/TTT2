@@ -234,7 +234,7 @@ if SERVER then
             return
         end
 
-        if not IsValid(ent) or not ent:IsPlayer() or not dmg:IsExplosionDamage() then
+        if not dmg:IsExplosionDamage() or not IsValid(ent) or ent:IsPlayer() then
             return
         end
 
