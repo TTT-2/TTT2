@@ -206,7 +206,7 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerSetModel
 -- @local
 function GM:PlayerSetModel(ply)
-    -- The player modes has to be applied here since some player model selectors overwrite
+    -- The player model has to be applied here since some player model selectors overwrite
     -- this hook to suppress the TTT2 player models. If the model is assigned elsewhere, it
     -- breaks with external model selectors.
     if not IsValid(ply) then
