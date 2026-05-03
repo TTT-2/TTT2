@@ -86,7 +86,8 @@ function PANEL:PositionTooltip()
 
     if self.targetPanel:HasTooltipFixedPosition() then
         x, y = self.targetPanel:GetTooltipFixedPosition()
-        parentX, parentY = self.targetPanel:GetParent():LocalToScreen(self.targetPanel:GetPos())
+        local parentX, parentY =
+            self.targetPanel:GetParent():LocalToScreen(self.targetPanel:GetPos())
 
         x = x + parentX
         y = y + parentY
