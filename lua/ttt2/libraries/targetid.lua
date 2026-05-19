@@ -702,6 +702,11 @@ function targetid.HUDDrawTargetIDButtons(tData)
         tData:SetTitle(TryT("name_button_rotating"))
         tData:SetSubtitle(ParT("button_rotating", key_params))
     end
+
+    if ent:IsMomentaryRotatingButton() then
+        tData:SetTitle(TryT("name_button_momentary_rotating"))
+        tData:SetSubtitle(ParT("button_momentary_rotating", key_params))
+    end
 end
 
 ---

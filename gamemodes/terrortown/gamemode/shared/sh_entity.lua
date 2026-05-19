@@ -34,9 +34,17 @@ function entmeta:IsRotatingButton()
 end
 
 ---
+-- Returns true if this entity is a momentary rotating button (lever).
+-- @return boolean Returns true if momentary rotating button
+-- @realm shared
+function entmeta:IsMomentaryRotatingButton()
+    return button.IsClass(self, "momentary_rot_button")
+end
+
+---
 -- Returns true if the entity is any type of button.
 -- @return boolean Returns true if button
 -- @realm shared
 function entmeta:IsButton()
-    return self:IsDefaultButton() or self:IsRotatingButton()
+    return self:IsDefaultButton() or self:IsRotatingButton() or self:IsMomentaryRotatingButton()
 end

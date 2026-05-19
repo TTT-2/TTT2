@@ -2356,9 +2356,11 @@ L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
 -- 2024-08-17
 L.name_button_default = "Button"
 L.name_button_rotating = "Lever"
+L.name_button_momentary_rotating = "Wheel"
 
 L.button_default = "Press [{usekey}] to trigger"
 L.button_rotating = "Press [{usekey}] to flip"
+L.button_momentary_rotating = "Press [{usekey}] to rotate"
 
 L.undefined_key = "???"
 
