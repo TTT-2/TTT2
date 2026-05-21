@@ -119,97 +119,170 @@ function ENT:AddSound(snd)
     end
 end
 
-local simplesounds = {
-    scream = {
-        Sound("vo/npc/male01/pain07.wav"),
-        Sound("vo/npc/male01/pain08.wav"),
-        Sound("vo/npc/male01/pain09.wav"),
-        Sound("vo/npc/male01/no02.wav"),
+TTTRadioType = {
+    Simple = "simple",
+    Serial = "serial",
+    Gun = "gun",
+}
+
+local radioSounds = {
+    [TTTRadioType.Simple] = {
+        scream = {
+            label = "radio_button_scream",
+            sound = {
+                Sound("vo/npc/male01/pain07.wav"),
+                Sound("vo/npc/male01/pain08.wav"),
+                Sound("vo/npc/male01/pain09.wav"),
+                Sound("vo/npc/male01/no02.wav"),
+            },
+        },
+        explosion = {
+            label = "radio_button_expl",
+            sound = {
+                Sound("BaseExplosionEffect.Sound"),
+            },
+        },
     },
-    explosion = {
-        Sound("BaseExplosionEffect.Sound"),
+
+    [TTTRadioType.Serial] = {
+        footsteps = {
+            label = "radio_button_steps",
+            sound = {
+                {
+                    Sound("player/footsteps/concrete1.wav"),
+                    Sound("player/footsteps/concrete2.wav"),
+                },
+                {
+                    Sound("player/footsteps/concrete3.wav"),
+                    Sound("player/footsteps/concrete4.wav"),
+                },
+            },
+            times = { 8, 16 },
+            delay = 0.35,
+            ampl = 80,
+        },
+        burning = {
+            label = "radio_button_burn",
+            sound = {
+                Sound("General.BurningObject"),
+                Sound("General.StopBurning"),
+            },
+            times = { 2, 2 },
+            delay = 4,
+        },
+        beeps = {
+            label = "radio_button_c4",
+            sound = {
+                Sound("weapons/c4/c4_beep1.wav"),
+            },
+            delay = 0.75,
+            times = { 8, 12 },
+            ampl = 70,
+        },
+    },
+
+    [TTTRadioType.Gun] = {
+        shotgun = {
+            label = "radio_button_shotgun",
+            sound = Sound("Weapon_XM1014.Single"),
+            delay = 0.8,
+            times = { 1, 3 },
+            burst = false,
+        },
+        pistol = {
+            label = "radio_button_pistol",
+            sound = Sound("Weapon_FiveSeven.Single"),
+            delay = 0.4,
+            times = { 2, 4 },
+            burst = false,
+        },
+        mac10 = {
+            label = "radio_button_mac10",
+            sound = Sound("Weapon_mac10.Single"),
+            delay = 0.065,
+            times = { 5, 10 },
+            burst = true,
+        },
+        deagle = {
+            label = "radio_button_deagle",
+            sound = Sound("Weapon_Deagle.Single"),
+            delay = 0.6,
+            times = { 1, 3 },
+            burst = false,
+        },
+        m16 = {
+            label = "radio_button_m16",
+            sound = Sound("Weapon_M4A1.Single"),
+            delay = 0.2,
+            times = { 1, 5 },
+            burst = true,
+        },
+        rifle = {
+            label = "radio_button_rifle",
+            sound = Sound("weapons/scout/scout_fire-1.wav"),
+            delay = 1.5,
+            times = { 1, 1 },
+            burst = false,
+            ampl = 80,
+        },
+        huge = {
+            label = "radio_button_huge",
+            sound = Sound("Weapon_m249.Single"),
+            delay = 0.055,
+            times = { 6, 12 },
+            burst = true,
+        },
     },
 }
 
-local serialsounds = {
-    footsteps = {
-        sound = {
-            {
-                Sound("player/footsteps/concrete1.wav"),
-                Sound("player/footsteps/concrete2.wav"),
-            },
-            {
-                Sound("player/footsteps/concrete3.wav"),
-                Sound("player/footsteps/concrete4.wav"),
-            },
-        },
-        times = { 8, 16 },
-        delay = 0.35,
-        ampl = 80,
-    },
-    burning = {
-        sound = {
-            Sound("General.BurningObject"),
-            Sound("General.StopBurning"),
-        },
-        times = { 2, 2 },
-        delay = 4,
-    },
-    beeps = {
-        sound = {
-            Sound("weapons/c4/c4_beep1.wav"),
-        },
-        delay = 0.75,
-        times = { 8, 12 },
-        ampl = 70,
-    },
-}
+---
+-- Allows addons to extend available sound pool;
+-- must be called once per added sound during initialization
+-- @param string type Can be TTTRadioType.Simple, TTTRadioType.Serial or TTTRadioType.Gun
+-- @param string name Arbitrary internal name, should be unique
+-- @param table data Sound data following above spec for the given sound type
+-- @realm shared
+function RegisterTTTRadioSound(type, name, data)
+    if type ~= "simple" and type ~= "serial" and type ~= "gun" then
+        ErrorNoHaltWithStack("Invalid radio sound type: ", type)
+        return
+    end
 
-local gunsounds = {
-    shotgun = {
-        sound = Sound("Weapon_XM1014.Single"),
-        delay = 0.8,
-        times = { 1, 3 },
-        burst = false,
-    },
-    pistol = {
-        sound = Sound("Weapon_FiveSeven.Single"),
-        delay = 0.4,
-        times = { 2, 4 },
-        burst = false,
-    },
-    mac10 = {
-        sound = Sound("Weapon_mac10.Single"),
-        delay = 0.065,
-        times = { 5, 10 },
-        burst = true,
-    },
-    deagle = {
-        sound = Sound("Weapon_Deagle.Single"),
-        delay = 0.6,
-        times = { 1, 3 },
-        burst = false,
-    },
-    m16 = {
-        sound = Sound("Weapon_M4A1.Single"),
-        delay = 0.2,
-        times = { 1, 5 },
-        burst = true,
-    },
-    rifle = {
-        sound = Sound("weapons/scout/scout_fire-1.wav"),
-        delay = 1.5,
-        times = { 1, 1 },
-        burst = false,
-        ampl = 80,
-    },
-    huge = {
-        sound = Sound("Weapon_m249.Single"),
-        delay = 0.055,
-        times = { 6, 12 },
-        burst = true,
-    },
-}
+    if not data.label or not data.sound then
+        ErrorNoHaltWithStack("Radio sound data missing translation label or sounds, name:", name)
+        return
+    end
+
+    radioSounds[type][name] = data
+end
+
+---
+-- Allows addons to remove from available sound pool
+-- @param string type Can be TTTRadioType.Simple, TTTRadioType.Serial or TTTRadioType.Gun
+-- @param string name Arbitrary internal name
+-- @realm shared
+function UnregisterTTTRadioSound(type, name)
+    if type ~= "simple" and type ~= "serial" and type ~= "gun" then
+        ErrorNoHaltWithStack("Invalid radio sound type: ", type)
+        return
+    end
+
+    radioSounds[type][name] = nil
+end
+
+---
+-- @param string type Can be TTTRadioType.Simple, TTTRadioType.Serial or TTTRadioType.Gun
+-- @param string name Arbitrary internal name
+-- @return table Registered radio sound data for the given type/name
+-- @realm shared
+function GetTTTRadioSound(type, name)
+    if type ~= "simple" and type ~= "serial" and type ~= "gun" then
+        ErrorNoHaltWithStack("Invalid radio sound type: ", type)
+        return
+    end
+
+    return radioSounds[type][name]
+end
 
 ---
 -- @param Sound snd
@@ -237,10 +310,10 @@ end
 function ENT:PlaySound(snd)
     local slf = self
 
-    if simplesounds[snd] then
-        self:BroadcastSound(table.Random(simplesounds[snd]))
-    elseif gunsounds[snd] then
-        local gunsound = gunsounds[snd]
+    if radioSounds.simple[snd] then
+        self:BroadcastSound(table.Random(radioSounds.simple[snd].sound))
+    elseif radioSounds.gun[snd] then
+        local gunsound = radioSounds.gun[snd]
         local times = math.random(gunsound.times[1], gunsound.times[2])
         local t = 0
 
@@ -259,8 +332,8 @@ function ENT:PlaySound(snd)
                 t = t + math.Rand(gunsound.delay, gunsound.delay * 2)
             end
         end
-    elseif serialsounds[snd] then
-        local serialsound = serialsounds[snd]
+    elseif radioSounds.serial[snd] then
+        local serialsound = radioSounds.serial[snd]
         local num = #serialsound.sound
         local times = math.random(serialsound.times[1], serialsound.times[2])
         local t = 0
@@ -377,23 +450,24 @@ if CLIENT then
 
         return true
     end
+
+    ---
+    -- @return table List of sounds with translation labels (internal)
+    -- @realm client
+    function GetTTTRadioSoundLabels()
+        local labels = {}
+
+        for _, category in pairs(radioSounds) do
+            for name, data in pairs(category) do
+                labels[name] = data.label
+            end
+        end
+
+        return labels
+    end
 end
 
 if SERVER then
-    local soundtypes = {
-        "scream",
-        "shotgun",
-        "explosion",
-        "pistol",
-        "mac10",
-        "deagle",
-        "m16",
-        "rifle",
-        "huge",
-        "burning",
-        "beeps",
-        "footsteps",
-    }
 
     local function RadioCmd(ply, cmd, args)
         if not IsValid(ply) or not ply:IsActive() or #args ~= 2 then
@@ -421,7 +495,9 @@ if SERVER then
             return
         end
 
-        if not table.HasValue(soundtypes, snd) then
+        if not radioSounds[TTTRadioType.Simple][snd]
+          and not radioSounds[TTTRadioType.Serial][snd]
+          and not radioSounds[TTTRadioType.Gun][snd] then
             ErrorNoHaltWithStack("Received radio sound not in table from", ply)
 
             return
