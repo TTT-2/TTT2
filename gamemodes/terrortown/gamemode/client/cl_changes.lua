@@ -1609,7 +1609,7 @@ function CreateChanges()
                     <li>A value of <code>0.13</code> ducks someone's volume at 90% down to effectively 78%, according to the client's scaling mode.</li>
                 </ul>
             </ul>
-            <li>Added the option for <code>DButtonTTT2</code> to have an icon next to the title (by @TimGoll)</li>
+            <li>Added the option for <code>TTT2:DButtonTTT2</code> to have an icon next to the title (by @TimGoll)</li>
             <li>Added a cached equipment item icon to its table as <code>.iconMaterial</code> (by @TimGoll)</li>
             <li>Added a new <code>bodysearch</code> library that handles the search (by @TimGoll)</li>
             <li>Completely reworked the body search UI (by @TimGoll)</li>

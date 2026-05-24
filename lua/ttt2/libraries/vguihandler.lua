@@ -117,6 +117,9 @@ function vguihandler.InvalidateVSkin()
 
     for i = 1, #frames do
         frames[i]:InvalidateLayout()
+
+        -- recursively trigger this for all children as well
+        frames[i]:InvalidateChildren(true)
     end
 end
 

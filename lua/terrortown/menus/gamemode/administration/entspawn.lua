@@ -143,7 +143,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 end
 
 function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
-    local buttonReset = vgui.Create("DButtonTTT2", parent)
+    local buttonReset = vgui.Create("TTT2:DButton", parent)
 
     buttonReset:SetText("button_reset")
     buttonReset:SetSize(100, 45)
@@ -154,7 +154,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
         cvars.ChangeServerConVar("ttt_use_weapon_spawn_scripts", "1")
     end
 
-    local buttonDelete = vgui.Create("DButtonTTT2", parent)
+    local buttonDelete = vgui.Create("TTT2:DButton", parent)
 
     buttonDelete:SetText("button_delete_all_spawns")
     buttonDelete:SetSize(195, 45)
@@ -163,7 +163,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
         entspawnscript.DeleteAllSpawns()
     end
 
-    local buttonToggle = vgui.Create("DButtonTTT2", parent)
+    local buttonToggle = vgui.Create("TTT2:DButton", parent)
 
     buttonToggle:SetText("button_start_entspawn_edit")
     buttonToggle:SetSize(180, 45)

@@ -266,14 +266,16 @@ end
 ---
 -- Returns the darkened or lightened color by the specified value
 -- @param Color color The original color
--- @param number value The amount to change
+-- @param number[default=20] value The amount to change
 -- @return Color The color based on the original color
 -- @realm shared
 function util.GetChangedColor(color, value)
+    value = value or 20
+
     if color.r + color.g + color.b < 383 then
-        return util.ColorLighten(color, value or 20)
+        return util.ColorLighten(color, value)
     else
-        return util.ColorDarken(color, value or 20)
+        return util.ColorDarken(color, value)
     end
 end
 
@@ -284,7 +286,15 @@ end
 -- @return Color The color based on the original color
 -- @realm shared
 function util.GetHoverColor(color)
-    return util.GetChangedColor(color, 20)
+    local value = 20
+    local maxVal = math.max(color.r, color.g, color.b)
+
+    -- special handling if one of the color values is already at the max
+    if maxVal > 255 - value then
+        value = math.Round(1.2 * (2 * value + maxVal - 255))
+    end
+
+    return util.GetChangedColor(color, value)
 end
 
 ---
@@ -294,7 +304,38 @@ end
 -- @return Color The color based on the original color
 -- @realm shared
 function util.GetActiveColor(color)
-    return util.GetChangedColor(color, 40)
+    local value = 32
+    local maxVal = math.max(color.r, color.g, color.b)
+
+    -- special handling if one of the color values is already at the max
+    if maxVal > 255 - value then
+        value = 2 * value + maxVal - 255
+    end
+
+    return util.GetChangedColor(color, value)
+end
+
+---
+-- Merges two colors to return a new solid color that consists out of these two.
+-- @param Color color The original color
+-- @param Color color The background color
+-- @param number alpha The alpha value (0..255) of the new color
+-- @return Color The color based on the original color
+-- @realm shared
+function util.GetMergedColor(color, colorBackground, alpha)
+    if not colorBackground then
+        return color
+    end
+
+    local mulColor = alpha / 255
+    local mulBgColor = (255 - alpha) / 255
+
+    return Color(
+        colorBackground.r * mulBgColor + color.r * mulColor,
+        colorBackground.g * mulBgColor + color.g * mulColor,
+        colorBackground.b * mulBgColor + color.b * mulColor,
+        255
+    )
 end
 
 local function DoBleed(ent)
@@ -746,7 +787,7 @@ if CLIENT then
     ---
     -- Checks recursively the parents until none is found and the highest parent is returned
     -- @ignore
-    function util.getHighestPanelParent(panel)
+    function util.GetHighestPanelParent(panel)
         local parent = panel
         local checkParent = panel:GetParent()
 

@@ -130,7 +130,7 @@ function RADIO:ShowRadioCommands(state)
 
             for key = 1, #commands do
                 local command = commands[key]
-                local dlabel = vgui.Create("DLabel", radioframe)
+                local dlabel = vgui.Create("TTT2:DLabel", radioframe)
                 local id = key .. ": "
                 local txt = id
 

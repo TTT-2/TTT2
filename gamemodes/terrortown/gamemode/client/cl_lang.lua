@@ -9,6 +9,9 @@
 
 LANG.Strings = {}
 
+LANG_DO_TRANSLATE_PARAMS = true
+LANG_DONT_TRANSLATE_PARAMS = false
+
 local table = table
 local pairs = pairs
 

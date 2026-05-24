@@ -153,54 +153,48 @@ function CLSCORE:CreatePanel()
     end
 
     -- LEFT HAND MENU STRIP
-    local menuBox = vgui.Create("DPanelTTT2", frame)
-    menuBox:SetSize(self.sizes.widthMenu, self.sizes.heightMainArea)
-    menuBox:DockMargin(0, self.sizes.padding, 0, self.sizes.padding)
-    menuBox:Dock(LEFT)
-    menuBox.Paint = function(slf, w, h)
-        derma.SkinHook("Paint", "VerticalBorderedBoxTTT2", slf, w, h)
-
-        return false
-    end
+    local menuBox = vgui.Create("TTT2:DPanel", frame)
+        :SetSize(self.sizes.widthMenu, self.sizes.heightMainArea)
+        :DockMargin(0, self.sizes.padding, 0, self.sizes.padding)
+        :Dock(LEFT)
+        :SetPaintHookName("VerticalBorderedBoxTTT2")
 
     local menuBoxGrid = vgui.Create("DIconLayout", menuBox)
     menuBoxGrid:Dock(FILL)
     menuBoxGrid:SetSpaceY(self.sizes.padding)
 
     -- RIGHT HAND MAIN AREA
-    local mainBox = vgui.Create("DPanelTTT2", frame)
-    mainBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
-    mainBox:DockMargin(
-        self.sizes.padding,
-        self.sizes.padding,
-        self.sizes.padding,
-        self.sizes.padding
-    )
-    mainBox:Dock(RIGHT)
+    local mainBox = vgui.Create("TTT2:DPanel", frame)
+        :SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+        :DockMargin(self.sizes.padding, self.sizes.padding, self.sizes.padding, self.sizes.padding)
+        :Dock(RIGHT)
 
-    local contentBox = vgui.Create("DPanelTTT2", mainBox)
-    contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
-    contentBox:Dock(TOP)
+    local contentBox = vgui.Create("TTT2:DPanel", mainBox)
+        :SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+        :Dock(TOP)
 
-    local buttonArea = vgui.Create("DButtonPanelTTT2", mainBox)
-    buttonArea:SetSize(self.sizes.widthMainArea, self.sizes.heightBottomButtonPanel)
-    buttonArea:Dock(BOTTOM)
+    local buttonArea = vgui.Create("TTT2:DPanel", mainBox)
+        :SetSize(self.sizes.widthMainArea, self.sizes.heightBottomButtonPanel)
+        :Dock(BOTTOM)
+        :SetOutline(0, 0, 0, 1)
 
-    local buttonSave = vgui.Create("DButtonTTT2", buttonArea)
-    buttonSave:SetText("report_save")
-    buttonSave:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-    buttonSave:SetPos(0, self.sizes.padding + 1)
-    buttonSave.DoClick = function(btn)
-        self:SaveLog()
-    end
+    -- Button SAVE
+    vgui.Create("TTT2:DButton", buttonArea)
+        :SetSize(self.sizes.widthButton, self.sizes.heightButton)
+        :SetPos(0, self.sizes.padding + 1)
+        :SetText("report_save")
+        :On("LeftClick", function()
+            self:SaveLog()
+        end)
 
-    local buttonClose = vgui.Create("DButtonTTT2", buttonArea)
-    buttonClose:SetText("close")
-    buttonClose:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-    buttonClose:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
-    buttonClose.DoClick = function(btn)
-        self:HidePanel()
-    end
+    -- Button CLOSE
+    vgui.Create("TTT2:DButton", buttonArea)
+        :SetSize(self.sizes.widthButton, self.sizes.heightButton)
+        :SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
+        :SetText("close")
+        :On("LeftClick", function()
+            self:HidePanel()
+        end)
 
     -- POPULATE SIDEBAR PANEL
     local lastActive
@@ -208,24 +202,26 @@ function CLSCORE:CreatePanel()
     for i = 1, #subMenusIndexed do
         local data = subMenusIndexed[i]
 
-        local menuButton = menuBoxGrid:Add("DSubmenuButtonTTT2")
-        menuButton:SetSize(self.sizes.widthMenu - 1, self.sizes.heightMenuButton)
-        menuButton:SetIcon(data.icon)
-        menuButton:SetTooltip(data.title)
-        menuButton.DoClick = function(slf)
-            contentBox:Clear()
+        local menuButton = menuBoxGrid:Add("TTT2:DSubmenuButton")
+        menuButton
+            :SetSize(self.sizes.widthMenu - 1, self.sizes.heightMenuButton)
+            :SetIcon(data.icon)
+            :SetTooltip(data.title)
+            :On("LeftClick", function(slf)
+                contentBox:Clear()
 
-            if isfunction(data.Populate) then
-                data:Populate(contentBox)
-            end
+                if isfunction(data.Populate) then
+                    data:Populate(contentBox)
+                end
 
-            slf:SetActive(true)
-            lastActive:SetActive(false)
-            lastActive = slf
-        end
+                slf:SetToggle(true)
+                lastActive:SetToggle(false)
+                lastActive = slf
+            end)
 
         if i == 1 then
-            menuButton:SetActive(true)
+            menuButton:SetToggle(true)
+
             lastActive = menuButton
         end
     end

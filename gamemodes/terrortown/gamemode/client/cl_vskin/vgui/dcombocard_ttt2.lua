@@ -150,5 +150,5 @@ derma.DefineControl(
     "DComboCardTTT2",
     "A special button where only one can be set at a time",
     PANEL,
-    "DButtonTTT2"
+    "TTT2:DButton"
 )

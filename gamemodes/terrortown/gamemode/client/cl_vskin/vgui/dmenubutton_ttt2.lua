@@ -1,145 +1,65 @@
 ---
 -- @class PANEL
--- @section DMenuButtonTTT2
+-- @section TTT2:DMainMenuButton
 
 local PANEL = {}
 
 ---
--- @accessor boolean
--- @realm client
-AccessorFunc(PANEL, "m_bBorder", "DrawBorder", FORCE_BOOL)
-
----
 -- @ignore
 function PANEL:Init()
-    self:SetContentAlignment(5)
+    DBase("TTT2:DButton").Init(self)
 
-    self:SetDrawBorder(true)
-    self:SetPaintBackground(true)
-
-    self:SetTall(22)
-    self:SetMouseInputEnabled(true)
-    self:SetKeyboardInputEnabled(true)
-
-    self:SetCursor("hand")
-    self:SetText("")
-
-    self.contents = {
-        title = "",
-        title_font = "DermaTTT2MenuButtonTitle",
-        description = "",
-        description_font = "DermaTTT2MenuButtonDescription",
-        icon = nil,
-    }
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:IsDown()
-    return self.Depressed
-end
-
----
--- @param string mat Icon's material path
--- @realm client
-function PANEL:SetImage(mat)
-    self.contents.icon = mat
-end
-
----
--- @return string Icon's material path
--- @realm client
-function PANEL:GetImage()
-    return self.contents.icon
-end
-
----
--- @param string title
--- @realm client
-function PANEL:SetTitle(title)
-    self.contents.title = title or ""
-end
-
----
--- @return string The title
--- @realm client
-function PANEL:GetTitle()
-    return self.contents.title
-end
-
----
--- @param string title_font
--- @realm client
-function PANEL:SetTitleFont(title_font)
-    self.contents.title_font = title_font or ""
-end
-
----
--- @return string
--- @realm client
-function PANEL:GetTitleFont()
-    return self.contents.title_font
-end
-
----
--- @param string description
--- @realm client
-function PANEL:SetDescription(description)
-    self.contents.description = description or ""
-end
-
----
--- @return string
--- @realm client
-function PANEL:GetDescription()
-    return self.contents.description
-end
-
----
--- @param string description_font
--- @realm client
-function PANEL:SetDescriptionFont(description_font)
-    self.contents.description_font = description_font or ""
-end
-
----
--- @return string
--- @realm client
-function PANEL:GetDescriptionFont()
-    return self.contents.description_font
+    self:SetFont("DermaTTT2MenuButtonTitle")
+    self:SetDescriptionFont("DermaTTT2MenuButtonDescription")
+    self:SetOutline(1)
+    self:SetTextCapitalized(false)
+    self:EnableCornerRadius(false)
+    self:SetPadding(15)
+    self:SetTextAlign(TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 end
 
 ---
 -- @ignore
-function PANEL:Paint(w, h)
-    derma.SkinHook("Paint", "MenuButtonTTT2", self, w, h)
+function PANEL:OnVSkinUpdate()
+    local colorBackground, colorText, colorDescription, colorIcon, colorOutline
 
-    return false
-end
+    -- PANEL DISABLED
+    -- (not implemented for now)
 
----
--- @ignore
-function PANEL:PerformLayout()
-    DLabel.PerformLayout(self)
-end
+    -- PANEL IS PRESSED or PANEL IS HOVERED
+    if self:IsDepressed() or self:IsSelected() or self:GetToggle() or self:IsHovered() then
+        colorBackground = self:GetColor() or vskin.GetBackgroundColor()
+        colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 50)
+        colorDescription = util.GetChangedColor(util.GetDefaultColor(colorBackground), 135)
+        colorIcon = util.GetChangedColor(util.GetDefaultColor(colorBackground), 160)
+        colorOutline = util.GetChangedColor(
+            util.GetDefaultColor(self:GetOutlineColor() or colorBackground),
+            135
+        )
 
----
--- @param string strName
--- @param string strArgs
--- @realm client
-function PANEL:SetConsoleCommand(strName, strArgs)
-    self.DoClick = function(slf, val)
-        RunConsoleCommand(strName, strArgs)
+    -- NORMAL COLORS
+    else
+        colorBackground = self:GetColor() or vskin.GetBackgroundColor()
+        colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 65)
+        colorDescription = util.GetChangedColor(util.GetDefaultColor(colorBackground), 145)
+        colorIcon = util.GetChangedColor(util.GetDefaultColor(colorBackground), 170)
+        colorOutline = util.GetChangedColor(
+            util.GetDefaultColor(self:GetOutlineColor() or colorBackground),
+            170
+        )
     end
+
+    self:ApplyVSkinColor("background", colorBackground)
+    self:ApplyVSkinColor("text", colorText)
+    self:ApplyVSkinColor("description", colorDescription)
+    self:ApplyVSkinColor("icon", colorIcon)
+    self:ApplyVSkinColor("outline", colorOutline)
+    self:ApplyVSkinColor("flash", colorText)
 end
 
----
--- @ignore
-function PANEL:SizeToContents()
-    local w, h = self:GetContentSize()
-
-    self:SetSize(w + 8, h + 4)
-end
-
-derma.DefineControl("DMenuButtonTTT2", "A standard Button", PANEL, "DButtonTTT2")
+derma.DefineControl(
+    "TTT2:DMainMenuButton",
+    "The button made for the main menu",
+    PANEL,
+    "TTT2:DButton"
+)

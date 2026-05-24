@@ -118,5 +118,5 @@ derma.DefineControl(
     "DShopCardTTT2",
     "A special button used for the shop editor",
     PANEL,
-    "DButtonTTT2"
+    "TTT2:DButton"
 )
