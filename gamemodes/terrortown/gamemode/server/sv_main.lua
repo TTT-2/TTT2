@@ -45,6 +45,7 @@ ttt_include("sh_armor")
 ttt_include("sh_player_ext")
 
 ttt_include("sv_player_ext")
+ttt_include("sv_player_custom")
 ttt_include("sv_player")
 
 ttt_include("sv_addonchecker")
@@ -65,21 +66,6 @@ local timer = timer
 local util = util
 local hook = hook
 local playerGetAll = player.GetAll
-
----
--- @realm server
-local cvPreferMapModels =
-    CreateConVar("ttt2_prefer_map_models", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
-
----
--- @realm server
-local cvSelectModelPerRound =
-    CreateConVar("ttt2_select_model_per_round", "1", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
-
----
--- @realm server
-local cvSelectUniqueModelPerPlayer =
-    CreateConVar("ttt2_select_unique_model_per_player", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
 ---
 -- @realm server
@@ -128,15 +114,6 @@ local map_switch_delay = CreateConVar(
     { FCVAR_NOTIFY, FCVAR_ARCHIVE },
     "Time that passes before the map is changed after the last round ends or the timer runs out",
     0
-)
-
----
--- @realm server
-CreateConVar(
-    "ttt_enforce_playermodel",
-    "1",
-    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
-    "Whether or not to enforce terrorist playermodels. Set to 0 for compatibility with Enhanced Playermodel Selector"
 )
 
 ---
@@ -427,9 +404,7 @@ function GM:InitPostEntity()
     -- initialize playermodel database
     playermodels.Initialize()
 
-    -- set the default random playermodel
-    self.playermodel = playermodels.GetRandomPlayerModel()
-    self.playercolor = COLOR_WHITE
+    self.playermodel, self.playercolor = hook.Run("TTT2GetDefaultPlayerDisplay")
 
     timer.Simple(0, function()
         addonChecker.Check()
@@ -700,9 +675,7 @@ function GM:OnReloaded()
 
     button.SetUp()
 
-    -- set the default random playermodel
-    self.playermodel = playermodels.GetRandomPlayerModel()
-    self.playercolor = COLOR_WHITE
+    self.playermodel, self.playercolor = hook.Run("TTT2GetDefaultPlayerDisplay")
 
     -- register synced player variables
     player.RegisterSettingOnServer("enable_dynamic_fov", "bool")
@@ -922,29 +895,8 @@ function GM:TTT2PrePrepareRound(duration)
         MuteForRestart(false)
     end)
 
-    -- sets the player model
-    -- supports map models or random player models
-    if cvPreferMapModels:GetBool() and self.force_plymodel and self.force_plymodel ~= "" then
-        self.playermodel = self.force_plymodel
-    elseif cvSelectModelPerRound:GetBool() then
-        if cvSelectUniqueModelPerPlayer:GetBool() then
-            local plys = player.GetAll()
-            for i = 1, #plys do
-                plys[i].defaultModel = playermodels.GetRandomPlayerModel()
-            end
-        else
-            local plys = player.GetAll()
-            for i = 1, #plys do
-                plys[i].defaultModel = nil
-            end
-
-            self.playermodel = playermodels.GetRandomPlayerModel()
-        end
-    end
-
-    ---
-    -- @realm server
-    self.playercolor = hook.Run("TTTPlayerColor", self.playermodel)
+    -- select new default playermodels for the round
+    self.playermodel, self.playercolor = hook.Run("TTT2GetDefaultPlayerDisplayForRound")
 end
 
 ---

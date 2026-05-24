@@ -193,18 +193,9 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
             -- @realm server
             hook.Run("PlayerLoadout", self, false)
 
-            -- Don't update the model if oldSubrole is nil (player isn't already spawned, leading to an initialization error)
-            if oldSubrole and GetConVar("ttt_enforce_playermodel"):GetBool() then
-                -- update subroleModel
-                self:SetModel(self:GetSubRoleModel())
-            end
-
-            -- Always clear color state, may later be changed in TTTPlayerSetColor
-            self:SetColor(COLOR_WHITE)
-
             ---
             -- @realm server
-            hook.Run("TTTPlayerSetColor", self)
+            hook.Run("TTT2UpdateSubrolePlayermodel", self, oldSubrole ~= nil)
         end
     end
 
@@ -1085,43 +1076,32 @@ local oldSetModel = plymeta.SetModel or plymeta.MetaBaseClass.SetModel
 -- @note override to fix PS/ModelSelector/... issues
 -- @realm shared
 function plymeta:SetModel(mdlName)
-    local mdl
+    --Dev(1, "Player", self, ":SetModel", mdlName or "(nil)")
+    --ErrorNoHaltWithStack("^^ ply:SetModel")
 
-    local curMdl = mdlName or self:GetModel()
+    local mdl = mdlName or self:GetModel()
 
-    if not checkModel(curMdl) then
-        curMdl = self.defaultModel
+    if not checkModel(mdl) then
+        hook.Run("PlayerSetModel", self)
+        mdl = self:GetModel()
 
-        if not checkModel(curMdl) then
+        if not checkModel(mdl) then
+            -- TODO: this is in the original code; is it still actually needed?
             if not checkModel(GAMEMODE.playermodel) then
                 GAMEMODE.playermodel = GAMEMODE.force_plymodel
-
                 if not checkModel(GAMEMODE.playermodel) then
                     GAMEMODE.playermodel = "models/player/phoenix.mdl"
                 end
             end
 
-            curMdl = GAMEMODE.playermodel
+            mdl = GAMEMODE.playermodel
         end
     end
 
-    local srMdl = self:GetSubRoleModel()
-    if srMdl then
-        mdl = srMdl
+    -- TODO: original checked and enforced subrole model here. I don't think this is a good idea, so
+    -- that other addons can override the model selection here, so I'm ommitting it, but there's
+    -- probably a reason for it to exist.
 
-        if curMdl ~= srMdl then
-            self.oldModel = curMdl
-        end
-    else
-        if self.oldModel then
-            mdl = self.oldModel
-            self.oldModel = nil
-        else
-            mdl = curMdl
-        end
-    end
-
-    -- last but not least, we fix this grey model "bug"
     if not checkModel(mdl) then
         mdl = "models/player/phoenix.mdl"
     end

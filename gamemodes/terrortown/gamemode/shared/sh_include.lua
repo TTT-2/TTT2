@@ -169,6 +169,7 @@ if SERVER then
         sv_networking = { file = "sv_networking.lua", on = "server" },
         sv_network_sync = { file = "sv_network_sync.lua", on = "server" },
         sv_player_ext = { file = "sv_player_ext.lua", on = "server" },
+        sv_player_custom = { file = "sv_player_custom.lua", on = "server" },
         sv_player = { file = "sv_player.lua", on = "server" },
         sv_propspec = { file = "sv_propspec.lua", on = "server" },
         sv_roleselection = { file = "sv_roleselection.lua", on = "server" },
