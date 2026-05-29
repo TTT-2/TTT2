@@ -239,14 +239,18 @@ if SERVER then
     -- push is a cheap no-op.
     -- @realm server
     hook.Add("SetupPlayerVisibility", "TTT2MarkerVisionForcePVS", function(ply, viewEntity)
-        if not IsValid(ply) then return end
+        if not IsValid(ply) then
+            return
+        end
 
         for i = 1, #markerVision.registry do
             local mvObject = markerVision.registry[i]
             local mvObjectData = mvObject.data
             local ent = mvObjectData.ent
 
-            if not IsValid(ent) then continue end
+            if not IsValid(ent) then
+                continue
+            end
 
             local visibleFor = mvObjectData.visibleFor
             local owner = mvObjectData.owner
