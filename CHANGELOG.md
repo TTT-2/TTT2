@@ -8,6 +8,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added momentary_rot_button to targetID (by @MrXonte)
 
+### Fixed
+
+- Fixed markerVision not relaying engine-native entities out of PVS (by @MrXonte)
+
 ## [v0.14.6b](https://github.com/TTT-2/TTT2/tree/v0.14.6b) (2026-04-06)
 
 ### Added
