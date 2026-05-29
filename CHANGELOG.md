@@ -7,6 +7,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added momentary_rot_button to targetID (by @MrXonte)
+- Made improvements to ammo boxes and ammo management (by @MrXonte)
+  - Added Ammo Settings F1 Menu that allows enabling/disabling ammo spawns, setting of max reserve and box ammo (by @MrXonte)
+  - Added TargetID for ammo which can be toggled in Appearance F1 Menu (by @MrXonte)
+  - Added ammo box size scaling with ammo left in box, from 25% to 100%. Can be toggled in Appearance F1 Menu (by @MrXonte)
+
+### Changed
+- Ammo Boxes no longer despawn below 25% ammo (by @MrXonte)
 
 ## [v0.14.6b](https://github.com/TTT-2/TTT2/tree/v0.14.6b) (2026-04-06)
 
