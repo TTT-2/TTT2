@@ -222,6 +222,59 @@ if SERVER then
             end
         end
     end
+
+    ---
+    -- Force-add every marker-tracked entity's origin into the PVS of each
+    -- player that should see the marker.
+    --
+    -- markerVision.Add overrides ent.UpdateTransmitState to TRANSMIT_ALWAYS,
+    -- which works for scripted entities (SENTs). However, engine-native
+    -- entities (prop_ragdoll, prop_physics, prop_door_rotating, ...) implement
+    -- UpdateTransmitState in C++ and silently ignore the Lua field, so they
+    -- remain PVS-gated. Without this hook, a marker placed on an out-of-PVS
+    -- engine entity is never networked to the receiver and the wallhack icon
+    -- never renders until the player happens to walk into PVS.
+    --
+    -- For SENTs whose transmit override already took effect, the extra PVS
+    -- push is a cheap no-op.
+    -- @realm server
+    hook.Add("SetupPlayerVisibility", "TTT2MarkerVisionForcePVS", function(ply, viewEntity)
+        if not IsValid(ply) then return end
+
+        for i = 1, #markerVision.registry do
+            local mvObject = markerVision.registry[i]
+            local mvObjectData = mvObject.data
+            local ent = mvObjectData.ent
+
+            if not IsValid(ent) then continue end
+
+            local visibleFor = mvObjectData.visibleFor
+            local owner = mvObjectData.owner
+            local shouldPush = false
+
+            if visibleFor == VISIBLE_FOR_ALL then
+                shouldPush = true
+            elseif visibleFor == VISIBLE_FOR_PLAYER then
+                shouldPush = (owner == ply)
+            elseif visibleFor == VISIBLE_FOR_ROLE then
+                if IsPlayer(owner) then
+                    shouldPush = IsValid(owner) and owner:GetSubRole() == ply:GetSubRole()
+                else
+                    shouldPush = owner == ply:GetSubRole()
+                end
+            elseif visibleFor == VISIBLE_FOR_TEAM then
+                if IsPlayer(owner) then
+                    shouldPush = IsValid(owner) and owner:GetTeam() == ply:GetTeam()
+                else
+                    shouldPush = owner == ply:GetTeam()
+                end
+            end
+
+            if shouldPush then
+                AddOriginToPVS(ent:GetPos())
+            end
+        end
+    end)
 end
 
 if CLIENT then
