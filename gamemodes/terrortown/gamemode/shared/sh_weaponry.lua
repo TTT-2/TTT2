@@ -105,6 +105,10 @@ local function BuildAmmoEntityData()
 end
 
 if SERVER then
+    ---
+    -- @param table ammoTypeData
+    -- @return nil|string
+    -- @realm server
     local function GetLegacyAmmoTypeReserveMax(ammoTypeData)
         for i = 1, #ammoTypeData.entities do
             local legacyConVar = GetConVar(
@@ -124,17 +128,22 @@ if SERVER then
             return ammoEntitySettingRegistry[class]
         end
 
+        -- @realm server
+        local enabledConVar = CreateConVar(
+            WEPS.GetAmmoSettingsConVarName(class, "enabled"),
+            "1",
+            { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+        )
+        -- @realm server
+        local boxAmountConVar = CreateConVar(
+            WEPS.GetAmmoSettingsConVarName(class, "box_amount"),
+            tostring(ammoData.boxAmount),
+            { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+        )
+
         ammoEntitySettingRegistry[class] = {
-            enabled = CreateConVar(
-                WEPS.GetAmmoSettingsConVarName(class, "enabled"),
-                "1",
-                { FCVAR_NOTIFY, FCVAR_ARCHIVE }
-            ),
-            boxAmount = CreateConVar(
-                WEPS.GetAmmoSettingsConVarName(class, "box_amount"),
-                tostring(ammoData.boxAmount),
-                { FCVAR_NOTIFY, FCVAR_ARCHIVE }
-            ),
+            enabled = enabledConVar,
+            boxAmount = boxAmountConVar,
         }
 
         return ammoEntitySettingRegistry[class]
@@ -149,12 +158,14 @@ if SERVER then
 
         local defaultReserveMax = GetLegacyAmmoTypeReserveMax(ammoTypeData)
             or tostring(ammoTypeData.reserveMax)
+        -- @realm server
+        local reserveMaxConVar = CreateConVar(
+            WEPS.GetAmmoTypeSettingsConVarName(ammoType, "reserve_max"),
+            defaultReserveMax,
+            { FCVAR_NOTIFY, FCVAR_ARCHIVE }
+        )
         local conVars = {
-            reserveMax = CreateConVar(
-                WEPS.GetAmmoTypeSettingsConVarName(ammoType, "reserve_max"),
-                defaultReserveMax,
-                { FCVAR_NOTIFY, FCVAR_ARCHIVE }
-            ),
+            reserveMax = reserveMaxConVar,
         }
 
         ammoTypeSettingRegistry[ammoType] = conVars

@@ -13,8 +13,12 @@ local hook = hook
 ENT.Type = "anim"
 
 if CLIENT then
+    -- @realm client
     local cvAmmoEntityScaling = CreateConVar("ttt2_ammo_entity_scaling", "1", FCVAR_ARCHIVE)
-    local cvAmmoEntityScalingMin = CreateConVar("ttt2_ammo_entity_scaling_min", "0.25", FCVAR_ARCHIVE)
+    -- @realm client
+    local cvAmmoEntityScalingMin =
+        CreateConVar("ttt2_ammo_entity_scaling_min", "0.25", FCVAR_ARCHIVE)
+    -- @realm client
     local cvAmmoTargetID = CreateConVar("ttt2_ammo_targetid", "1", FCVAR_ARCHIVE)
     local Material = Material
     local ParT = LANG.GetParamTranslation
@@ -40,6 +44,9 @@ if CLIENT then
         return title
     end
 
+    ---
+    -- @return number
+    -- @realm client
     function ENT:GetVisualScale()
         if not cvAmmoEntityScaling:GetBool() then
             return 1
@@ -57,6 +64,8 @@ if CLIENT then
         return (ammoAmount / ammoEntMax) * (1 - minScale) + minScale
     end
 
+    ---
+    -- @realm client
     function ENT:UpdateVisualScale()
         local scale = self:GetVisualScale()
 
@@ -72,6 +81,8 @@ if CLIENT then
         self.lastVisualScale = scale
     end
 
+    ---
+    -- @realm client
     function ENT:Draw()
         self:UpdateVisualScale()
         self:DrawModel()
@@ -145,7 +156,8 @@ end
 -- @return number
 -- @realm shared
 function ENT:GetConfiguredReserveMax()
-    return WEPS.GetAmmoReserveMax(self.AmmoType or self:GetClass()) or math.max(0, self.AmmoMax or 0)
+    return WEPS.GetAmmoReserveMax(self.AmmoType or self:GetClass())
+        or math.max(0, self.AmmoMax or 0)
 end
 
 ---
