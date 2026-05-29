@@ -31,6 +31,11 @@ local loc_voice = CreateConVar("ttt_locational_voice", "0", { FCVAR_NOTIFY, FCVA
 
 ---
 -- @realm server
+local loc_voice_team =
+    CreateConVar("ttt_locational_voice_team", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
+
+---
+-- @realm server
 local loc_voice_prep =
     CreateConVar("ttt_locational_voice_prep", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
 
@@ -44,6 +49,7 @@ local loc_voice_range_sq = loc_voice_range:GetInt() ^ 2
 hook.Add("TTT2SyncGlobals", "AddVoiceGlobals", function()
     SetGlobalBool(sv_voiceenable:GetName(), sv_voiceenable:GetBool())
     SetGlobalBool(loc_voice:GetName(), loc_voice:GetBool())
+    SetGlobalBool(loc_voice_team:GetName(), loc_voice_team:GetBool())
 end)
 
 cvars.AddChangeCallback(sv_voiceenable:GetName(), function(cv, old, new)
@@ -52,6 +58,10 @@ end)
 
 cvars.AddChangeCallback(loc_voice:GetName(), function(cv, old, new)
     SetGlobalBool(loc_voice:GetName(), tobool(tonumber(new)))
+end)
+
+cvars.AddChangeCallback(loc_voice_team:GetName(), function(cv, old, new)
+    SetGlobalBool(loc_voice_team:GetName(), tobool(tonumber(new)))
 end)
 
 cvars.AddChangeCallback(loc_voice_range:GetName(), function(cv, old, new)
@@ -99,7 +109,7 @@ local function PlayerCanHearTeam(listener, speaker, speakerTeam)
         return false, false
     end
 
-    return true, loc_voice:GetBool()
+    return true, loc_voice:GetBool() and loc_voice_team:GetBool()
 end
 
 local function PlayerIsMuted(listener, speaker)

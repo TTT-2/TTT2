@@ -28,18 +28,19 @@ end
 function plymeta:SetupDataTables()
     -- This has to be transferred, because we need the value when predicting the player movement
     -- It turned out that this is the only reliable way to fix all prediction errors.
-    self:NetworkVar("Float", 0, "SprintStamina")
+    self:NetworkVar("Float", "SprintStamina")
+    self:NetworkVar("Float", "SprintCooldownTime")
 
     if SERVER then
         self:SetSprintStamina(1)
     end
 
     -- these are networked variables for the custom FOV handling
-    self:NetworkVar("Float", 1, "FOVTime")
-    self:NetworkVar("Float", 2, "FOVTransitionTime")
-    self:NetworkVar("Float", 3, "FOVValue")
-    self:NetworkVar("Float", 4, "FOVLastValue")
-    self:NetworkVar("Bool", 0, "FOVIsFixed")
+    self:NetworkVar("Float", "FOVTime")
+    self:NetworkVar("Float", "FOVTransitionTime")
+    self:NetworkVar("Float", "FOVValue")
+    self:NetworkVar("Float", "FOVLastValue")
+    self:NetworkVar("Bool", "FOVIsFixed")
 end
 
 ---

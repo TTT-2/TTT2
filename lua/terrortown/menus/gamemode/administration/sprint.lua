@@ -39,4 +39,19 @@ function CLGAMEMODESUBMENU:Populate(parent)
         decimal = 2,
         master = enbSprint,
     })
+
+    form:MakeSlider({
+        serverConvar = "ttt2_sprint_stamina_cooldown",
+        label = "label_sprint_stamina_cooldown",
+        min = 0,
+        max = 2,
+        decimal = 2,
+        master = enbSprint,
+    })
+
+    form:MakeCheckBox({
+        serverConvar = "ttt2_sprint_forwards_only",
+        label = "label_sprint_stamina_forwards_only",
+        master = enbSprint,
+    })
 end

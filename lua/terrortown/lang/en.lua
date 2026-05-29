@@ -38,6 +38,8 @@ L.win_showreport = "Let's look at the round report for {num} seconds."
 
 L.limit_round = "Round limit reached. The next map will load soon."
 L.limit_time = "Time limit reached. The next map will load soon."
+-- limit_left needed for some third-party addons which rely on this vanilla TTT string
+L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes."
 L.limit_left_session_mode_1 = "{num} round(s) or {time} minutes remaining before the map changes."
 L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
 L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
@@ -49,6 +51,8 @@ L.credit_kill = "You have received {num} credit(s) for killing a {role}."
 -- Karma
 L.karma_dmg_full = "Your Karma is {amount}, so you deal full damage this round!"
 L.karma_dmg_other = "Your Karma is {amount}. As a result all damage you deal is reduced by {num}%"
+L.karma_hp_full = "Your Karma is {amount}, so you get full HP this round!"
+L.karma_hp_other = "Your Karma is {amount}. As a result your maximum HP is reduced by {num} HP"
 
 -- Body identification messages
 L.body_found = "{finder} found the body of {victim}. {role}"
@@ -1609,7 +1613,7 @@ Haste mode balances the game by increasing the round time with every dead player
 If haste mode is enabled, the fixed round time is ignored.]]
 L.help_round_limit = "After one of the set limit conditions is met, a map change is triggered."
 L.help_armor_balancing = "The following values can be used to balance the armor."
-L.help_item_armor_classic = "If classic armor mode is enabled, only the previous settings matter. Classic armor mode means that a player can only buy armor once in a round, and that this armor blocks 30% of the incoming bullet and crowbar damage until they die."
+L.help_item_armor_classic = "If classic armor mode is enabled, only the previous settings matter. Classic armor mode means that a player can only buy armor once in a round, and that this armor blocks 30% of the incoming bullet damage until they die."
 L.help_item_armor_dynamic = [[
 Dynamic armor is the TTT2 approach to make armor more interesting. The amount of armor that can be bought is now unlimited, and the armor value stacks. Getting damaged decreases the armor value. The armor value per bought armor item is set in the 'Equipment Settings' of said item.
 
@@ -1664,6 +1668,7 @@ L.label_voice_drain_normal = "Drain per tick for normal players"
 L.label_voice_drain_admin = "Drain per tick for admins and public policing roles"
 L.label_voice_drain_recharge = "Recharge rate per tick of not voice chatting"
 L.label_locational_voice = "Enable proximity voice chat for living players"
+L.label_locational_voice_team = "Enable proximity team voice chat for living players"
 L.label_locational_voice_prep = "Enable proximity voice chat during preparing phase"
 L.label_locational_voice_range = "Proximity voice chat range"
 L.label_armor_on_spawn = "Player armor on (re-)spawn"
@@ -1713,6 +1718,9 @@ L.label_doors_health = "Door health"
 L.label_doors_prop_health = "Destructed door health"
 L.label_minimum_players = "Minimum player amount to start round"
 L.label_karma = "Enable Karma"
+L.label_karma_damage_scaling = "Damage scaling"
+L.label_karma_health_scaling = "Health scaling"
+L.label_karma_health_min = "Minimum health"
 L.label_karma_strict = "Enable strict Karma"
 L.label_karma_starting = "Starting Karma"
 L.label_karma_max = "Maximum Karma"
@@ -2076,11 +2084,11 @@ L.flaregun_help_primary = "Burn body/entity"
 
 -- 2023-12-14
 L.marker_vision_owner = "Owner: {owner}"
-L.marker_vision_distance = "Distance: {distance}m"
-L.marker_vision_distance_collapsed = "{distance}m"
+L.marker_vision_distance = "Distance: {distance}"
+L.marker_vision_distance_collapsed = "{distance}"
 
 L.c4_marker_vision_time = "Detonation time: {time}"
-L.c4_marker_vision_collapsed = "{time} / {distance}m"
+L.c4_marker_vision_collapsed = "{time} / {distance}"
 
 L.c4_marker_vision_safe_zone = "Bomb safe zone"
 L.c4_marker_vision_damage_zone = "Bomb damage zone"
@@ -2348,9 +2356,11 @@ L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
 -- 2024-08-17
 L.name_button_default = "Button"
 L.name_button_rotating = "Lever"
+L.name_button_momentary_rotating = "Wheel"
 
 L.button_default = "Press [{usekey}] to trigger"
 L.button_rotating = "Press [{usekey}] to flip"
+L.button_momentary_rotating = "Press [{usekey}] to rotate"
 
 L.undefined_key = "???"
 
@@ -2807,3 +2817,32 @@ L.radio_desc = [[
 Plays sounds to distract or deceive.
 
 Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
+
+-- 2025-02-13
+L.help_c4_radius = [[
+C4 uses two different zones to calculate the damage of its explosion:
+
+Players within the "kill zone" will receive the full damage of the devastating explosion.
+
+Players within the "damage zone" (and outside the "kill zone") will receive a percentage of the damage based on their position between the borders of both zones.]]
+
+L.label_c4_radius_inner = "C4 Kill Zone radius"
+L.label_c4_radius = "C4 Damage Zone radius"
+
+-- 2025-02-21
+L.length_in_meters = "{length}m"
+L.length_in_yards = "{length}yd"
+L.length_in_feet = "{length}ft"
+
+L.label_distance_unit = "Preferred unit of length for distance displays"
+L.choice_distance_unit_0 = "Inches"
+L.choice_distance_unit_1 = "Meters"
+L.choice_distance_unit_2 = "Yards"
+L.choice_distance_unit_3 = "Feet"
+
+-- 2025-03-06
+L.label_armor_block_clubdmg = "Enable armor blocking crowbar damage"
+
+-- 2025-03-10
+L.label_sprint_stamina_cooldown = "Stamina cooldown time"
+L.label_sprint_stamina_forwards_only = "Disallow sprinting backwards or laterally"

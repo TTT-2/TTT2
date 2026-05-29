@@ -188,19 +188,27 @@ end
 ---
 -- @ignore
 function SWEP:ShootFlare()
+    local owner = self:GetOwner()
+
+    if not IsValid(owner) then
+        return
+    end
+
     local cone = self.Primary.Cone
+
     local bullet = {}
+    bullet.Inflictor = self
     bullet.Num = 1
-    bullet.Src = self:GetOwner():GetShootPos()
-    bullet.Dir = self:GetOwner():GetAimVector()
+    bullet.Src = owner:GetShootPos()
+    bullet.Dir = owner:GetAimVector()
     bullet.Spread = Vector(cone, cone, 0)
     bullet.Tracer = 1
+    bullet.TracerName = self.Tracer
     bullet.Force = 2
     bullet.Damage = self.Primary.Damage
-    bullet.TracerName = self.Tracer
     bullet.Callback = IgniteTarget
 
-    self:GetOwner():FireBullets(bullet)
+    owner:FireBullets(bullet)
 end
 
 ---

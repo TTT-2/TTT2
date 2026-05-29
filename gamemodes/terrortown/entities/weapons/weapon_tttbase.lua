@@ -885,6 +885,11 @@ if CLIENT then
     -- affects @{GM:PostDrawViewModel}
     -- @realm client
     hook.Add("PreDrawViewModel", "TTT2ViewModelHider", function(viewModel, ply, wep)
+        -- safeguard for ghost viewmodels appearing from weapons held by other players
+        if wep ~= ply:GetActiveWeapon() then
+            return true
+        end
+
         -- note: while ShowDefaultViewModel is set to true in the weapon base, addons such as TFA
         -- do not use the weapon base and only implement parts of it to work with TTT. In a perfect
         -- world TFA would be updated to fix this issue, but we can also prevent it by explicitly
@@ -1072,6 +1077,7 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
     cone = cone or 0.02
 
     local bullet = {}
+    bullet.Inflictor = self
     bullet.Num = numbul
     bullet.Src = owner:GetShootPos()
     bullet.Dir = owner:GetAimVector()
@@ -1667,8 +1673,13 @@ hook.Add("KeyRelease", "TTT2ResetIronSights", function(ply, key)
         return
     end
 
-    wep:SetIronsights(false)
-    wep:SetZoom(false)
+    if wep.SetIronsights then
+        wep:SetIronsights(false)
+    end
+
+    if wep.SetZoom then
+        wep:SetZoom(false)
+    end
 end)
 
 if CLIENT then

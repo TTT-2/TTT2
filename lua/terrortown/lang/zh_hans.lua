@@ -38,6 +38,8 @@ L.win_showreport = "来看一下 {num} 秒的回合总结吧！"
 
 L.limit_round = "达到回合限制。即将加载下一张地图。"
 L.limit_time = "达到时间限制。即将加载下一张地图。"
+-- limit_left needed for some third-party addons which rely on this vanilla TTT string
+L.limit_left = "新地图将在 {num} 回合或 {time} 分钟后切换。"
 L.limit_left_session_mode_1 = "新地图将在 {num} 回合或 {time} 分钟后切换。"
 --L.limit_left_session_mode_2 = "{time} minutes remaining before the map changes."
 --L.limit_left_session_mode_3 = "{num} round(s) remaining before the map changes."
@@ -49,6 +51,8 @@ L.credit_kill = "你杀死 {role} 获得了 {num} 点积分。"
 -- Karma
 L.karma_dmg_full = "你的人品为 {amount}，因此本回合你将造成正常伤害。"
 L.karma_dmg_other = "你的人品为 {amount}，因此本回合你造成的伤害将减少 {num}%"
+--L.karma_hp_full = "Your Karma is {amount}, so you get full HP this round!"
+--L.karma_hp_other = "Your Karma is {amount}. As a result your maximum HP is reduced by {num} HP"
 
 -- Body identification messages
 L.body_found = " {finder} 发现了 {victim} 的尸体。{role}"
@@ -1658,6 +1662,7 @@ L.label_voice_drain_normal = "普通玩家的每滴答消耗量"
 L.label_voice_drain_admin = "让管理员和公开警察角色的电池会耗尽"
 L.label_voice_drain_recharge = "不进行语音聊天时每滴答的充能率"
 L.label_locational_voice = "为活着的玩家启用近距离语音聊天功能"
+--L.label_locational_voice_team = "Enable proximity team voice chat for living players"
 L.label_locational_voice_prep = "在准备阶段启用近距离语音聊天"
 L.label_locational_voice_range = "近距离语音聊天范围"
 L.label_armor_on_spawn = "玩家在重生时的默认护甲量"
@@ -1707,6 +1712,9 @@ L.label_doors_health = "门的生命值"
 L.label_doors_prop_health = "被破坏的门生命值"
 L.label_minimum_players = "开始游戏的最低玩家数量"
 L.label_karma = "启用人品值"
+--L.label_karma_damage_scaling = "Damage scaling"
+--L.label_karma_health_scaling = "Health scaling"
+--L.label_karma_health_min = "Minimum health"
 L.label_karma_strict = "启用严格的人品值"
 L.label_karma_starting = "初始人品值"
 L.label_karma_max = "最大人品值"
@@ -2070,11 +2078,11 @@ L.flaregun_help_primary = "焚烧尸体/实体"
 
 -- 2023-12-14
 L.marker_vision_owner = "拥有者: {owner}"
-L.marker_vision_distance = "距离: {distance}米"
-L.marker_vision_distance_collapsed = "{distance}米"
+L.marker_vision_distance = "距离: {distance}"
+L.marker_vision_distance_collapsed = "{distance}"
 
 L.c4_marker_vision_time = "爆炸时间: {time}"
-L.c4_marker_vision_collapsed = "{time} / {distance}米"
+L.c4_marker_vision_collapsed = "{time} / {distance}"
 
 L.c4_marker_vision_safe_zone = "炸弹安全区"
 L.c4_marker_vision_damage_zone = "炸弹伤害区"
@@ -2801,3 +2809,32 @@ L.label_player_role = "选择角色"
 --Plays sounds to distract or deceive.
 --
 --Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
+
+-- 2025-02-13
+--L.help_c4_radius = [[
+--C4 uses two different zones to calculate the damage of its explosion:
+--
+--Players within the "kill zone" will receive the full damage of the devastating explosion.
+--
+--Players within the "damage zone" (and outside the "kill zone") will receive a percentage of the damage based on their position between the borders of both zones.]]
+
+--L.label_c4_radius_inner = "C4 Kill Zone radius"
+--L.label_c4_radius = "C4 Damage Zone radius"
+
+-- 2025-02-21
+L.length_in_meters = "{length}米"
+--L.length_in_yards = "{length}yd"
+--L.length_in_feet = "{length}ft"
+
+--L.label_distance_unit = "Preferred unit of length for distance displays"
+--L.choice_distance_unit_0 = "Inches"
+--L.choice_distance_unit_1 = "Meters"
+--L.choice_distance_unit_2 = "Yards"
+--L.choice_distance_unit_3 = "Feet"
+
+-- 2025-03-06
+--L.label_armor_block_clubdmg = "Enable armor blocking crowbar damage"
+
+-- 2025-03-10
+--L.label_sprint_stamina_cooldown = "Stamina cooldown time"
+--L.label_sprint_stamina_forwards_only = "Disallow sprinting backwards or laterally"

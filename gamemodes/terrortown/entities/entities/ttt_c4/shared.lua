@@ -105,15 +105,15 @@ function ENT:Initialize()
     end
 
     if not self:GetRadiusInner() then
-        self:SetRadiusInner(750)
+        self:SetRadiusInner(GetConVar("ttt2_c4_radius_inner"):GetInt() or 500)
     end
 
     if not self:GetRadius() then
-        self:SetRadius(1500)
+        self:SetRadius(GetConVar("ttt2_c4_radius"):GetInt() or 600)
     end
 
     if not self:GetDmg() then
-        self:SetDmg(200)
+        self:SetDmg(200 * (weapons.GetStored("weapon_ttt_c4").damageScaling or 1))
     end
 end
 
@@ -222,9 +222,7 @@ function ENT:Explode(tr)
         util.Effect("Explosion", effect, true, true)
         util.Effect("HelicopterMegaBomb", effect, true, true)
 
-        timer.Simple(0.1, function()
-            sound.Play(c4boom, pos, 100, 100)
-        end)
+        self:BroadcastSound(c4boom, 100)
 
         -- extra push
         local phexp = ents.Create("env_physexplosion")
@@ -351,7 +349,7 @@ function ENT:Think()
         end
 
         if SERVER then
-            sound.Play(soundBeep, self:GetPos(), amp, 100)
+            self:BroadcastSound(soundBeep, amp)
         end
 
         local btime = (etime - CurTime()) / 30
@@ -723,9 +721,7 @@ else -- CLIENT
     })
 
     ---
-    -- Hook that is called if a player uses their use key while focusing on the entity.
-    -- Shows C4 UI
-    -- @return bool True to prevent pickup
+    -- This is called if a player uses their use key while in proximity of the entity.
     -- @realm client
     function ENT:ClientUse()
         if IsValid(self) then
@@ -735,8 +731,6 @@ else -- CLIENT
                 ShowC4Disarm(self)
             end
         end
-
-        return true
     end
 
     ---
@@ -843,7 +837,7 @@ else -- CLIENT
         local nick = IsValid(owner) and owner:Nick() or "---"
 
         local time = util.SimpleTime(ent:GetExplodeTime() - CurTime(), "%02i:%02i")
-        local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
+        local distance = util.DistanceToString(mvData:GetEntityDistance(), 1)
 
         mvData:EnableText()
 

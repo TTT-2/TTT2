@@ -115,13 +115,10 @@ if SERVER then
     local mathRound = math.Round
     local mathFloor = math.floor
 
-    local cv_ttt2_confirm_killlist
+    local cv_ttt2_confirm_killlist = CORPSE and CORPSE.cv.confirm_killlist
 
     hook.Add("Initialize", "TTT2BodySearch", function()
-        -- Change check if your terrortown folder is named something different
-        if engine.ActiveGamemode():lower() == "terrortown" and TTT2 and istable(CORPSE) then
-            cv_ttt2_confirm_killlist = CORPSE.cv.confirm_killlist
-        end
+        cv_ttt2_confirm_killlist = CORPSE.cv.confirm_killlist
     end)
 
     util.AddNetworkString("ttt2_client_reports_corpse")
@@ -1023,7 +1020,7 @@ if CLIENT then
 
         ---
         -- @realm client
-        hook.Run("TTTBodySearchPopulate", search, raw)
+        hook.Run("TTTBodySearchPopulate", search, raw, true)
 
         return search
     end
@@ -1214,9 +1211,10 @@ if CLIENT then
     -- This hook can be used to populate the body search panel.
     -- @param table search The search data table
     -- @param table raw The raw search data
+    -- @param boolean scoreboard Whether the hook is being called to popluate the scoreboard (legacy)
     -- @hook
     -- @realm client
-    function GM:TTTBodySearchPopulate(search, raw) end
+    function GM:TTTBodySearchPopulate(search, raw, scoreboard) end
 
     ---
     -- This hook can be used to modify the equipment info of a corpse.

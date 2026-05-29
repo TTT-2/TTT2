@@ -237,3 +237,35 @@
 [
 
 ]
+
+@FilterClass base(BaseFilter) = ttt_filter_role :
+	"A filter that filters by the role of the activator."
+[
+	Role(choices) : "Player role to filter for" : 1 : "The role to filter by. If the filter mode is Allow, only players with the given role will pass the filter. If the filter mode is Disallow, all players EXCEPT those whose role matches the given role will pass the filter." =
+	[
+   0 : "Innocent"
+   1 : "Traitor"
+   2 : "Detective"
+   3 : "Any role"
+   "ROLE_JACKAL" : "Jackal"
+   "ROLE_SERIALKILLER" : "Serialkiller"
+   "ROLE_INFECTED" : "Infected"
+   "ROLE_JESTER" : "Jester"
+	]
+]
+
+@FilterClass base(BaseFilter) = ttt_filter_subrole :
+	"A filter that filters by the subrole of the activator."
+[
+	Role(choices) : "Player subrole to filter for" : 1 : "The subrole to filter by. If the filter mode is Allow, only players with the given subrole will pass the filter. If the filter mode is Disallow, all players EXCEPT those whose subrole matches the given subrole will pass the filter." =
+	[
+   0 : "Innocent"
+   1 : "Traitor"
+   2 : "Detective"
+   3 : "Any role"
+   "ROLE_JACKAL" : "Jackal"
+   "ROLE_SERIALKILLER" : "Serialkiller"
+   "ROLE_INFECTED" : "Infected"
+   "ROLE_JESTER" : "Jester"
+	]
+]

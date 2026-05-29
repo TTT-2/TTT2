@@ -36,6 +36,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
         label = "label_armor_block_blastdmg",
     })
 
+    form2:MakeCheckBox({
+        serverConvar = "ttt_item_armor_block_clubdmg",
+        label = "label_armor_block_clubdmg",
+    })
+
     form2:MakeHelp({
         label = "help_item_armor_classic",
     })

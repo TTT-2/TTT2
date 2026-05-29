@@ -153,6 +153,15 @@ function GM:PlayerSpawn(ply)
 
     ply:SetupHands()
 
+    if KARMA.IsHealthScalingEnabled() then
+        local health = KARMA.GetHealthMin()
+        local df = ply:GetDamageFactor() or 1
+
+        health = health + (100 - health) * df
+        ply:SetMaxHealth(health)
+        ply:SetHealth(health)
+    end
+
     ply:SetLastSpawnPosition(ply:GetPos())
     ply:SetLastDeathPosition(nil)
 
@@ -343,18 +352,30 @@ end
 -- Triggered when the @{Player} presses use on an object.
 -- Continuously runs until USE is released but will not activate other Entities
 -- until the USE key is released; dependent on activation type of the @{Entity}.
--- @note TTT2 blocks all gmod internal use and only checks this for addons
 -- @param Player ply The @{Player} pressing the "use" key.
 -- @param Entity ent The entity which the @{Player} is looking at / activating USE on.
--- @param bool overrideDoPlayerUse This is used to override the default outcome of the check
 -- @return boolean Return false if the @{Player} is not allowed to USE the entity.
 -- Do not return true if using a hook, otherwise other mods may not get a chance to block a @{Player}'s use.
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerUse
 -- @local
-function GM:PlayerUse(ply, ent, overrideDoPlayerUse)
-    return overrideDoPlayerUse or false
+function GM:PlayerUse(ply, ent)
+    if not ply:IsTerror() then
+        return false
+    end
+
+    if
+        ent:IsButton()
+        ---
+        -- @realm server
+        and hook.Run("TTT2OnButtonUse", ply, ent, ent:GetInternalVariable("m_toggle_state"))
+            == false
+    then
+        return false
+    end
+
+    return true
 end
 
 ---
@@ -385,8 +406,6 @@ function GM:KeyPress(ply, key)
 
     -- Do not allow the spectator to gather information if they're about to revive.
     if ply:IsReviving() then
-        LANG.Msg(ply, "spec_about_to_revive", nil, MSG_MSTACK_WARN)
-
         return
     end
 
@@ -512,119 +531,92 @@ local function SpecUseKey(ply, ent)
     end
 end
 
-local function EntityContinuousUse(ent, ply)
-    ---
-    -- Enable addons to allow handling PlayerUse
-    -- Otherwise default to old IsTerror Check
-    -- @realm server
-    -- stylua: ignore
-    if hook.Run("PlayerUse", ply, ent, ply:IsTerror()) then
-        ent:Use(ply, ply)
-    end
-
-    if ply:IsSpec() then
-        SpecUseKey(ply, ent)
-
-        return
-    end
-
-    if not ply:IsTerror() then
-        return
-    end
-
-    if ent.CanUseKey and ent.UseOverride then
-        local phys = ent:GetPhysicsObject()
-
-        if not IsValid(phys) or phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then
-            return
-        end
-
-        ent:UseOverride(ply)
-    elseif ent.player_ragdoll then
-        CORPSE.ShowSearch(ply, ent, ply:KeyDown(IN_WALK) or ply:KeyDownLast(IN_WALK))
-
-        return
-    elseif ent:IsWeapon() then
-        ply:SafePickupWeapon(ent, false, true, true, nil)
-
-        return
-    end
-
-    -- if it is a SENT, this will always return true
-    -- if it is a map entity, the flag will be checked
-    if not ent:IsUsableEntity(FCAP_CONTINUOUS_USE) then
-        return
-    end
-
-    -- make sure it is called 10 times per second
-    timer.Simple(0.1, function()
-        if not IsValid(ent) or not IsValid(ply) then
-            return
-        end
-
-        -- make sure the use key is still pressed
-        if not ply:KeyDown(IN_USE) then
-            return
-        end
-
-        -- make sure the entity is still in a good position
-        local distance = ply:GetShootPos():Distance(ent:GetPos())
-
-        if distance > 100 + ent:BoundingRadius() then
-            return
-        end
-
-        EntityContinuousUse(ent, ply)
-    end)
-end
-
 ---
--- This is called by a client when using the "+use"-key
--- and contains the entity which was detected
+-- This is called by a client when using the "+use"-key for special actions
+-- that need to suppress the default +use functionality.
+-- E.g. spectator's trying to access corpse info etc.
+--
+-- This might check the same conditions again, because we need to verify this
+-- on the server. Clients need to do the same checks to determine the usage type.
+--
 -- @param number len Length of the message
 -- @param Player ply Player that sent the message
 -- @realm server
 -- @internal
 net.Receive("TTT2PlayerUseEntity", function(len, ply)
-    local hasEnt = net.ReadBool()
     local ent = net.ReadEntity()
-    local isRemote = net.ReadBool()
+    local usageType = net.ReadString()
 
-    if not hasEnt or not ent:IsUsableEntity() then
-        ent = ply:GetUseEntity()
-    end
-
-    if not IsValid(ent) then
-        return
-    end
-
-    if isRemote then
-        if isfunction(ent.RemoteUse) then
+    if usageType == "remote_use" then
+        if IsValid(ent) and isfunction(ent.RemoteUse) then
             ent:RemoteUse(ply)
         end
+    elseif usageType == "spectator_use" then
+        if not ply:IsSpec() then
+            return
+        end
 
-        return
+        -- Use a custom trace
+        local trace = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 100, ply)
+
+        if trace.Hit and IsValid(trace.Entity) then
+            SpecUseKey(ply, trace.Entity)
+        end
+    elseif usageType == "weapon_pickup" then
+        if not ply:IsTerror() or not IsValid(ent) or not ent:IsWeapon() then
+            return
+        end
+
+        -- Double check if the use interaction is valid (server side)
+        local trace = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 100, ply)
+
+        -- The entity needs to be the same entity as the one being requested
+        if not trace.Hit or trace.Entity ~= ent then
+            Dev(1, "Weapon to pickup is not equal to the client side")
+            return
+        end
+
+        ply:SafePickupWeapon(ent, false, true, true, nil)
     end
-
-    -- Check if the use interaction is possible
-    -- Add the bounding radius to compensate for center position
-    local distance = ply:GetShootPos():Distance(ent:GetPos())
-    if distance > 100 + ent:BoundingRadius() then
-        return
-    end
-
-    if
-        ent:IsButton()
-        ---
-        -- @realm server
-        and hook.Run("TTT2OnButtonUse", ply, ent, ent:GetInternalVariable("m_toggle_state"))
-            == false
-    then
-        return
-    end
-
-    EntityContinuousUse(ent, ply)
 end)
+
+---
+-- Runs when a IN key was released by a player.
+-- @param Player ply
+-- @param number key The key that the @{Player} released using <a href="https://wiki.facepunch.com/gmod/Enums/IN">IN_Enums</a>.
+-- @hook
+-- @realm server
+-- @ref https://wiki.facepunch.com/gmod/GM:KeyRelease
+function GM:KeyRelease(ply, key)
+    if not (key == IN_USE and IsValid(ply) and ply:IsTerror()) then
+        return
+    end
+
+    -- see if we need to do some custom usekey overriding
+    local tr = util.TraceLine({
+        start = ply:GetShootPos(),
+        endpos = ply:GetShootPos() + ply:GetAimVector() * 84,
+        filter = ply,
+        mask = MASK_SHOT,
+    })
+
+    if tr.Hit and IsValid(tr.Entity) then
+        if tr.Entity.CanUseKey and tr.Entity.UseOverride then
+            local phys = tr.Entity:GetPhysicsObject()
+            if IsValid(phys) and not phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then
+                tr.Entity:UseOverride(ply)
+                return true
+            else
+                -- do nothing, can't +use held objects
+                return true
+            end
+        elseif tr.Entity.player_ragdoll then
+            CORPSE.ShowSearch(ply, tr.Entity, ply:KeyDown(IN_WALK) or ply:KeyDownLast(IN_WALK))
+
+            return true
+        end
+    end
+end
 
 ---
 -- A hook that is called before a button is pressed. Can be used to cancel the event by returning false.
@@ -1116,7 +1108,12 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 
         if IsValid(wep) then
             ---@cast wep -nil
-            local s = wep:GetHeadshotMultiplier(ply, dmginfo) or 2
+            local s = 2
+
+            -- only call GetHeadshotMultiplier if the weapon provides it
+            if isfunction(wep.GetHeadshotMultiplier) then
+                s = wep:GetHeadshotMultiplier(ply, dmginfo) or s
+            end
 
             dmginfo:ScaleDamage(s)
         end
@@ -1325,6 +1322,18 @@ function GM:EntityTakeDamage(ent, dmginfo)
 end
 
 ---
+-- Called after an entity receives a damage event, after passing damage filters, etc.
+-- @param Entity ent The @{Entity} taking damage
+-- @param CTakeDamageInfo dmginfo Damage info
+-- @param boolean wasDamageTaken Whether the entity actually took the damage
+-- @hook
+-- @realm server
+-- @ref https://wiki.facepunch.com/gmod/GM:PostEntityTakeDamage
+function GM:PostEntityTakeDamage(ent, dmginfo, wasDamageTaken)
+    door.PostHandleDamage(ent, dmginfo, wasDamageTaken)
+end
+
+---
 -- Called by @{GM:EntityTakeDamage}
 -- @param Entity ent The @{Entity} taking damage
 -- @param Entity infl the inflictor
@@ -1481,14 +1490,21 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
         and gameloop.GetRoundState() == ROUND_ACTIVE
         and math.floor(dmginfo:GetDamage()) > 0
     then
-        if KARMA.IsEnabled() and ent ~= att and not dmginfo:IsDamageType(DMG_SLASH) then
+        if
+            KARMA.IsEnabled()
+            and KARMA.IsDamageScalingEnabled()
+            and ent ~= att
             -- scale everything to karma damage factor except the knife, because it assumes a kill
+            and not dmginfo:IsDamageType(DMG_SLASH)
+        then
             dmginfo:ScaleDamage(att:GetDamageFactor())
         end
 
+        --
         -- before the karma is calculated, but after all other damage hooks / damage change is processed,
         -- the armor system should come into place (GM functions are called last)
-        ARMOR:HandlePlayerTakeDamage(ent, infl, att, amount, dmginfo)
+        -- @realm server
+        hook.Run("TTT2ArmorHandlePlayerTakeDamage", ent, infl, att, amount, dmginfo)
 
         if ent ~= att then
             -- process the effects of the damage on karma

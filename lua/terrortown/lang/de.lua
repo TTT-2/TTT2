@@ -38,6 +38,8 @@ L.win_showreport = "Schauen wir uns den Rundenbericht die nächste(n) {num} Seku
 
 L.limit_round = "Rundenlimit erreicht. Die nächste Map wird bald geladen."
 L.limit_time = "Zeitlimit erreicht. Die nächste Map wird bald geladen."
+-- limit_left needed for some third-party addons which rely on this vanilla TTT string
+L.limit_left = "{num} Runde(n) oder {time} Minute(n) verbleibend bis die Map gewechselt wird."
 L.limit_left_session_mode_1 = "{num} Runde(n) oder {time} Minute(n) verbleibend bis die Map gewechselt wird."
 L.limit_left_session_mode_2 = "{time} Minute(n) verbleibend bis die Map gewechselt wird."
 L.limit_left_session_mode_3 = "{num} Runde(n) verbleibend bis die Map gewechselt wird."
@@ -49,6 +51,8 @@ L.credit_kill = "Dir wurde(n) {num} Ausrüstungspunkt(e) gegeben, da du einen {r
 -- Karma
 L.karma_dmg_full = "Dein Karma ist {amount}, also verteilst du diese Runde vollen Schaden!"
 L.karma_dmg_other = "Dein Karma ist {amount}. Daher ist dein Schaden um {num}% reduziert!"
+--L.karma_hp_full = "Your Karma is {amount}, so you get full HP this round!"
+--L.karma_hp_other = "Your Karma is {amount}. As a result your maximum HP is reduced by {num} HP"
 
 -- Body identification messages
 L.body_found = "{finder} fand den Körper von {victim}. {role}"
@@ -1658,6 +1662,7 @@ L.label_voice_drain_normal = "Entladung pro Tick für normale Spieler"
 L.label_voice_drain_admin = "Entladung pro Tick für Admins und öffentliche Ordnungsrollen"
 L.label_voice_drain_recharge = "Aufladungsrate pro Tick wenn nicht gesprochen wird"
 L.label_locational_voice = "Aktiviere Proximity Sprachchat für lebende Spieler"
+L.label_locational_voice_team = "Aktiviere Proximity Team-Sprachat für lebende Spieler"
 L.label_locational_voice_prep = "Aktiviere Proximity Sprachchat während der Vorbereitungszeit"
 L.label_locational_voice_range = "Proximity Sprachchat Reichweite"
 L.label_armor_on_spawn = "Spielerrüstung beim (Neu-)Spawnen"
@@ -1707,6 +1712,9 @@ L.label_doors_health = "Tür-Lebenspunkte"
 L.label_doors_prop_health = "Zerstörte-Tür-Lebenspunkte"
 L.label_minimum_players = "Mindestspieleranzahl, um die Runde zu starten"
 L.label_karma = "Aktiviere Karma"
+--L.label_karma_damage_scaling = "Damage scaling"
+--L.label_karma_health_scaling = "Health scaling"
+--L.label_karma_health_min = "Minimum health"
 L.label_karma_strict = "Aktiviere strenges Karma"
 L.label_karma_starting = "Initiales Karma"
 L.label_karma_max = "Maximales Karma"
@@ -2070,11 +2078,11 @@ L.flaregun_help_primary = "Körper/Entität verbrennen"
 
 -- 2023-12-14
 L.marker_vision_owner = "Besitzer: {owner}"
-L.marker_vision_distance = "Distanz: {distance}m"
-L.marker_vision_distance_collapsed = "{distance}m"
+L.marker_vision_distance = "Distanz: {distance}"
+L.marker_vision_distance_collapsed = "{distance}"
 
 L.c4_marker_vision_time = "Explosionszeit: {time}"
-L.c4_marker_vision_collapsed = "{time} / {distance}m"
+L.c4_marker_vision_collapsed = "{time} / {distance}"
 
 L.c4_marker_vision_safe_zone = "Bombensicherheitszone"
 L.c4_marker_vision_damage_zone = "Bombenschadenszone"
@@ -2801,3 +2809,32 @@ L.label_voice_activation_mode_toggle_enabled = "Umschalten (Aktiviert zum Start)
 --Plays sounds to distract or deceive.
 --
 --Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
+
+-- 2025-02-13
+--L.help_c4_radius = [[
+--C4 uses two different zones to calculate the damage of its explosion:
+--
+--Players within the "kill zone" will receive the full damage of the devastating explosion.
+--
+--Players within the "damage zone" (and outside the "kill zone") will receive a percentage of the damage based on their position between the borders of both zones.]]
+
+--L.label_c4_radius_inner = "C4 Kill Zone radius"
+--L.label_c4_radius = "C4 Damage Zone radius"
+
+-- 2025-02-21
+L.length_in_meters = "{length}m"
+--L.length_in_yards = "{length}yd"
+--L.length_in_feet = "{length}ft"
+
+--L.label_distance_unit = "Preferred unit of length for distance displays"
+--L.choice_distance_unit_0 = "Inches"
+--L.choice_distance_unit_1 = "Meters"
+--L.choice_distance_unit_2 = "Yards"
+--L.choice_distance_unit_3 = "Feet"
+
+-- 2025-03-06
+--L.label_armor_block_clubdmg = "Enable armor blocking crowbar damage"
+
+-- 2025-03-10
+--L.label_sprint_stamina_cooldown = "Stamina cooldown time"
+--L.label_sprint_stamina_forwards_only = "Disallow sprinting backwards or laterally"

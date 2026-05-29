@@ -85,6 +85,11 @@ if CLIENT then
             icon = self.icon_ammo
         end
 
+        -- Some items, like default HL2 items, have no icon. Fallback to the "icon_special"
+        if icon == nil then
+            icon = self.icon_item
+        end
+
         -- Draw the colour tip
         surface.SetDrawColor(tipColor.r, tipColor.g, tipColor.b, alpha)
         surface.DrawRect(x, y, self.tipsize, h)

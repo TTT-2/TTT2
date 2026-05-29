@@ -65,6 +65,7 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
     cone = sights and (cone * 0.9) or cone
 
     local bullet = {}
+    bullet.Inflictor = self
     bullet.Num = numbul
     bullet.Src = owner:GetShootPos()
     bullet.Dir = owner:GetAimVector()

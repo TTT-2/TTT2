@@ -31,6 +31,20 @@ SPRINT = {
             { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED },
             "The regeneration time of the stamina (per second; Def: 0.3)"
         ),
+        -- @realm shared
+        cooldown = CreateConVar(
+            "ttt2_sprint_stamina_cooldown",
+            "0.8",
+            { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED },
+            "Time before stamina begins regenerating after sprinting (in seconds; Def: 0.8)"
+        ),
+        -- @realm shared
+        forwards_only = CreateConVar(
+            "ttt2_sprint_forwards_only",
+            "1",
+            { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED },
+            "Disallow sprinting backwards or laterally (Def: 1)"
+        ),
     },
 }
 
@@ -41,10 +55,17 @@ SPRINT = {
 -- @realm shared
 function SPRINT:PlayerWantsToSprint(ply)
     local inSprint = ply:KeyDown(IN_SPEED)
-    local inMovement = ply:KeyDown(IN_FORWARD)
-        or ply:KeyDown(IN_BACK)
-        or ply:KeyDown(IN_MOVERIGHT)
-        or ply:KeyDown(IN_MOVELEFT)
+
+    local inMovement
+
+    if self.convars.forwards_only:GetBool() then
+        inMovement = ply:KeyDown(IN_FORWARD) and not ply:KeyDown(IN_BACK)
+    else
+        inMovement = ply:KeyDown(IN_FORWARD)
+            or ply:KeyDown(IN_BACK)
+            or ply:KeyDown(IN_MOVERIGHT)
+            or ply:KeyDown(IN_MOVELEFT)
+    end
 
     return inSprint and inMovement
 end
@@ -68,6 +89,7 @@ end
 function SPRINT:HandleStaminaCalculation(ply)
     local staminaRegeneratonRate = self.convars.regeneration:GetFloat()
     local staminaConsumptionRate = self.convars.consumption:GetFloat()
+    local staminaCooldownTime = self.convars.cooldown:GetFloat()
 
     local sprintStamina = ply:GetSprintStamina()
     local playerWantsToSprint = self:PlayerWantsToSprint(ply) and not ply:IsInIronsights()
@@ -81,7 +103,7 @@ function SPRINT:HandleStaminaCalculation(ply)
 
     -- Note: This is a table, because it is passed by reference and multiple addons can adjust the value.
     local rateModifier = { 1 }
-    local newStamina = 0
+    local newStamina = sprintStamina
 
     if playerWantsToSprint then
         ---
@@ -90,7 +112,11 @@ function SPRINT:HandleStaminaCalculation(ply)
 
         newStamina =
             math.max(sprintStamina - FrameTime() * rateModifier[1] * staminaConsumptionRate, 0)
-    else
+
+        if staminaCooldownTime > 0 then
+            ply:SetSprintCooldownTime(CurTime() + staminaCooldownTime)
+        end
+    elseif staminaCooldownTime <= 0 or CurTime() > ply:GetSprintCooldownTime() then
         ---
         -- @realm shared
         hook.Run("TTT2StaminaRegen", ply, rateModifier)

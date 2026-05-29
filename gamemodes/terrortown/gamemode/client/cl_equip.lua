@@ -409,7 +409,7 @@ local function CreateEquipmentList(t)
         local equipName = GetEquipmentTranslation(item.name, item.PrintName)
 
         if
-            t.search and string.find(string.lower(equipName), string.lower(t.search))
+            t.search and string.find(string.lower(equipName), string.lower(t.search), 1, true)
             or not t.search
         then
             local ic = nil

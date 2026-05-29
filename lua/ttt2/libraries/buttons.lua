@@ -12,6 +12,7 @@ button = {}
 local validButtons = {
     "func_button",
     "func_rot_button",
+    "momentary_rot_button",
 }
 
 if SERVER then
@@ -31,10 +32,7 @@ if SERVER then
             for j = 1, #buttonsTable do
                 local foundButton = buttonsTable[j]
 
-                foundButton:SetNotSolid(false)
-                foundButton:SetSolid(SOLID_BSP)
-
-                foundButton:SetNWInt("button_class", i)
+                foundButton:SetNW2Int("button_class", i)
             end
         end
 
@@ -62,7 +60,7 @@ end
 -- @return boolean Returns true if the entity matches the provided class name
 -- @realm shared
 function button.IsClass(ent, class)
-    local classID = ent:GetNWInt("button_class")
+    local classID = ent:GetNW2Int("button_class")
 
     if not classID or classID > #validButtons then
         return

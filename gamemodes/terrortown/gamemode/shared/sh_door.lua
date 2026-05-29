@@ -45,7 +45,7 @@ function entmeta:IsDoorLocked()
         return
     end
 
-    return self:GetNWBool("ttt2_door_locked", false)
+    return self:GetNW2Bool("ttt2_door_locked", false)
 end
 
 ---
@@ -57,7 +57,7 @@ function entmeta:IsDoorForceclosed()
         return
     end
 
-    return self:GetNWBool("ttt2_door_forceclosed", false)
+    return self:GetNW2Bool("ttt2_door_forceclosed", false)
 end
 
 ---
@@ -70,7 +70,7 @@ function entmeta:UseOpensDoor()
         return
     end
 
-    return self:GetNWBool("ttt2_door_player_use", false)
+    return self:GetNW2Bool("ttt2_door_player_use", false)
 end
 
 ---
@@ -82,7 +82,7 @@ function entmeta:TouchOpensDoor()
         return
     end
 
-    return self:GetNWBool("ttt2_door_player_touch", false)
+    return self:GetNW2Bool("ttt2_door_player_touch", false)
 end
 
 ---
@@ -106,11 +106,11 @@ function entmeta:DoorAutoCloses()
         return
     end
 
-    return self:GetNWBool("ttt2_door_auto_close", false)
+    return self:GetNW2Bool("ttt2_door_auto_close", false)
 end
 
 ---
--- Retuens if a door is destructible.
+-- Returns if a door is destructible.
 -- @return boolean If a door is destructible
 -- @realm shared
 function entmeta:DoorIsDestructible()
@@ -118,7 +118,16 @@ function entmeta:DoorIsDestructible()
         return
     end
 
-    return self:GetNWBool("ttt2_door_is_destructable", false)
+    -- might be a little hacky
+    if
+        self:Health() > 0
+        and self:GetMaxHealth() > 0
+        and (self:GetInternalVariable("m_takedamage") or 2) > 1
+    then
+        return true
+    end
+
+    return self:GetNW2Bool("ttt2_door_is_destructable", false)
 end
 
 ---
@@ -130,7 +139,7 @@ function entmeta:IsDoorOpen()
         return
     end
 
-    return self:GetNWBool("ttt2_door_open", false)
+    return self:GetNW2Bool("ttt2_door_open", false)
 end
 
 ---
@@ -138,7 +147,7 @@ end
 -- @return number The synced health
 -- @realm shared
 function entmeta:GetFastSyncedHealth()
-    return math.max(0, self:GetNWInt("fast_sync_health", 100))
+    return math.max(0, self:GetNW2Int("fast_sync_health", self:Health()))
 end
 
 if SERVER then
@@ -259,7 +268,7 @@ if SERVER then
     function entmeta:SetDoorCanTouchOpen(state, surpressPair)
         door.SetPlayerCanTouch(self, state)
 
-        self:SetNWBool("ttt2_door_player_touch", door.PlayerCanTouch(self))
+        self:SetNW2Bool("ttt2_door_player_touch", door.PlayerCanTouch(self))
 
         -- if the door is grouped as a pair, call the other one as well
         if not surpressPair and IsValid(self.otherPairDoor) then
@@ -275,7 +284,7 @@ if SERVER then
     function entmeta:SetDoorCanUseOpen(state, surpressPair)
         door.SetPlayerCanUse(self, state)
 
-        self:SetNWBool("ttt2_door_player_use", door.PlayerCanUse(self))
+        self:SetNW2Bool("ttt2_door_player_use", door.PlayerCanUse(self))
 
         -- if the door is grouped as a pair, call the other one as well
         if not surpressPair and IsValid(self.otherPairDoor) then
@@ -291,7 +300,7 @@ if SERVER then
     function entmeta:SetDoorAutoCloses(state, surpressPair)
         door.SetAutoClose(self, state)
 
-        self:SetNWBool("ttt2_door_auto_close", door.AutoCloses(self))
+        self:SetNW2Bool("ttt2_door_auto_close", door.AutoCloses(self))
 
         -- if the door is grouped as a pair, call the other one as well
         if not surpressPair and IsValid(self.otherPairDoor) then
@@ -309,12 +318,12 @@ if SERVER then
             return
         end
 
-        self:SetNWBool("ttt2_door_is_destructable", state)
+        self:SetNW2Bool("ttt2_door_is_destructable", state)
 
         if self:Health() == 0 then
             self:SetHealth(cvDoorHealth:GetInt())
 
-            self:SetNWInt("fast_sync_health", self:Health())
+            self:SetNW2Int("fast_sync_health", self:Health())
         end
 
         -- if the door is grouped as a pair, call the other one as well
@@ -353,12 +362,33 @@ if SERVER then
         doorProp:SetCollisionGroup(COLLISION_GROUP_NONE)
         doorProp:SetMoveType(MOVETYPE_VPHYSICS)
         doorProp:SetSolid(SOLID_BBOX)
-        doorProp:SetPos(self:GetPos() + Vector(0, 0, 2))
+        doorProp:SetPos(self:GetPos())
         doorProp:SetAngles(self:GetAngles())
         doorProp:SetModel(self:GetModel())
         doorProp:SetSkin(self:GetSkin())
 
+        local bodygroups = self:GetBodyGroups()
+        for i = 1, #bodygroups do
+            local id = bodygroups[i].id
+            doorProp:SetBodygroup(id, self:GetBodygroup(id))
+        end
+
+        -- if there are entities parented to the door, transfer them over
+        local children = self:GetChildren()
+        for i = 1, #children do
+            local child = children[i]
+            local pos, ang = child:GetLocalPos(), child:GetLocalAngles()
+
+            child:SetParent(doorProp)
+            child:SetLocalPos(pos)
+            child:SetLocalAngles(ang)
+        end
+
         door.HandleDestruction(self)
+
+        -- hide away the real door while it is being opened and destroyed
+        self:SetNoDraw(true)
+        self:SetSolid(SOLID_NONE)
 
         -- disable the door move sound for the destruction
         self:SetKeyValue("soundmoveoverride", "")
@@ -369,6 +399,38 @@ if SERVER then
         -- set flag that this door is destroyed to prevent multiple prop spawns in case
         -- this function is called multiple times for the same door in the same tick
         self.isDestroyed = true
+
+        if IsValid(ply) and ply:IsPlayer() then
+            DamageLog(
+                string.format(
+                    "TTT2Doors: The door with the index %s has been destroyed by %s.",
+                    self:EntIndex(),
+                    ply:Nick()
+                )
+            )
+        else
+            DamageLog(
+                string.format(
+                    "TTT2Doors: The door with the index %s has been destroyed.",
+                    self:EntIndex()
+                )
+            )
+        end
+
+        doorProp:Spawn()
+        doorProp:SetHealth(cvDoorPropHealth:GetInt())
+
+        doorProp.isDoorProp = true
+
+        local physObj = doorProp:GetPhysicsObject()
+
+        if IsValid(physObj) then
+            physObj:ApplyForceCenter(pushForce or vector_origin)
+        end
+
+        ---
+        -- @realm server
+        hook.Run("TTT2DoorDestroyed", doorProp, ply)
 
         -- if the door is grouped as a pair, call the other one as well
         if not surpressPair and IsValid(self.otherPairDoor) then
@@ -383,33 +445,6 @@ if SERVER then
             -- we have to kill the entity here instead of removing it because this way we
             -- have no problems with area portals (invisible rooms after door is destroyed)
             self:Fire("Kill", "", 0)
-
-            if IsValid(ply) and ply:IsPlayer() then
-                DamageLog(
-                    "TTT2Doors: The door with the index "
-                        .. self:EntIndex()
-                        .. " has been destroyed by "
-                        .. ply:Nick()
-                        .. "."
-                )
-            else
-                DamageLog(
-                    "TTT2Doors: The door with the index "
-                        .. self:EntIndex()
-                        .. " has been destroyed."
-                )
-            end
-
-            doorProp:Spawn()
-            doorProp:SetHealth(cvDoorPropHealth:GetInt())
-
-            doorProp.isDoorProp = true
-
-            doorProp:GetPhysicsObject():ApplyForceCenter(pushForce or Vector(0, 0, 0))
-
-            ---
-            -- @realm server
-            hook.Run("TTT2DoorDestroyed", doorProp, ply)
         end)
 
         return doorProp

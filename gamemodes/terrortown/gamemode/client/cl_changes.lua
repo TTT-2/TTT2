@@ -2304,6 +2304,164 @@ function CreateChanges()
         os.time({ year = 2025, month = 02, day = 02 })
     )
 
+    AddChange(
+        "TTT2 Base - v0.14.3b",
+        [[
+
+        <h2>Added</h2>
+        <ul>
+            <li>Added C4 cvars for adjusting the range & falloff of C4 explosions (by @Spanospy)</li>
+            <ul>
+                <li>C4 explosions will now also respect the weapon's configured damage scaling</li>
+            </ul>
+            <li>Added option to select preferred unit of length for distance displays (by @wgetJane)</li>
+            <li>Added <code>GM:TTT2ArmorHandlePlayerTakeDamage</code> hook for modifying/overriding armor behavior (by @wgetJane)</li>
+            <li>Added server option for body armor to protect against crowbar damage (by @wgetJane)</li>
+            <li>Added <code>GM:TTTLastWordsMsg</code> hook from base TTT (by @wgetJane)</li>
+            <li>Port new TTT entity <code>ttt_filter_role</code> to TTT2 (by @figardo, ported by @wgetJane)</li>
+            <li>Added 2 new sprint settings (by @wgetJane)</li>
+            <ul>
+                <li>Stamina cooldown time before stamina begins regenerating after sprinting, 0.8 seconds by default</li>
+                <li>Option to require forward key to be held to sprint, enabled by default</li>
+            </ul>
+        </ul>
+
+        <h2>Changed</h2>
+        <ul>
+            <li>Updated Russian and English localization files (by @Satton2)</li>
+            <li>Updated the list of troublesome addons used by the addonchecker</li>
+            <li>Changed option for body armor to protect against headshot damage by default (by @wgetJane)</li>
+        </ul>
+
+        <h2>Fixed</h2>
+        <ul>
+            <li>Fixed classic armour protecting against crowbar damage (by @wgetJane)</li>
+            <li>Fixed C4/Radio sounds not playing outside of PAS (by @figardo)</li>
+            <li>Fixed players sometimes being revealed as dead when they chat/voicechat right as they die (by @wgetJane)</li>
+            <li>Fixed various bugs related to using doors and buttons, to match base TTT behavior (by @wgetJane)</li>
+            <ul>
+                <li>Fixed brush doors on certain maps not being usable</li>
+                <li>Fixed certain doors on certain maps being forcibly usable when they shouldn't be</li>
+                <li>Fixed func_rotating being forcibly usable</li>
+                <li>Fixed vehicles not being usable</li>
+                <li>Removed forced button solidity</li>
+                <li>Improved targetID trace detection for doors and buttons</li>
+                <li>Allow brush doors to be detected as destructible for targetID</li>
+                <li>Use NW2Vars instead of NWVars for door variables for more efficient networking</li>
+                <li>Fixed clientside door.GetAll() to return a more updated list of doors</li>
+                <li>Removed clientside TTT2PostDoorSetup hook</li>
+                <li>Changed crowbar unlocking behavior to match base TTT</li>
+            </ul>
+            <li>Fixed lua errors after autorefresh (by @wgetJane)</li>
+            <li>Fixed Hud errors when picking up items or weapons with no viable icon (by @NickCloudAT)</li>
+        </ul>
+
+    ]],
+        os.time({ year = 2025, month = 03, day = 18 })
+    )
+
+    AddChange(
+        "TTT2 Base - v0.14.4b",
+        [[
+
+        <h2>Fixed</h2>
+        <ul>
+            <li>Fixed health station continuous use not working (by @wgetJane)</li>
+            <li>Fixed the shop search breaking when using certain special characters (by @NickCloudAT)</li>
+            <li>Fixed propspec not working (by @wgetJane)</li>
+            <li>Fixed a regression in TTT voice chat team colors (see <https://github.com/Facepunch/garrysmod/commit/39b7394ced29ffe318213e580efa4b1090828ac7>)</li>
+            <li>Fixed ghost viewmodels briefly appearing from weapons held by other players (by @TW2STaL1CKY)</li>
+            <li>Fixed corpses not inheriting the bodygroups from the players model (by @NickCloudAT)</li>
+            <li>Fixed edgecases where ttt_flame entities break when their extra entities fail to initialise (by @TW2STaL1CKY)</li>
+            <li>Fixed null physics object error for doors (by @mexikoedi)</li>
+        </ul>
+
+    ]],
+        os.time({ year = 2025, month = 06, day = 15 })
+    )
+
+    AddChange(
+        "TTT2 Base - v0.14.5b",
+        [[
+
+        <h2>Changed</h2>
+        <ul>
+            <li>Made improvements to how data returned from the <code>GM:TTTBodySearchPopulate</code> hook is handled to make custom bodysearch entry creation better (by @TW1STaL1CKY)</li>
+            <ul>
+                <li>Added support for icon text (like the timer on the Death Time entry)</li>
+                <li>Added support for specifying the ordering so custom entries can be placed between existing entries</li>
+                <li>Added support for coloring the entry's background box</li>
+                <li>Added support for specifying a custom height for an entry</li>
+                <li>Gave <code>GM:TTTBodySearchPopulate</code> hook a new boolean argument named <code>scoreboard</code> which becomes true if the hook is being called to populate the bodysearch info on the scoreboard</li>
+            </ul>
+            <li><code>GM:TTTModifyTargetedEntity</code> can now return a second value to modify the distance of a new target entity (by @TW1STaL1CKY)</li>
+        </ul>
+
+        <h2>Fixed</h2>
+        <ul>
+            <li>Fixed guns not applying themselves as their damage inflictor (by @TW1STaL1CKY)</li>
+            <li>Fixed markerVision entities getting culled by the game if too far away (by @NickCloudAT)</li>
+            <li>Fixed not being able to use entities through water and clip brushes (by @TW1STaL1CKY)</li>
+            <li>Fixed <code>GM:TTTBodySearchPopulate</code> failing to create custom bodysearch entries properly (by @TW1STaL1CKY)</li>
+            <li>Fixed scoreboard breaking if a custom bodysearch entry has no icon (by @TW1STaL1CKY)</li>
+            <li>remove CS:S check since the resources got integrated (excluding music and maps) (by @xopez)</li>
+        </ul>
+
+    ]],
+        os.time({ year = 2025, month = 08, day = 18 })
+    )
+
+    AddChange(
+        "TTT2 Base - v0.14.6b",
+        [[
+
+        <h2>Added</h2>
+        <ul>
+            <li>Karma health scaling (by @coookies369)</li>
+            <ul>
+                <li>Option to scale a player's max HP by their karma</li>
+                <li>Lower karma values scale HP towards <code>ttt_karma_health_min</code></li>
+                <li>Option to disable karma damage scaling</li>
+            </ul>
+        </ul>
+
+        <h2>Changed</h2>
+        <ul>
+            <li>Made improvements to door destruction (by @TW1STaL1CKY)</li>
+            <ul>
+                <li>Bodygroups from destroyed doors are now transferred to their physics prop</li>
+                <li>Entities parented to destroyed doors are now transferred to their physics prop</li>
+                <li>Door props are now spawned as soon as the door is destroyed (instead of a frame later)</li>
+                <li>Reuse existing vector globals instead of creating new vectors</li>
+            </ul>
+            <li>Added <code>ttt_filter_subrole</code> (by @mrxonte)</li>
+        </ul>
+
+        <h2>Fixed</h2>
+        <ul>
+            <li>Fixed markerVision null entity errors (by @mexikoedi)</li>
+            <li>Fixed missing <code>ttt_filter_role</code> in <i>ttt2.fgd</i> (by @mrxonte)</li>
+            <li>Fixed loading screen tips translation (by @mexikoedi)</li>
+            <li>Fixed missing <code>limit_left</code> translation (by @mexikoedi)</li>
+            <li>Fixed <code>GetHeadshotMultiplier</code> nil value error (by @mexikoedi)</li>
+            <li>Fixed continuous use not working correctly with entities like health stations (by @saibotk)</li>
+            <li>Fixed vFire explosions still killing players with <code>NoExplosionDamage</code> equipped (by @TW1STaL1CKY)</li>
+            <li>Fixed vFire explosions sometimes not damaging entities in the way they should, like explosive barrels (by @TW1STaL1CKY)</li>
+            <li>Fixed an issue where overhead icons from <code>TTT2ModifyOverheadIcon</code> were ignored when <code>shouldDrawDefault</code> was false (by @mexikoedi)</li>
+            <li>Fixed pressing keys while being revived spamming your HUD with warnings (by @archrbx)</li>
+            <li>Fixed <code>SetIronsights</code> nil value error (by @mexikoedi)</li>
+        </ul>
+
+        <h2>Removed / Breaking Changes</h2>
+        <ul>
+            <li>Removed <code>IsSpecialUsableEntity</code> & <code>IsUsableEntity</code> functions on entities (by @saibotk)</li>
+            <li>Changed <code>ENT:ClientUse()</code>: Removed return value, now always blocks the default use handling (by @saibotk)</li>
+        </ul>
+
+    ]],
+        os.time({ year = 2026, month = 04, day = 06 })
+    )
+
     ---
     -- run hook for other addons to add their changelog as well
     -- @realm client

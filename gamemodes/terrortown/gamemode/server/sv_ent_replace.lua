@@ -120,13 +120,20 @@ end
 ---
 -- Checks whether the given map is able to import @{Entity} based on the map's data
 -- @param string map
--- @return[default=false] boolean
+-- @return[default=nil] string The rearm script's file path
 -- @realm server
 -- @internal
 function ents.TTT.CanImportEntities(map)
     local fname = "maps/" .. map .. "_ttt.txt"
+    if file.Exists(fname, "GAME") then
+        return fname
+    end
 
-    return file.Exists(fname, "GAME")
+    -- Allows workshop addons to pack rearm scripts
+    fname = "data_static/" .. map .. "_ttt.txt"
+    if file.Exists(fname, "GAME") then
+        return fname
+    end
 end
 
 local classremap = {
@@ -142,7 +149,7 @@ local classremap = {
 -- @internal
 -- @realm server
 function ents.TTT.ImportEntities(map)
-    local fname = "maps/" .. map .. "_ttt.txt"
+    local fname = ents.TTT.CanImportEntities(map)
     local buf = file.Read(fname, "GAME")
     local lines = string.Explode("\n", buf)
 
