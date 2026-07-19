@@ -51,6 +51,8 @@ L.credit_kill = "Dir wurde(n) {num} Ausrüstungspunkt(e) gegeben, da du einen {r
 -- Karma
 L.karma_dmg_full = "Dein Karma ist {amount}, also verteilst du diese Runde vollen Schaden!"
 L.karma_dmg_other = "Dein Karma ist {amount}. Daher ist dein Schaden um {num}% reduziert!"
+--L.karma_hp_full = "Your Karma is {amount}, so you get full HP this round!"
+--L.karma_hp_other = "Your Karma is {amount}. As a result your maximum HP is reduced by {num} HP"
 
 -- Body identification messages
 L.body_found = "{finder} fand den Körper von {victim}. {role}"
@@ -1710,6 +1712,9 @@ L.label_doors_health = "Tür-Lebenspunkte"
 L.label_doors_prop_health = "Zerstörte-Tür-Lebenspunkte"
 L.label_minimum_players = "Mindestspieleranzahl, um die Runde zu starten"
 L.label_karma = "Aktiviere Karma"
+--L.label_karma_damage_scaling = "Damage scaling"
+--L.label_karma_health_scaling = "Health scaling"
+--L.label_karma_health_min = "Minimum health"
 L.label_karma_strict = "Aktiviere strenges Karma"
 L.label_karma_starting = "Initiales Karma"
 L.label_karma_max = "Maximales Karma"

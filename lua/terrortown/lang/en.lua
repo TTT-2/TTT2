@@ -51,6 +51,8 @@ L.credit_kill = "You have received {num} credit(s) for killing a {role}."
 -- Karma
 L.karma_dmg_full = "Your Karma is {amount}, so you deal full damage this round!"
 L.karma_dmg_other = "Your Karma is {amount}. As a result all damage you deal is reduced by {num}%"
+L.karma_hp_full = "Your Karma is {amount}, so you get full HP this round!"
+L.karma_hp_other = "Your Karma is {amount}. As a result your maximum HP is reduced by {num} HP"
 
 -- Body identification messages
 L.body_found = "{finder} found the body of {victim}. {role}"
@@ -1716,6 +1718,9 @@ L.label_doors_health = "Door health"
 L.label_doors_prop_health = "Destructed door health"
 L.label_minimum_players = "Minimum player amount to start round"
 L.label_karma = "Enable Karma"
+L.label_karma_damage_scaling = "Damage scaling"
+L.label_karma_health_scaling = "Health scaling"
+L.label_karma_health_min = "Minimum health"
 L.label_karma_strict = "Enable strict Karma"
 L.label_karma_starting = "Starting Karma"
 L.label_karma_max = "Maximum Karma"
@@ -2351,9 +2356,11 @@ L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
 -- 2024-08-17
 L.name_button_default = "Button"
 L.name_button_rotating = "Lever"
+L.name_button_momentary_rotating = "Wheel"
 
 L.button_default = "Press [{usekey}] to trigger"
 L.button_rotating = "Press [{usekey}] to flip"
+L.button_momentary_rotating = "Press [{usekey}] to rotate"
 
 L.undefined_key = "???"
 

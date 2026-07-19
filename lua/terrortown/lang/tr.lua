@@ -18,7 +18,7 @@ L.last_words = "Son Sözleri"
 L.terrorists = "Teröristler"
 L.spectators = "İzleyiciler"
 
-L.nones = "Takım Yok"
+L.nones = "Takımı Yok"
 L.innocents = "Masum Takımı"
 L.traitors = "Hain Takımı"
 
@@ -40,26 +40,28 @@ L.limit_round = "Raunt sınırına ulaşıldı. Bir sonraki harita yakında yük
 L.limit_time = "Zaman sınırına ulaşıldı. Bir sonraki harita yakında yüklenecek."
 -- limit_left needed for some third-party addons which rely on this vanilla TTT string
 L.limit_left = "Harita değişmeden önce {num} raunt veya {time} dakika kaldı."
-L.limit_left_session_mode_1 = "Harita değişmeden önce {num} raunt veya {time} dakika kaldı."
-L.limit_left_session_mode_2 = "Harita değişmeden önce {time} dakika kaldı."
-L.limit_left_session_mode_3 = "Harita değişmeden önce {num} raunt kaldı."
+L.limit_left_session_mode_1 = "Harita değişmesine {num} raunt veya {time} dakika kaldı."
+L.limit_left_session_mode_2 = "Harita değişmesine {time} dakika kaldı."
+L.limit_left_session_mode_3 = "Harita değişmesine {num} raunt kaldı."
 
 -- Credit awards
 L.credit_all = "Takımınıza performansınız için {num} ekipman kredisi verildi."
 L.credit_kill = "Bir {role} öldürdüğünüz için {num} kredi aldınız."
 
 -- Karma
-L.karma_dmg_full = "Karman {amount}, bu yüzden bu raunt tam hasar veriyorsun!"
-L.karma_dmg_other = "Karman {amount}. Bu nedenle, verdiğiniz tüm hasar ​%{num}​ azaltıldı."
+L.karma_dmg_full = "Karman {amount}. Bu yüzden bu raunt tam hasar veriyorsun!"
+L.karma_dmg_other = "Karman {amount}. Bu yüzden verdiğiniz tüm hasar ​%{num}​ azaltıldı."
+L.karma_hp_full = "Karman {amount}. Bu yüzden bu raunt tam sağlıkla başlıyorsun!"
+L.karma_hp_other = "Karman {amount}. Bu yüzden maks sağlığınız {num} azaltıldı"
 
 -- Body identification messages
 L.body_found = "{finder}, {victim} adlı kişinin cesedini buldu. {role}"
 L.body_found_team = "{finder}, {victim} adlı kişinin cesedini buldu. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following:
-L.body_found_traitor = "Onlar bir Haindi!"
-L.body_found_det = "Onlar bir Dedektifti."
-L.body_found_inno = "Onlar bir Masumdu."
+L.body_found_traitor = "O bir Haindi!"
+L.body_found_det = "O bir Dedektifti."
+L.body_found_inno = "O bir Masumdu."
 
 L.body_call = "{player}, {victim} adlı kurbanın cesedine Dedektif çağırdı!"
 L.body_call_error = "Bir Dedektif çağırmadan önce bu oyuncunun ölümünü onaylamalısın!"
@@ -85,15 +87,15 @@ L.equip_help_cost = "Satın aldığınız her ekipman parçası 1 krediye mal ol
 
 L.equip_help_carry = "Yalnızca yeriniz olan şeyleri satın alabilirsiniz."
 L.equip_carry = "Bu ekipmanı taşıyabilirsiniz."
-L.equip_carry_own = "Bu öğeyi zaten taşıyorsunuz."
+L.equip_carry_own = "Bu ögeyi zaten taşıyorsunuz."
 L.equip_carry_slot = "{slot} yuvasında zaten bir silah taşıyorsun."
 L.equip_carry_minplayers = "Sunucuda bu silahı etkinleştirmek için yeterli oyuncu yok."
 
-L.equip_help_stock = "Belirli öğelerden her rauntta yalnızca bir tane satın alabilirsiniz."
+L.equip_help_stock = "Belirli ögelerden her rauntta yalnızca bir tane satın alabilirsiniz."
 L.equip_stock_deny = "Bu ürün artık stokta yok."
 L.equip_stock_ok = "Bu ürün stokta mevcut."
 
-L.equip_custom = "Bu sunucu tarafından eklenen özel öğe."
+L.equip_custom = "Bu sunucu tarafından eklenen özel öge."
 
 L.equip_spec_name = "Ad"
 L.equip_spec_type = "Tür"
@@ -108,7 +110,7 @@ L.disg_not_owned = "Kılık Değiştirici taşımıyorsun!"
 L.disg_enable = "Kılık değiştirmeyi etkinleştir"
 
 L.disg_help1 = "Kılık değiştiğinde, biri sana baktığında adın, sağlığın ve Karman gösterilmez. Ayrıca, bir Dedektifin radarından gizleneceksiniz."
-L.disg_help2 = "Menüyü kullanmadan kılık değiştirmek için Numpad Enter tuşuna basın. Konsolu kullanarak farklı bir tuşa 'ttt_toggle_digguise' olarak da atayabilirsiniz."
+L.disg_help2 = "Menüyü kullanmadan kılık değiştirmek için Numpad Enter tuşuna basın. Konsolu kullanarak farklı bir tuşa atayabilirsiniz. (ttt_toggle_digguise)"
 
 -- Radar tab in equipment menu
 L.radar_name = "Radar"
@@ -203,8 +205,8 @@ L.disg_turned_on = "Kılık değiştirme etkinleştirildi!"
 L.disg_turned_off = "Kılık değiştirme devre dışı."
 
 -- Equipment item descriptions
-L.item_passive = "Pasif etki öğesi"
-L.item_active = "Aktif kullanım öğesi"
+L.item_passive = "Pasif etki ögesi"
+L.item_active = "Aktif kullanım ögesi"
 L.item_weapon = "Silah"
 
 L.item_armor = "Vücut Zırhı"
@@ -243,15 +245,15 @@ L.c4_remove_pickup = "C4'ü al"
 L.c4_remove_destroy1 = "C4'ü yok et"
 L.c4_remove_destroy2 = "İmhayı onayla"
 
-L.c4_disarm = "C4'ü devre dışı bırak"
+L.c4_disarm = "C4'ü etkisiz hale getir"
 L.c4_disarm_cut = "{num} telini kesmek için tıklayın"
 
 L.c4_disarm_t = "Bombayı etkisiz hale getirmek için bir kablo kesin. Hain olduğun için her kablo güvende. Masumlar için iş o kadar kolay değil!"
 L.c4_disarm_owned = "Bombayı etkisiz hale getirmek için bir kablo kesin. Bu senin bomban, bu yüzden her kablo onu etkisiz hale getirecek."
-L.c4_disarm_other = "Bombayı etkisiz hale getirmek için bir kablo kesin. Yanlış yaparsan patlar!"
+L.c4_disarm_other = "Bombayı etkisiz hale getirmek için doğru kabloyu kesin. Yanlış yaparsan patlar!"
 
 L.c4_status_armed = "DEVREYE ALINDI"
-L.c4_status_disarmed = "DEVRE DIŞI"
+L.c4_status_disarmed = "ETKİSİZ HALE GETİRİLDİ"
 
 -- Visualizer
 L.vis_name = "Görüntüleyici"
@@ -369,7 +371,7 @@ L.magnet_name = "Manyeto çubuğu"
 L.grenade_smoke = "Duman bombası"
 L.grenade_fire = "Yanıcı bomba"
 
-L.unarmed_name = "Gizle"
+L.unarmed_name = "Silahı İndir"
 L.crowbar_name = "Levye"
 L.pistol_name = "Tabanca"
 L.rifle_name = "Tüfek"
@@ -572,7 +574,7 @@ L.tip33 = "Hain olarak, cesetleri taşıyabileceğinizi ve onları masumların v
 
 L.tip34 = "Skor tablosunda, yaşayan bir oyuncunun adına tıklayıp 'şüpheli' veya 'arkadaş' gibi bir etiket seçebilirsiniz. Bu etiket, nişangâhınızın altındaysa görünecektir."
 
-L.tip35 = "Yerleştirilebilir ekipman öğelerinin çoğu (C4, Radyo gibi) ikincil ateş kullanılarak duvarlara yapıştırılabilir."
+L.tip35 = "Yerleştirilebilir ekipman ögelerinin çoğu (C4, Radyo gibi) ikincil ateş kullanılarak duvarlara yapıştırılabilir."
 
 L.tip36 = "Etkisiz hale getirilirken bir hata nedeniyle patlayan C4, zamanlayıcısında sıfıra ulaşan C4'ten daha küçük bir patlamaya sahiptir."
 
@@ -615,10 +617,10 @@ L.aw_sui2_title = "Yalnız ve Depresyonda"
 L.aw_sui2_text = "kendini öldüren tek kişiydi."
 
 L.aw_exp1_title = "Patlayıcı Araştırma Hibesi"
-L.aw_exp1_text = "patlamalar üzerine yaptıkları araştırmalarla tanındı. {num} denek yardımcı oldu."
+L.aw_exp1_text = "patlamalar üzerine yaptığı araştırmalarla tanındı. {num} denek yardımcı oldu."
 
 L.aw_exp2_title = "Saha Araştırması"
-L.aw_exp2_text = "patlamalara karşı kendi dirençlerini test etti. Yeterince yüksek değildi."
+L.aw_exp2_text = "patlamalara karşı kendi direncini test etti. Yeterince yüksek değildi."
 
 L.aw_fst1_title = "İlk Kan"
 L.aw_fst1_text = "bir hainin elindeki ilk masum ölümü teslim etti."
@@ -699,13 +701,13 @@ L.aw_sgn1_title = "Kolay Mod"
 L.aw_sgn1_text = "iri saçmayı acıdığı yere uygulayarak {num} hedefi öldürür."
 
 L.aw_sgn2_title = "Bin Küçük Saçma Tanesi"
-L.aw_sgn2_text = "saçmalarını gerçekten beğenmedi, bu yüzden hepsini verdiler. {num} alıcı bundan zevk alacak kadar yaşamadı."
+L.aw_sgn2_text = "saçmalarını gerçekten beğenmedi, bu yüzden hepsini verdi. {num} alıcı bundan zevk alacak kadar yaşamadı."
 
 L.aw_rfl1_title = "İşaretle ve Tıkla"
 L.aw_rfl1_text = "{num} öldürme için ihtiyacın olan tek şeyin bir tüfek ve titremeyen bir el olduğunu gösterir."
 
 L.aw_rfl2_title = "Kafanı Buradan Görebiliyorum"
-L.aw_rfl2_text = "tüfeğini biliyor. Şimdi {num} kişi daha tüfeği biliyor."
+L.aw_rfl2_text = "tüfeğini kullanmasını biliyor. Şimdi {num} kişi daha tüfeği biliyor."
 
 L.aw_dgl1_title = "Küçük Bir Tüfek Gibi"
 L.aw_dgl1_text = "Desert Eagle'a alışıp {num} kişiyi öldürdü."
@@ -717,7 +719,7 @@ L.aw_mac1_title = "Dua Et ve Öldür"
 L.aw_mac1_text = "MAC10 ile {num} kişiyi öldürdü, ama öldürmek için ne kadar mermiye ihtiyaç duyduğunu söylemeyecek."
 
 L.aw_mac2_title = "Gülümse ve Seyret"
-L.aw_mac2_text = "iki MAC10 kullanabilseler ne olacağını merak ediyor. {num} çarpı iki"
+L.aw_mac2_text = "iki MAC10 kullanabilse ne olacağını merak ediyor. {num} çarpı iki"
 
 L.aw_sip1_title = "Sessiz Ol"
 L.aw_sip1_text = "{num} kişiyi susturulmuş tabancayla sustur."
@@ -744,7 +746,7 @@ L.aw_flg2_title = "İşaret Fişeği Yangını Gösterir"
 L.aw_flg2_text = "{num} erkeğe yanıcı kıyafet giymenin tehlikesini öğretti."
 
 L.aw_hug1_title = "H.U.G.E Felaketi"
-L.aw_hug1_text = "H.U.G.E.'leriyle uyumluydu, bir şekilde mermilerini {num} kişiye isabet ettirmeyi başardı."
+L.aw_hug1_text = "H.U.G.E. silahıyla uyumluydu, bir şekilde mermilerini {num} kişiye isabet ettirmeyi başardı."
 
 L.aw_hug2_title = "Sabırlı Er"
 L.aw_hug2_text = "sadece ateş etmeye devam etti ve H.U.G.E.'nin sabrının {num} öldürme ile ödüllendirildiğini gördü."
@@ -756,25 +758,25 @@ L.aw_msx2_title = "Orta Menzil Çılgınlığı"
 L.aw_msx2_text = "M16 ile hedefleri nasıl indireceğini bilir ve {num} düşman öldürür."
 
 L.aw_tkl1_title = "Sakar Şakir"
-L.aw_tkl1_text = "tam bir arkadaşa nişan alırken parmakları kaydı."
+L.aw_tkl1_text = "tam bir arkadaşa nişan alırken parmağı kaydı."
 
 L.aw_tkl2_title = "Çifte Sakar Şakir"
-L.aw_tkl2_text = "iki kez Hain aldıklarını düşündüler, ancak her iki seferde de yanıldılar."
+L.aw_tkl2_text = "iki Haini birden indirdiğini düşündü, ancak her ikisinde de yanıldı."
 
 L.aw_tkl3_title = "Karma bilincine sahip"
-L.aw_tkl3_text = "iki takım arkadaşını öldürdükten sonra duramadı. Üç onların uğurlu sayısıdır."
+L.aw_tkl3_text = "iki takım arkadaşını öldürdükten sonra duramadı. Üç onun uğurlu sayısıdır."
 
 L.aw_tkl4_title = "Takım Katili"
 L.aw_tkl4_text = "tüm takımını öldürdü. ALLAH'INI SEVEN BANLASIN."
 
 L.aw_tkl5_title = "Rol Oyuncusu"
-L.aw_tkl5_text = "dürüstçe deli bir adamı canlandırıyordu. Bu yüzden takımlarının çoğunu öldürdüler."
+L.aw_tkl5_text = "dürüstçe deli bir adamı canlandırıyordu. Bu yüzden takımının çoğunu öldürdü."
 
 L.aw_tkl6_title = "Aptal"
-L.aw_tkl6_text = "hangi tarafta olduklarını anlayamadılar ve yoldaşlarının yarısından fazlasını öldürdüler."
+L.aw_tkl6_text = "hangi tarafta olduğunu anlayamadı ve yoldaşlarının yarısından fazlasını öldürdü."
 
 L.aw_tkl7_title = "Cahil"
-L.aw_tkl7_text = "takım arkadaşlarının dörtte birinden fazlasını öldürerek bölgelerini gerçekten iyi korudu."
+L.aw_tkl7_text = "takım arkadaşlarının dörtte birinden fazlasını öldürerek bölgesini gerçekten iyi korudu."
 
 L.aw_brn1_title = "Eskiden Büyükannemin Yaptığı Gibi"
 L.aw_brn1_text = "birkaç kişiyi güzelce kızarttı."
@@ -789,7 +791,7 @@ L.aw_fnd1_title = "Adli tabip"
 L.aw_fnd1_text = "etrafta {num} ceset bulundu."
 
 L.aw_fnd2_title = "Hepsini Yakalamalıyım"
-L.aw_fnd2_text = "koleksiyonları için {num} ceset bulundu."
+L.aw_fnd2_text = "koleksiyonu için {num} ceset buldu."
 
 L.aw_fnd3_title = "Ölüm Kokusu"
 L.aw_fnd3_text = "bu turda {num} kez rastgele cesetler üzerinde tökezler."
@@ -798,7 +800,7 @@ L.aw_crd1_title = "Geri Dönüştürücü"
 L.aw_crd1_text = "cesetlerden {num} kredi toplandı."
 
 L.aw_tod1_title = "Kundakçının Zaferi"
-L.aw_tod1_text = "takımları raundu kazanmadan sadece saniyeler önce öldü."
+L.aw_tod1_text = "takımı raundu kazanmadan sadece saniyeler önce öldü."
 
 L.aw_tod2_title = "Bu Oyundan Nefret Ediyorum"
 L.aw_tod2_text = "raundun başlamasından hemen sonra öldü."
@@ -829,7 +831,7 @@ L.stungun_name = "UMP Prototipi"
 
 L.knife_instant = "ANINDA ÖLDÜRME"
 
-L.binoc_zoom_level = "Yakınlaştırma Seviyesi"
+L.binoc_zoom_level = "Yakınlaştırma Düzeyi"
 L.binoc_body = "CESET ALGILANDI"
 
 L.idle_popup_title = "Boşta"
@@ -848,7 +850,7 @@ L.reroll_button = "Yeniden Dağıt"
 L.reroll_help = "Mağazanızda yeni bir rastgele ekipman seti almak için {amount} kredi kullanın!"
 
 -- 2019-05-06
-L.equip_not_alive = "Sağdan bir rol seçerek mevcut tüm öğeleri görüntüleyebilirsiniz. Favorilerinizi işaretlemeyi unutmayın!"
+L.equip_not_alive = "Sağdan bir rol seçerek mevcut tüm ögeleri görüntüleyebilirsiniz. Favorilerinizi işaretlemeyi unutmayın!"
 
 -- 2019-06-27
 L.shop_editor_title = "Mağaza Düzenleme"
@@ -856,7 +858,7 @@ L.shop_edit_items_weapong = "Silahları Düzenle"
 L.shop_edit = "Mağazaları Düzenle"
 L.shop_settings = "Ayarlar"
 L.shop_select_role = "Rol Seç"
-L.shop_edit_items = "Öğeleri Düzenle"
+L.shop_edit_items = "Ögeleri Düzenle"
 L.shop_edit_shop = "Mağazayı Düzenle"
 L.shop_create_shop = "Özel Mağaza Oluştur"
 L.shop_selected = "Seçili {role}"
@@ -920,7 +922,7 @@ L.tbut_team_toggle = "{team} için bu düğmeyi açmak için [SHIFT + {walkkey} 
 L.tbut_team_config = "Takım {current}"
 L.tbut_current_config = "Geçerli yapılandırma"
 L.tbut_intended_config = "Harita oluşturucu tarafından tasarlanan yapılandırma"
-L.tbut_admin_mode_only = "Yönetici olduğunuz ve '{cv}' öğesi '1' olarak ayarlandığı için bu düğmeyi görüyorsunuz."
+L.tbut_admin_mode_only = "Yönetici olduğunuz ve '{cv}' ögesi '1' olarak ayarlandığı için bu düğmeyi görüyorsunuz."
 L.tbut_allow = "İzin ver"
 L.tbut_prohib = "Yasakla"
 L.tbut_default = "Varsayılan"
@@ -991,10 +993,10 @@ L.submenu_administration_hud_title = "Arayüz Ayarları"
 L.submenu_administration_randomshop_title = "Rasgele Mağaza"
 
 L.help_color_desc = "Bu ayar etkinleştirilirse, hedef kimliği dış çizgisi ve nişangâh için kullanılacak genel bir renk seçebilirsiniz."
-L.help_scale_factor = "Bu ölçek faktörü tüm arayüz öğelerini (Arayüz, Valve Grafiksel Kullanıcı Arayüzü ve Hedef Kimliği) etkiler. Ekran çözünürlüğü değiştirilirse otomatik olarak güncellenir. Bu değerin değiştirilmesi arayüzü sıfırlayacaktır!"
+L.help_scale_factor = "Bu ölçek faktörü tüm arayüz ögelerini (Arayüz, Valve Grafiksel Kullanıcı Arayüzü ve Hedef Kimliği) etkiler. Ekran çözünürlüğü değiştirilirse otomatik olarak güncellenir. Bu değerin değiştirilmesi arayüzü sıfırlayacaktır!"
 L.help_hud_game_reload = "Arayüz şu anda kullanılamıyor. Sunucuya yeniden bağlanın veya oyunu yeniden başlatın."
 L.help_hud_special_settings = "Bunlar bu arayüzün özel ayarlarıdır."
-L.help_vskin_info = "Valve Arayüzü (Valve Grafiksel Kullanıcı Arayüz görünümü), mevcut olan tüm menü öğelerine uygulanan görünümdür. Basit bir Lua komut dosyası ile kolayca oluşturulabilirler ve renkleri ve bazı boyut parametrelerini değiştirebilirler."
+L.help_vskin_info = "Valve Arayüzü (Valve Grafiksel Kullanıcı Arayüz görünümü), mevcut olan tüm menü ögelerine uygulanan görünümdür. Basit bir Lua komut dosyası ile kolayca oluşturulabilirler ve renkleri ve bazı boyut parametrelerini değiştirebilirler."
 L.help_targetid_info = "Hedef Kimliği, nişangâhınızı bir varlığa yönlendirirken oluşturulan bilgilerdir. Rengi 'Genel' sekmesinde yapılandırılabilir."
 L.help_hud_default_desc = "Tüm oyuncular için varsayılan arayüz değerini ayarlar. Henüz bir arayüz seçmemiş olan oyuncular, varsayılan olarak bu arayüzü alacaklardır. Bunu değiştirmek, arayüzlerini zaten seçmiş olan oyuncuların arayüzlerini değiştirmez."
 L.help_hud_forced_desc = "Tüm oyuncular için bir arayüz zorlar. Bu, arayüz seçim özelliğini herkes için devre dışı bırakır."
@@ -1019,8 +1021,8 @@ L.label_shop_num_col = "Sütun sayısı"
 L.label_shop_num_row = "Satır sayısı"
 L.label_shop_item_size = "Simge boyutu"
 L.label_shop_show_slot = "Yuva işaretini göster"
-L.label_shop_show_custom = "Özel öğe işaretini göster"
-L.label_shop_show_fav = "Favori öğe işaretini göster"
+L.label_shop_show_custom = "Özel öge işaretini göster"
+L.label_shop_show_fav = "Favori öge işaretini göster"
 L.label_crosshair_enable = "Nişangâhı etkinleştir"
 L.label_crosshair_opacity = "Nişangâh opaklığı"
 L.label_crosshair_ironsight_opacity = "Gez ve arpacık opaklığı"
@@ -1064,8 +1066,8 @@ L.header_hud_customize = "Arayüzü Özelleştir"
 L.header_vskin_select = "Valve Arayüzü Seç ve Özelleştir"
 L.header_targetid = "Hedef Kimliği Ayarları"
 L.header_shop_settings = "Ekipman Mağazası Ayarları"
-L.header_shop_layout = "Öğe Listesi Düzeni"
-L.header_shop_marker = "Öğe İşaretleyici Ayarları"
+L.header_shop_layout = "Öge Listesi Düzeni"
+L.header_shop_marker = "Öge İşaretleyici Ayarları"
 L.header_crosshair_settings = "Nişangâh Ayarları"
 L.header_damage_indicator = "Hasar Göstergesi Ayarları"
 L.header_performance_settings = "Performans Ayarları"
@@ -1128,7 +1130,7 @@ L.dna_help_secondary = "DNA yuvasını değiştirin"
 L.dna_help_reload = "Numuneyi sil"
 
 L.binoc_help_pri = "Bir ceset ara."
-L.binoc_help_sec = "Yakınlaştırma seviyesini değiştirin."
+L.binoc_help_sec = "Yakınlaştırma düzeyini değiştirin."
 
 L.vis_help_pri = "Etkinleştirilmiş cihazı bırakın."
 
@@ -1184,7 +1186,7 @@ L.kill_score = "Öldürme"
 L.bodyfound_score = "Ceset bulundu"
 
 L.title_event_bodyfound = "Bir ceset bulundu"
-L.title_event_c4_disarm = "Bir C4 devre dışı bırakıldı"
+L.title_event_c4_disarm = "Bir C4 etkisiz hale getirildi"
 L.title_event_c4_explode = "Bir C4 patladı"
 L.title_event_c4_plant = "Bir C4 kuruldu"
 L.title_event_creditfound = "Ekipman kredileri bulundu"
@@ -1220,13 +1222,13 @@ L.desc_event_kill_team = "Bu bir takım öldürmesiydi."
 L.desc_event_kill_blowup = "{victim} ({vrole} {vteam}) kendini havaya uçurdu."
 L.desc_event_kill_blowup_trap = "{victim} ({vrole} {vteam}), {trap} tarafından havaya uçuruldu."
 
-L.desc_event_kill_tele_self = "{victim} ({vrole} {vteam}) kendilerini ışınlanarak öldürdüler."
+L.desc_event_kill_tele_self = "{victim} ({vrole} {vteam}) kendini ışınlanarak öldürdü."
 L.desc_event_kill_sui = "{victim} ({vrole} {vteam}) bunu kaldıramadı ve kendini öldürdü."
 L.desc_event_kill_sui_using = "{victim} ({vrole} {vteam}), {tool} kullanarak kendini öldürdü."
 
 L.desc_event_kill_fall = "{victim} ({vrole} {vteam}) ölümüne düştü."
-L.desc_event_kill_fall_pushed = "{victim} ({vrole} {vteam}, {attacker} onları ittikten sonra ölüme düştü."
-L.desc_event_kill_fall_pushed_using = "{victim} ({vrole} {vteam}), {attacker} ({arole} {ateam}) onları itmek için {trap} kullandıktan sonra ölümüne düştü."
+L.desc_event_kill_fall_pushed = "{victim} ({vrole} {vteam}, {attacker} onu ittikten sonra ölüme düştü."
+L.desc_event_kill_fall_pushed_using = "{victim} ({vrole} {vteam}), {attacker} ({arole} {ateam}) onu itmek için {trap} kullandıktan sonra ölümüne düştü."
 
 L.desc_event_kill_shot = "{victim} ({vrole} {vteam}), {attacker} tarafından vuruldu."
 L.desc_event_kill_shot_using = "{victim} ({vrole} {vteam}), {attacker} ({arole} {ateam}) tarafından bir {weapon} kullanılarak vuruldu."
@@ -1322,7 +1324,7 @@ L.help_rolelayering_layers = [[
 Role özgü değişkenlere göre atanabilir roller belirlendikten sonra (rastgele seçilme şansı da dahil!), dağıtım için her katmandan bir rol (varsa) seçilir. Katmanlar işlendikten sonra katmanlanmamış roller rastgele seçilir. Doldurulması gereken yuva kalmadığı anda rol seçimi durdurulur.
 
 Convar ile ilgili gereksinimler nedeniyle dikkate alınmayan roller dağıtılmaz.]]
-L.scoreboard_voice_tooltip = "Ses seviyesini değiştirmek için kaydırın"
+L.scoreboard_voice_tooltip = "Ses düzeyini değiştirmek için kaydırın"
 
 -- 2021-06-15
 L.header_shop_linker = "Ayarlar"
@@ -1576,7 +1578,7 @@ L.header_round_setup_map_duration = "Harita Oturumu"
 L.header_textchat = "Metin sohbeti"
 L.header_round_dead_players = "Ölü Oyuncu Ayarları"
 L.header_administration_scoreboard = "Puan Tablosu Ayarları"
-L.header_hud_toggleable = "Değiştirilebilir Arayüz Öğeleri"
+L.header_hud_toggleable = "Değiştirilebilir Arayüz Ögeleri"
 L.header_mapentities_prop_possession = "Nesne Kontrolü"
 L.header_mapentities_doors = "Kapılar"
 L.header_karma_tweaking = "Karma Düzenlemesi"
@@ -1611,9 +1613,9 @@ Hız modu, her ölü oyuncu ile raunt süresini artırarak oyunu dengeler. Yaln�
 Hız modu etkinleştirilirse, sabit raunt süresi göz ardı edilir.]]
 L.help_round_limit = "Ayarlanan sınır koşullarından biri karşılandıktan sonra, bir harita değişikliği tetiklenir."
 L.help_armor_balancing = "Zırhı dengelemek için aşağıdaki değerler kullanılabilir."
-L.help_item_armor_classic = "Klasik zırh modu etkinleştirilmişse, yalnızca önceki ayarlar önemlidir. Klasik zırh modu, bir oyuncunun bir turda yalnızca bir kez zırh satın alabileceği ve bu zırhın gelen mermi ve levye hasarının %30'unu ölene kadar bloke ettiği anlamına gelir."
+L.help_item_armor_classic = "Klasik zırh modu etkinleştirilmişse, yalnızca önceki ayarlar önemlidir. Klasik zırh modu, bir oyuncunun bir turda yalnızca bir kez zırh satın alabileceği ve bu zırhın gelen mermi ve levye hasarının %30'unu ölene kadar engellediği anlamına gelir."
 L.help_item_armor_dynamic = [[
-Dinamik zırh, zırhı daha ilginç hale getirmek için TTT2 yaklaşımıdır. Satın alınabilecek zırh miktarı artık sınırsızdır ve zırh değeri birikir. Hasar almak, zırh değerini azaltır. Satın alınan zırh öğesi başına zırh değeri, söz konusu öğenin 'Ekipman Ayarları'nda ayarlanır.
+Dinamik zırh, zırhı daha ilginç hale getirmek için TTT2 yaklaşımıdır. Satın alınabilecek zırh miktarı artık sınırsızdır ve zırh değeri birikir. Hasar almak, zırh değerini azaltır. Satın alınan zırh ögesi başına zırh değeri, söz konusu ögenin 'Ekipman Ayarları'nda ayarlanır.
 
 Hasar alırken, bu hasarın belirli bir yüzdesi zırh hasarına dönüştürülür, oyuncuya hala farklı bir yüzde uygulanır ve geri kalanı kaybolur.
 
@@ -1630,7 +1632,7 @@ L.help_karma_ratio = "Her ikisi de aynı takımdaysa, kurbanın Karmasının ne 
 L.help_karma_traitordmg_ratio = "Her ikisi de farklı takımlarda ise, kurbanın Karmasının ne kadarının saldırgana eklendiğini hesaplamak için kullanılan hasarın oranı. Eğer bir düşman öldürülürse, bir bonus daha uygulanır."
 L.help_karma_bonus = "Bir rauntta Karma kazanmanın iki farklı pasif yolu da vardır. Birincisi, raunt sonundaki her oyuncuya uygulanan bir karma restorasyonudur. Hiçbir takım arkadaşı bir oyuncu tarafından yaralanmamış veya öldürülmemişse, ikincil bir temiz raunt bonusu verilir."
 L.help_karma_clean_half = [[
-Bir oyuncunun Karması başlangıç seviyesinin üzerinde olduğunda (yani maksimum Karma bundan daha yüksek olacak şekilde yapılandırıldığında), tüm Karma artışları, Karmalarının başlangıç seviyesinin ne kadar üzerinde olduğuna bağlı olarak azaltılacaktır. Yani ne kadar yüksek olursa o kadar yavaş yükselir.
+Bir oyuncunun Karması başlangıç düzeyinin üzerinde olduğunda (yani maksimum Karma bundan daha yüksek olacak şekilde yapılandırıldığında), tüm Karma artışları, Karmalarının başlangıç düzeyinin ne kadar üzerinde olduğuna bağlı olarak azaltılacaktır. Yani ne kadar yüksek olursa o kadar yavaş yükselir.
 
 Bu azalma, başlangıçta hızlı olan üstel bir bozunma eğrisine girer ve artış küçüldükçe yavaşlar. Bu konvar, bonusun hangi noktada yarıya indirildiğini (yani yarılanma ömrünü) belirler. Varsayılan değer 0.25 ile, Karma'nın başlangıç miktarı 1000 ve maksimum 1500 ise ve bir oyuncu Karma 1125'e ((1500 - 1000) 0.25 = 125) sahipse, temiz raunt bonusu 30 2 = 15 olacaktır. Böylece bonusu daha hızlı düşürmek için bu konvarı düşürürsünüz, daha yavaş düşürmek için 1'e yükseltirsiniz.]]
 L.help_max_slots = "Yuva başına maksimum silah miktarını ayarlar. '-1', sınır olmadığı anlamına gelir."
@@ -1666,7 +1668,7 @@ L.label_voice_drain_normal = "Normal oyuncular için tik başına azalma"
 L.label_voice_drain_admin = "Yöneticiler ve genel polislik rolleri için tik başına azalma"
 L.label_voice_drain_recharge = "Sesli sohbet etmeme işareti başına şarj oranı"
 L.label_locational_voice = "Canlı oyuncular için yakın sesli sohbeti etkinleştir"
---L.label_locational_voice_team = "Enable proximity team voice chat for living players"
+L.label_locational_voice_team = "Canlı oyuncular için konumsal takım sesli sohbetini etkinleştir"
 L.label_locational_voice_prep = "Hazırlanma sürecinde konumsal ses sohbetini etkinleştir"
 L.label_locational_voice_range = "Konumsal ses sohbetinin uzaklık oranı"
 L.label_armor_on_spawn = "(Yeniden) canlanmada oyuncu zırhı"
@@ -1691,7 +1693,7 @@ L.label_dyingshot = "Gez ve arpacıkta ölürken ateş et [deneysel]"
 L.label_armor_block_headshots = "Zırh engelleyici kafadan vuruşları etkinleştir"
 L.label_armor_block_blastdmg = "Patlama hasarını engelleyen zırhı etkinleştir"
 L.label_armor_dynamic = "Dinamik zırhı etkinleştir"
-L.label_armor_value = "Zırh öğesi tarafından verilen zırh miktarı"
+L.label_armor_value = "Zırh ögesi tarafından verilen zırh miktarı"
 L.label_armor_damage_block_pct = "Zırhın aldığı hasar yüzdesi"
 L.label_armor_damage_health_pct = "Oyuncunun aldığı hasar yüzdesi"
 L.label_armor_enable_reinforced = "Güçlendirilmiş zırhı etkinleştir"
@@ -1702,7 +1704,7 @@ L.label_highlight_dev = "TTT2 geliştiricisini vurgula"
 L.label_highlight_vip = "TTT2 destekçisini vurgula"
 L.label_highlight_addondev = "TTT2 eklenti geliştiricisini vurgula"
 L.label_highlight_supporter = "Diğerlerini vurgula"
-L.label_enable_hud_element = "{elem} arayüz öğesini etkinleştir"
+L.label_enable_hud_element = "{elem} arayüz ögesini etkinleştir"
 L.label_spec_prop_control = "Nesne kontrolünü etkinleştir"
 L.label_spec_prop_base = "Kontrol temel değeri"
 L.label_spec_prop_maxpenalty = "Daha düşük kontrol bonusu limiti"
@@ -1716,6 +1718,9 @@ L.label_doors_health = "Kapı sağlığı"
 L.label_doors_prop_health = "Yok edilen kapı sağlığı"
 L.label_minimum_players = "Raunda başlamak için minimum oyuncu miktarı"
 L.label_karma = "Karmayı Etkinleştir"
+L.label_karma_damage_scaling = "Hasar Ölçeklendirme"
+L.label_karma_health_scaling = "Sağlık Ölçeklendirme"
+L.label_karma_health_min = "En Az Sağlık"
 L.label_karma_strict = "Katı Karmayı etkinleştir"
 L.label_karma_starting = "Başlangıç Karması"
 L.label_karma_max = "Maksimum Karma"
@@ -1764,7 +1769,7 @@ Bu değeri değiştirirken dikkatli olun. Çok yükseğe ayarlamak en küçük d
 L.testpopup_title = "Çok satırlı bir başlık içeren bir test açılır penceresi, ne GÜZEL!"
 L.testpopup_subtitle = "Aa merhaba! Bu, bazı özel bilgiler içeren süslü bir açılır penceredir. Metin çok satırlı da olabilir, ne kadar süslü! Off, herhangi bir fikrim olsaydı çok daha fazla metin ekleyebilirdim..."
 
-L.hudeditor_chat_hint1 = "[TTT2][BİLGİ] Bir öğenin üzerine gelin, [SOL TIK] tuşuna basın ve basılı tutun. TAŞIMAK veya YENİDEN BOYUTLANDIRMAK için fareyi hareket ettirin."
+L.hudeditor_chat_hint1 = "[TTT2][BİLGİ] Bir ögenin üzerine gelin, [SOL TIK] tuşuna basın ve basılı tutun. TAŞIMAK veya YENİDEN BOYUTLANDIRMAK için fareyi hareket ettirin."
 L.hudeditor_chat_hint2 = "[TTT2][BİLGİ] Simetrik yeniden boyutlandırma için ALT tuşuna basın ve basılı tutun."
 L.hudeditor_chat_hint3 = "[TTT2][BİLGİ] Eksen üzerinde hareket etmek ve en boy oranını korumak için SHIFT tuşunu basılı tutun."
 L.hudeditor_chat_hint4 = "[TTT2][BİLGİ] Arayüz Düzenleyiciden çıkmak için [SAĞ TIK] - 'Kapat'a bas!"
@@ -1813,7 +1818,7 @@ L.slot_weapon_class = "Sınıf Yuvası"
 -- 2023-10-04
 L.label_voice_duck_spectator = "İzleyici seslerini azalt"
 L.label_voice_duck_spectator_amount = "İzleyici seslerini azaltma miktarı"
-L.label_voice_scaling = "Ses Seviyesi Ölçekleme Modu"
+L.label_voice_scaling = "Ses Düzeyi Ölçekleme Modu"
 L.label_voice_scaling_mode_linear = "Doğrusal"
 L.label_voice_scaling_mode_power4 = "Güç 4"
 L.label_voice_scaling_mode_log = "Logaritmik"
@@ -1832,24 +1837,24 @@ L.search_called = "Ölüm Bildirildi"
 L.search_team_role_unknown = "???"
 
 L.search_words = "İçinizden bir ses bu kişinin son sözlerinden bazılarının '{lastwords}' olduğunu söylüyor."
-L.search_armor = "Standart olmayan vücut zırhı giyiyorlardı."
-L.search_disguiser = "Kimliklerini saklamaya yarayan bir cihaz taşıyorlardı."
+L.search_armor = "Standart olmayan vücut zırhı giyiyordu."
+L.search_disguiser = "Kimliğini saklamaya yarayan bir cihaz taşıyorlardı."
 L.search_radar = "Bir çeşit radar taşıyorlardı. Artık çalışmıyor."
 L.search_c4 = "Cebinde bir not buldun. Tel {num} kesmenin bombayı güvenli bir şekilde etkisiz hale getireceğini belirtiyor."
 
-L.search_dmg_crush = "Kemiklerinin çoğu kırılmış. Ağır bir nesnenin çarpması onları öldürmüş gibi görünüyor."
-L.search_dmg_bullet = "Vurularak öldürüldükleri belli."
-L.search_dmg_fall = "Düşüp öldüler."
-L.search_dmg_boom = "Yaraları ve yanmış kıyafetleri bir patlamanın sonlarına neden olduğunu gösteriyor."
-L.search_dmg_club = "Ceset çürümüş ve hırpalanmış. Belli ki dövülerek öldürülmüşler."
+L.search_dmg_crush = "Kemiklerinin çoğu kırılmış. Ağır bir nesnenin çarpması onu öldürmüş gibi görünüyor."
+L.search_dmg_bullet = "Vurularak öldürüldüğü belli."
+L.search_dmg_fall = "Düşüp öldü."
+L.search_dmg_boom = "Yarası ve yanmış kıyafeti bir patlamanın onun sonu olduğunu gösteriyor."
+L.search_dmg_club = "Ceset çürümüş ve hırpalanmış. Belli ki dövülerek öldürülmüş."
 L.search_dmg_drown = "Ceset boğulma belirtileri gösteriyor."
-L.search_dmg_stab = "Kanamadan hızlı bir şekilde ölmeden önce bıçaklandılar ve kesildiler."
+L.search_dmg_stab = "Kanamadan hızlı bir şekilde ölmeden önce bıçaklandı ve kesildi."
 L.search_dmg_burn = "Buralar kızartılmış terörist gibi kokuyor..."
-L.search_dmg_teleport = "DNA'ları takyon emisyonları tarafından karıştırılmış gibi görünüyor!"
+L.search_dmg_teleport = "DNA'sı takyon emisyonları tarafından karıştırılmış gibi görünüyor!"
 L.search_dmg_car = "Bu terörist yolu geçtiğinde, dikkatsiz bir sürücü tarafından ezildi."
 L.search_dmg_other = "Bu teröristin ölümünün belirli bir nedenini bulamazsın."
 
-L.search_floor_antlions = "Vücudun her yerinde hala antlionlar var. Zemin onlarla kaplı olmalı."
+L.search_floor_antlions = "Vücudun her yerinde hala kum böcekleri var. Zemin onlarla kaplı olmalı."
 L.search_floor_bloodyflesh = "Bu vücuttaki kan eski ve iğrenç görünüyor. Ayakkabılarına yapışmış küçük kanlı et parçaları bile var."
 L.search_floor_concrete = "Ayakkabılarını ve dizlerini gri toz kaplamış. Olay yerinin beton zemini varmış gibi görünüyor."
 L.search_floor_dirt = "Toprak gibi kokuyor. Muhtemelen kurbanın ayakkabılarına yapışan topraktan kaynaklanıyor."
@@ -1858,27 +1863,27 @@ L.search_floor_flesh = "Kurbanın giysileri biraz nemli geliyor. Sanki ıslak bi
 L.search_floor_grate = "Kurbanın derisi bifteğe benziyor. Belli bir sırada kalın çizgiler kurbanın her yerinde görülüyor. Izgaranın üzerinde mi dinlendiler?"
 L.search_floor_alienflesh = "Sence uzaylı eti mi? Kulağa biraz tuhaf geliyor ama dedektif yardımcısı kitabınız onu olası bir zemin yüzeyi olarak listeliyor."
 L.search_floor_snow = "İlk bakışta giysileri sadece ıslak ve buz gibi geliyor ama kenarlardaki beyaz köpüğü gördüğünüzde anlarsınız. Bu kar!"
-L.search_floor_plastic = "'Ah, bu acıtmış olmalı.' Cesetleri yanıklarla kaplıdır. Plastik bir yüzey üzerinde kayarken meydana gelenlere benziyorlar."
-L.search_floor_metal = "En azından artık öldükleri için tetanoz olamazlar. Yaralarını pas kaplıyor. Muhtemelen metal bir yüzeyde öldüler."
-L.search_floor_sand = "Küçük küçük pürüzlü taşlar soğuk cesetlerine yapışmış. Kumsaldaki kaba kum gibi. Ahh, her yere bulaşıyor!"
+L.search_floor_plastic = "'Ah, bu acıtmış olmalı.' Cesedi yanıklarla kaplı. Plastik bir yüzey üzerinde kayarken meydana gelenlere benziyor."
+L.search_floor_metal = "En azından artık öldüğü için tetanoz olamazlar. Yaralarını pas kaplıyor. Muhtemelen metal bir yüzeyde öldüler."
+L.search_floor_sand = "Küçük küçük pürüzlü taşlar soğuk cesedine yapışmış. Kumsaldaki kaba kum gibi. Ahh, her yere bulaşıyor!"
 L.search_floor_foliage = "Doğa harikadır. Kurbanın kanlı yaraları, neredeyse gizlenecek kadar yeşilliklerle kaplı."
-L.search_floor_computer = "Bip-bup. Cesetleri bilgisayar yüzeyiyle kaplı! Bu nasıl görünüyor diye sorabilirsiniz. Ee, yani!"
+L.search_floor_computer = "Bip-bup. Cesedi bilgisayar yüzeyiyle kaplı! Bu nasıl görünüyor diye sorabilirsiniz. Ee, yani!"
 L.search_floor_slosh = "Islak ve hatta belki biraz sümüksü. Tüm vücudu bununla kaplı ve kıyafetleri sırılsıklam. Çok pis kokuyor!"
-L.search_floor_tile = "Küçük parçalar derilerine yapışmış. Darbe aldığında paramparça olan yer fayanslarının parçaları gibi."
+L.search_floor_tile = "Küçük parçalar derisine yapışmış. Darbe aldığında paramparça olan yer fayanslarının parçaları gibi."
 L.search_floor_grass = "Taze kesilmiş çimen gibi kokuyor. Koku neredeyse kan ve ölüm kokusunu bastırıyor."
 L.search_floor_vent = "Vücudunu hissederken taze bir hava esintisi hissediyorsun. Havalandırmada ölüp yanlarında hava mı aldılar?"
 L.search_floor_wood = "Bir parke zeminde oturup düşüncelere dalmaktan daha güzel ne olabilir? En azından kaderi ahşap bir zeminde ölü yatmak!"
 L.search_floor_default = "Bu çok basit, çok normal görünüyor. Ne görüyorsanız o gibi. Yüzeyin türü hakkında hiçbir şey söyleyemiyorsunuz."
-L.search_floor_glass = "Cesetleri birçok kanlı kesikle kaplı. Bazılarında cam kırıkları sıkışmış ve size oldukça tehditkar görünüyor."
+L.search_floor_glass = "Cesedi birçok kanlı kesikle kaplı. Bazılarında cam kırıkları sıkışmış ve size oldukça tehditkâr görünüyor."
 L.search_floor_warpshield = "Warpshield'den yapılmış bir zemin mi? Evet, biz de senin kadar şaşkınız ama notlarımız bunu açıkça belirtiyor. Warpshield."
 
 L.search_water_1 = "Kurbanın ayakkabıları ıslak, ancak geri kalanı kuru görünüyor. Muhtemelen ayakları suyun içindeyken öldürüldüler."
 L.search_water_2 = "Kurbanın ayakkabıları sırılsıklam olmuş. Öldürülmeden önce suda dolaştılar mı?"
 L.search_water_3 = "Cesedin tamamı ıslak ve şişmiş. Muhtemelen tamamen su altındayken öldüler."
 
-L.search_weapon = "Görünüşe göre onları öldürmek için bir {weapon} kullanılmış."
+L.search_weapon = "Görünüşe göre onu öldürmek için bir {weapon} kullanılmış."
 L.search_head = "Ölümcül yara bir kafa vuruşuymuş. Çığlık atacak zaman yok."
-L.search_time = "Siz aramayı yapmadan bir süre önce öldüler."
+L.search_time = "Siz aramayı yapmadan bir süre önce öldü."
 L.search_dna = "Bir DNA Tarayıcısı ile katilin DNA'sının bir örneğini alın. DNA örneği bir süre sonra çürüyecek."
 
 L.search_kills1 = "{player} oyuncusunun ölümünü doğrulayan bir leş listesi buldun."
@@ -1933,7 +1938,7 @@ L.search_title_kills = "Kurbanın ölüm listesi"
 L.search_title_eyes = "Katilin gölgesi"
 L.search_title_floor = "Olay yerinin zemini"
 L.search_title_credits = "{credits} Ekipman kredisi"
-L.search_title_water = "Su seviyesi {level}"
+L.search_title_water = "Su düzeyi {level}"
 L.search_title_policingrole_report_confirm = "Ölümü bildirmeyi onayla"
 L.search_title_policingrole_confirm_disabled = "Ceset bildir"
 L.search_title_spectator = "İzleyicisin"
@@ -1963,16 +1968,16 @@ L.label_grenade_trajectory_ui = "Bomba yörüngesi göstergesi"
 
 -- 2023-10-23
 L.label_hud_pulsate_health_enable = "Sağlık %25'in altındayken sağlık göstergesini titret"
-L.header_hud_elements_customize = "Arayüz Öğelerini Özelleştir"
-L.help_hud_elements_special_settings = "Bunlar, kullanılan arayüz öğeleri için özel ayarlardır."
+L.header_hud_elements_customize = "Arayüz Ögelerini Özelleştir"
+L.help_hud_elements_special_settings = "Bunlar, kullanılan arayüz ögeleri için özel ayarlardır."
 
 -- 2023-10-25
 L.help_keyhelp = [[
-Tuş atama yardımcıları, oyuncuya her zaman güncel tuş atamalarını gösteren ve özellikle yeni oyuncular için yararlı olan bir kullanıcı arayüzü öğesinin bir parçasıdır. Üç farklı türde tuş atama vardır.
+Tuş atama yardımcıları, oyuncuya her zaman güncel tuş atamalarını gösteren ve özellikle yeni oyuncular için yararlı olan bir kullanıcı arayüzü ögesinin bir parçasıdır. Üç farklı türde tuş atama vardır.
 
 Çekirdek: Bunlar, TTT2'de bulunan en önemli atamaları içerir. Onlar olmadan oyunu tam potansiyeliyle oynamak zordur.
 Ekstra Core'a benzer, ancak her zaman onlara ihtiyacınız yoktur. Sohbet, ses veya el feneri gibi şeyler içerirler. Yeni oyuncuların bunu etkinleştirmesi yararlı olabilir.
-Bazı ekipman öğelerinin kendi atamaları vardır, bunlar bu kategoride gösterilmiştir.
+Bazı ekipman ögelerinin kendi atamaları vardır, bunlar bu kategoride gösterilmiştir.
 
 Puan tablosu görünür olduğunda devre dışı kategoriler hala gösterilir.]]
 
@@ -2025,7 +2030,7 @@ L.crowbar_help_secondary = "Oyuncuları it"
 
 -- 2023-10-27
 L.help_HUD_enable_description = [[
-Tuş yardımcısı veya kenar çubuğu gibi bazı arayüz öğeleri, puan tablosu açıkken ayrıntılı bilgi gösterir. Bu, dağınıklığı azaltmak için devre dışı bırakılabilir.]]
+Tuş yardımcısı veya kenar çubuğu gibi bazı arayüz ögeleri, puan tablosu açıkken ayrıntılı bilgi gösterir. Bu, dağınıklığı azaltmak için devre dışı bırakılabilir.]]
 L.label_HUD_enable_description = "Puan tablosu açıkken açıklamaları etkinleştir"
 L.label_HUD_enable_box_blur = "Arayüz kutusu arka plan bulanıklığını etkinleştir"
 
@@ -2113,18 +2118,18 @@ L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
 
 -- 2023-12-19
 L.builtin_marker = "Bütünleşik."
-L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir öğedir!"
-L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
+L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir ögedir!"
+L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir ögedir!"
 L.header_equipment_info = "Ekipman bilgisi"
 
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[Bir silahın temel hasar değerini bu faktörle çarpar.
 Bir pompalı için bu, her bir saçmayı etkileyecektir.
 Bir tüfek için bu sadece kurşunu etkiler.
-Afacan Peri için bu, her bir "güm" ü ve son patlamayı etkileyecektir.
+Afacan Peri için bu, her bir "güm"ü ve son patlamayı etkileyecektir.
 
 0.5 = Hasar miktarının yarısını ver.
-2 = Hasar miktarının iki katı kadar hasar ver.
+2   = Hasar miktarının iki katı kadar hasar ver.
 
 Not: Bazı silahlar bu değiştiricinin etkisiz kalmasına neden olan bu değeri kullanmayabilir.]]
 
@@ -2167,8 +2172,8 @@ L.grenade_fuse = "ATEŞLE"
 -- 2024-01-25
 L.header_roles_magnetostick = "Manyeto Çubuğu"
 L.label_roles_ragdoll_pinning = "Ceset sabitlemeyi etkinleştir"
-L.magneto_stick_help_carry_rag_pin = "Ceseti sabitle"
-L.magneto_stick_help_carry_rag_drop = "Ceseti bırak"
+L.magneto_stick_help_carry_rag_pin = "Cesedi sabitle"
+L.magneto_stick_help_carry_rag_drop = "Cesedi bırak"
 L.magneto_stick_help_carry_prop_release = "Nesneyi sal"
 L.magneto_stick_help_carry_prop_drop = "Nesneyi bırak"
 
@@ -2201,9 +2206,9 @@ L.label_enable_sound_interact = "Etkileşim seslerini etkinleştir"
 L.label_enable_sound_buttons = "Düğme seslerini etkinleştir"
 L.label_enable_sound_message = "Mesaj seslerini etkinleştir"
 
-L.label_level_sound_interact = "Etkileşim ses seviyesi çarpanı"
-L.label_level_sound_buttons = "Düğme ses seviyesi çarpanı"
-L.label_level_sound_message = "Mesaj ses seviyesi çarpanı"
+L.label_level_sound_interact = "Etkileşim ses düzeyi çarpanı"
+L.label_level_sound_buttons = "Düğme ses düzeyi çarpanı"
+L.label_level_sound_message = "Mesaj ses düzeyi çarpanı"
 
 -- 2024-03-07
 L.label_crosshair_static_gap_length = "Sabit nişangâh boşluk uzunluğunu etkinleştir"
@@ -2400,7 +2405,7 @@ L.choice_session_limits_mode_3 = "mod 3: sadece raunt sınırı"
 
 -- 2024-12-30
 L.searchbar_roles_placeholder = "Rol ara..."
-L.label_menu_search_no_items = "Aramanızla eşleşen bir öğe bulunamadı."
+L.label_menu_search_no_items = "Aramanızla eşleşen bir öge bulunamadı."
 
 L.submenu_roles_overview_title = "Rollere Genel Bakış (BENİ OKU)"
 
@@ -2793,36 +2798,36 @@ L.help_rolelayering_enable = "Simgenin etrafındaki kırmızı ve yeşil kenarl�
 L.label_hud_show_team_name = "Rol adının yanında takım adını göstermeyi etkinleştir"
 
 -- 2025-01-31
---L.radio_desc = [[
---Plays sounds to distract or deceive.
---
---Place the radio somewhere, and then remotely interact with it to choose sounds to play.]]
+L.radio_desc = [[
+Kandırmak veya dikkat dağıtmak için ses çalar.
+
+Radyoyu herhangi bir yere koyun ve uzaktan istediğiniz sesi seçerek çalmasını sağlayın.]]
 
 -- 2025-02-13
---L.help_c4_radius = [[
---C4 uses two different zones to calculate the damage of its explosion:
---
---Players within the "kill zone" will receive the full damage of the devastating explosion.
---
---Players within the "damage zone" (and outside the "kill zone") will receive a percentage of the damage based on their position between the borders of both zones.]]
+L.help_c4_radius = [[
+C4 patlama hasarını hesaplamak için iki alanı dikkate alır:
 
---L.label_c4_radius_inner = "C4 Kill Zone radius"
---L.label_c4_radius = "C4 Damage Zone radius"
+"Ölüm Alanında" olan oyuncular yıkıcı patlamadan tam hasar alır.
+
+"Hasar Alanında" olan oyuncular ve "ölüm alanının" dışında kalan oyuncular iki alanın sınırında nerede olduklarına göre yüzdelik bir hasar alacaktır.]]
+
+L.label_c4_radius_inner = "C4 Ölüm Alanı Yarıçapı"
+L.label_c4_radius = "C4 Hasar Alanı Yarıçapı"
 
 -- 2025-02-21
 L.length_in_meters = "{length}m"
---L.length_in_yards = "{length}yd"
---L.length_in_feet = "{length}ft"
+L.length_in_yards = "{length}yd"
+L.length_in_feet = "{length}ft"
 
---L.label_distance_unit = "Preferred unit of length for distance displays"
---L.choice_distance_unit_0 = "Inches"
---L.choice_distance_unit_1 = "Meters"
---L.choice_distance_unit_2 = "Yards"
---L.choice_distance_unit_3 = "Feet"
+L.label_distance_unit = "Tercih edilen uzunluk birimi göstergesi"
+L.choice_distance_unit_0 = "İnç"
+L.choice_distance_unit_1 = "Metre"
+L.choice_distance_unit_2 = "Yard"
+L.choice_distance_unit_3 = "Fit"
 
 -- 2025-03-06
---L.label_armor_block_clubdmg = "Enable armor blocking crowbar damage"
+L.label_armor_block_clubdmg = "Zırhın levye hasarını engellemesini etkinleştir"
 
 -- 2025-03-10
---L.label_sprint_stamina_cooldown = "Stamina cooldown time"
---L.label_sprint_stamina_forwards_only = "Disallow sprinting backwards or laterally"
+L.label_sprint_stamina_cooldown = "Enerji bekleme süresi"
+L.label_sprint_stamina_forwards_only = "Geriye veya yana doğru koşmaya izin verme"

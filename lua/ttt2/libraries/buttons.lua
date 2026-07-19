@@ -12,6 +12,7 @@ button = {}
 local validButtons = {
     "func_button",
     "func_rot_button",
+    "momentary_rot_button",
 }
 
 if SERVER then

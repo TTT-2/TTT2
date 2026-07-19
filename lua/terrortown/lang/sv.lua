@@ -51,6 +51,8 @@ L.credit_kill = "Du har blivit tilldelad {num} kredit(er) för att ha dödat en 
 -- Karma
 L.karma_dmg_full = "Din Karma är {amount}, så du utdelar full skada denna runda!"
 L.karma_dmg_other = "Din Karma är {amount}. Till följd av detta är skadan du utdelar reducerad med {num}%"
+--L.karma_hp_full = "Your Karma is {amount}, so you get full HP this round!"
+--L.karma_hp_other = "Your Karma is {amount}. As a result your maximum HP is reduced by {num} HP"
 
 -- Body identification messages
 L.body_found = "{finder} fann {victim}s kropp. {role}"
@@ -1716,6 +1718,9 @@ L.hilite_win_traitors = "FÖRRÄDISK VINST"
 --L.label_doors_prop_health = "Destructed door health"
 --L.label_minimum_players = "Minimum player amount to start round"
 --L.label_karma = "Enable Karma"
+--L.label_karma_damage_scaling = "Damage scaling"
+--L.label_karma_health_scaling = "Health scaling"
+--L.label_karma_health_min = "Minimum health"
 --L.label_karma_strict = "Enable strict Karma"
 --L.label_karma_starting = "Starting Karma"
 --L.label_karma_max = "Maximum Karma"

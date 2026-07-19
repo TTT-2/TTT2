@@ -153,6 +153,15 @@ function GM:PlayerSpawn(ply)
 
     ply:SetupHands()
 
+    if KARMA.IsHealthScalingEnabled() then
+        local health = KARMA.GetHealthMin()
+        local df = ply:GetDamageFactor() or 1
+
+        health = health + (100 - health) * df
+        ply:SetMaxHealth(health)
+        ply:SetHealth(health)
+    end
+
     ply:SetLastSpawnPosition(ply:GetPos())
     ply:SetLastDeathPosition(nil)
 
@@ -397,8 +406,6 @@ function GM:KeyPress(ply, key)
 
     -- Do not allow the spectator to gather information if they're about to revive.
     if ply:IsReviving() then
-        LANG.Msg(ply, "spec_about_to_revive", nil, MSG_MSTACK_WARN)
-
         return
     end
 
@@ -1483,8 +1490,13 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
         and gameloop.GetRoundState() == ROUND_ACTIVE
         and math.floor(dmginfo:GetDamage()) > 0
     then
-        if KARMA.IsEnabled() and ent ~= att and not dmginfo:IsDamageType(DMG_SLASH) then
+        if
+            KARMA.IsEnabled()
+            and KARMA.IsDamageScalingEnabled()
+            and ent ~= att
             -- scale everything to karma damage factor except the knife, because it assumes a kill
+            and not dmginfo:IsDamageType(DMG_SLASH)
+        then
             dmginfo:ScaleDamage(att:GetDamageFactor())
         end
 
