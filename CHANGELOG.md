@@ -6,7 +6,21 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
-- Added `plymeta:HasExternalGestureActive()` to check if an external gesture is active (by @mexikoedi)
+- Added momentary_rot_button to targetID (by @MrXonte)
+
+### Fixed
+
+- Fixed markerVision not relaying engine-native entities out of PVS (by @MrXonte)
+- Fixed thirdperson animations from third-party addons (by @mexikoedi)
+
+## [v0.14.6b](https://github.com/TTT-2/TTT2/tree/v0.14.6b) (2026-04-06)
+
+### Added
+
+- Karma health scaling (by @coookies369)
+  - Option to scale a player's max HP by their karma
+  - Lower karma values scale HP towards `ttt_karma_health_min`
+  - Option to disable karma damage scaling
 
 ### Changed
 
@@ -28,8 +42,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed vFire explosions still killing players with `NoExplosionDamage` equipped (by @TW1STaL1CKY)
 - Fixed vFire explosions sometimes not damaging entities in the way they should, like explosive barrels (by @TW1STaL1CKY)
 - Fixed an issue where overhead icons from `TTT2ModifyOverheadIcon` were ignored when `shouldDrawDefault` was false (by @mexikoedi)
+- Fixed pressing keys while being revived spamming your HUD with warnings (by @archrbx)
 - Fixed `SetIronsights` nil value error (by @mexikoedi)
-- Fixed thirdperson animations from third-party addons (by @mexikoedi)
 
 ### Removed / Breaking Changes
 
