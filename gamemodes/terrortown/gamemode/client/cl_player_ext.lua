@@ -41,26 +41,16 @@ local function IsCustomSlotOverridden(ply)
         return false
     end
 
-    -- if voiceSeq is invalid, the model doesn't support voice gesture, so no collision can occur
-    local voiceSeq = ply:SelectWeightedSequence(ACT_GMOD_IN_CHAT)
-    if not voiceSeq or voiceSeq < 0 then
-        return false
-    end
-
     -- if currentSeq is invalid, the layer is not active, so no collision can occur
     local currentSeq = ply:GetLayerSequence(slot)
     if not currentSeq or currentSeq < 0 then
         return false
     end
 
-    -- if act is valid and not ACT_GMOD_IN_CHAT, the layer is overridden by another gesture
     local act = ply:GetSequenceActivity(currentSeq)
-    if act and act >= 0 and act ~= ACT_GMOD_IN_CHAT then
-        return true
-    end
 
-    -- if act is invalid fallback to sequence comparison
-    return currentSeq ~= voiceSeq
+    -- if act isn't ACT_GMOD_IN_CHAT, the layer is being used by another gesture
+    return act ~= ACT_GMOD_IN_CHAT
 end
 
 -- act -> gesture runner fn
