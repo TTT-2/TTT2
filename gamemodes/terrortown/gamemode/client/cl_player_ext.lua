@@ -53,7 +53,13 @@ local function IsCustomSlotOverridden(ply)
         return false
     end
 
-    -- if currentSeq is different from voiceSeq, then another gesture has taken over
+    -- if act is valid and not the voice gesture, the layer is overridden by another gesture
+    local act = ply:GetSequenceActivity(currentSeq)
+    if act and act >= 0 and act ~= ACT_GMOD_IN_CHAT then
+        return true
+    end
+
+    -- if act is invalid fallback to sequence comparison
     return currentSeq ~= voiceSeq
 end
 
