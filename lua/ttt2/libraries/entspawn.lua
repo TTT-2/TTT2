@@ -77,7 +77,7 @@ function entspawn.SpawnRandomAmmo(ent)
     }
 
     local ammoForTypes, ammo = WEPS.GetAmmoForSpawnTypes()
-    entspawn.SpawnEntities(spawns, ammoForTypes, ammo, AMMO_TYPE_RANDOM)
+    entspawn.SpawnEntities(spawns, ammoForTypes, ammo, AMMO_TYPE_RANDOM, true)
 end
 
 local function RemoveEntities(entTable, spawnTable, spawnType)
@@ -140,8 +140,9 @@ end
 -- @param table entsForTypes A table that assigns the ent types to a list of possible entities
 -- @param table entTable A single indexed list that contains all entites without type grouping
 -- @param number randomType The spawn type that should be used as random
+-- @param[opt] boolean fallbackToRandom If true, missing specific entity types fall back to a random entity
 -- @realm server
-function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
+function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType, fallbackToRandom)
     if not spawns then
         return
     end
@@ -159,6 +160,10 @@ function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
                 selectedEnt = GetRandomEntityFromTable(entTable)
             else
                 selectedEnt = GetRandomEntityFromTable(entsForTypes[entType])
+
+                if not selectedEnt and fallbackToRandom then
+                    selectedEnt = GetRandomEntityFromTable(entTable)
+                end
             end
 
             if not selectedEnt then
@@ -292,7 +297,7 @@ function entspawn.HandleSpawns()
         -- done like this to improve the performance for random weapon spawns.
         local ammoForTypes, ammo = WEPS.GetAmmoForSpawnTypes()
 
-        entspawn.SpawnEntities(ammoSpawns, ammoForTypes, ammo, AMMO_TYPE_RANDOM)
+        entspawn.SpawnEntities(ammoSpawns, ammoForTypes, ammo, AMMO_TYPE_RANDOM, true)
 
         -- SPAWN PLAYER
         entspawn.SpawnPlayers(false)
