@@ -16,9 +16,13 @@ AccessorFunc(PANEL, "m_bDoSort", "SortItems", FORCE_BOOL)
 ---
 -- @ignore
 function PANEL:Init()
-    self.DropButton = vgui.Create("DPanel", self)
+    self.DropButton = vgui.Create("TTT2:DPanel", self)
     self.DropButton:SetMouseInputEnabled(false)
     self.DropButton.ComboBox = self
+
+    self.GetDisabled = function(slf) -- TODO: this is hacky to use builtin rendering function
+        return not slf:IsEnabled()
+    end
 
     self.DropButton.Paint = function(panel, w, h)
         derma.SkinHook("Paint", "ComboDownArrow", panel, w, h)
@@ -40,34 +44,34 @@ function PANEL:Init()
 
     self.valueType = nil
 
-    self.slaves = {}
+    self.followers = {}
 
     local value, _ = self:GetSelected()
 
-    self:UpdateSlaves(value ~= nil)
+    self:UpdateFollowers(value ~= nil)
 end
 
 ---
--- @param Panel slave
+-- @param Panel follower
 -- @realm client
-function PANEL:AddSlave(slave)
-    if not IsValid(slave) then
+function PANEL:AddFollower(follower)
+    if not IsValid(follower) then
         return
     end
 
-    self.slaves[#self.slaves + 1] = slave
+    self.followers[#self.followers + 1] = follower
 
     local value, _ = self:GetSelected()
 
-    slave:SetEnabled(value ~= nil)
+    follower:SetEnabled(value ~= nil)
 end
 
 ---
 -- @param boolean val
 -- @realm client
-function PANEL:UpdateSlaves(val)
-    for i = 1, #self.slaves do
-        self.slaves[i]:SetEnabled(val)
+function PANEL:UpdateFollowers(val)
+    for i = 1, #self.followers do
+        self.followers[i]:SetEnabled(val)
     end
 end
 
@@ -249,7 +253,7 @@ function PANEL:ChooseOptionID(index, ignoreCallbackEnabledVars)
     self:SetText(choice.title)
     self:OnSelect(index, value, choice.data)
 
-    self:UpdateSlaves(value ~= nil)
+    self:UpdateFollowers(value ~= nil)
 
     self:CloseMenu()
 
@@ -606,4 +610,4 @@ function PANEL:GetResetButton()
     return self.resetButton
 end
 
-derma.DefineControl("DComboBoxTTT2", "", PANEL, "DButtonTTT2")
+derma.DefineControl("DComboBoxTTT2", "", PANEL, "TTT2:DButton")

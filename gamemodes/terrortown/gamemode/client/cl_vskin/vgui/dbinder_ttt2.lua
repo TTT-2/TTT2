@@ -97,4 +97,4 @@ end
 -- @realm client
 function PANEL:OnChange() end
 
-derma.DefineControl("DBinderTTT2", "", PANEL, "DButtonTTT2")
+derma.DefineControl("DBinderTTT2", "", PANEL, "TTT2:DButton")

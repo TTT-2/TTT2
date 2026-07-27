@@ -22,13 +22,13 @@ function PANEL:Init()
 
     -- On focus of textbox, enable input
     self.TextArea.OnGetFocus = function(textarea)
-        util.getHighestPanelParent(self):SetKeyboardInputEnabled(true)
+        util.GetHighestPanelParent(self):SetKeyboardInputEnabled(true)
         self:EnableTextBox(true)
     end
 
     -- On focus loss, disable input and set new values from textbox
     self.TextArea.OnLoseFocus = function(textarea)
-        util.getHighestPanelParent(self):SetKeyboardInputEnabled(false)
+        util.GetHighestPanelParent(self):SetKeyboardInputEnabled(false)
         self:EnableTextBox(false)
         self:SetValueFromTextBox()
     end
@@ -509,4 +509,4 @@ function PANEL:SetEnabled(b)
     FindMetaTable("Panel").SetEnabled(self, b)
 end
 
-derma.DefineControl("DNumSliderTTT2", "", PANEL, "DPanelTTT2")
+derma.DefineControl("DNumSliderTTT2", "", PANEL, "TTT2:DPanel")

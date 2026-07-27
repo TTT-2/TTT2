@@ -12,7 +12,7 @@ local font = "DermaTTT2Text"
 AccessorFunc(PANEL, "heightMult", "HeightMult")
 
 ---
--- @accessor bool
+-- @accessor boolean
 -- @realm client
 AccessorFunc(PANEL, "isOnFocus", "IsOnFocus")
 
@@ -340,7 +340,7 @@ end
 function PANEL:SetEnabled(b)
     self.TextArea:SetEnabled(b)
 
-    FindMetaTable("DPanelTTT2").SetEnabled(self, b)
+    FindMetaTable("DPanel").SetEnabled(self, b)
 end
 
-derma.DefineControl("DTextEntryTTT2", "", PANEL, "DPanelTTT2")
+derma.DefineControl("DTextEntryTTT2", "", PANEL, "DPanel")

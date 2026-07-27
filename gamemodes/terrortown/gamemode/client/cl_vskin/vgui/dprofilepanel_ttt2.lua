@@ -314,5 +314,5 @@ derma.DefineControl(
     "DProfilePanelTTT2",
     "A special box with a 3D model or model",
     PANEL,
-    "DLabelTTT2"
+    "TTT2:DLabel"
 )
