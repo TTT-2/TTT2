@@ -268,7 +268,7 @@ local function CacheAllPlayerAvatars(ply)
 
     for i = 1, #plys do
         local plyid64 = plys[i]:SteamID64()
-        draw.RefreshAvatars(plyid64)
+        playeravatar.Refresh(plyid64)
     end
 end
 
