@@ -18,10 +18,6 @@ local function GetPlayerSize(ply)
     return top - bottom
 end
 
----
--- @realm server
-local cvCustomModels = CreateConVar("ttt2_use_custom_models", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
-
 local initialDefaultStates = {
     selected = {
         ["css_phoenix"] = true,
@@ -271,7 +267,7 @@ function playermodels.GetRandomPlayerModel()
     local availableModels = playermodels.GetSelectedModels()
     local sizeAvailableModels = #availableModels
 
-    if cvCustomModels:GetBool() and sizeAvailableModels > 0 then
+    if customization.cv.playermodels.customModels:GetBool() and sizeAvailableModels > 0 then
         local modelPaths = playerManagerAllValidModels()
         local randomModel = availableModels[mathRandom(sizeAvailableModels)]
 
