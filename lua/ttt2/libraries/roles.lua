@@ -665,3 +665,98 @@ function roles.SetBaseRole(roleTable, baserole)
         )
     end
 end
+
+local networkRequestID = 0
+local networkReceiveFuncs = {}
+
+if SERVER then
+    util.AddNetworkString("TTT2RequestEnabledRoles")
+
+    ---
+    -- Checks whether a role is part of the current game. Roles that are not enabled cannot be
+    -- assigned to any player and should not be presented to players.
+    -- @note Non-distributable roles have no enabled convar, they are handed out during a round
+    -- and are therefore considered to be enabled.
+    -- @param ROLE roleData The role to check
+    -- @param boolean newRolesEnabled Whether roles added on top of the built-in ones are enabled
+    -- @return boolean Whether the role is part of the current game
+    -- @realm server
+    local function IsRoleActive(roleData, newRolesEnabled)
+        if roleData.index == ROLE_INNOCENT or roleData.index == ROLE_TRAITOR then
+            return true
+        end
+
+        if roleData.notSelectable then
+            return true
+        end
+
+        if roleData ~= roles.DETECTIVE and not newRolesEnabled then
+            return false
+        end
+
+        local enabledConVar = GetConVar("ttt_" .. roleData.name .. "_enabled")
+
+        return enabledConVar ~= nil and enabledConVar:GetBool()
+    end
+
+    net.Receive("TTT2RequestEnabledRoles", function(_, ply)
+        local requestID = net.ReadUInt(8)
+        local newRolesEnabled = GetConVar("ttt_newroles_enabled"):GetBool()
+        local activeRoles = {}
+
+        for _, roleData in pairs(roles.roleList) do
+            if roleData.isAbstract or roleData.index == ROLE_NONE then
+                continue
+            end
+
+            if IsRoleActive(roleData, newRolesEnabled) then
+                activeRoles[#activeRoles + 1] = roleData.index
+            end
+        end
+
+        net.Start("TTT2RequestEnabledRoles")
+        net.WriteUInt(requestID, 8)
+        net.WriteUInt(#activeRoles, 8)
+
+        for i = 1, #activeRoles do
+            net.WriteUInt(activeRoles[i], ROLE_BITS)
+        end
+
+        net.Send(ply)
+    end)
+else
+    net.Receive("TTT2RequestEnabledRoles", function()
+        local requestID = net.ReadUInt(8)
+        local roleCount = net.ReadUInt(8)
+        local activeRoles = {}
+
+        for i = 1, roleCount do
+            activeRoles[net.ReadUInt(ROLE_BITS)] = true
+        end
+
+        local callback = networkReceiveFuncs[requestID]
+
+        if not callback then
+            return
+        end
+
+        networkReceiveFuncs[requestID] = nil
+
+        callback(activeRoles)
+    end)
+
+    ---
+    -- Requests a table of all roles that are currently part of the game on the server. Roles
+    -- that are disabled in the role settings are not included, as they cannot be assigned.
+    -- @note The server is authoritative for the role settings, which is why they are requested.
+    -- @param function callback Called with a table of role indices that are part of the game
+    -- @realm client
+    function roles.RequestEnabledRoles(callback)
+        networkRequestID = networkRequestID % 255 + 1
+        networkReceiveFuncs[networkRequestID] = callback
+
+        net.Start("TTT2RequestEnabledRoles")
+        net.WriteUInt(networkRequestID, 8)
+        net.SendToServer()
+    end
+end

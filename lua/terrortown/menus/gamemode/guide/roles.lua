@@ -41,80 +41,24 @@ end
 
 ---
 -- Returns all roles that are currently part of the game. Roles that are disabled in the
--- role settings are not included, as they cannot be assigned to any player. The values are
--- requested from the server, as the server is authoritative for these convars.
+-- role settings are not included, as they cannot be assigned to any player.
 -- @param function callback Called with the list of roles that should be shown
 -- @realm client
 local function GetVisibleRoles(callback)
-    local sortedRoles = roles.GetSortedRoles()
+    roles.RequestEnabledRoles(function(activeRoles)
+        local visibleRoles = {}
+        local sortedRoles = roles.GetSortedRoles()
 
-    cvars.ServerConVarGetValue("ttt_newroles_enabled", function(newRolesSuccess, newRolesValue)
-        local newRolesEnabled = not newRolesSuccess or tobool(newRolesValue)
-        local visible = {}
-        local rolesToCheck = {}
-
+        -- preserve the order of the sorted roles
         for i = 1, #sortedRoles do
             local roleData = sortedRoles[i]
 
-            if roleData.index == ROLE_NONE then
-                continue
-            end
-
-            if roleData.index == ROLE_INNOCENT or roleData.index == ROLE_TRAITOR then
-                visible[roleData.index] = true
-            elseif roleData.notSelectable then
-                -- these roles are not distributed, they are handed out during the round and
-                -- have no enabled convar, so they are always part of the game
-                visible[roleData.index] = true
-            elseif not roleData.builtin and not newRolesEnabled then
-                -- roles added on top of the built-in ones are disabled entirely
-                visible[roleData.index] = false
-            else
-                rolesToCheck[#rolesToCheck + 1] = roleData
+            if activeRoles[roleData.index] then
+                visibleRoles[#visibleRoles + 1] = roleData
             end
         end
 
-        local roleCount = #rolesToCheck
-        local pending = roleCount
-
-        local function Finish()
-            local visibleRoles = {}
-
-            -- preserve the order of the sorted roles
-            for i = 1, #sortedRoles do
-                local roleData = sortedRoles[i]
-
-                if visible[roleData.index] then
-                    visibleRoles[#visibleRoles + 1] = roleData
-                end
-            end
-
-            callback(visibleRoles)
-        end
-
-        if pending < 1 then
-            Finish()
-
-            return
-        end
-
-        for i = 1, roleCount do
-            local roleData = rolesToCheck[i]
-
-            cvars.ServerConVarGetValue(
-                "ttt_" .. roleData.name .. "_enabled",
-                function(success, value)
-                    -- a role without an enabled convar is not gated by one
-                    visible[roleData.index] = not success or tobool(value)
-
-                    pending = pending - 1
-
-                    if pending < 1 then
-                        Finish()
-                    end
-                end
-            )
-        end
+        callback(visibleRoles)
     end)
 end
 
