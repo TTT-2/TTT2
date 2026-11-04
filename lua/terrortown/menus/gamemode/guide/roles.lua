@@ -40,6 +40,85 @@ local function CreateWrappedLabel(parent, text, font)
 end
 
 ---
+-- Returns all roles that are currently part of the game. Roles that are disabled in the
+-- role settings are not included, as they cannot be assigned to any player. The values are
+-- requested from the server, as the server is authoritative for these convars.
+-- @param function callback Called with the list of roles that should be shown
+-- @realm client
+local function GetVisibleRoles(callback)
+    local sortedRoles = roles.GetSortedRoles()
+
+    cvars.ServerConVarGetValue("ttt_newroles_enabled", function(newRolesSuccess, newRolesValue)
+        local newRolesEnabled = not newRolesSuccess or tobool(newRolesValue)
+        local visible = {}
+        local rolesToCheck = {}
+
+        for i = 1, #sortedRoles do
+            local roleData = sortedRoles[i]
+
+            if roleData.index == ROLE_NONE then
+                continue
+            end
+
+            if roleData.index == ROLE_INNOCENT or roleData.index == ROLE_TRAITOR then
+                visible[roleData.index] = true
+            elseif roleData.notSelectable then
+                -- these roles are not distributed, they are handed out during the round and
+                -- have no enabled convar, so they are always part of the game
+                visible[roleData.index] = true
+            elseif not roleData.builtin and not newRolesEnabled then
+                -- roles added on top of the built-in ones are disabled entirely
+                visible[roleData.index] = false
+            else
+                rolesToCheck[#rolesToCheck + 1] = roleData
+            end
+        end
+
+        local roleCount = #rolesToCheck
+        local pending = roleCount
+
+        local function Finish()
+            local visibleRoles = {}
+
+            -- preserve the order of the sorted roles
+            for i = 1, #sortedRoles do
+                local roleData = sortedRoles[i]
+
+                if visible[roleData.index] then
+                    visibleRoles[#visibleRoles + 1] = roleData
+                end
+            end
+
+            callback(visibleRoles)
+        end
+
+        if pending < 1 then
+            Finish()
+
+            return
+        end
+
+        for i = 1, roleCount do
+            local roleData = rolesToCheck[i]
+
+            cvars.ServerConVarGetValue(
+                "ttt_" .. roleData.name .. "_enabled",
+                function(success, value)
+                    -- a role without an enabled convar is not gated by one
+                    visible[roleData.index] = not success or tobool(value)
+
+                    pending = pending - 1
+
+                    if pending < 1 then
+                        Finish()
+                    end
+                end
+            )
+        end
+    end)
+end
+
+---
 -- Populates the info panel with the details of the given role.
 -- @param Panel parent The parent panel
 -- @param ROLE roleData The role whose details should be displayed
@@ -138,40 +217,42 @@ function CLGAMEMODESUBMENU:Populate(parent)
     local infoPanel = vgui.Create("DScrollPanelTTT2", container)
     infoPanel:Dock(FILL)
 
-    local firstRole, firstRoleButton
-    local sortedRoles = roles.GetSortedRoles()
-
-    for i = 1, #sortedRoles do
-        local roleData = sortedRoles[i]
-
-        if roleData.index == ROLE_NONE then
-            continue
+    GetVisibleRoles(function(visibleRoles)
+        -- the menu can be closed while the role settings are fetched from the server
+        if not IsValid(listPanel) or not IsValid(infoPanel) then
+            return
         end
 
-        local roleButton = vgui.Create("DSubmenuButtonTTT2", listPanel)
-        roleButton:Dock(TOP)
-        roleButton:DockMargin(0, 0, 0, 5)
-        roleButton:SetTitle(roleData.name)
-        roleButton:SetIcon(roleData.iconMaterial, false)
-        roleButton:SetIconBadge(roleData.builtin and builtinIcon)
-        roleButton:SetIconBadgeSize(8)
+        local firstRole, firstRoleButton
 
-        roleButton.PerformLayout = function(panel)
-            panel:SetSize(panel:GetParent():GetWide(), heightRoleButton)
+        for i = 1, #visibleRoles do
+            local roleData = visibleRoles[i]
+
+            local roleButton = vgui.Create("DSubmenuButtonTTT2", listPanel)
+            roleButton:Dock(TOP)
+            roleButton:DockMargin(0, 0, 0, 5)
+            roleButton:SetTitle(roleData.name)
+            roleButton:SetIcon(roleData.iconMaterial, false)
+            roleButton:SetIconBadge(roleData.builtin and builtinIcon)
+            roleButton:SetIconBadgeSize(8)
+
+            roleButton.PerformLayout = function(panel)
+                panel:SetSize(panel:GetParent():GetWide(), heightRoleButton)
+            end
+
+            roleButton.DoClick = function(slf)
+                SelectRole(infoPanel, roleData, slf)
+            end
+
+            if not firstRole then
+                firstRole = roleData
+                firstRoleButton = roleButton
+            end
         end
 
-        roleButton.DoClick = function(slf)
-            SelectRole(infoPanel, roleData, slf)
+        -- preselect the first role so the info panel is never empty
+        if firstRole then
+            SelectRole(infoPanel, firstRole, firstRoleButton)
         end
-
-        if not firstRole then
-            firstRole = roleData
-            firstRoleButton = roleButton
-        end
-    end
-
-    -- preselect the first role so the info panel is never empty
-    if firstRole then
-        SelectRole(infoPanel, firstRole, firstRoleButton)
-    end
+    end)
 end
