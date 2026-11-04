@@ -7,6 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added momentary_rot_button to targetID (by @MrXonte)
+- Added a roles guide to the help menu that lists all available roles and shows their description, team and base role (by @ROODAY)
 
 ### Fixed
 
