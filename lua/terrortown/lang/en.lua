@@ -2850,3 +2850,5 @@ L.label_sprint_stamina_forwards_only = "Disallow sprinting backwards or laterall
 -- 2026-11-04
 L.guide_role_no_description = "No description has been provided for this role."
 L.guide_role_baserole = "Base role: {baserole}"
+L.guide_equipment_no_description = "No description has been provided for this equipment."
+L.guide_equipment_buyable_by = "Buyable by: {roles}"
