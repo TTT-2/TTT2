@@ -77,7 +77,7 @@ function entspawn.SpawnRandomAmmo(ent)
     }
 
     local ammoForTypes, ammo = WEPS.GetAmmoForSpawnTypes()
-    entspawn.SpawnEntities(spawns, ammoForTypes, ammo, AMMO_TYPE_RANDOM)
+    entspawn.SpawnEntities(spawns, ammoForTypes, ammo, AMMO_TYPE_RANDOM, true)
 end
 
 local function RemoveEntities(entTable, spawnTable, spawnType)
@@ -109,7 +109,7 @@ local function RemoveEntities(entTable, spawnTable, spawnType)
 end
 
 local function GetRandomEntityFromTable(ents)
-    if not ents then
+    if not ents or #ents == 0 then
         return
     end
 
@@ -140,8 +140,9 @@ end
 -- @param table entsForTypes A table that assigns the ent types to a list of possible entities
 -- @param table entTable A single indexed list that contains all entites without type grouping
 -- @param number randomType The spawn type that should be used as random
+-- @param[opt] boolean fallbackToRandom Use random entities if a specific spawn type is unavailable
 -- @realm server
-function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
+function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType, fallbackToRandom)
     if not spawns then
         return
     end
@@ -159,6 +160,11 @@ function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
                 selectedEnt = GetRandomEntityFromTable(entTable)
             else
                 selectedEnt = GetRandomEntityFromTable(entsForTypes[entType])
+
+                -- A disabled ammo type still leaves a usable random ammo spawn.
+                if not selectedEnt and fallbackToRandom then
+                    selectedEnt = GetRandomEntityFromTable(entTable)
+                end
             end
 
             if not selectedEnt then
@@ -176,6 +182,11 @@ function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
             spawnedEnt:SetPos(spawn.pos)
             spawnedEnt:SetAngles(spawn.ang)
             spawnedEnt:Spawn()
+
+            if not IsValid(spawnedEnt) then
+                continue
+            end
+
             spawnedEnt:PhysWake()
 
             -- if the spawn has a defined auto ammo spawn, the ammo should be spawned now
@@ -195,7 +206,10 @@ function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
                 ammoEnt:SetPos(pos)
                 ammoEnt:SetAngles(VectorRand():Angle())
                 ammoEnt:Spawn()
-                ammoEnt:PhysWake()
+
+                if IsValid(ammoEnt) then
+                    ammoEnt:PhysWake()
+                end
             end
         end
     end
@@ -292,7 +306,7 @@ function entspawn.HandleSpawns()
         -- done like this to improve the performance for random weapon spawns.
         local ammoForTypes, ammo = WEPS.GetAmmoForSpawnTypes()
 
-        entspawn.SpawnEntities(ammoSpawns, ammoForTypes, ammo, AMMO_TYPE_RANDOM)
+        entspawn.SpawnEntities(ammoSpawns, ammoForTypes, ammo, AMMO_TYPE_RANDOM, true)
 
         -- SPAWN PLAYER
         entspawn.SpawnPlayers(false)

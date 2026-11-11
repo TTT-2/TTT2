@@ -1560,6 +1560,7 @@ L.submenu_administration_inventory_title = "Inventory"
 L.submenu_administration_karma_title = "Karma"
 L.submenu_administration_sprint_title = "Sprinting"
 L.submenu_administration_playersettings_title = "Player Settings"
+L.submenu_administration_ammo_title = "Ammo Settings"
 
 L.header_roles_special_settings = "Special Role Settings"
 L.header_equipment_additional = "Additional Equipment Settings"
@@ -1588,6 +1589,15 @@ L.header_inventory_gernal = "Inventory Size"
 L.header_inventory_pickup = "Inventory Weapon Pickup"
 L.header_sprint_general = "Sprint Settings"
 L.header_playersettings_armor = "Armor System Settings"
+L.header_ammo_administration = "Ammo Settings"
+L.help_ammo_administration = [[
+Reserve ammo is the spare ammo players use to reload their weapons. Set how much players can carry for each ammo type.
+You can also adjust how much ammo each box contains.
+You can also disable specific ammo boxes. A random enabled ammo box will spawn in their place on the map.]]
+L.label_ammo_reserve_max = "Maximum reserve ammo for this ammo type"
+L.label_ammo_entity_class = "Ammo box: {class}"
+L.label_ammo_enable = "Enable map spawns for this ammo box"
+L.label_ammo_box_amount = "Ammo per box"
 
 L.help_killer_dna_range = "When a player is killed by another player, a DNA sample is left on their body. The setting below defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away than this value when the victim dies, no sample will be left on the corpse."
 L.help_killer_dna_basetime = "The base time in seconds until a DNA sample decays, if the killer is 0 Hammer units away. The farther the killer is, the less time will be given to the DNA sample to decay."

@@ -7,6 +7,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added momentary_rot_button to targetID (by @MrXonte)
+- Added Ammo Settings F1 Menu that allows enabling/disabling ammo spawns, setting of max reserve and box ammo (by @MrXonte)
+
+### Changed
+- Ammo Boxes no longer despawn below 25% ammo and less than 25% can be taken out (by @MrXonte)
 
 ### Fixed
 
