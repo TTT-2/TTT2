@@ -32,11 +32,37 @@ local function MakeSimpleRunner(act)
     end
 end
 
+local function IsCustomSlotOverridden(ply)
+    local slot = GESTURE_SLOT_CUSTOM
+
+    -- if weight is 0, the layer is not active, so no collision can occur
+    local weight = ply:GetLayerWeight(slot) or 0
+    if weight <= 0 then
+        return false
+    end
+
+    -- if currentSeq is invalid, the layer is not active, so no collision can occur
+    local currentSeq = ply:GetLayerSequence(slot)
+    if not currentSeq or currentSeq < 0 then
+        return false
+    end
+
+    local act = ply:GetSequenceActivity(currentSeq)
+
+    -- if act isn't ACT_GMOD_IN_CHAT, the layer is being used by another gesture
+    return act ~= ACT_GMOD_IN_CHAT
+end
+
 -- act -> gesture runner fn
 local act_runner = {
     -- ear grab needs weight control
     -- sadly it's currently the only one
     [ACT_GMOD_IN_CHAT] = function(ply, w)
+        -- prevent voice chat ear grab gesture from interfering with active third-party gestures
+        if IsCustomSlotOverridden(ply) then
+            return 0
+        end
+
         local dest = ply:IsSpeaking() and 1 or 0
 
         w = math.Approach(w, dest, FrameTime() * 10)
