@@ -95,6 +95,29 @@ function shop.IsTeamBoughtFor(ply, equipmentName)
 end
 
 ---
+-- Checks whether an equipment's purchase limit has been reached for a player
+-- @param Player ply The player to check
+-- @param table equipment The equipment to check
+-- @return boolean True, if a purchase limit has been reached
+-- @return[opt] number The shop.statusCode of the reached limit
+-- @realm shared
+function shop.IsEquipmentLimitedFor(ply, equipment)
+    if equipment.limited and shop.IsBoughtFor(ply, equipment.id) then
+        return true, shop.statusCode.LIMITEDBOUGHT
+    end
+
+    if equipment.globalLimited and shop.IsGlobalBought(equipment.id) then
+        return true, shop.statusCode.GLOBALLIMITEDBOUGHT
+    end
+
+    if equipment.teamLimited and shop.IsTeamBoughtFor(ply, equipment.id) then
+        return true, shop.statusCode.TEAMLIMITEDBOUGHT
+    end
+
+    return false
+end
+
+---
 -- Marks the equipment as already bought for the player
 -- @param Player ply The player to set it for
 -- @param string equipmentName The name of the equipment to set
@@ -189,16 +212,9 @@ function shop.CanBuyEquipment(ply, equipmentName)
         end
     end
 
-    if equipment.limited and shop.IsBoughtFor(ply, equipmentName) then
-        return false, shop.statusCode.LIMITEDBOUGHT
-    end
-
-    if equipment.globalLimited and shop.IsGlobalBought(equipmentName) then
-        return false, shop.statusCode.GLOBALLIMITEDBOUGHT
-    end
-
-    if equipment.teamLimited and shop.IsTeamBoughtFor(ply, equipmentName) then
-        return false, shop.statusCode.TEAMLIMITEDBOUGHT
+    local limited, limitStatusCode = shop.IsEquipmentLimitedFor(ply, equipment)
+    if limited then
+        return false, limitStatusCode
     end
 
     local subrole = GetShopFallback(ply:GetSubRole())
@@ -358,11 +374,62 @@ end
 -- @return boolean True, if shop can be rerolled
 -- @realm shared
 function shop.CanRerollShop(ply)
-    return GetGlobalBool("ttt2_random_shops")
-        and GetGlobalBool("ttt2_random_shop_reroll")
-        and IsValid(ply)
-        and ply:IsActiveShopper()
-        and ply:GetCredits() >= GetGlobalInt("ttt2_random_shop_reroll_cost")
+    if
+        not GetGlobalBool("ttt2_random_shops")
+        or not GetGlobalBool("ttt2_random_shop_reroll")
+        or not IsValid(ply)
+        or not ply:IsActiveShopper()
+        or ply:GetCredits() < GetGlobalInt("ttt2_random_shop_reroll_cost")
+    then
+        return false
+    end
+
+    local currentShop = RANDOMSHOP[ply]
+    local equipment
+
+    if CLIENT then
+        equipment = GetEquipmentForRole(ply, ply:GetSubRole(), true)
+    else
+        equipment = RANDOMSAVEDSHOPS[GetShopFallback(ply:GetSubRole())]
+    end
+
+    if not currentShop or not equipment then
+        return false
+    end
+
+    local displayed = {}
+
+    for i = 1, #currentShop do
+        displayed[currentShop[i].id] = true
+    end
+
+    local poolSize = 0
+    local randomSlots = GetGlobalInt("ttt2_random_shop_items")
+    local hasAlternative = false
+    local filter = GetGlobalBool("ttt2_random_shop_reroll_filter")
+
+    for i = 1, #equipment do
+        local equip = equipment[i]
+
+        if equip.notBuyable then
+            continue
+        end
+
+        if filter and shop.IsEquipmentLimitedFor(ply, equip) then
+            continue
+        end
+
+        poolSize = poolSize + 1
+
+        if equip.NoRandom then
+            randomSlots = randomSlots - 1
+        elseif not displayed[equip.id] then
+            hasAlternative = true
+        end
+    end
+
+    -- Filtered rerolls can replace bought equipment that still occupies displayed slots.
+    return (filter or poolSize > #currentShop) and randomSlots > 0 and hasAlternative
 end
 
 ---

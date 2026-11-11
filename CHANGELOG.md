@@ -7,9 +7,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added momentary_rot_button to targetID (by @MrXonte)
+- Added setting to exclude unbuyable equipment from rerolls (by @MrXonte)
 
 ### Fixed
 
+- Fixed reroll being an option when there are not enough items to reroll (by @MrXonte)
 - Fixed markerVision not relaying engine-native entities out of PVS (by @MrXonte)
 - Fixed thirdperson animations from third-party addons (by @mexikoedi)
 
