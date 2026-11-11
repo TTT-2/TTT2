@@ -1286,7 +1286,7 @@ L.shopeditor_name_random_shop_reroll = "Aktiviere Möglichkeit Shop neu auszuwü
 L.shopeditor_name_random_shop_reroll_cost = "Kosten pro Auswürfeln"
 L.shopeditor_name_random_shop_reroll_per_buy = "Automatisches Auswürfeln nach jedem Kauf"
 L.shopeditor_name_random_shop_reroll_filter = "Nicht kaufbare Ausrüstung beim Neuauswürfeln ausschließen"
-L.shopeditor_desc_random_shop_reroll_filter = "Beim Neuauswürfeln wird Ausrüstung ausgeschlossen, deren persönliches, Team- oder globales Kauflimit erreicht ist. Für gemeinsame Shops gelten die Kauflimits des Spielers, der neu auswürfelt."
+L.shopeditor_desc_random_shop_reroll_filter = "Beim Neuauswürfeln wird unkaufbare Ausrüstung ausgeschlossen."
 
 -- 2021-06-04
 L.header_equipment_setup = "Ausrüstungseinstellungen"

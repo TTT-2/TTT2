@@ -135,7 +135,7 @@ ShopEditor.cvars = {
         typ = "bool",
         default = 0,
         name = "random_shop_reroll_filter",
-        b_desc = true,
+        b_desc = false,
     },
 }
 
