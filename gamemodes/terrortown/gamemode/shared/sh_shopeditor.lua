@@ -130,6 +130,13 @@ ShopEditor.cvars = {
         name = "random_shop_reroll_per_buy",
         b_desc = false,
     },
+    ttt2_random_shop_reroll_filter = {
+        order = 7,
+        typ = "bool",
+        default = 0,
+        name = "random_shop_reroll_filter",
+        b_desc = true,
+    },
 }
 
 -- Table which contains all equipment and is sorted by their translated equipment names

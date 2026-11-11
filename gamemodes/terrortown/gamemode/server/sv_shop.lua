@@ -83,9 +83,9 @@ end
 -- @realm server
 function shop.ForceRerollShop(ply)
     if GetGlobalBool("ttt2_random_team_shops") then
-        ResetRandomShopsForRole(ply:GetSubRole(), GetGlobalInt("ttt2_random_shop_items"), true)
+        ResetRandomShopsForRole(ply:GetSubRole(), GetGlobalInt("ttt2_random_shop_items"), true, ply)
     else
-        UpdateRandomShops({ ply }, GetGlobalInt("ttt2_random_shop_items"), false)
+        UpdateRandomShops({ ply }, GetGlobalInt("ttt2_random_shop_items"), false, ply)
     end
 end
 

@@ -1285,6 +1285,8 @@ L.shopeditor_name_random_team_shops = "Enable team shops"
 L.shopeditor_name_random_shop_reroll = "Enable shop reroll availability"
 L.shopeditor_name_random_shop_reroll_cost = "Cost per reroll"
 L.shopeditor_name_random_shop_reroll_per_buy = "Auto reroll after buy"
+L.shopeditor_name_random_shop_reroll_filter = "Exclude unbuyable equipment from rerolls"
+L.shopeditor_desc_random_shop_reroll_filter = "Rerolls exclude equipment whose personal, team or global purchase limit has been reached. Shared shops use the rerolling player's purchase limits."
 
 -- 2021-06-04
 L.header_equipment_setup = "Equipment Settings"
