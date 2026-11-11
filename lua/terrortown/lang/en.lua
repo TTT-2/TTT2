@@ -885,8 +885,6 @@ L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
 L.c4_short_desc = "Something very explosive"
 
 L.target_pickup = "Press [{usekey}] to pick up"
-L.ttt2_wstat_ammo_walk_over = "Walk over to pick up"
-L.target_ammo_box_amount = "{curAmmo}/{maxAmmo}"
 L.target_slot_info = "Slot: {slot}"
 L.target_pickup_weapon = "Press [{usekey}] to pickup weapon"
 L.target_switch_weapon = "Press [{usekey}] to swap with your current weapon"
@@ -988,7 +986,6 @@ L.submenu_appearance_crosshair_title = "Crosshair"
 L.submenu_appearance_dmgindicator_title = "Damage Indicator"
 L.submenu_appearance_performance_title = "Performance"
 L.submenu_appearance_interface_title = "Interface"
-L.submenu_appearance_ammo_title = "Ammo Settings"
 
 L.submenu_gameplay_general_title = "General"
 
@@ -1593,16 +1590,14 @@ L.header_inventory_pickup = "Inventory Weapon Pickup"
 L.header_sprint_general = "Sprint Settings"
 L.header_playersettings_armor = "Armor System Settings"
 L.header_ammo_administration = "Ammo Settings"
-L.header_ammo_appearance = "Ammo Appearance"
-L.help_ammo_administration = "Configure each ammo entity's spawn availability and box amount here. Reserve limits are still shared per ammo type, so entities with the same ammo type edit the same spare-ammo cap."
-L.help_ammo_appearance = "These settings are clientside only and change how ammo boxes look and whether they show TargetID information for you."
-L.label_ammo_entity_class = "{class}"
-L.label_ammo_enable = "Enable this ammo entity"
+L.help_ammo_administration = [[
+Reserve ammo is the spare ammo players use to reload their weapons. Set how much players can carry for each ammo type.
+You can also adjust how much ammo each box contains.
+You can also disable specific ammo boxes. A random enabled ammo box will spawn in their place on the map.]]
+L.label_ammo_reserve_max = "Maximum reserve ammo for this ammo type"
+L.label_ammo_entity_class = "Ammo box: {class}"
+L.label_ammo_enable = "Enable map spawns for this ammo box"
 L.label_ammo_box_amount = "Ammo per box"
-L.label_ammo_reserve_max = "Maximum spare ammo for this ammo type"
-L.label_ammo_entity_scaling = "Scale ammo boxes by remaining ammo"
-L.label_ammo_entity_scaling_min = "Minimum ammo box scale"
-L.label_ammo_targetid = "Show TargetID for ammo boxes"
 
 L.help_killer_dna_range = "When a player is killed by another player, a DNA sample is left on their body. The setting below defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away than this value when the victim dies, no sample will be left on the corpse."
 L.help_killer_dna_basetime = "The base time in seconds until a DNA sample decays, if the killer is 0 Hammer units away. The farther the killer is, the less time will be given to the DNA sample to decay."

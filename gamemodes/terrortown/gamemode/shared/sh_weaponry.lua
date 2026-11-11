@@ -9,182 +9,197 @@ WEPS = {}
 
 local pairs = pairs
 local IsValid = IsValid
-local GetConVar = GetConVar
-local mathMax = math.max
-local hook = hook
-local stringGsub = string.gsub
-local stringLower = string.lower
-local tableSortByMember = table.SortByMember
 local wepGetList = weapons.GetList
 local scriptedEntsGetList = scripted_ents.GetList
 
-local ammoEntitySettingRegistry = {}
-local ammoTypeSettingRegistry = {}
-local RegisterAmmoEntitySettings
-local RegisterAmmoTypeSettings
+local ammoTypes
+local ammoTypeLookup
+local ammoEntityLookup
 
-local function GetAmmoClassIdentifier(class)
-    return stringLower(stringGsub(class or "", "[^%w_]", "_"))
-end
-
-local function GetAmmoTypeIdentifier(ammoType)
-    return GetAmmoClassIdentifier(ammoType)
-end
-
-local function GetAmmoTypeLangIdentifier(ammoType)
-    return "ammo_" .. stringLower(ammoType or "")
-end
-
-local function GetAmmoDefaultBoxAmount(ammo)
-    return mathMax(1, ammo.AmmoAmount or 1)
-end
-
-local ammoTypeDefaultReserveMax = {
+-- Reserve limits belong to ammo types, not to individual box entities.
+local defaultAmmoReserveMax = {
     ["357"] = 20,
-    AlyxGun = 36,
-    Buckshot = 24,
-    Pistol = 60,
-    SMG1 = 60,
+    alyxgun = 36,
+    buckshot = 24,
+    pistol = 60,
+    smg1 = 60,
 }
 
-local function GetAmmoDefaultReserveMax(ammoType, ammo)
-    return mathMax(ammoTypeDefaultReserveMax[ammoType] or 0, mathMax(0, ammo.AmmoMax or 0))
+local function GetAmmoIdentifier(name)
+    return string.gsub(string.lower(name), "[^%w_]", "_")
 end
 
-local function BuildAmmoEntityData()
-    local ammoEntities = {}
-    local ammoLookup = {}
-    local ammoTypes = {}
-    local ammoTypeLookup = {}
-    local allEnts = scriptedEntsGetList()
+---
+-- Returns the convar name for an ammo box setting.
+-- @param string class Ammo entity class
+-- @param string setting Setting suffix
+-- @return string
+-- @realm shared
+function WEPS.GetAmmoSettingsConVarName(class, setting)
+    return "ttt2_ammo_" .. GetAmmoIdentifier(class) .. "_" .. setting
+end
 
-    for class, entData in pairs(allEnts) do
-        if entData.Base ~= "base_ammo_ttt" then
+---
+-- Returns the convar name for the shared reserve limit of an ammo type.
+-- @param string ammoType Ammo type name
+-- @return string
+-- @realm shared
+function WEPS.GetAmmoReserveConVarName(ammoType)
+    return "ttt2_ammo_type_" .. GetAmmoIdentifier(ammoType) .. "_reserve_max"
+end
+
+local function BuildAmmoSettings()
+    ammoTypes = {}
+    ammoTypeLookup = {}
+    ammoEntityLookup = {}
+
+    for class in pairs(scriptedEntsGetList()) do
+        if class == "base_ammo_ttt" or not scripted_ents.IsBasedOn(class, "base_ammo_ttt") then
             continue
         end
 
-        local ammo = entData.t
-        local ammoType = ammo.AmmoType or class
-        local ammoTypeData = ammoTypeLookup[ammoType]
-        local defaultReserveMax = GetAmmoDefaultReserveMax(ammoType, ammo)
+        local ammo = scripted_ents.Get(class)
+        local ammoType = ammo.AmmoType or "Pistol"
+        local identifier = string.lower(ammoType)
+        local typeData = ammoTypeLookup[identifier]
 
-        if not ammoTypeData then
-            ammoTypeData = {
+        if not typeData then
+            typeData = {
                 ammoType = ammoType,
-                name = GetAmmoTypeLangIdentifier(ammoType),
-                reserveMax = defaultReserveMax,
+                name = "ammo_" .. identifier,
+                reserveMax = defaultAmmoReserveMax[identifier] or 0,
                 entities = {},
             }
 
-            ammoTypes[#ammoTypes + 1] = ammoTypeData
-            ammoTypeLookup[ammoType] = ammoTypeData
+            ammoTypes[#ammoTypes + 1] = typeData
+            ammoTypeLookup[identifier] = typeData
         end
 
-        local ammoData = {
+        -- Import legacy defaults once when building the registry. Pick the highest
+        -- default when several boxes share a type; pickups only consult the convar.
+        typeData.reserveMax = math.max(
+            typeData.reserveMax,
+            math.max(0, ammo.AmmoMax or defaultAmmoReserveMax[identifier] or 10)
+        )
+
+        local entityData = {
             class = class,
-            ammoType = ammoType,
-            typeName = ammoTypeData.name,
-            boxAmount = GetAmmoDefaultBoxAmount(ammo),
-            reserveMax = defaultReserveMax,
+            boxAmount = math.max(1, ammo.AmmoAmount or 1),
         }
 
-        ammoEntities[#ammoEntities + 1] = ammoData
-        ammoLookup[class] = ammoData
-        ammoTypeData.entities[#ammoTypeData.entities + 1] = ammoData
-        ammoTypeData.reserveMax = mathMax(ammoTypeData.reserveMax, ammoData.reserveMax)
+        typeData.entities[#typeData.entities + 1] = entityData
+        ammoEntityLookup[class] = entityData
     end
 
-    tableSortByMember(ammoEntities, "class", true)
-    tableSortByMember(ammoTypes, "ammoType", true)
+    table.SortByMember(ammoTypes, "ammoType", true)
 
     for i = 1, #ammoTypes do
-        tableSortByMember(ammoTypes[i].entities, "class", true)
-    end
+        local typeData = ammoTypes[i]
+        table.SortByMember(typeData.entities, "class", true)
 
-    return ammoEntities, ammoLookup, ammoTypes, ammoTypeLookup
-end
-
-if SERVER then
-    ---
-    -- @param table ammoTypeData
-    -- @return nil|string
-    -- @realm server
-    local function GetLegacyAmmoTypeReserveMax(ammoTypeData)
-        for i = 1, #ammoTypeData.entities do
-            local legacyConVar = GetConVar(
-                WEPS.GetAmmoSettingsConVarName(ammoTypeData.entities[i].class, "reserve_max")
+        if SERVER then
+            -- @realm server
+            typeData.reserveConVar = CreateConVar(
+                WEPS.GetAmmoReserveConVarName(typeData.ammoType),
+                tostring(typeData.reserveMax),
+                { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+                "",
+                0
             )
 
-            if legacyConVar then
-                return tostring(mathMax(0, legacyConVar:GetInt()))
+            for j = 1, #typeData.entities do
+                local entityData = typeData.entities[j]
+                -- @realm server
+                entityData.enabledConVar = CreateConVar(
+                    WEPS.GetAmmoSettingsConVarName(entityData.class, "enabled"),
+                    "1",
+                    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+                    "",
+                    0,
+                    1
+                )
+                -- @realm server
+                entityData.boxAmountConVar = CreateConVar(
+                    WEPS.GetAmmoSettingsConVarName(entityData.class, "box_amount"),
+                    tostring(entityData.boxAmount),
+                    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+                    "",
+                    1
+                )
             end
         end
     end
-
-    RegisterAmmoEntitySettings = function(ammoData)
-        local class = ammoData.class
-
-        if ammoEntitySettingRegistry[class] then
-            return ammoEntitySettingRegistry[class]
-        end
-
-        -- @realm server
-        local enabledConVar = CreateConVar(
-            WEPS.GetAmmoSettingsConVarName(class, "enabled"),
-            "1",
-            { FCVAR_NOTIFY, FCVAR_ARCHIVE }
-        )
-        -- @realm server
-        local boxAmountConVar = CreateConVar(
-            WEPS.GetAmmoSettingsConVarName(class, "box_amount"),
-            tostring(ammoData.boxAmount),
-            { FCVAR_NOTIFY, FCVAR_ARCHIVE }
-        )
-
-        ammoEntitySettingRegistry[class] = {
-            enabled = enabledConVar,
-            boxAmount = boxAmountConVar,
-        }
-
-        return ammoEntitySettingRegistry[class]
-    end
-
-    RegisterAmmoTypeSettings = function(ammoTypeData)
-        local ammoType = ammoTypeData.ammoType
-
-        if ammoTypeSettingRegistry[ammoType] then
-            return ammoTypeSettingRegistry[ammoType]
-        end
-
-        local defaultReserveMax = GetLegacyAmmoTypeReserveMax(ammoTypeData)
-            or tostring(ammoTypeData.reserveMax)
-        -- @realm server
-        local reserveMaxConVar = CreateConVar(
-            WEPS.GetAmmoTypeSettingsConVarName(ammoType, "reserve_max"),
-            defaultReserveMax,
-            { FCVAR_NOTIFY, FCVAR_ARCHIVE }
-        )
-        local conVars = {
-            reserveMax = reserveMaxConVar,
-        }
-
-        ammoTypeSettingRegistry[ammoType] = conVars
-
-        return conVars
-    end
-
-    hook.Add("InitPostEntity", "TTT2RegisterAmmoSettings", function()
-        local ammoEntities, _, ammoTypes = BuildAmmoEntityData()
-
-        for i = 1, #ammoEntities do
-            RegisterAmmoEntitySettings(ammoEntities[i])
-        end
-
-        for i = 1, #ammoTypes do
-            RegisterAmmoTypeSettings(ammoTypes[i])
-        end
-    end)
 end
+
+---
+-- Returns ammo types with their default reserve limits and individual box classes.
+-- @return table An indexed list of ammo types, each with an entities list
+-- @realm shared
+function WEPS.GetAmmoTypes()
+    if not ammoTypes then
+        BuildAmmoSettings()
+    end
+
+    return ammoTypes
+end
+
+---
+-- Returns the shared pickup reserve limit for an ammo type.
+-- Legacy AmmoMax values only seed its initial default, never the pickup limit.
+-- @param string ammoType Ammo type name
+-- @return number
+-- @realm shared
+function WEPS.GetAmmoReserveMax(ammoType)
+    WEPS.GetAmmoTypes()
+
+    local typeData = ammoTypeLookup[string.lower(ammoType)]
+
+    if not typeData then
+        return 0
+    end
+
+    return SERVER and math.max(0, typeData.reserveConVar:GetInt()) or typeData.reserveMax
+end
+
+---
+-- Returns the configured starting ammo amount for a box class.
+-- @param string class Ammo entity class
+-- @param[default=1] number fallback Amount for an unregistered class
+-- @return number
+-- @realm shared
+function WEPS.GetAmmoBoxAmount(class, fallback)
+    WEPS.GetAmmoTypes()
+
+    local entityData = ammoEntityLookup[class]
+
+    if not entityData then
+        return math.max(1, fallback or 1)
+    end
+
+    return SERVER and math.max(1, entityData.boxAmountConVar:GetInt()) or entityData.boxAmount
+end
+
+---
+-- Returns whether an ammo box class is enabled for map spawns.
+-- @param string class Ammo entity class
+-- @return boolean
+-- @realm shared
+function WEPS.IsAmmoEnabled(class)
+    WEPS.GetAmmoTypes()
+
+    local entityData = ammoEntityLookup[class]
+
+    return not SERVER or not entityData or entityData.enabledConVar:GetBool()
+end
+
+hook.Add("InitPostEntity", "TTT2RegisterAmmoSettings", function()
+    WEPS.GetAmmoTypes()
+end)
+
+hook.Add("OnReloaded", "TTT2ReloadAmmoSettings", function()
+    -- Preserve archived convar values while discovering reloaded or new box classes.
+    ammoTypes = nil
+end)
 
 ---
 -- Get the type (<code>kind</code>) of a weapon class
@@ -217,176 +232,6 @@ function WEPS.GetClass(wep)
     elseif IsValid(wep) then
         return wep:GetClass()
     end
-end
-
----
--- Returns the shared list of all ammo entities that inherit from base_ammo_ttt.
--- @return table An indexed list of ammo entity data tables
--- @return table A lookup table keyed by entity class
--- @realm shared
-function WEPS.GetAmmoEntities()
-    return BuildAmmoEntityData()
-end
-
----
--- Returns the translation key used for a given ammo type.
--- @param string ammoType The ammo type string
--- @return string
--- @realm shared
-function WEPS.GetAmmoTypeLangIdentifier(ammoType)
-    return GetAmmoTypeLangIdentifier(ammoType)
-end
-
----
--- Returns the generated convar name for a specific ammo setting.
--- @param string class The ammo entity class
--- @param string suffix The setting suffix
--- @return string
--- @realm shared
-function WEPS.GetAmmoSettingsConVarName(class, suffix)
-    return "ttt2_ammo_" .. GetAmmoClassIdentifier(class) .. "_" .. suffix
-end
-
----
--- Returns the generated convar name for a specific ammo-type setting.
--- @param string ammoType The ammo type string
--- @param string suffix The setting suffix
--- @return string
--- @realm shared
-function WEPS.GetAmmoTypeSettingsConVarName(ammoType, suffix)
-    return "ttt2_ammo_type_" .. GetAmmoTypeIdentifier(ammoType) .. "_" .. suffix
-end
-
----
--- Returns the current shared settings for a specific ammo type.
--- @param string ammoType The ammo type string
--- @return nil|table
--- @realm shared
-function WEPS.GetAmmoTypeSettings(ammoType)
-    local _, _, _, ammoTypeLookup = BuildAmmoEntityData()
-    local ammoTypeData = ammoTypeLookup[ammoType]
-
-    if not ammoTypeData then
-        return
-    end
-
-    local settings = {
-        reserveMax = ammoTypeData.reserveMax,
-    }
-
-    if not SERVER then
-        return settings
-    end
-
-    local conVars = ammoTypeSettingRegistry[ammoTypeData.ammoType]
-
-    if not conVars then
-        conVars = RegisterAmmoTypeSettings(ammoTypeData)
-    end
-
-    settings.reserveMax = mathMax(0, conVars.reserveMax:GetInt())
-
-    return settings
-end
-
----
--- Returns the current ammo settings for a specific ammo entity class.
--- @param string class The ammo entity class
--- @return nil|table
--- @realm shared
-function WEPS.GetAmmoSettings(class)
-    local _, ammoLookup, _, ammoTypeLookup = BuildAmmoEntityData()
-    local ammoData = ammoLookup[class]
-
-    if not ammoData then
-        return
-    end
-
-    local ammoTypeData = ammoTypeLookup[ammoData.ammoType]
-
-    local settings = {
-        ammoType = ammoData.ammoType,
-        enabled = true,
-        boxAmount = ammoData.boxAmount,
-        reserveMax = ammoTypeData and ammoTypeData.reserveMax or ammoData.reserveMax,
-    }
-
-    if not SERVER then
-        return settings
-    end
-
-    local entityConVars = ammoEntitySettingRegistry[class]
-
-    if not entityConVars then
-        entityConVars = RegisterAmmoEntitySettings(ammoData)
-    end
-
-    local typeConVars
-
-    if ammoTypeData then
-        typeConVars = ammoTypeSettingRegistry[ammoTypeData.ammoType]
-
-        if not typeConVars then
-            typeConVars = RegisterAmmoTypeSettings(ammoTypeData)
-        end
-    end
-
-    settings.enabled = entityConVars.enabled:GetBool()
-    settings.boxAmount = mathMax(1, entityConVars.boxAmount:GetInt())
-
-    if typeConVars then
-        settings.reserveMax = mathMax(0, typeConVars.reserveMax:GetInt())
-    end
-
-    return settings
-end
-
----
--- @param string class The ammo entity class
--- @param[opt] number fallback Fallback value if no settings are registered
--- @return boolean
--- @realm shared
-function WEPS.IsAmmoEnabled(class, fallback)
-    local settings = WEPS.GetAmmoSettings(class)
-
-    if not settings then
-        return fallback == nil and true or fallback
-    end
-
-    return settings.enabled
-end
-
----
--- @param string class The ammo entity class
--- @param[opt] number fallback Fallback value if no settings are registered
--- @return number
--- @realm shared
-function WEPS.GetAmmoBoxAmount(class, fallback)
-    local settings = WEPS.GetAmmoSettings(class)
-
-    if not settings then
-        return fallback
-    end
-
-    return settings.boxAmount
-end
-
----
--- @param string ammoIdentifier The ammo entity class or ammo type string
--- @return number
--- @realm shared
-function WEPS.GetAmmoReserveMax(ammoIdentifier)
-    local settings = WEPS.GetAmmoTypeSettings(ammoIdentifier)
-
-    if not settings then
-        settings = WEPS.GetAmmoSettings(ammoIdentifier)
-    end
-
-    if not settings then
-        return
-    end
-
-    return settings.reserveMax
 end
 
 ---
@@ -433,12 +278,12 @@ function WEPS.GetAmmoForSpawnTypes()
 
     local allEnts = scriptedEntsGetList()
 
-    for class, entData in pairs(allEnts) do
-        if entData.Base ~= "base_ammo_ttt" then
+    for class in pairs(allEnts) do
+        if class == "base_ammo_ttt" or not scripted_ents.IsBasedOn(class, "base_ammo_ttt") then
             continue
         end
 
-        local ammo = entData.t
+        local ammo = scripted_ents.Get(class)
         local spawnType = ammo.spawnType
 
         if not ammo.AutoSpawnable or not WEPS.IsAmmoEnabled(class) then
