@@ -710,7 +710,7 @@ if SERVER then
             end
 
             if IsRoleActive(roleData, newRolesEnabled) then
-                activeRoles[#activeRoles + 1] = roleData.index
+                activeRoles[#activeRoles + 1] = roleData
             end
         end
 
@@ -719,7 +719,14 @@ if SERVER then
         net.WriteUInt(#activeRoles, 8)
 
         for i = 1, #activeRoles do
-            net.WriteUInt(activeRoles[i], ROLE_BITS)
+            local roleData = activeRoles[i]
+
+            -- the starting credits are a server only convar, they are therefore sent along
+            local creditsConVar = GetConVar("ttt_" .. roleData.abbr .. "_credits_starting")
+            local credits = creditsConVar and creditsConVar:GetInt() or 0
+
+            net.WriteUInt(roleData.index, ROLE_BITS)
+            net.WriteUInt(math.Clamp(credits, 0, 65535), 16)
         end
 
         net.Send(ply)
@@ -731,7 +738,11 @@ else
         local activeRoles = {}
 
         for i = 1, roleCount do
-            activeRoles[net.ReadUInt(ROLE_BITS)] = true
+            local roleIndex = net.ReadUInt(ROLE_BITS)
+
+            activeRoles[roleIndex] = {
+                credits = net.ReadUInt(16),
+            }
         end
 
         local callback = networkReceiveFuncs[requestID]
@@ -749,7 +760,9 @@ else
     -- Requests a table of all roles that are currently part of the game on the server. Roles
     -- that are disabled in the role settings are not included, as they cannot be assigned.
     -- @note The server is authoritative for the role settings, which is why they are requested.
-    -- @param function callback Called with a table of role indices that are part of the game
+    -- @param function callback Called with a table that is indexed by the role indices that are
+    -- part of the game, each entry contains the settings of that role that are only known to the
+    -- server, such as the starting `credits`
     -- @realm client
     function roles.RequestEnabledRoles(callback)
         networkRequestID = networkRequestID % 255 + 1
