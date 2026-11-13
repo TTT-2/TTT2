@@ -2846,3 +2846,87 @@ L.label_armor_block_clubdmg = "Enable armor blocking crowbar damage"
 -- 2025-03-10
 L.label_sprint_stamina_cooldown = "Stamina cooldown time"
 L.label_sprint_stamina_forwards_only = "Disallow sprinting backwards or laterally"
+
+-- 2026-11-13
+L.header_guide_gameplay_goal = "The Goal"
+L.help_guide_gameplay_goal = [[
+Trouble in Terrorist Town is a game of trust and betrayal. At the start of every round each player secretly gets a role, and every role belongs to a team.
+
+The Innocents have to find and take out the Traitors. The Traitors have to kill everyone else without getting caught. The round ends as soon as only one team is left alive. If the time runs out, the Traitors lose.]]
+
+L.header_guide_gameplay_round = "Round Flow"
+L.help_guide_gameplay_round = [[
+Preparing: Nobody has a role yet and players can't hurt each other. Use this time to pick up weapons.
+
+Active: Roles are handed out and your role is shown on screen. From now on, trust no one. The HUD shows how much time is left.
+
+Round end: The winning team is announced and the round report shows who had which role.]]
+
+L.header_guide_gameplay_haste = "Haste Mode"
+L.help_guide_gameplay_haste = [[
+On most servers, haste mode is enabled. The round starts with a short timer, and every death adds extra time to it.
+
+Only roles that can see missing players, like the Traitors, know the real remaining time. Everyone else only sees the starting timer. Once it runs out, they see "OVERTIME", but the round goes on until the real time is up.
+
+So as an Innocent, don't wait it out. As a Traitor, keep an eye on the clock, because each kill buys you more time.]]
+
+L.header_guide_gameplay_roles = "Roles and Teams"
+L.help_guide_gameplay_roles = [[
+Innocent: The majority. You don't know who is on your side, so watch how others behave and work together.
+
+Traitor: You know your fellow Traitors and can talk to them in the team chat and team voice chat. Use your shop to buy special equipment.
+
+Detective: An Innocent whose role is known to everyone. Detectives have their own shop with tools to investigate.
+
+Many servers add more roles with their own teams and goals.]]
+
+L.header_guide_gameplay_bodies = "Dead Bodies"
+L.help_guide_gameplay_bodies = [[
+Dead players can't talk to the living, so dead bodies are the best evidence you have. Look at a body and press [{usekey}] to search it. This confirms the death for everyone and reveals the role, the cause of death and other clues.
+
+Traitors can hold [{walkkey}] and press [{usekey}] to search a body covertly without confirming it.
+
+If you are unsure what happened, you can call a Detective to the body from the search window.]]
+
+L.header_guide_gameplay_spectator = "Spectating"
+L.help_guide_gameplay_spectator = [[
+Once you die, you become a spectator until the next round starts. You can't talk to the living, only to other spectators.
+
+If you don't want to play for a while, you can enable "Spectate-only mode" in the "Gameplay" menu.
+
+[{attack2key}] / [{attackkey}] Jump to the next / previous living player
+[{usekey}] Watch the player you are looking at or search a body
+[{reloadkey}] Switch between first and third person view
+[{duckkey}] Leave the player and fly around freely
+[{mutekey}] Mute other spectators or the living]]
+
+L.header_guide_gameplay_possession = "Prop Possession"
+L.help_guide_gameplay_possession = [[
+As a spectator, you can look at a prop and press [{usekey}] to possess it. That way you can still help or annoy the living.
+
+Every move uses up points from the Punch-O-Meter, which slowly recharges. Players with a good score in the round get a bigger meter.
+
+[{jumpkey}] Jump
+[{speedkey}] Dash in your view direction
+Movement keys: Push the prop around
+[{duckkey}] Leave the prop]]
+
+L.header_guide_gameplay_shop = "Shop and Credits"
+L.help_guide_gameplay_shop = [[
+Roles with a shop, like Traitors and Detectives, start with credits and earn more during the round, for example when enemies die. Press [{shopkey}] to open the shop and buy equipment. Unspent credits can be looted from bodies.]]
+
+L.header_guide_gameplay_karma = "Karma"
+L.help_guide_gameplay_karma = [[
+Karma shows how carefully you play. Hurting or killing members of your own team lowers it, playing clean raises it again over time. Low Karma reduces the damage you deal and, on some servers, your maximum health. Many servers also kick players whose Karma gets too low.]]
+
+L.header_guide_gameplay_controls = "Controls"
+L.help_guide_gameplay_controls = [[
+Most keys can be changed in the Garry's Mod options under "Keyboard". The voice chat keys can be changed in this menu under "Key Bindings".
+
+[{helpkey}] Open this menu
+[{scorekey}] Show the scoreboard
+[{shopkey}] Open the shop
+[{dropkey}] Drop your current weapon
+[{usekey}] Search bodies, use buttons and doors
+[{voicekey}] Talk to everyone
+[{teamvoicekey}] Talk to your team]]

@@ -958,7 +958,7 @@ L.menu_equipment_title = "Bearbeite Ausrüstung"
 L.menu_shops_title = "Bearbeite Shops"
 
 L.menu_changelog_description = "Eine Liste von Fixes und Verbesserungen in den vergangenen Versionen"
-L.menu_guide_description = "Hilft dir mit TTT2 zurecht zu kommen und erklärt einiges über Gamplay, Rollen und anderes"
+L.menu_guide_description = "Hilft dir mit TTT2 zurecht zu kommen und erklärt einiges über Gameplay, Rollen und anderes"
 L.menu_bindings_description = "Belege Tasten von TTT2 und seinen Erweiterungen nach deinem Geschmack"
 L.menu_language_description = "Stelle die Sprache des Spiels ein"
 L.menu_appearance_description = "Verändere die Erscheinung und Performance der UI"
@@ -1460,7 +1460,7 @@ Linksklick auf die Modelle, um sie dem Spielermodell-Pool hinzuzufügen. Klicke 
 Der kleine Indikator oben links zeigt an, ob das Spielermodell eine Kopftrefferbox hat. Das Symbol darunter zeigt an, ob dieses Modell für einen Detektivhut geeignet ist.]]
 
 L.menu_roles_title = "Rollen Einstellungen"
-L.menu_roles_description = "Richte Rollenspawning, Ausrüsungspunkte und mehr ein."
+L.menu_roles_description = "Richte die Rollenverteilung, Ausrüstungspunkte und mehr ein."
 
 L.submenu_roles_roles_general_title = "Allgemeine Rolleneinstellungen"
 
@@ -2838,3 +2838,87 @@ L.length_in_meters = "{length}m"
 -- 2025-03-10
 --L.label_sprint_stamina_cooldown = "Stamina cooldown time"
 --L.label_sprint_stamina_forwards_only = "Disallow sprinting backwards or laterally"
+
+-- 2026-11-13
+L.header_guide_gameplay_goal = "Das Ziel"
+L.help_guide_gameplay_goal = [[
+Trouble in Terrorist Town ist ein Spiel um Vertrauen und Verrat. Zu Beginn jeder Runde bekommt jeder Spieler heimlich eine Rolle und jede Rolle gehört zu einem Team.
+
+Die Unschuldigen müssen die Verräter finden und ausschalten. Die Verräter müssen alle anderen töten, ohne erwischt zu werden. Die Runde endet, sobald nur noch ein Team am Leben ist. Läuft die Zeit ab, verlieren die Verräter.]]
+
+L.header_guide_gameplay_round = "Rundenablauf"
+L.help_guide_gameplay_round = [[
+Vorbereitung: Noch hat niemand eine Rolle und Spieler können sich nicht verletzen. Nutze die Zeit, um Waffen aufzusammeln.
+
+Aktiv: Die Rollen werden verteilt und deine Rolle wird dir angezeigt. Ab jetzt kannst du niemandem trauen. Im HUD siehst du, wie viel Zeit noch übrig ist.
+
+Rundenende: Das Gewinnerteam wird verkündet und der Rundenbericht zeigt, wer welche Rolle hatte.]]
+
+L.header_guide_gameplay_haste = "Hast-Modus"
+L.help_guide_gameplay_haste = [[
+Auf den meisten Servern ist der Hast-Modus aktiv. Die Runde startet mit einem kurzen Timer und jeder Tod verlängert die Zeit.
+
+Nur Rollen, die vermisste Spieler sehen können, wie die Verräter, kennen die echte Restzeit. Alle anderen sehen nur den Start-Timer. Ist er abgelaufen, erscheint bei ihnen „VERLÄNGERUNG“, aber die Runde läuft weiter, bis die echte Zeit abgelaufen ist.
+
+Als Unschuldiger solltest du also nicht auf Zeit spielen. Als Verräter behältst du die Uhr im Blick, denn jeder Kill verschafft dir mehr Zeit.]]
+
+L.header_guide_gameplay_roles = "Rollen und Teams"
+L.help_guide_gameplay_roles = [[
+Unschuldiger: Die Mehrheit. Du weißt nicht, wer auf deiner Seite steht, also achte darauf, wie sich andere verhalten, und arbeitet zusammen.
+
+Verräter: Du kennst deine Mitverräter und kannst mit ihnen im Team-Chat und Team-Sprachchat reden. Nutze deinen Shop, um besondere Ausrüstung zu kaufen.
+
+Detektiv: Ein Unschuldiger, dessen Rolle alle kennen. Detektive haben einen eigenen Shop mit Werkzeugen zum Ermitteln.
+
+Viele Server haben weitere Rollen mit eigenen Teams und Zielen.]]
+
+L.header_guide_gameplay_bodies = "Leichen"
+L.help_guide_gameplay_bodies = [[
+Tote Spieler können nicht mit den Lebenden reden, deshalb sind Leichen dein wichtigstes Beweismittel. Schau eine Leiche an und drücke [{usekey}], um sie zu durchsuchen. Damit wird der Tod für alle bestätigt und du siehst die Rolle, die Todesursache und weitere Hinweise.
+
+Verräter können [{walkkey}] halten und [{usekey}] drücken, um eine Leiche verdeckt zu untersuchen, ohne den Tod zu bestätigen.
+
+Wenn du dir nicht sicher bist, was passiert ist, kannst du im Durchsuchungsfenster einen Detektiv zur Leiche rufen.]]
+
+L.header_guide_gameplay_spectator = "Zuschauer"
+L.help_guide_gameplay_spectator = [[
+Wenn du stirbst, bist du bis zur nächsten Runde Zuschauer. Du kannst nicht mit den Lebenden reden, nur mit anderen Zuschauern.
+
+Wenn du eine Weile nicht mitspielen willst, kannst du im Menü „Gameplay“ den „Nur-Zuschauer-Modus“ aktivieren.
+
+[{attack2key}] / [{attackkey}] Zum nächsten / vorherigen lebenden Spieler springen
+[{usekey}] Den angeschauten Spieler beobachten oder eine Leiche durchsuchen
+[{reloadkey}] Zwischen Ego- und Third-Person-Ansicht wechseln
+[{duckkey}] Den Spieler verlassen und frei herumfliegen
+[{mutekey}] Andere Zuschauer oder die Lebenden stummschalten]]
+
+L.header_guide_gameplay_possession = "Gegenstände besetzen"
+L.help_guide_gameplay_possession = [[
+Als Zuschauer kannst du einen Gegenstand anschauen und [{usekey}] drücken, um ihn zu besetzen. So kannst du den Lebenden weiterhin helfen oder sie ärgern.
+
+Jede Bewegung verbraucht Punkte vom Punch-O-Meter, das sich langsam wieder auflädt. Spieler mit einer guten Wertung in der Runde bekommen ein größeres Meter.
+
+[{jumpkey}] Springen
+[{speedkey}] In Blickrichtung vorpreschen
+Bewegungstasten: Den Gegenstand herumschieben
+[{duckkey}] Den Gegenstand verlassen]]
+
+L.header_guide_gameplay_shop = "Shop und Ausrüstungspunkte"
+L.help_guide_gameplay_shop = [[
+Rollen mit Shop, wie Verräter und Detektive, starten mit Ausrüstungspunkten und verdienen während der Runde weitere, zum Beispiel wenn Gegner sterben. Drücke [{shopkey}], um den Shop zu öffnen und Ausrüstung zu kaufen. Nicht ausgegebene Ausrüstungspunkte können von Leichen genommen werden.]]
+
+L.header_guide_gameplay_karma = "Karma"
+L.help_guide_gameplay_karma = [[
+Karma zeigt, wie sorgfältig du spielst. Wenn du Mitglieder deines eigenen Teams verletzt oder tötest, sinkt es, sauberes Spielen hebt es mit der Zeit wieder an. Niedriges Karma verringert deinen Schaden und auf manchen Servern auch deine maximalen Lebenspunkte. Viele Server kicken außerdem Spieler, deren Karma zu niedrig wird.]]
+
+L.header_guide_gameplay_controls = "Steuerung"
+L.help_guide_gameplay_controls = [[
+Die meisten Tasten änderst du in den Garry's-Mod-Optionen unter „Tastatur“. Die Tasten für den Sprachchat änderst du in diesem Menü unter „Tastenbelegungen“.
+
+[{helpkey}] Dieses Menü öffnen
+[{scorekey}] Scoreboard anzeigen
+[{shopkey}] Shop öffnen
+[{dropkey}] Aktuelle Waffe wegwerfen
+[{usekey}] Leichen durchsuchen, Knöpfe und Türen benutzen
+[{voicekey}] Mit allen reden
+[{teamvoicekey}] Mit deinem Team reden]]
