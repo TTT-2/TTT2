@@ -2846,3 +2846,38 @@ L.label_armor_block_clubdmg = "Enable armor blocking crowbar damage"
 -- 2025-03-10
 L.label_sprint_stamina_cooldown = "Stamina cooldown time"
 L.label_sprint_stamina_forwards_only = "Disallow sprinting backwards or laterally"
+
+-- 2026-11-04
+L.guide_role_no_description = "No description has been provided for this role."
+L.guide_equipment_no_description = "No description has been provided for this equipment."
+L.guide_equipment_buyable_by = "Buyable by: {roles}"
+L.guide_roles_help = "All roles that can appear on this server. Click a role to learn how to play it."
+L.guide_roles_all_teams = "All teams"
+L.guide_roles_none_found = "No role matches your search."
+L.guide_role_tag_builtin = "Built-in"
+L.guide_role_tag_shop = "Shop"
+L.guide_role_how_to_play = "How to play"
+L.guide_role_properties = "Properties"
+L.guide_role_shop = "Shop"
+L.guide_role_property_baserole = "Base role"
+L.guide_role_property_shop = "Shop"
+L.guide_role_property_credits = "Starting credits"
+L.guide_role_property_public = "Visible to everyone"
+L.guide_role_shop_own = "Own shop"
+L.guide_role_shop_linked = "{role} shop"
+L.guide_role_shop_none = "None"
+L.guide_role_yes = "Yes"
+L.guide_role_no = "No"
+
+-- Role guide "How to play" texts, every line is shown as a bullet point.
+-- Role addons can add a "ttt2_howtoplay_<rolename>" key to fill this section for their roles.
+L.ttt2_howtoplay_innocent = [[Win: all traitors are dead.
+Search bodies to find out who killed them.
+Watch out for suspicious behavior and work together with the detectives.]]
+L.ttt2_howtoplay_traitor = [[Win: all non-traitors are dead.
+Use your shop to buy equipment that helps you kill unnoticed.
+Work together with your fellow traitors, you can see each other.]]
+L.ttt2_howtoplay_detective = [[Win: all traitors are dead.
+Everyone knows you are a detective, so you are a prime target.
+Search bodies and scan DNA to track down the killers.
+Use your shop to buy tools that help you lead the innocents.]]

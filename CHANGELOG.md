@@ -7,6 +7,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added momentary_rot_button to targetID (by @MrXonte)
+- Added a roles guide to the help menu that groups all enabled roles by team, can be searched and filtered and shows the description, properties and shop of a role (by @ROODAY)
+  - Role addons can add a "How to play" section to the guide with the language identifier `ttt2_howtoplay_<rolename>`, every line is shown as a bullet point
+- Added an equipment guide to the help menu that lists all equipment and shows its description, type and the roles that can buy it (by @ROODAY)
 
 ### Fixed
 

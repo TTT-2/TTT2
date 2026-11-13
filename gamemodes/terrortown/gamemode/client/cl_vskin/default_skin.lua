@@ -1729,6 +1729,322 @@ end
 -- @param number w
 -- @param number h
 -- @realm client
+function SKIN:PaintRoleCardTTT2(panel, w, h)
+    local widthBorder = 2
+    local padding = 5
+    local heightBar = mathRound(0.42 * h)
+    local shift = 0
+
+    local colorBox = colors.settingsBox
+    local colorBorder = colors.settingsBox
+    local colorText = colors.settingsText
+
+    if panel:IsSelected() then
+        colorBorder = colors.accent
+    end
+
+    if panel.Hovered then
+        colorBox = utilGetHoverColor(colorBox)
+    end
+
+    if panel:IsDown() then
+        shift = 1
+    end
+
+    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBorder)
+    drawRoundedBox(
+        sizes.cornerRadius,
+        widthBorder,
+        widthBorder,
+        w - 2 * widthBorder,
+        h - 2 * widthBorder,
+        colorBox
+    )
+
+    -- the role icon on a box in the role color
+    local sizeIcon = h - 2 * (widthBorder + padding)
+    local posIcon = widthBorder + padding
+    local colorRole = panel:GetColor()
+    local colorIcon = utilGetDefaultColor(colorRole)
+
+    drawRoundedBox(sizes.cornerRadius, posIcon, posIcon, sizeIcon, sizeIcon, colorRole)
+
+    if panel:GetIcon() then
+        drawFilteredShadowedTexture(
+            posIcon + padding,
+            posIcon + padding + shift,
+            sizeIcon - 2 * padding,
+            sizeIcon - 2 * padding,
+            panel:GetIcon(),
+            colorIcon.a,
+            colorIcon
+        )
+    end
+
+    -- the team bar at the bottom of the card
+    local posContent = posIcon + sizeIcon + padding
+    local widthContent = w - posContent - widthBorder
+    local colorTeam = panel:GetTeamColor()
+
+    drawRoundedBoxEx(
+        sizes.cornerRadius,
+        posContent,
+        h - widthBorder - heightBar,
+        widthContent,
+        heightBar,
+        colorTeam,
+        false,
+        false,
+        false,
+        true
+    )
+
+    drawSimpleText(
+        drawGetLimitedLengthText(
+            TryT(panel:GetTeamText()),
+            widthContent - 2 * padding,
+            "DermaTTT2SmallBold",
+            "..."
+        ),
+        "DermaTTT2SmallBold",
+        posContent + 2 * padding,
+        h - widthBorder - 0.5 * heightBar,
+        utilGetDefaultColor(colorTeam),
+        TEXT_ALIGN_LEFT,
+        TEXT_ALIGN_CENTER
+    )
+
+    -- the tags in the top right corner
+    local tags = panel:GetTags()
+    local textTags = ""
+
+    for i = 1, #tags do
+        textTags = textTags .. (i > 1 and " · " or "") .. TryT(tags[i])
+    end
+
+    local posTextY = widthBorder + 0.5 * (h - 2 * widthBorder - heightBar) + shift
+    local widthTags = 0
+
+    if textTags ~= "" then
+        widthTags = drawGetTextSize(textTags, "DermaTTT2TextSmall") + padding
+
+        drawSimpleText(
+            textTags,
+            "DermaTTT2TextSmall",
+            w - widthBorder - 2 * padding,
+            posTextY,
+            ColorAlpha(colorText, 175),
+            TEXT_ALIGN_RIGHT,
+            TEXT_ALIGN_CENTER
+        )
+    end
+
+    drawSimpleText(
+        drawGetLimitedLengthText(
+            TryT(panel:GetText()),
+            widthContent - widthTags - 4 * padding,
+            panel:GetFont(),
+            "..."
+        ),
+        panel:GetFont(),
+        posContent + 2 * padding,
+        posTextY,
+        colorText,
+        TEXT_ALIGN_LEFT,
+        TEXT_ALIGN_CENTER
+    )
+end
+
+---
+-- Draws the box of the role details in the role guide. It has a pointer at its top
+-- that points to the selected role card.
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintRoleDetailTTT2(panel, w, h)
+    local heightPointer = panel.heightPointer or 0
+    local heightLine = 3
+    local posPointer = panel.posPointer
+
+    if posPointer and heightPointer > 0 then
+        surface.SetDrawColor(colors.accent.r, colors.accent.g, colors.accent.b, colors.accent.a)
+        draw.NoTexture()
+        surface.DrawPoly({
+            { x = posPointer - heightPointer, y = heightPointer },
+            { x = posPointer, y = 0 },
+            { x = posPointer + heightPointer, y = heightPointer },
+        })
+    end
+
+    drawBox(0, heightPointer, w, heightLine, colors.accent)
+    drawBox(
+        0,
+        heightPointer + heightLine,
+        w,
+        h - heightPointer - heightLine,
+        utilGetChangedColor(colors.background, 8)
+    )
+end
+
+---
+-- Draws a small colored tag with a text, the panel is expected to have a `color` field.
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintGuideTagTTT2(panel, w, h)
+    local colorTag = panel.color or COLOR_WARMGRAY
+
+    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorTag)
+
+    drawSimpleText(
+        TryT(panel:GetText()),
+        panel:GetFont(),
+        0.5 * w,
+        0.5 * h,
+        utilGetDefaultColor(colorTag),
+        TEXT_ALIGN_CENTER,
+        TEXT_ALIGN_CENTER
+    )
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintGuideSectionTitleTTT2(panel, w, h)
+    drawSimpleText(
+        string.upper(TryT(panel:GetText())),
+        panel:GetFont(),
+        0,
+        0.5 * h,
+        utilGetChangedColor(colors.default, 50),
+        TEXT_ALIGN_LEFT,
+        TEXT_ALIGN_CENTER
+    )
+end
+
+---
+-- Draws a row with a title on the left and a value on the right, the panel is expected
+-- to have the `title` and `value` fields.
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintGuidePropertyTTT2(panel, w, h)
+    local padding = 10
+
+    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.settingsBox)
+
+    local textValue = TryT(panel.value)
+    local widthValue = drawGetTextSize(textValue, "DermaTTT2SmallBold")
+
+    drawSimpleText(
+        textValue,
+        "DermaTTT2SmallBold",
+        w - padding,
+        0.5 * h,
+        colors.settingsText,
+        TEXT_ALIGN_RIGHT,
+        TEXT_ALIGN_CENTER
+    )
+
+    drawSimpleText(
+        drawGetLimitedLengthText(
+            TryT(panel.title),
+            w - widthValue - 3 * padding,
+            "DermaTTT2Text",
+            "..."
+        ),
+        "DermaTTT2Text",
+        padding,
+        0.5 * h,
+        colors.settingsText,
+        TEXT_ALIGN_LEFT,
+        TEXT_ALIGN_CENTER
+    )
+end
+
+---
+-- Draws a list of wrapped lines with bullet points. The panel is expected to have a
+-- `lines` field that contains the wrapped lines, each with a `text` and a `bullet` field.
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintGuideBulletListTTT2(panel, w, h)
+    local lines = panel.lines or {}
+    local font = panel:GetFont()
+    local _, heightText = drawGetTextSize("", font)
+    local colorText = utilGetChangedColor(colors.default, 40)
+    local indent = panel.indent or 0
+
+    for i = 1, #lines do
+        local line = lines[i]
+        local posY = (i - 1) * heightText
+
+        if line.bullet then
+            drawSimpleText("•", font, 2, posY, colorText, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        end
+
+        drawSimpleText(line.text, font, indent, posY, colorText, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+    end
+end
+
+---
+-- Draws an equipment tile with its icon and its name.
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintGuideEquipmentTTT2(panel, w, h)
+    local padding = 5
+    local sizeIcon = h - 3 * padding - 14
+
+    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.settingsBox)
+
+    if panel.icon then
+        drawFilteredTexture(0.5 * (w - sizeIcon), padding, sizeIcon, sizeIcon, panel.icon)
+    end
+
+    drawSimpleText(
+        drawGetLimitedLengthText(
+            TryT(panel:GetText()),
+            w - 2 * padding,
+            "DermaTTT2TextSmall",
+            "..."
+        ),
+        "DermaTTT2TextSmall",
+        0.5 * w,
+        h - padding - 7,
+        colors.settingsText,
+        TEXT_ALIGN_CENTER,
+        TEXT_ALIGN_CENTER
+    )
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintGuideCloseButtonTTT2(panel, w, h)
+    local colorIcon = utilGetChangedColor(colors.default, 75)
+
+    if panel.Hovered then
+        colorIcon = colors.default
+    end
+
+    drawFilteredTexture(0, 0, w, h, materialClose, colorIcon.a, colorIcon)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintRoleImageTTT2(panel, w, h)
     local widthBorder = 2
     local widthBorder2 = widthBorder * 2
