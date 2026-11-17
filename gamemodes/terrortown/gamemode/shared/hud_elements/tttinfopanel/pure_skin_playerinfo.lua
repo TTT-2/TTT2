@@ -8,6 +8,7 @@ HUDELEMENT.Base = base
 
 if CLIENT then
     local GetLang = LANG.GetUnsafeLanguageTable
+    local TryT = LANG.TryTranslation
 
     local pad = 14 -- padding
     local lpw = 44 -- left panel width
@@ -214,7 +215,12 @@ if CLIENT then
                 if IsValid(tgt) and tgt:IsPlayer() then
                     text = tgt:Nick()
                 else
-                    text = L[self.roundstate_string[round_state]]
+                    -- the round state is only synced from the server, it can still be
+                    -- unknown if no state has been received yet (e.g. in singleplayer,
+                    -- where the client never triggers the ready handshake)
+                    local roundStateKey = self.roundstate_string[round_state]
+
+                    text = roundStateKey and L[roundStateKey] or TryT("round_wait")
                 end
             end
 

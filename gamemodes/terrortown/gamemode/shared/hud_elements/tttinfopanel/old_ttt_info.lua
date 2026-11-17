@@ -2,6 +2,7 @@ local draw = draw
 local math = math
 local string = string
 local GetLang = LANG.GetUnsafeLanguageTable
+local TryT = LANG.TryTranslation
 local util = util
 
 local base = "old_ttt_element"
@@ -172,7 +173,12 @@ if CLIENT then
             if round_state == ROUND_ACTIVE then
                 text = L[client:GetSubRoleData().name]
             else
-                text = L[self.roundstate_string[round_state]]
+                -- the round state is only synced from the server, it can still be unknown
+                -- if no state has been received yet (e.g. in singleplayer, where the client
+                -- never triggers the ready handshake)
+                local roundStateKey = self.roundstate_string[round_state]
+
+                text = roundStateKey and L[roundStateKey] or TryT("round_wait")
             end
 
             self:ShadowedText(
@@ -282,7 +288,8 @@ if CLIENT then
             draw.RoundedBox(8, x, round_y, time_x, height, bg_colors.noround)
 
             -- Draw current round state
-            local text = L[self.roundstate_string[gameloop.GetRoundState()]]
+            local roundStateKey = self.roundstate_string[gameloop.GetRoundState()]
+            local text = roundStateKey and L[roundStateKey] or TryT("round_wait")
 
             self:ShadowedText(
                 text,
