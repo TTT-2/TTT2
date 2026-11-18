@@ -12,6 +12,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed reroll being an option when there are not enough items to reroll (by @MrXonte)
+- Added a how to play guide to the gameplay page of the F1 guide menu (by @Nosebody)
+
+### Fixed
+
+- Fixed typos and wording in the German localization (by @Nosebody)
 - Fixed markerVision not relaying engine-native entities out of PVS (by @MrXonte)
 - Fixed thirdperson animations from third-party addons (by @mexikoedi)
 
