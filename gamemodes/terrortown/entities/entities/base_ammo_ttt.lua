@@ -15,7 +15,6 @@ ENT.Type = "anim"
 -- Override these values
 ENT.AmmoType = "Pistol"
 ENT.AmmoAmount = 1
-ENT.AmmoMax = 10
 ENT.AmmoEntMax = 1
 ENT.Model = "models/items/boxsrounds.mdl"
 
@@ -30,6 +29,14 @@ function ENT:RealInit() end
 -- Subclasses can easily call this whenever they want to
 -- @realm shared
 function ENT:Initialize()
+    -- Player-dropped boxes keep their ammo type even when map spawns are disabled.
+    if SERVER and not IsValid(self:GetOwner()) and not WEPS.IsAmmoEnabled(self:GetClass()) then
+        entspawn.SpawnRandomAmmo(self)
+        self:Remove()
+
+        return
+    end
+
     self:SetModel(self.Model)
 
     self:PhysicsInit(SOLID_VPHYSICS)
@@ -41,6 +48,7 @@ function ENT:Initialize()
     self:UseTriggerBounds(true, 24)
 
     self.tickRemoval = false
+    self.AmmoAmount = WEPS.GetAmmoBoxAmount(self:GetClass(), self.AmmoAmount)
     self.AmmoEntMax = self.AmmoAmount
 end
 
@@ -133,19 +141,19 @@ function ENT:Touch(ply)
     end
 
     local ammo = ply:GetAmmoCount(self.AmmoType)
+    local reserveMax = WEPS.GetAmmoReserveMax(self.AmmoType)
 
-    -- need clipmax info and room for at least 1/4th
-    if self.AmmoMax < ammo + math.ceil(self.AmmoAmount * 0.25) then
+    if reserveMax <= ammo then
         return
     end
 
-    local given = math.min(self.AmmoAmount, self.AmmoMax - ammo)
+    local given = math.min(self.AmmoAmount, reserveMax - ammo)
 
     ply:GiveAmmo(given, self.AmmoType)
 
     self.AmmoAmount = self.AmmoAmount - given
 
-    if self.AmmoAmount > 0 and math.ceil(self.AmmoEntMax * 0.25) <= self.AmmoAmount then
+    if self.AmmoAmount > 0 then
         return
     end
 

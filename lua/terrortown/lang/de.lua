@@ -1554,6 +1554,7 @@ L.submenu_administration_inventory_title = "Inventar"
 L.submenu_administration_karma_title = "Karma"
 L.submenu_administration_sprint_title = "Sprinten"
 L.submenu_administration_playersettings_title = "Spielereinstellungen"
+L.submenu_administration_ammo_title = "Munitionseinstellungen"
 
 L.header_roles_special_settings = "Spezialrolleneinstellungen"
 L.header_equipment_additional = "Zusätzliche Ausrüstungseinstellungen"
@@ -1582,6 +1583,15 @@ L.header_inventory_gernal = "Inventargröße"
 L.header_inventory_pickup = "Inventar Waffenaufnahme"
 L.header_sprint_general = "Sprinteinstellungen"
 L.header_playersettings_armor = "Rüstungssystem Einstellungen"
+L.header_ammo_administration = "Munitionseinstellungen"
+L.help_ammo_administration = [[
+Reservemunition ist die zusätzliche Munition, mit der Spieler ihre Waffen nachladen. Lege fest, wie viel Spieler von jedem Munitionstyp mitführen können.
+Du kannst außerdem einstellen, wie viel Munition jede Kiste enthält.
+Du kannst auch bestimmte Munitionskisten deaktivieren. An ihrer Stelle erscheint auf der Karte eine zufällig ausgewählte aktivierte Munitionskiste.]]
+L.label_ammo_reserve_max = "Maximale Reservemunition für diesen Munitionstyp"
+L.label_ammo_entity_class = "Munitionskiste: {class}"
+L.label_ammo_enable = "Kartenspawns für diese Munitionskiste aktivieren"
+L.label_ammo_box_amount = "Munition pro Kiste"
 
 L.help_killer_dna_range = "Wenn ein Spieler von einem anderen Spieler getötet wird, wird eine DNA-Probe auf ihrem Körper hinterlassen. Die untenstehende Einstellung definiert die maximale Entfernung in Hammer-Einheiten, in der DNA-Proben hinterlassen werden. Wenn der Mörder weiter entfernt ist als dieser Wert, wenn das Opfer stirbt, wird keine Probe auf der Leiche hinterlassen."
 L.help_killer_dna_basetime = "Die Grundzeit in Sekunden, bis eine DNA-Probe zerfällt, wenn der Mörder 0 Hammer-Einheiten entfernt ist. Je weiter der Mörder entfernt ist, desto weniger Zeit wird der DNA-Probe gegeben, um zu zerfallen."

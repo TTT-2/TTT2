@@ -12,6 +12,195 @@ local IsValid = IsValid
 local wepGetList = weapons.GetList
 local scriptedEntsGetList = scripted_ents.GetList
 
+local ammoTypes
+local ammoTypeLookup
+local ammoEntityLookup
+
+-- Reserve limits belong to ammo types, not to individual box entities.
+local defaultAmmoReserveMax = {
+    ["357"] = 20,
+    alyxgun = 36,
+    buckshot = 24,
+    pistol = 60,
+    smg1 = 60,
+}
+
+local function GetAmmoIdentifier(name)
+    return string.gsub(string.lower(name), "[^%w_]", "_")
+end
+
+---
+-- Returns the convar name for an ammo box setting.
+-- @param string class Ammo entity class
+-- @param string setting Setting suffix
+-- @return string
+-- @realm shared
+function WEPS.GetAmmoSettingsConVarName(class, setting)
+    return "ttt2_ammo_" .. GetAmmoIdentifier(class) .. "_" .. setting
+end
+
+---
+-- Returns the convar name for the shared reserve limit of an ammo type.
+-- @param string ammoType Ammo type name
+-- @return string
+-- @realm shared
+function WEPS.GetAmmoReserveConVarName(ammoType)
+    return "ttt2_ammo_type_" .. GetAmmoIdentifier(ammoType) .. "_reserve_max"
+end
+
+local function BuildAmmoSettings()
+    ammoTypes = {}
+    ammoTypeLookup = {}
+    ammoEntityLookup = {}
+
+    for class in pairs(scriptedEntsGetList()) do
+        if class == "base_ammo_ttt" or not scripted_ents.IsBasedOn(class, "base_ammo_ttt") then
+            continue
+        end
+
+        local ammo = scripted_ents.Get(class)
+        local ammoType = ammo.AmmoType or "Pistol"
+        local identifier = string.lower(ammoType)
+        local typeData = ammoTypeLookup[identifier]
+
+        if not typeData then
+            typeData = {
+                ammoType = ammoType,
+                name = "ammo_" .. identifier,
+                reserveMax = defaultAmmoReserveMax[identifier] or 0,
+                entities = {},
+            }
+
+            ammoTypes[#ammoTypes + 1] = typeData
+            ammoTypeLookup[identifier] = typeData
+        end
+
+        -- Import legacy defaults once when building the registry. Pick the highest
+        -- default when several boxes share a type; pickups only consult the convar.
+        typeData.reserveMax = math.max(
+            typeData.reserveMax,
+            math.max(0, ammo.AmmoMax or defaultAmmoReserveMax[identifier] or 10)
+        )
+
+        local entityData = {
+            class = class,
+            boxAmount = math.max(1, ammo.AmmoAmount or 1),
+        }
+
+        typeData.entities[#typeData.entities + 1] = entityData
+        ammoEntityLookup[class] = entityData
+    end
+
+    table.SortByMember(ammoTypes, "ammoType", true)
+
+    for i = 1, #ammoTypes do
+        local typeData = ammoTypes[i]
+        table.SortByMember(typeData.entities, "class", true)
+
+        if SERVER then
+            -- @realm server
+            typeData.reserveConVar = CreateConVar(
+                WEPS.GetAmmoReserveConVarName(typeData.ammoType),
+                tostring(typeData.reserveMax),
+                { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+                "",
+                0
+            )
+
+            for j = 1, #typeData.entities do
+                local entityData = typeData.entities[j]
+                -- @realm server
+                entityData.enabledConVar = CreateConVar(
+                    WEPS.GetAmmoSettingsConVarName(entityData.class, "enabled"),
+                    "1",
+                    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+                    "",
+                    0,
+                    1
+                )
+                -- @realm server
+                entityData.boxAmountConVar = CreateConVar(
+                    WEPS.GetAmmoSettingsConVarName(entityData.class, "box_amount"),
+                    tostring(entityData.boxAmount),
+                    { FCVAR_NOTIFY, FCVAR_ARCHIVE },
+                    "",
+                    1
+                )
+            end
+        end
+    end
+end
+
+---
+-- Returns ammo types with their default reserve limits and individual box classes.
+-- @return table An indexed list of ammo types, each with an entities list
+-- @realm shared
+function WEPS.GetAmmoTypes()
+    if not ammoTypes then
+        BuildAmmoSettings()
+    end
+
+    return ammoTypes
+end
+
+---
+-- Returns the shared pickup reserve limit for an ammo type.
+-- Legacy AmmoMax values only seed its initial default, never the pickup limit.
+-- @param string ammoType Ammo type name
+-- @return number
+-- @realm shared
+function WEPS.GetAmmoReserveMax(ammoType)
+    WEPS.GetAmmoTypes()
+
+    local typeData = ammoTypeLookup[string.lower(ammoType)]
+
+    if not typeData then
+        return 0
+    end
+
+    return SERVER and math.max(0, typeData.reserveConVar:GetInt()) or typeData.reserveMax
+end
+
+---
+-- Returns the configured starting ammo amount for a box class.
+-- @param string class Ammo entity class
+-- @param[default=1] number fallback Amount for an unregistered class
+-- @return number
+-- @realm shared
+function WEPS.GetAmmoBoxAmount(class, fallback)
+    WEPS.GetAmmoTypes()
+
+    local entityData = ammoEntityLookup[class]
+
+    if not entityData then
+        return math.max(1, fallback or 1)
+    end
+
+    return SERVER and math.max(1, entityData.boxAmountConVar:GetInt()) or entityData.boxAmount
+end
+
+---
+-- Returns whether an ammo box class is enabled for map spawns.
+-- @param string class Ammo entity class
+-- @return boolean
+-- @realm shared
+function WEPS.IsAmmoEnabled(class)
+    WEPS.GetAmmoTypes()
+
+    local entityData = ammoEntityLookup[class]
+
+    return not SERVER or not entityData or entityData.enabledConVar:GetBool()
+end
+
+hook.Add("InitPostEntity", "TTT2RegisterAmmoSettings", function()
+    WEPS.GetAmmoTypes()
+end)
+
+hook.Add("OnReloaded", "TTT2ReloadAmmoSettings", function()
+    -- Preserve archived convar values while discovering reloaded or new box classes.
+    ammoTypes = nil
+end)
+
 ---
 -- Get the type (<code>kind</code>) of a weapon class
 -- @param string class weapon class
@@ -89,15 +278,15 @@ function WEPS.GetAmmoForSpawnTypes()
 
     local allEnts = scriptedEntsGetList()
 
-    for _, entData in pairs(allEnts) do
-        if entData.Base ~= "base_ammo_ttt" then
+    for class in pairs(allEnts) do
+        if class == "base_ammo_ttt" or not scripted_ents.IsBasedOn(class, "base_ammo_ttt") then
             continue
         end
 
-        local ammo = entData.t
+        local ammo = scripted_ents.Get(class)
         local spawnType = ammo.spawnType
 
-        if not ammo.AutoSpawnable then
+        if not ammo.AutoSpawnable or not WEPS.IsAmmoEnabled(class) then
             continue
         end
 

@@ -1465,7 +1465,10 @@ function plymeta:DropAmmo(wep, useClip, amt)
         if useClip then
             amt = wep:Clip1()
         else
-            amt = math.min(box.AmmoAmount, self:GetAmmoCount(wep.Primary.Ammo))
+            amt = math.min(
+                WEPS.GetAmmoBoxAmount(wep.AmmoEnt, box.AmmoAmount),
+                self:GetAmmoCount(wep.Primary.Ammo)
+            )
         end
     end
     local hook_data = { amt }
