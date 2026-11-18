@@ -177,8 +177,9 @@ if SERVER then
     ---
     -- Welds the entity to the nearest surface.
     -- @param boolean stateWelding The welding state; true to weld, false to unweld
+    -- @param table tr Optional trace data from another source
     -- @realm server
-    function ENT:WeldToSurface(stateWelding)
+    function ENT:WeldToSurface(stateWelding, tr)
         self.stateWelding = stateWelding
 
         if stateWelding then
@@ -190,15 +191,20 @@ if SERVER then
 
             local pos = self:GetPos()
             local ignore = player.GetAll()
+            local mins, maxs = self:OBBMins(), self:OBBMaxs()
+            -- distance from origin down to the bottom of the collision hull, plus margin
+            local traceDist = math.abs(mins.z) + 256
 
             ignore[#ignore + 1] = self
 
-            local tr = util.TraceEntity({
+            tr = tr and tr or util.TraceHull({
                 start = pos,
-                endpos = pos - Vector(0, 0, 16),
+                endpos = pos - Vector(0, 0, traceDist),
+                mins = mins,
+                maxs = maxs,
                 filter = ignore,
                 mask = MASK_SOLID,
-            }, self)
+            })
 
             sound.Play(soundWeld, pos, 75)
 
@@ -387,7 +393,7 @@ if SERVER then
             self:SetStickRotation(rotationalOffset)
         end
 
-        self:WeldToSurface(true)
+        self:WeldToSurface(true, tr)
 
         return true
     end
