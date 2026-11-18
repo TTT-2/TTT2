@@ -48,9 +48,7 @@ function CreateRerollMenu(parent)
     end
 
     dsubmit.Think = function(s)
-        if client:GetCredits() < cost or not GetGlobalBool("ttt2_random_shop_reroll") then
-            s:SetEnabled(false)
-        end
+        s:SetEnabled(shop.CanRerollShop(client))
     end
 
     dform:AddItem(dsubmit)

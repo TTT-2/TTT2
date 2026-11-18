@@ -389,6 +389,15 @@ if SERVER then
         "Should the random shop reroll after every purchase"
     )
 
+    ---
+    -- @realm server
+    local random_shop_reroll_filter = CreateConVar(
+        "ttt2_random_shop_reroll_filter",
+        "0",
+        { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE },
+        "Exclude equipment whose personal, team or global purchase limit has been reached from rerolls"
+    )
+
     util.AddNetworkString("TTT2SyncRandomShops")
 
     local function SyncRandomShops(plys)
@@ -405,10 +414,6 @@ if SERVER then
 
             for i = 1, #tbl do
                 tmp[i] = tbl[i].id
-            end
-
-            if #tmp <= 0 then
-                continue
             end
 
             local s = EncodeForStream(tmp)
@@ -474,45 +479,42 @@ if SERVER then
         return fallbackTable
     end
 
-    local function GetValidTeamShops(fallback, amount, team, fallbackTable)
+    local function GenerateRandomShop(equipment, amount, rerollPlayer)
+        local result = {}
+        local pool = {}
+        local filter = IsValid(rerollPlayer) and GetGlobalBool("ttt2_random_shop_reroll_filter")
+
+        for i = 1, #equipment do
+            local equip = equipment[i]
+
+            if equip.notBuyable or filter and shop.IsEquipmentLimitedFor(rerollPlayer, equip) then
+                continue
+            end
+
+            if equip.NoRandom then
+                amount = amount - 1
+                result[#result + 1] = equip
+            else
+                pool[#pool + 1] = equip
+            end
+        end
+
+        for i = 1, math.min(amount, #pool) do
+            local index = math.random(#pool)
+
+            result[#result + 1] = pool[index]
+
+            table.remove(pool, index)
+        end
+
+        return result
+    end
+
+    local function GetValidTeamShops(fallback, amount, team, fallbackTable, rerollPlayer)
         local teamShops = RANDOMTEAMSHOPS
 
         if team and not teamShops[fallback] then
-            local fallbackTblCount = #fallbackTable
-
-            if amount < fallbackTblCount then
-                teamShops[fallback] = {}
-
-                local tmp2 = {}
-
-                for i = 1, fallbackTblCount do
-                    local equip = fallbackTable[i]
-
-                    if equip.notBuyable then
-                        continue
-                    end
-
-                    if equip.NoRandom then
-                        amount = amount - 1
-
-                        teamShops[fallback][#teamShops[fallback] + 1] = equip
-                    else
-                        tmp2[#tmp2 + 1] = equip
-                    end
-                end
-
-                if amount > 0 then
-                    for i = 1, amount do
-                        local rndm = math.random(#tmp2)
-
-                        teamShops[fallback][#teamShops[fallback] + 1] = tmp2[rndm]
-
-                        table.remove(tmp2, rndm)
-                    end
-                end
-            else
-                teamShops[fallback] = fallbackTable
-            end
+            teamShops[fallback] = GenerateRandomShop(fallbackTable, amount, rerollPlayer)
         end
 
         return teamShops
@@ -523,9 +525,10 @@ if SERVER then
     -- @param table plys list of @{Player}
     -- @param number val
     -- @param string team @{ROLE} team
+    -- @param[opt] Player rerollPlayer The player whose purchase limits apply to this reroll
     -- @internal
     -- @realm server
-    function UpdateRandomShops(plys, val, team)
+    function UpdateRandomShops(plys, val, team, rerollPlayer)
         if plys then
             for i = 1, #plys do
                 RANDOMSHOP[plys[i]] = {} -- reset ply
@@ -546,14 +549,12 @@ if SERVER then
                 local fallbackTable = GetValidShopFallbackTable(fallback)
 
                 RANDOMSAVEDSHOPS[fallback] = fallbackTable
-                RANDOMTEAMSHOPS = GetValidTeamShops(fallback, val, team, fallbackTable)
+                RANDOMTEAMSHOPS =
+                    GetValidTeamShops(fallback, val, team, fallbackTable, rerollPlayer)
             end
         end
 
         local tmpTbl = plys or playerGetAll()
-
-        local mathrandom = math.random
-        local tableremove = table.remove
 
         -- now set the individual random shop
         if team then -- the shop is synced with the team
@@ -576,38 +577,9 @@ if SERVER then
                     continue
                 end
 
-                local amount = val
-                local tmp2 = {}
-
-                RANDOMSHOP[ply] = {}
-
                 local cachedTbl = RANDOMSAVEDSHOPS[GetShopFallback(srd.index)]
 
-                for k = 1, #cachedTbl do
-                    local equip = cachedTbl[k]
-
-                    if equip.notBuyable then
-                        continue
-                    end
-
-                    if equip.NoRandom then
-                        amount = amount - 1
-
-                        RANDOMSHOP[ply][#RANDOMSHOP[ply] + 1] = equip
-                    else
-                        tmp2[#tmp2 + 1] = equip
-                    end
-                end
-
-                if amount > 0 then
-                    for k = 1, amount do
-                        local rndm = mathrandom(#tmp2)
-
-                        RANDOMSHOP[ply][#RANDOMSHOP[ply] + 1] = tmp2[rndm]
-
-                        tableremove(tmp2, rndm)
-                    end
-                end
+                RANDOMSHOP[ply] = GenerateRandomShop(cachedTbl, val, rerollPlayer and ply)
             end
         end
 
@@ -619,9 +591,10 @@ if SERVER then
     -- @param number role subrole id of a @{ROLE}
     -- @param number amount
     -- @param string team @{ROLE} team
+    -- @param[opt] Player rerollPlayer The player whose purchase limits apply to this reroll
     -- @internal
     -- @realm server
-    function ResetRandomShopsForRole(role, amount, team)
+    function ResetRandomShopsForRole(role, amount, team, rerollPlayer)
         local fallback = GetShopFallback(role)
 
         RANDOMTEAMSHOPS[fallback] = nil
@@ -640,7 +613,7 @@ if SERVER then
             plys_with_fb[#plys_with_fb + 1] = ply
         end
 
-        UpdateRandomShops(plys_with_fb, amount, team)
+        UpdateRandomShops(plys_with_fb, amount, team, rerollPlayer)
     end
 
     cvars.AddChangeCallback("ttt2_random_shops", function(name, old, new)
@@ -686,6 +659,10 @@ if SERVER then
         SetGlobalBool("ttt2_random_shop_reroll_per_buy", tobool(new))
     end, "ttt2updatererollperbuyglobal")
 
+    cvars.AddChangeCallback("ttt2_random_shop_reroll_filter", function(name, old, new)
+        SetGlobalBool("ttt2_random_shop_reroll_filter", tobool(new))
+    end, "ttt2updatererollfilterglobal")
+
     hook.Add("TTTPrepareRound", "TTT2InitRandomShops", function()
         if not GetGlobalBool("ttt2_random_shops") then
             return
@@ -719,6 +696,7 @@ if SERVER then
         SetGlobalBool("ttt2_random_shop_reroll", random_shop_reroll:GetBool())
         SetGlobalInt("ttt2_random_shop_reroll_cost", random_shop_reroll_cost:GetInt())
         SetGlobalBool("ttt2_random_shop_reroll_per_buy", random_shop_reroll_per_buy:GetBool())
+        SetGlobalBool("ttt2_random_shop_reroll_filter", random_shop_reroll_filter:GetBool())
 
         if not random_shop then
             return
@@ -792,9 +770,7 @@ function GetModifiedEquipment(ply, fallback)
             end
         end
 
-        if #tmp > 0 then
-            return tmp
-        end
+        return tmp
     end
 
     return fallback
