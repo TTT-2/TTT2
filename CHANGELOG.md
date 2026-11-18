@@ -11,9 +11,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 - Ammo Boxes no longer despawn below 25% ammo and less than 25% can be taken out (by @MrXonte)
+- Added a how to play guide to the gameplay page of the F1 guide menu (by @Nosebody)
 
 ### Fixed
 
+- Fixed typos and wording in the German localization (by @Nosebody)
 - Fixed markerVision not relaying engine-native entities out of PVS (by @MrXonte)
 - Fixed thirdperson animations from third-party addons (by @mexikoedi)
 
